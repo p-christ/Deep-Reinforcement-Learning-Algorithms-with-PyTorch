@@ -14,17 +14,21 @@ Contains
 ### A. Deep Q Learning
 --------------------------------------------------
 
+The Deep Q Learning algorithm was implemented including experience replay. Experience replay is when you store your experiences and then randomly sample from past experiences during training. The purpose of this is to decorrelate the data you are using to train your policy. 
 
 --------------------------------------------------
 ### B. Deep Q Learning with Fixed Q-Targets
 --------------------------------------------------
 
+The Deep Q Learning algorithm above was extended to include Fixed Q-Targets. Using Fixed Q-Targets means that to calculate the Q-targets we use a different neural network than our policy network. The alternative neural network we use is effectively an older version of the policy. This generally has the effect of stabilising training.
 
+Using Fixed Q-Targets with experience replay makes this algorithm similar to the algorithm used in [DeepMind's 2013 Atari Paper](https://arxiv.org/pdf/1312.5602v1.pdf)
 
 --------------------------------------------------
 ### C. Doule Deep Q Learning
 --------------------------------------------------
 
+The Deep Q Learning algorithm was also extended to a Doulbe Deep Q Learning algorithm. This means that when calculating the Q-value resulting from the best action we use two different networks (one to select the maximum action and one to calculate the Q-value of that action) rather than one network. This helps alleviate over-estimation of the Q-values and is described in this [paper](https://arxiv.org/pdf/1509.06461.pdf). 
 
 
 # 2) Environments Analysed
@@ -33,7 +37,7 @@ Contains
 ### A. Unity Banana Environment
 --------------------------------------------------
 
-To train the agents and see their results:
+To train the agents on the Unity Banana environment and see their results:
 
 - Navigate to Deep_RL_Implementations/
 - On the command line run: 
