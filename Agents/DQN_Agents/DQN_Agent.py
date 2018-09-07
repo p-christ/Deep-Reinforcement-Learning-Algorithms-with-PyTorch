@@ -1,7 +1,7 @@
 
-from Base_Agent import Base_Agent
-from Replay_Buffer import Replay_Buffer
-from Q_Network import Q_Network
+from Agents.Base_Agent import Base_Agent
+from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
+from Networks.Q_Network import Q_Network
 from Utilities import override
 import torch
 import torch.nn as nn

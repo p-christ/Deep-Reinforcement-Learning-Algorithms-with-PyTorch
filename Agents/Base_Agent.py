@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from Replay_Buffer import Replay_Buffer
+from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
 from abc import ABC, abstractmethod
 
 class Base_Agent(object):    

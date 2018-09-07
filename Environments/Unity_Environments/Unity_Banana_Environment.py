@@ -1,4 +1,4 @@
-from Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 from unityagents import UnityEnvironment
 
 class Unity_Banana_Environment(Base_Environment):    
