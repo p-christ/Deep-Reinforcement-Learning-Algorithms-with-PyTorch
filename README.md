@@ -4,3 +4,8 @@ Contains
 
 1. PyTorch implementations of deep reinforcement learning algorithms
 1. Analysis of algorithm performance in different game environments
+
+
+
+
+## 1) Deep Reinforcement Learning Algorithms Implemented
