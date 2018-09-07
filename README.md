@@ -1,10 +1,9 @@
 # Implementations of Deep Reinforcement Learning Algorithms
 
-This repository contains:
+This (WIP) repository contains:
 
-1. PyTorch implementations of deep reinforcement learning algorithms
-1. Analysis of algorithm performance in different game environments
-
+* PyTorch implementations of deep reinforcement learning algorithms
+* Analysis of algorithm performance in different game environments
 
 
 
