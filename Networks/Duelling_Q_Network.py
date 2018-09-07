@@ -11,17 +11,22 @@ class Duelling_Q_Network(nn.Module):
         nn.Module.__init__(self)
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(state_size, hyperparameters['fc_units'][0])
-        self.fc2 = nn.Linear(hyperparameters['fc_units'][0], hyperparameters['fc_units'][1])
-        self.fc3_advantages = nn.Linear(hyperparameters['fc_units'][1], action_size)
-        self.fc3_state_value = nn.Linear(hyperparameters['fc_units'][1], 1)
+
+        self.advantage_fc1 = nn.Linear(hyperparameters['fc_units'][0], hyperparameters['fc_units'][1])
+        self.state_values_fc1 = nn.Linear(hyperparameters['fc_units'][0],hyperparameters['fc_units'][1] )
+
+        self.advantage_fc2 = nn.Linear(hyperparameters['fc_units'][1], action_size)
+        self.state_values_fc2 = nn.Linear(hyperparameters['fc_units'][1], 1)
 
     def forward(self, state):
         x = F.relu(self.fc1(state))
-        x = F.relu(self.fc2(x))
 
-        advantages = self.fc3_advantages(x)
-        state_values = self.fc3_state_value(x)
+        advantages = F.relu(self.advantage_fc1(x))
+        state_values = F.relu(self.state_values_fc1(x))
 
-        output = advantages.add(state_values)
+        advantages = self.advantage_fc2(advantages)
+        state_values = self.state_values_fc2(state_values)
+
+        output = advantages + state_values  - advantages.mean(1).unsqueeze(1).expand(x.size(0), self.num_actions)
 
         return output
