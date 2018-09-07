@@ -66,7 +66,6 @@ class Base_Agent(object):
         self.state = self.next_state #this is to set the state for the next iteration
         
 
-                    
     def pick_and_conduct_action(self):
         self.action = self.pick_action()   
         self.conduct_action()
@@ -124,9 +123,9 @@ class Base_Agent(object):
         
     def print_rolling_result(self):
 
-        print("""Episode {}, Rolling score: {}, Max rolling score seen: {}                   """.format(len(self.game_scores),
-                                                                                                        self.rolling_results[-1],
-                            self.max_rolling_score_seen), end="\r", flush=True)
+        print("""Episode {}, Rolling score: {}, Max rolling score seen: {}""".format(len(self.game_scores),
+                                                                                     self.rolling_results[-1],
+                                                                                     self.max_rolling_score_seen), end="\r", flush=True)
                  
                  
     def summarise_results(self):
@@ -146,11 +145,11 @@ class Base_Agent(object):
         index_achieved_goal = self.achieved_required_score_at_index()
         if index_achieved_goal == -1:
             print("\033[91m" + "\033[1m" + 
-                  "{} did not achieve required score             \n".format(self.agent_name) + 
+                  "{} did not achieve required score \n".format(self.agent_name) +
                   "\033[0m" + "\033[0m")
         else:
             print("\033[92m" + "\033[1m" + 
-                  "{} achieved required score at episode {}       \n".format(self.agent_name,index_achieved_goal) + 
+                  "{} achieved required score at episode {} \n".format(self.agent_name,index_achieved_goal) +
                   "\033[0m" + "\033[0m")
                   
         
