@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.VehiclesModule</name>
+    </assembly>
+    <member name="T:UnityEngine.WheelCollider">
+      <summary>
+        <para>A special collider for vehicle wheels.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.brakeTorque">
+      <summary>
+        <para>Brake torque expressed in Newton metres.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.center">
+      <summary>
+        <para>The center of the wheel, measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.forceAppPointDistance">
+      <summary>
+        <para>Application point of the suspension and tire forces measured from the base of the resting wheel.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.forwardFriction">
+      <summary>
+        <para>Properties of tire friction in the direction the wheel is pointing in.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.isGrounded">
+      <summary>
+        <para>Indicates whether the wheel currently collides with something (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.mass">
+      <summary>
+        <para>The mass of the wheel, expressed in kilograms. Must be larger than zero. Typical values would be in range (20,80).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.motorTorque">
+      <summary>
+        <para>Motor torque on the wheel axle expressed in Newton metres. Positive or negative depending on direction.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.radius">
+      <summary>
+        <para>The radius of the wheel, measured in local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.rpm">
+      <summary>
+        <para>Current wheel axle rotation speed, in rotations per minute (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.sidewaysFriction">
+      <summary>
+        <para>Properties of tire friction in the sideways direction.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.sprungMass">
+      <summary>
+        <para>The mass supported by this WheelCollider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.steerAngle">
+      <summary>
+        <para>Steering angle in degrees, always around the local y-axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.suspensionDistance">
+      <summary>
+        <para>Maximum extension distance of wheel suspension, measured in local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.suspensionSpring">
+      <summary>
+        <para>The parameters of wheel's suspension. The suspension attempts to reach a target position by applying a linear force and a damping force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelCollider.wheelDampingRate">
+      <summary>
+        <para>The damping rate of the wheel. Must be larger than zero.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WheelCollider.ConfigureVehicleSubsteps(System.Single,System.Int32,System.Int32)">
+      <summary>
+        <para>Configure vehicle sub-stepping parameters.</para>
+      </summary>
+      <param name="speedThreshold">The speed threshold of the sub-stepping algorithm.</param>
+      <param name="stepsBelowThreshold">Amount of simulation sub-steps when vehicle's speed is below speedThreshold.</param>
+      <param name="stepsAboveThreshold">Amount of simulation sub-steps when vehicle's speed is above speedThreshold.</param>
+    </member>
+    <member name="M:UnityEngine.WheelCollider.GetGroundHit(UnityEngine.WheelHit&amp;)">
+      <summary>
+        <para>Gets ground collision data for the wheel.</para>
+      </summary>
+      <param name="hit"></param>
+    </member>
+    <member name="M:UnityEngine.WheelCollider.GetWorldPose(UnityEngine.Vector3&amp;,UnityEngine.Quaternion&amp;)">
+      <summary>
+        <para>Gets the world space pose of the wheel accounting for ground contact, suspension limits, steer angle, and rotation angle (angles in degrees).</para>
+      </summary>
+      <param name="pos">Position of the wheel in world space.</param>
+      <param name="quat">Rotation of the wheel in world space.</param>
+    </member>
+    <member name="T:UnityEngine.WheelHit">
+      <summary>
+        <para>Contact information for the wheel, reported by WheelCollider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.collider">
+      <summary>
+        <para>The other Collider the wheel is hitting.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.force">
+      <summary>
+        <para>The magnitude of the force being applied for the contact.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.forwardDir">
+      <summary>
+        <para>The direction the wheel is pointing in.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.forwardSlip">
+      <summary>
+        <para>Tire slip in the rolling direction. Acceleration slip is negative, braking slip is positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.normal">
+      <summary>
+        <para>The normal at the point of contact.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.point">
+      <summary>
+        <para>The point of contact between the wheel and the ground.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.sidewaysDir">
+      <summary>
+        <para>The sideways direction of the wheel.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelHit.sidewaysSlip">
+      <summary>
+        <para>Tire slip in the sideways direction.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

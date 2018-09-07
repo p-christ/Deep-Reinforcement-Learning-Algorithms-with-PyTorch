@@ -1,7 +1,10 @@
-from DQN_Agents.DDQN_Agent import DDQN_Agent
+from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from Networks.Duelling_Q_Network import Duelling_Q_Network
+
+"""WIP implementation of a duelling DDQN agent. Not finished yet"""
 
 
-class Duelling_DQN(DDQN_Agent):
+class Duelling_DDQN_Agent(DDQN_Agent):
 
     def __init__(self, environment, seed, hyperparameters, rolling_score_length,
                  average_score_required, agent_name):
@@ -9,7 +12,7 @@ class Duelling_DQN(DDQN_Agent):
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
 
-        self.qnetwork_local = Q_Network(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
+        self.qnetwork_local = Duelling_Q_Network(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
 
-        self.qnetwork_target = Q_Network(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
+        self.qnetwork_target = Duelling_Q_Network(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
 

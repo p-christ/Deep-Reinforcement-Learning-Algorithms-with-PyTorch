@@ -1,0 +1,30 @@
+{
+    IBClasses =     (
+                {
+            CLASS = FirstResponder;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSObject;
+        },
+                {
+            ACTIONS =             {
+                ToggleFullscreen = id;
+            };
+            CLASS = PlayerAppDelegate;
+            LANGUAGE = ObjC;
+            OUTLETS =             {
+                "m_AboutBox" = id;
+                "m_AboutMenuItem" = id;
+                "m_FullscreenMenuItem" = id;
+                "m_HideMenuItem" = id;
+                "m_QuitMenuItem" = id;
+            };
+            SUPERCLASS = NSObject;
+        },
+                {
+            CLASS = PlayerApplication;
+            LANGUAGE = ObjC;
+            SUPERCLASS = NSApplication;
+        }
+    );
+    IBVersion = 1;
+}

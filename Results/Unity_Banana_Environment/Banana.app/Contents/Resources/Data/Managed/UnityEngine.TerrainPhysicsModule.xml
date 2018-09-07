@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.TerrainPhysicsModule</name>
+    </assembly>
+    <member name="T:UnityEngine.TerrainCollider">
+      <summary>
+        <para>A heightmap based collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TerrainCollider.terrainData">
+      <summary>
+        <para>The terrain that stores the heightmap.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

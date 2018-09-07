@@ -1,0 +1,3060 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.Physics2DModule</name>
+    </assembly>
+    <member name="T:UnityEngine.AnchoredJoint2D">
+      <summary>
+        <para>Parent class for all joints that have anchor points.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AnchoredJoint2D.anchor">
+      <summary>
+        <para>The joint's anchor point on the object that has the joint component.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AnchoredJoint2D.autoConfigureConnectedAnchor">
+      <summary>
+        <para>Should the connectedAnchor be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AnchoredJoint2D.connectedAnchor">
+      <summary>
+        <para>The joint's anchor point on the second object (ie, the one which doesn't have the joint component).</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.AreaEffector2D">
+      <summary>
+        <para>Applies forces within an area.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.angularDrag">
+      <summary>
+        <para>The angular drag to apply to rigid-bodies.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.drag">
+      <summary>
+        <para>The linear drag to apply to rigid-bodies.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.forceAngle">
+      <summary>
+        <para>The angle of the force to be applied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.forceMagnitude">
+      <summary>
+        <para>The magnitude of the force to be applied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.forceTarget">
+      <summary>
+        <para>The target for where the effector applies any force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.forceVariation">
+      <summary>
+        <para>The variation of the magnitude of the force to be applied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.AreaEffector2D.useGlobalAngle">
+      <summary>
+        <para>Should the forceAngle use global space?</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.BoxCollider2D">
+      <summary>
+        <para>Collider for 2D physics representing an axis-aligned rectangle.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BoxCollider2D.autoTiling">
+      <summary>
+        <para>Determines whether the BoxCollider2D's shape is automatically updated based on a SpriteRenderer's tiling properties.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BoxCollider2D.edgeRadius">
+      <summary>
+        <para>Controls the radius of all edges created by the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BoxCollider2D.size">
+      <summary>
+        <para>The width and height of the rectangle.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.BuoyancyEffector2D">
+      <summary>
+        <para>Applies forces to simulate buoyancy, fluid-flow and fluid drag.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.angularDrag">
+      <summary>
+        <para>A force applied to slow angular movement of any Collider2D in contact with the effector.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.density">
+      <summary>
+        <para>The density of the fluid used to calculate the buoyancy forces.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.flowAngle">
+      <summary>
+        <para>The angle of the force used to similate fluid flow.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.flowMagnitude">
+      <summary>
+        <para>The magnitude of the force used to similate fluid flow.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.flowVariation">
+      <summary>
+        <para>The random variation of the force used to similate fluid flow.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.linearDrag">
+      <summary>
+        <para>A force applied to slow linear movement of any Collider2D in contact with the effector.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BuoyancyEffector2D.surfaceLevel">
+      <summary>
+        <para>Defines an arbitrary horizontal line that represents the fluid surface level.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CapsuleCollider2D">
+      <summary>
+        <para>A capsule-shaped primitive collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider2D.direction">
+      <summary>
+        <para>The direction that the capsule sides can extend.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider2D.size">
+      <summary>
+        <para>The width and height of the capsule area.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CapsuleDirection2D">
+      <summary>
+        <para>The direction that the capsule sides can extend.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CapsuleDirection2D.Horizontal">
+      <summary>
+        <para>The capsule sides extend horizontally.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CapsuleDirection2D.Vertical">
+      <summary>
+        <para>The capsule sides extend vertically.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CircleCollider2D">
+      <summary>
+        <para>Collider for 2D physics representing an circle.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CircleCollider2D.radius">
+      <summary>
+        <para>Radius of the circle.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Collider2D">
+      <summary>
+        <para>Parent class for collider types used with 2D gameplay.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.attachedRigidbody">
+      <summary>
+        <para>The Rigidbody2D attached to the Collider2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.bounciness">
+      <summary>
+        <para>Get the bounciness used by the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.bounds">
+      <summary>
+        <para>The world space bounding area of the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.composite">
+      <summary>
+        <para>Get the CompositeCollider2D that is available to be attached to the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.density">
+      <summary>
+        <para>The density of the collider used to calculate its mass (when auto mass is enabled).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.friction">
+      <summary>
+        <para>Get the friction used by the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.isTrigger">
+      <summary>
+        <para>Is this collider configured as a trigger?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.offset">
+      <summary>
+        <para>The local offset of the collider geometry.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.shapeCount">
+      <summary>
+        <para>The number of separate shaped regions in the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.sharedMaterial">
+      <summary>
+        <para>The PhysicsMaterial2D that is applied to this collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.usedByComposite">
+      <summary>
+        <para>Sets whether the Collider will be used or not used by a CompositeCollider2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider2D.usedByEffector">
+      <summary>
+        <para>Whether the collider is used by an attached effector or not.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Collider2D.Cast(UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Boolean)">
+      <summary>
+        <para>Casts the collider shape into the scene starting at the collider position ignoring the collider itself.</para>
+      </summary>
+      <param name="direction">Vector representing the direction to cast the shape.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the shape.</param>
+      <param name="ignoreSiblingColliders">Should colliders attached to the same Rigidbody2D (known as sibling colliders) be ignored?</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.Cast(UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single,System.Boolean)">
+      <summary>
+        <para>Casts the collider shape into the scene starting at the collider position ignoring the collider itself.</para>
+      </summary>
+      <param name="direction">Vector representing the direction to cast the shape.</param>
+      <param name="contactFilter">Filter results defined by the contact filter.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the shape.</param>
+      <param name="ignoreSiblingColliders">Should colliders attached to the same Rigidbody2D (known as sibling colliders) be ignored?</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.Distance(UnityEngine.Collider2D)">
+      <summary>
+        <para>Calculates the minimum separation of this collider against another collider.</para>
+      </summary>
+      <param name="collider">A collider used to calculate the minimum separation against this collider.</param>
+      <returns>
+        <para>The minimum separation of collider and this collider.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.GetContacts(UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points for this collider.</para>
+      </summary>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.GetContacts(UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with this collider.</para>
+      </summary>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.GetContacts(UnityEngine.ContactFilter2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points for this collider, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.GetContacts(UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with this collider, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of collidersplaced in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.IsTouching(UnityEngine.Collider2D)">
+      <summary>
+        <para>Check whether this collider is touching the collider or not.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching this collider.</param>
+      <returns>
+        <para>Whether this collider is touching the collider or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.IsTouching(UnityEngine.Collider2D,UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Check whether this collider is touching the collider or not with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching this collider.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether this collider is touching the collider or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.IsTouching(UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Check whether this collider is touching other colliders or not with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether this collider is touching the collider or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.IsTouchingLayers(System.Int32)">
+      <summary>
+        <para>Checks whether this collider is touching any colliders on the specified layerMask or not.</para>
+      </summary>
+      <param name="layerMask">Any colliders on any of these layers count as touching.</param>
+      <returns>
+        <para>Whether this collider is touching any collider on the specified layerMask or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.OverlapCollider(UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Get a list of all colliders that overlap this collider.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.OverlapPoint(UnityEngine.Vector2)">
+      <summary>
+        <para>Check if a collider overlaps a point in space.</para>
+      </summary>
+      <param name="point">A point in world space.</param>
+      <returns>
+        <para>Does point overlap the collider?</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.Raycast(UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a ray into the scene starting at the collider position ignoring the collider itself.</para>
+      </summary>
+      <param name="direction">Vector representing the direction of the ray.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <param name="contactFilter">Filter results defined by the contact filter.</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider2D.Raycast(UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>Casts a ray into the scene starting at the collider position ignoring the collider itself.</para>
+      </summary>
+      <param name="direction">Vector representing the direction of the ray.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <param name="contactFilter">Filter results defined by the contact filter.</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.ColliderDistance2D">
+      <summary>
+        <para>Represents the separation or overlap of two Collider2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.distance">
+      <summary>
+        <para>Gets the distance between two colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.isOverlapped">
+      <summary>
+        <para>Gets whether the distance represents an overlap or not.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.isValid">
+      <summary>
+        <para>Gets whether the distance is valid or not.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.normal">
+      <summary>
+        <para>A normalized vector that points from pointB to pointA.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.pointA">
+      <summary>
+        <para>A point on a Collider2D that is a specific distance away from pointB.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ColliderDistance2D.pointB">
+      <summary>
+        <para>A point on a Collider2D that is a specific distance away from pointA.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Collision2D">
+      <summary>
+        <para>Collision details returned by 2D physics callback functions.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.collider">
+      <summary>
+        <para>The incoming Collider2D involved in the collision with the otherCollider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.contacts">
+      <summary>
+        <para>The specific points of contact with the incoming Collider2D.  You should avoid using this as it produces memory garbage.  Use GetContacts instead.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.enabled">
+      <summary>
+        <para>Indicates whether the collision response or reaction is enabled or disabled.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.gameObject">
+      <summary>
+        <para>The incoming GameObject involved in the collision.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.otherCollider">
+      <summary>
+        <para>The other Collider2D involved in the collision with the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.otherRigidbody">
+      <summary>
+        <para>The other Rigidbody2D involved in the collision with the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.relativeVelocity">
+      <summary>
+        <para>The relative linear velocity of the two colliding objects (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.rigidbody">
+      <summary>
+        <para>The incoming Rigidbody2D involved in the collision with the otherRigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision2D.transform">
+      <summary>
+        <para>The Transform of the incoming object involved in the collision.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Collision2D.GetContacts(UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in for contacts between collider and otherCollider.</para>
+      </summary>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.CollisionDetectionMode2D">
+      <summary>
+        <para>Controls how collisions are detected when a Rigidbody2D moves.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode2D.Continuous">
+      <summary>
+        <para>Ensures that all collisions are detected when a Rigidbody2D moves.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode2D.Discrete">
+      <summary>
+        <para>When a Rigidbody2D moves, only collisions at the new position are detected.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode2D.None">
+      <summary>
+        <para>This mode is obsolete.  You should use Discrete mode.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CompositeCollider2D">
+      <summary>
+        <para>A Collider that can merge other Colliders together.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.edgeRadius">
+      <summary>
+        <para>Controls the radius of all edges created by the Collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.generationType">
+      <summary>
+        <para>Specifies when to generate the Composite Collider geometry.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.geometryType">
+      <summary>
+        <para>Specifies the type of geometry the Composite Collider should generate.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.pathCount">
+      <summary>
+        <para>The number of paths in the Collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.pointCount">
+      <summary>
+        <para>Gets the total number of points in all the paths within the Collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CompositeCollider2D.vertexDistance">
+      <summary>
+        <para>Controls the minimum distance allowed between generated vertices.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CompositeCollider2D.GenerateGeometry">
+      <summary>
+        <para>Regenerates the Composite Collider geometry.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CompositeCollider2D.GenerationType">
+      <summary>
+        <para>Specifies when to generate the Composite Collider geometry.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CompositeCollider2D.GenerationType.Manual">
+      <summary>
+        <para>Sets the Composite Collider geometry to not automatically update when a Collider used by the Composite Collider changes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CompositeCollider2D.GenerationType.Synchronous">
+      <summary>
+        <para>Sets the Composite Collider geometry to update synchronously immediately when a Collider used by the Composite Collider changes.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CompositeCollider2D.GeometryType">
+      <summary>
+        <para>Specifies the type of geometry the Composite Collider generates.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CompositeCollider2D.GeometryType.Outlines">
+      <summary>
+        <para>Sets the Composite Collider to generate closed outlines for the merged Collider geometry consisting of only edges.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CompositeCollider2D.GeometryType.Polygons">
+      <summary>
+        <para>Sets the Composite Collider to generate closed outlines for the merged Collider geometry consisting of convex polygon shapes.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CompositeCollider2D.GetPath(System.Int32,UnityEngine.Vector2[])">
+      <summary>
+        <para>Gets a path from the Collider by its index.</para>
+      </summary>
+      <param name="index">The index of the path from 0 to pathCount.</param>
+      <param name="points">An ordered array of the vertices or points in the selected path.</param>
+      <returns>
+        <para>Returns the number of points placed in the points array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.CompositeCollider2D.GetPathPointCount(System.Int32)">
+      <summary>
+        <para>Gets the number of points in the specified path from the Collider by its index.</para>
+      </summary>
+      <param name="index">The index of the path from 0 to pathCount.</param>
+      <returns>
+        <para>Returns the number of points in the path specified by index.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.ConstantForce2D">
+      <summary>
+        <para>Applies both linear and angular (torque) forces continuously to the rigidbody each physics update.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce2D.force">
+      <summary>
+        <para>The linear force applied to the rigidbody each physics update.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce2D.relativeForce">
+      <summary>
+        <para>The linear force, relative to the rigid-body coordinate system, applied each physics update.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce2D.torque">
+      <summary>
+        <para>The torque applied to the rigidbody each physics update.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ContactFilter2D">
+      <summary>
+        <para>A set of parameters for filtering contact results.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactFilter2D.isFiltering">
+      <summary>
+        <para>Given the current state of the contact filter, determine whether it would filter anything.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.layerMask">
+      <summary>
+        <para>Sets the contact filter to filter the results that only include Collider2D on the layers defined by the layer mask.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.maxDepth">
+      <summary>
+        <para>Sets the contact filter to filter the results to only include Collider2D with a Z coordinate (depth) less than this value.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.maxNormalAngle">
+      <summary>
+        <para>Sets the contact filter to filter the results to only include contacts with collision normal angles that are less than this angle.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.minDepth">
+      <summary>
+        <para>Sets the contact filter to filter the results to only include Collider2D with a Z coordinate (depth) greater than this value.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.minNormalAngle">
+      <summary>
+        <para>Sets the contact filter to filter the results to only include contacts with collision normal angles that are greater than this angle.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useDepth">
+      <summary>
+        <para>Sets the contact filter to filter the results by depth using minDepth and maxDepth.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useLayerMask">
+      <summary>
+        <para>Sets the contact filter to filter results by layer mask.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useNormalAngle">
+      <summary>
+        <para>Sets the contact filter to filter the results by the collision's normal angle using minNormalAngle and maxNormalAngle.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useOutsideDepth">
+      <summary>
+        <para>Sets the contact filter to filter within the minDepth and maxDepth range, or outside that range.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useOutsideNormalAngle">
+      <summary>
+        <para>Sets the contact filter to filter within the minNormalAngle and maxNormalAngle range, or outside that range.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ContactFilter2D.useTriggers">
+      <summary>
+        <para>Sets to filter contact results based on trigger collider involvement.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.ClearDepth">
+      <summary>
+        <para>Turns off depth filtering by setting useDepth to false.  The associated values of minDepth and maxDepth are not changed.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.ClearLayerMask">
+      <summary>
+        <para>Turns off layer mask filtering by setting useLayerMask to false.  The associated value of layerMask is not changed.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.ClearNormalAngle">
+      <summary>
+        <para>Turns off normal angle filtering by setting useNormalAngle to false. The associated values of minNormalAngle and maxNormalAngle are not changed.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.IsFilteringDepth(UnityEngine.GameObject)">
+      <summary>
+        <para>Checks if the Transform for obj is within the depth range to be filtered.</para>
+      </summary>
+      <param name="obj">The GameObject used to check the z-position (depth) of Transform.position.</param>
+      <returns>
+        <para>Returns true when obj is excluded by the filter and false if otherwise.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.IsFilteringLayerMask(UnityEngine.GameObject)">
+      <summary>
+        <para>Checks if the GameObject.layer for obj is included in the layerMask to be filtered.</para>
+      </summary>
+      <param name="obj">The GameObject used to check the GameObject.layer.</param>
+      <returns>
+        <para>Returns true when obj is excluded by the filter and false if otherwise.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.IsFilteringNormalAngle(UnityEngine.Vector2)">
+      <summary>
+        <para>Checks if the angle of normal is within the normal angle range to be filtered.</para>
+      </summary>
+      <param name="normal">The normal used to calculate an angle.</param>
+      <returns>
+        <para>Returns true when normal is excluded by the filter and false if otherwise.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.IsFilteringNormalAngle(System.Single)">
+      <summary>
+        <para>Checks if the angle is within the normal angle range to be filtered.</para>
+      </summary>
+      <param name="angle">The angle used for comparison in the filter.</param>
+      <returns>
+        <para>Returns true when angle is excluded by the filter and false if otherwise.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.IsFilteringTrigger(UnityEngine.Collider2D)">
+      <summary>
+        <para>Checks if the collider is a trigger and should be filtered by the useTriggers to be filtered.</para>
+      </summary>
+      <param name="collider">The Collider2D used to check for a trigger.</param>
+      <returns>
+        <para>Returns true when collider is excluded by the filter and false if otherwise.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.NoFilter">
+      <summary>
+        <para>Sets the contact filter to not filter any ContactPoint2D.</para>
+      </summary>
+      <returns>
+        <para>A copy of the contact filter set to not filter any ContactPoint2D.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.SetDepth(System.Single,System.Single)">
+      <summary>
+        <para>Sets the minDepth and maxDepth filter properties and turns on depth filtering by setting useDepth to true.</para>
+      </summary>
+      <param name="minDepth">The value used to set minDepth.</param>
+      <param name="maxDepth">The value used to set maxDepth.</param>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.SetLayerMask(UnityEngine.LayerMask)">
+      <summary>
+        <para>Sets the layerMask filter property using the layerMask parameter provided and also enables layer mask filtering by setting useLayerMask to true.</para>
+      </summary>
+      <param name="layerMask">The value used to set the layerMask.</param>
+    </member>
+    <member name="M:UnityEngine.ContactFilter2D.SetNormalAngle(System.Single,System.Single)">
+      <summary>
+        <para>Sets the minNormalAngle and maxNormalAngle filter properties and turns on normal angle filtering by setting useNormalAngle to true.</para>
+      </summary>
+      <param name="minNormalAngle">The value used to set the minNormalAngle.</param>
+      <param name="maxNormalAngle">The value used to set the maxNormalAngle.</param>
+    </member>
+    <member name="T:UnityEngine.ContactPoint2D">
+      <summary>
+        <para>Details about a specific point of contact involved in a 2D physics collision.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.collider">
+      <summary>
+        <para>The incoming Collider2D involved in the collision with the otherCollider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.enabled">
+      <summary>
+        <para>Indicates whether the collision response or reaction is enabled or disabled.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.normal">
+      <summary>
+        <para>Surface normal at the contact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.normalImpulse">
+      <summary>
+        <para>Gets the impulse force applied at the contact point along the ContactPoint2D.normal.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.otherCollider">
+      <summary>
+        <para>The other Collider2D involved in the collision with the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.otherRigidbody">
+      <summary>
+        <para>The other Rigidbody2D involved in the collision with the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.point">
+      <summary>
+        <para>The point of contact between the two colliders in world space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.relativeVelocity">
+      <summary>
+        <para>Gets the relative velocity of the two colliders at the contact point (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.rigidbody">
+      <summary>
+        <para>The incoming Rigidbody2D involved in the collision with the otherRigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.separation">
+      <summary>
+        <para>Gets the distance between the colliders at the contact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint2D.tangentImpulse">
+      <summary>
+        <para>Gets the impulse force applied at the contact point which is perpendicular to the ContactPoint2D.normal.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.DistanceJoint2D">
+      <summary>
+        <para>Joint that keeps two Rigidbody2D objects a fixed distance apart.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.DistanceJoint2D.autoConfigureDistance">
+      <summary>
+        <para>Should the distance be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.DistanceJoint2D.distance">
+      <summary>
+        <para>The distance separating the two ends of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.DistanceJoint2D.maxDistanceOnly">
+      <summary>
+        <para>Whether to maintain a maximum distance only or not.  If not then the absolute distance will be maintained instead.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.EdgeCollider2D">
+      <summary>
+        <para>Collider for 2D physics representing an arbitrary set of connected edges (lines) defined by its vertices.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.EdgeCollider2D.edgeCount">
+      <summary>
+        <para>Gets the number of edges.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.EdgeCollider2D.edgeRadius">
+      <summary>
+        <para>Controls the radius of all edges created by the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.EdgeCollider2D.pointCount">
+      <summary>
+        <para>Gets the number of points.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.EdgeCollider2D.points">
+      <summary>
+        <para>Get or set the points defining multiple continuous edges.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.EdgeCollider2D.Reset">
+      <summary>
+        <para>Reset to a single edge consisting of two points.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Effector2D">
+      <summary>
+        <para>A base class for all 2D effectors.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Effector2D.colliderMask">
+      <summary>
+        <para>The mask used to select specific layers allowed to interact with the effector.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Effector2D.useColliderMask">
+      <summary>
+        <para>Should the collider-mask be used or the global collision matrix?</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.EffectorForceMode2D">
+      <summary>
+        <para>The mode used to apply Effector2D forces.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.EffectorForceMode2D.Constant">
+      <summary>
+        <para>The force is applied at a constant rate.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.EffectorForceMode2D.InverseLinear">
+      <summary>
+        <para>The force is applied inverse-linear relative to a point.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.EffectorForceMode2D.InverseSquared">
+      <summary>
+        <para>The force is applied inverse-squared relative to a point.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.EffectorSelection2D">
+      <summary>
+        <para>Selects the source and/or target to be used by an Effector2D.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.EffectorSelection2D.Collider">
+      <summary>
+        <para>The source/target is defined by the Collider2D.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.EffectorSelection2D.Rigidbody">
+      <summary>
+        <para>The source/target is defined by the Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.FixedJoint2D">
+      <summary>
+        <para>Connects two Rigidbody2D together at their anchor points using a configurable spring.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.FixedJoint2D.dampingRatio">
+      <summary>
+        <para>The amount by which the spring force is reduced in proportion to the movement speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.FixedJoint2D.frequency">
+      <summary>
+        <para>The frequency at which the spring oscillates around the distance between the objects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.FixedJoint2D.referenceAngle">
+      <summary>
+        <para>The angle referenced between the two bodies used as the constraint for the joint.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ForceMode2D">
+      <summary>
+        <para>Option for how to apply a force using Rigidbody2D.AddForce.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode2D.Force">
+      <summary>
+        <para>Add a force to the Rigidbody2D, using its mass.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode2D.Impulse">
+      <summary>
+        <para>Add an instant force impulse to the rigidbody2D, using its mass.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.FrictionJoint2D">
+      <summary>
+        <para>Applies both force and torque to reduce both the linear and angular velocities to zero.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.FrictionJoint2D.maxForce">
+      <summary>
+        <para>The maximum force that can be generated when trying to maintain the friction joint constraint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.FrictionJoint2D.maxTorque">
+      <summary>
+        <para>The maximum torque that can be generated when trying to maintain the friction joint constraint.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.HingeJoint2D">
+      <summary>
+        <para>Joint that allows a Rigidbody2D object to rotate around a point in space or a point on another object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.jointAngle">
+      <summary>
+        <para>The current joint angle (in degrees) with respect to the reference angle.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.jointSpeed">
+      <summary>
+        <para>The current joint speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.limits">
+      <summary>
+        <para>Limit of angular rotation (in degrees) on the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.limitState">
+      <summary>
+        <para>Gets the state of the joint limit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.motor">
+      <summary>
+        <para>Parameters for the motor force applied to the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.referenceAngle">
+      <summary>
+        <para>The angle (in degrees) referenced between the two bodies used as the constraint for the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.useLimits">
+      <summary>
+        <para>Should limits be placed on the range of rotation?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint2D.useMotor">
+      <summary>
+        <para>Should the joint be rotated automatically by a motor torque?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.HingeJoint2D.GetMotorTorque(System.Single)">
+      <summary>
+        <para>Gets the motor torque of the joint given the specified timestep.</para>
+      </summary>
+      <param name="timeStep">The time to calculate the motor torque for.</param>
+    </member>
+    <member name="T:UnityEngine.Joint2D">
+      <summary>
+        <para>Parent class for joints to connect Rigidbody2D objects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.attachedRigidbody">
+      <summary>
+        <para>The Rigidbody2D attached to the Joint2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.breakForce">
+      <summary>
+        <para>The force that needs to be applied for this joint to break.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.breakTorque">
+      <summary>
+        <para>The torque that needs to be applied for this joint to break.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.connectedBody">
+      <summary>
+        <para>The Rigidbody2D object to which the other end of the joint is attached (ie, the object without the joint component).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.enableCollision">
+      <summary>
+        <para>Should the two rigid bodies connected with this joint collide with each other?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.reactionForce">
+      <summary>
+        <para>Gets the reaction force of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint2D.reactionTorque">
+      <summary>
+        <para>Gets the reaction torque of the joint.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Joint2D.GetReactionForce(System.Single)">
+      <summary>
+        <para>Gets the reaction force of the joint given the specified timeStep.</para>
+      </summary>
+      <param name="timeStep">The time to calculate the reaction force for.</param>
+      <returns>
+        <para>The reaction force of the joint in the specified timeStep.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Joint2D.GetReactionTorque(System.Single)">
+      <summary>
+        <para>Gets the reaction torque of the joint given the specified timeStep.</para>
+      </summary>
+      <param name="timeStep">The time to calculate the reaction torque for.</param>
+      <returns>
+        <para>The reaction torque of the joint in the specified timeStep.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.JointAngleLimits2D">
+      <summary>
+        <para>Angular limits on the rotation of a Rigidbody2D object around a HingeJoint2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointAngleLimits2D.max">
+      <summary>
+        <para>Upper angular limit of rotation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointAngleLimits2D.min">
+      <summary>
+        <para>Lower angular limit of rotation.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointLimitState2D">
+      <summary>
+        <para>Represents the state of a joint limit.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointLimitState2D.EqualLimits">
+      <summary>
+        <para>Represents a state where the joint limit is at the specified lower and upper limits (they are identical).</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointLimitState2D.Inactive">
+      <summary>
+        <para>Represents a state where the joint limit is inactive.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointLimitState2D.LowerLimit">
+      <summary>
+        <para>Represents a state where the joint limit is at the specified lower limit.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointLimitState2D.UpperLimit">
+      <summary>
+        <para>Represents a state where the joint limit is at the specified upper limit.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointMotor2D">
+      <summary>
+        <para>Parameters for the optional motor force applied to a Joint2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointMotor2D.maxMotorTorque">
+      <summary>
+        <para>The maximum force that can be applied to the Rigidbody2D at the joint to attain the target speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointMotor2D.motorSpeed">
+      <summary>
+        <para>The desired speed for the Rigidbody2D to reach as it moves with the joint.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointSuspension2D">
+      <summary>
+        <para>Joint suspension is used to define how suspension works on a WheelJoint2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointSuspension2D.angle">
+      <summary>
+        <para>The world angle (in degrees) along which the suspension will move.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointSuspension2D.dampingRatio">
+      <summary>
+        <para>The amount by which the suspension spring force is reduced in proportion to the movement speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointSuspension2D.frequency">
+      <summary>
+        <para>The frequency at which the suspension spring oscillates.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointTranslationLimits2D">
+      <summary>
+        <para>Motion limits of a Rigidbody2D object along a SliderJoint2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointTranslationLimits2D.max">
+      <summary>
+        <para>Maximum distance the Rigidbody2D object can move from the Slider Joint's anchor.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointTranslationLimits2D.min">
+      <summary>
+        <para>Minimum distance the Rigidbody2D object can move from the Slider Joint's anchor.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Physics2D">
+      <summary>
+        <para>Global settings and helpers for 2D physics.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.alwaysShowColliders">
+      <summary>
+        <para>Should the collider gizmos always be shown even when they are not selected?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.angularSleepTolerance">
+      <summary>
+        <para>A rigid-body cannot sleep if its angular velocity is above this tolerance.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.autoSimulation">
+      <summary>
+        <para>Sets whether the physics should be simulated automatically or not.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.autoSyncTransforms">
+      <summary>
+        <para>Whether or not to automatically sync transform changes with the physics system whenever a Transform component changes.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.baumgarteScale">
+      <summary>
+        <para>The scale factor that controls how fast overlaps are resolved.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.baumgarteTOIScale">
+      <summary>
+        <para>The scale factor that controls how fast TOI overlaps are resolved.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.callbacksOnDisable">
+      <summary>
+        <para>Use this to control whether or not the appropriate OnCollisionExit2D or OnTriggerExit2D callbacks should be called when a Collider2D is disabled.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.changeStopsCallbacks">
+      <summary>
+        <para>Whether or not to stop reporting collision callbacks immediately if any of the objects involved in the collision are deleted/moved. </para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.colliderAABBColor">
+      <summary>
+        <para>Sets the color used by the gizmos to show all Collider axis-aligned bounding boxes (AABBs).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.colliderAsleepColor">
+      <summary>
+        <para>The color used by the gizmos to show all asleep colliders (collider is asleep when the body is asleep).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.colliderAwakeColor">
+      <summary>
+        <para>The color used by the gizmos to show all awake colliders (collider is awake when the body is awake).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.colliderContactColor">
+      <summary>
+        <para>The color used by the gizmos to show all collider contacts.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.contactArrowScale">
+      <summary>
+        <para>The scale of the contact arrow used by the collider gizmos.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.defaultContactOffset">
+      <summary>
+        <para>The default contact offset of the newly created colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.gravity">
+      <summary>
+        <para>Acceleration due to gravity.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.linearSleepTolerance">
+      <summary>
+        <para>A rigid-body cannot sleep if its linear velocity is above this tolerance.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.maxAngularCorrection">
+      <summary>
+        <para>The maximum angular position correction used when solving constraints.  This helps to prevent overshoot.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.maxLinearCorrection">
+      <summary>
+        <para>The maximum linear position correction used when solving constraints.  This helps to prevent overshoot.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.maxRotationSpeed">
+      <summary>
+        <para>The maximum angular speed of a rigid-body per physics update.  Increasing this can cause numerical problems.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.maxTranslationSpeed">
+      <summary>
+        <para>The maximum linear speed of a rigid-body per physics update.  Increasing this can cause numerical problems.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.positionIterations">
+      <summary>
+        <para>The number of iterations of the physics solver when considering objects' positions.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.queriesHitTriggers">
+      <summary>
+        <para>Do raycasts detect Colliders configured as triggers?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.queriesStartInColliders">
+      <summary>
+        <para>Sets the raycasts or linecasts that start inside Colliders to detect or not detect those Colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.showColliderAABB">
+      <summary>
+        <para>Should the collider gizmos show the AABBs for each collider?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.showColliderContacts">
+      <summary>
+        <para>Should the collider gizmos show current contacts for each collider?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.showColliderSleep">
+      <summary>
+        <para>Should the collider gizmos show the sleep-state for each collider?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.timeToSleep">
+      <summary>
+        <para>The time in seconds that a rigid-body must be still before it will go to sleep.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.velocityIterations">
+      <summary>
+        <para>The number of iterations of the physics solver when considering objects' velocities.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics2D.velocityThreshold">
+      <summary>
+        <para>Any collisions with a relative linear velocity below this threshold will be treated as inelastic.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Physics2D.AllLayers">
+      <summary>
+        <para>Layer mask constant that includes all layers.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics2D.BoxCast(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a box against colliders in the scene, returning the first collider to contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the box originates.</param>
+      <param name="size">The size of the box.</param>
+      <param name="angle">The angle of the box (in degrees).</param>
+      <param name="direction">Vector representing the direction of the box.</param>
+      <param name="distance">Maximum distance over which to cast the box.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.BoxCast(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>Casts a box against the colliders in the Scene and returns all colliders that are in contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the box originates.</param>
+      <param name="size">The size of the box.</param>
+      <param name="angle">The angle of the box (in degrees).</param>
+      <param name="direction">Vector representing the direction of the box.</param>
+      <param name="distance">Maximum distance over which to cast the box.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.BoxCastAll(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a box against colliders in the scene, returning all colliders that contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the box originates.</param>
+      <param name="size">The size of the box.</param>
+      <param name="angle">The angle of the box (in degrees).</param>
+      <param name="direction">Vector representing the direction of the box.</param>
+      <param name="distance">Maximum distance over which to cast the box.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.BoxCastNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a box into the scene, returning colliders that contact with it into the provided results array.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the box originates.</param>
+      <param name="size">The size of the box.</param>
+      <param name="angle">The angle of the box (in degrees).</param>
+      <param name="direction">Vector representing the direction of the box.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the box.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CapsuleCast(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a capsule against colliders in the scene, returning the first collider to contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the capsule originates.</param>
+      <param name="size">The size of the capsule.</param>
+      <param name="capsuleDirection">The direction of the capsule.</param>
+      <param name="angle">The angle of the capsule (in degrees).</param>
+      <param name="direction">Vector representing the direction to cast the capsule.</param>
+      <param name="distance">Maximum distance over which to cast the capsule.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CapsuleCast(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>Casts a capsule against the colliders in the Scene and returns all colliders that are in contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the capsule originates.</param>
+      <param name="size">The size of the capsule.</param>
+      <param name="capsuleDirection">The direction of the capsule.</param>
+      <param name="angle">The angle of the capsule (in degrees).</param>
+      <param name="direction">Vector representing the direction to cast the capsule.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="distance">Maximum distance over which to cast the capsule.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CapsuleCastAll(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a capsule against colliders in the scene, returning all colliders that contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the capsule originates.</param>
+      <param name="size">The size of the capsule.</param>
+      <param name="capsuleDirection">The direction of the capsule.</param>
+      <param name="angle">The angle of the capsule (in degrees).</param>
+      <param name="direction">Vector representing the direction to cast the capsule.</param>
+      <param name="distance">Maximum distance over which to cast the capsule.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CapsuleCastNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a capsule into the scene, returning colliders that contact with it into the provided results array.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the capsule originates.</param>
+      <param name="size">The size of the capsule.</param>
+      <param name="capsuleDirection">The direction of the capsule.</param>
+      <param name="angle">The angle of the capsule (in degrees).</param>
+      <param name="direction">Vector representing the direction to cast the capsule.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the capsule.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CircleCast(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a circle against colliders in the scene, returning the first collider to contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the circle originates.</param>
+      <param name="radius">The radius of the circle.</param>
+      <param name="direction">Vector representing the direction of the circle.</param>
+      <param name="distance">Maximum distance over which to cast the circle.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CircleCast(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>Casts a circle against colliders in the Scene, returning all colliders that contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the circle originates.</param>
+      <param name="radius">The radius of the circle.</param>
+      <param name="direction">Vector representing the direction of the circle.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="distance">Maximum distance over which to cast the circle.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CircleCastAll(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a circle against colliders in the scene, returning all colliders that contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the circle originates.</param>
+      <param name="radius">The radius of the circle.</param>
+      <param name="direction">Vector representing the direction of the circle.</param>
+      <param name="distance">Maximum distance over which to cast the circle.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.CircleCastNonAlloc(UnityEngine.Vector2,System.Single,UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a circle into the scene, returning colliders that contact with it into the provided results array.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the circle originates.</param>
+      <param name="radius">The radius of the circle.</param>
+      <param name="direction">Vector representing the direction of the circle.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the circle.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="F:UnityEngine.Physics2D.DefaultRaycastLayers">
+      <summary>
+        <para>Layer mask constant that includes all layers participating in raycasts by default.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Distance(UnityEngine.Collider2D,UnityEngine.Collider2D)">
+      <summary>
+        <para>Calculates the minimum distance between two colliders.</para>
+      </summary>
+      <param name="colliderA">A collider used to calculate the minimum distance against colliderB.</param>
+      <param name="colliderB">A collider used to calculate the minimum distance against colliderA.</param>
+      <returns>
+        <para>The minimum distance between colliderA and colliderB.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Collider2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with the collider.</para>
+      </summary>
+      <param name="collider">The collider to retrieve contacts for.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Collider2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in contact with the collider.</para>
+      </summary>
+      <param name="collider">The collider to retrieve contacts for.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Collider2D,UnityEngine.ContactFilter2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in contact with the collider, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="collider">The collider to retrieve contacts for.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Collider2D,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with the collider, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="collider">The collider to retrieve contacts for.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Collider2D,UnityEngine.Collider2D,UnityEngine.ContactFilter2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in for contacts between with the collider1 and collider2, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="collider1">The collider to check if it has contacts against collider2.</param>
+      <param name="collider2">The collider to check if it has contacts against collider1.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Rigidbody2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in contact with any of the collider(s) attached to this rigidbody.</para>
+      </summary>
+      <param name="rigidbody">The rigidbody to retrieve contacts for.  All colliders attached to this rigidbody will be checked.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Rigidbody2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with any of the collider(s) attached to this rigidbody.</para>
+      </summary>
+      <param name="rigidbody">The rigidbody to retrieve contacts for.  All colliders attached to this rigidbody will be checked.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Rigidbody2D,UnityEngine.ContactFilter2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points in contact with any of the collider(s) attached to this rigidbody, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="rigidbody">The rigidbody to retrieve contacts for.  All colliders attached to this rigidbody will be checked.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetContacts(UnityEngine.Rigidbody2D,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with any of the collider(s) attached to this rigidbody, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="rigidbody">The rigidbody to retrieve contacts for.  All colliders attached to this rigidbody will be checked.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetIgnoreCollision(UnityEngine.Collider2D,UnityEngine.Collider2D)">
+      <summary>
+        <para>Checks whether the collision detection system will ignore all collisionstriggers between collider1 and collider2/ or not.</para>
+      </summary>
+      <param name="collider1">The first collider to compare to collider2.</param>
+      <param name="collider2">The second collider to compare to collider1.</param>
+      <returns>
+        <para>Whether the collision detection system will ignore all collisionstriggers between collider1 and collider2/ or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetIgnoreLayerCollision(System.Int32,System.Int32)">
+      <summary>
+        <para>Checks whether collisions between the specified layers be ignored or not.</para>
+      </summary>
+      <param name="layer1">ID of first layer.</param>
+      <param name="layer2">ID of second layer.</param>
+      <returns>
+        <para>Whether collisions between the specified layers be ignored or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetLayerCollisionMask(System.Int32)">
+      <summary>
+        <para>Get the collision layer mask that indicates which layer(s) the specified layer can collide with.</para>
+      </summary>
+      <param name="layer">The layer to retrieve the collision layer mask for.</param>
+      <returns>
+        <para>A mask where each bit indicates a layer and whether it can collide with layer or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetRayIntersection(UnityEngine.Ray,System.Single,System.Int32)">
+      <summary>
+        <para>Cast a 3D ray against the colliders in the scene returning the first collider along the ray.</para>
+      </summary>
+      <param name="ray">The 3D ray defining origin and direction to test.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to detect colliders only on certain layers.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetRayIntersectionAll(UnityEngine.Ray,System.Single,System.Int32)">
+      <summary>
+        <para>Cast a 3D ray against the colliders in the scene returning all the colliders along the ray.</para>
+      </summary>
+      <param name="ray">The 3D ray defining origin and direction to test.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to detect colliders only on certain layers.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.GetRayIntersectionNonAlloc(UnityEngine.Ray,UnityEngine.RaycastHit2D[],System.Single,System.Int32)">
+      <summary>
+        <para>Cast a 3D ray against the colliders in the scene returning the colliders along the ray.</para>
+      </summary>
+      <param name="ray">The 3D ray defining origin and direction to test.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to detect colliders only on certain layers.</param>
+      <param name="results">Array to receive results.</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IgnoreCollision(UnityEngine.Collider2D,UnityEngine.Collider2D,System.Boolean)">
+      <summary>
+        <para>Makes the collision detection system ignore all collisionstriggers between collider1 and collider2/.</para>
+      </summary>
+      <param name="collider1">The first collider to compare to collider2.</param>
+      <param name="collider2">The second collider to compare to collider1.</param>
+      <param name="ignore">Whether collisionstriggers between collider1 and collider2/ should be ignored or not.</param>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IgnoreLayerCollision(System.Int32,System.Int32,System.Boolean)">
+      <summary>
+        <para>Choose whether to detect or ignore collisions between a specified pair of layers.</para>
+      </summary>
+      <param name="layer1">ID of the first layer.</param>
+      <param name="layer2">ID of the second layer.</param>
+      <param name="ignore">Should collisions between these layers be ignored?</param>
+    </member>
+    <member name="F:UnityEngine.Physics2D.IgnoreRaycastLayer">
+      <summary>
+        <para>Layer mask constant for the default layer that ignores raycasts.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IsTouching(UnityEngine.Collider2D,UnityEngine.Collider2D)">
+      <summary>
+        <para>Checks whether the passed colliders are in contact or not.</para>
+      </summary>
+      <param name="collider1">The collider to check if it is touching collider2.</param>
+      <param name="collider2">The collider to check if it is touching collider1.</param>
+      <returns>
+        <para>Whether collider1 is touching collider2 or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IsTouching(UnityEngine.Collider2D,UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Checks whether the passed colliders are in contact or not.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching any other collider filtered by the contactFilter.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether the collider is touching any other collider filtered by the contactFilter or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IsTouching(UnityEngine.Collider2D,UnityEngine.Collider2D,UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Checks whether the passed colliders are in contact or not.</para>
+      </summary>
+      <param name="collider1">The collider to check if it is touching collider2.</param>
+      <param name="collider2">The collider to check if it is touching collider1.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether collider1 is touching collider2 or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.IsTouchingLayers(UnityEngine.Collider2D,System.Int32)">
+      <summary>
+        <para>Checks whether the collider is touching any colliders on the specified layerMask or not.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching colliders on the layerMask.</param>
+      <param name="layerMask">Any colliders on any of these layers count as touching.</param>
+      <returns>
+        <para>Whether the collider is touching any colliders on the specified layerMask or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Linecast(UnityEngine.Vector2,UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a line segment against colliders in the Scene.</para>
+      </summary>
+      <param name="start">The start point of the line in world space.</param>
+      <param name="end">The end point of the line in world space.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Linecast(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[])">
+      <summary>
+        <para>Casts a line segment against colliders in the Scene with results filtered by ContactFilter2D.</para>
+      </summary>
+      <param name="start">The start point of the line in world space.</param>
+      <param name="end">The end point of the line in world space.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.LinecastAll(UnityEngine.Vector2,UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a line against colliders in the scene.</para>
+      </summary>
+      <param name="start">The start point of the line in world space.</param>
+      <param name="end">The end point of the line in world space.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.LinecastNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a line against colliders in the scene.</para>
+      </summary>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <param name="start">The start point of the line in world space.</param>
+      <param name="end">The end point of the line in world space.</param>
+      <param name="results">Returned array of objects that intersect the line.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapArea(UnityEngine.Vector2,UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Checks if a collider falls within a rectangular area.</para>
+      </summary>
+      <param name="pointA">One corner of the rectangle.</param>
+      <param name="pointB">Diagonally opposite the point A corner of the rectangle.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The collider overlapping the area.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapArea(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Checks if a collider falls within a rectangular area.</para>
+      </summary>
+      <param name="pointA">One corner of the rectangle.</param>
+      <param name="pointB">Diagonally opposite the point A corner of the rectangle.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapAreaAll(UnityEngine.Vector2,UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a rectangular area.</para>
+      </summary>
+      <param name="pointA">One corner of the rectangle.</param>
+      <param name="pointB">Diagonally opposite the point A corner of the rectangle.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapAreaNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.Collider2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a specified area.</para>
+      </summary>
+      <param name="pointA">One corner of the rectangle.</param>
+      <param name="pointB">Diagonally opposite the point A corner of the rectangle.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="layerMask">Filter to check objects only on specified layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapBox(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Checks if a collider falls within a box area.</para>
+      </summary>
+      <param name="point">Center of the box.</param>
+      <param name="size">Size of the box.</param>
+      <param name="angle">Angle of the box.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The collider overlapping the box.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapBox(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Checks if a collider falls within a box area.</para>
+      </summary>
+      <param name="point">Center of the box.</param>
+      <param name="size">Size of the box.</param>
+      <param name="angle">Angle of the box.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapBoxAll(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a box area.</para>
+      </summary>
+      <param name="point">Center of the box.</param>
+      <param name="size">Size of the box.</param>
+      <param name="angle">Angle of the box.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapBoxNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,UnityEngine.Collider2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a box area.</para>
+      </summary>
+      <param name="point">Center of the box.</param>
+      <param name="size">Size of the box.</param>
+      <param name="angle">Angle of the box.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCapsule(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Checks if a collider falls within a capsule area.</para>
+      </summary>
+      <param name="point">Center of the capsule.</param>
+      <param name="size">Size of the capsule.</param>
+      <param name="direction">The direction of the capsule.</param>
+      <param name="angle">Angle of the capsule.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The collider overlapping the capsule.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCapsule(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Checks if a collider falls within a capsule area.</para>
+      </summary>
+      <param name="point">Center of the capsule.</param>
+      <param name="size">Size of the capsule.</param>
+      <param name="direction">The direction of the capsule.</param>
+      <param name="angle">Angle of the capsule.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCapsuleAll(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a capsule area.</para>
+      </summary>
+      <param name="point">Center of the capsule.</param>
+      <param name="size">Size of the capsule.</param>
+      <param name="direction">The direction of the capsule.</param>
+      <param name="angle">Angle of the capsule.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCapsuleNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.CapsuleDirection2D,System.Single,UnityEngine.Collider2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a capsule area.</para>
+      </summary>
+      <param name="point">Center of the capsule.</param>
+      <param name="size">Size of the capsule.</param>
+      <param name="direction">The direction of the capsule.</param>
+      <param name="angle">Angle of the capsule.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCircle(UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Checks if a collider falls within a circular area.</para>
+      </summary>
+      <param name="point">Centre of the circle.</param>
+      <param name="radius">Radius of the circle.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The collider overlapping the circle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCircle(UnityEngine.Vector2,System.Single,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Checks if a collider is within a circular area.</para>
+      </summary>
+      <param name="point">Centre of the circle.</param>
+      <param name="radius">Radius of the circle.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCircleAll(UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a circular area.</para>
+      </summary>
+      <param name="point">Center of the circle.</param>
+      <param name="radius">Radius of the circle.</param>
+      <param name="layerMask">Filter to check objects only on specified layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCircleNonAlloc(UnityEngine.Vector2,System.Single,UnityEngine.Collider2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that fall within a circular area.</para>
+      </summary>
+      <param name="point">Center of the circle.</param>
+      <param name="radius">Radius of the circle.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapCollider(UnityEngine.Collider2D,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Get a list of all colliders that overlap collider.</para>
+      </summary>
+      <param name="collider">The collider that defines the area used to query for other collider overlaps.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapPoint(UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Checks if a collider overlaps a point in space.</para>
+      </summary>
+      <param name="point">A point in world space.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The collider overlapping the point.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapPoint(UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Checks if a collider overlaps a point in world space.</para>
+      </summary>
+      <param name="point">A point in world space.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapPointAll(UnityEngine.Vector2,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that overlap a point in space.</para>
+      </summary>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <param name="point">A point in space.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.OverlapPointNonAlloc(UnityEngine.Vector2,UnityEngine.Collider2D[],System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Get a list of all colliders that overlap a point in space.</para>
+      </summary>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <param name="point">A point in space.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Raycast(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a ray against colliders in the scene.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the ray originates.</param>
+      <param name="direction">The vector representing the direction of the ray.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Raycast(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>Casts a ray against colliders in the Scene.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the ray originates.</param>
+      <param name="direction">The vector representing the direction of the ray.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.RaycastAll(UnityEngine.Vector2,UnityEngine.Vector2,System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a ray against colliders in the scene, returning all colliders that contact with it.</para>
+      </summary>
+      <param name="origin">The point in 2D space where the ray originates.</param>
+      <param name="direction">The vector representing the direction of the ray.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to detect Colliders only on certain layers.</param>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <returns>
+        <para>The cast results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.RaycastNonAlloc(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single,System.Int32,System.Single,System.Single)">
+      <summary>
+        <para>Casts a ray into the scene.</para>
+      </summary>
+      <param name="minDepth">Only include objects with a Z coordinate (depth) greater than or equal to this value.</param>
+      <param name="maxDepth">Only include objects with a Z coordinate (depth) less than or equal to this value.</param>
+      <param name="origin">The point in 2D space where the ray originates.</param>
+      <param name="direction">The vector representing the direction of the ray.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the ray.</param>
+      <param name="layerMask">Filter to check objects only on specific layers.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.SetLayerCollisionMask(System.Int32,System.Int32)">
+      <summary>
+        <para>Set the collision layer mask that indicates which layer(s) the specified layer can collide with.</para>
+      </summary>
+      <param name="layer">The layer to set the collision layer mask for.</param>
+      <param name="layerMask">A mask where each bit indicates a layer and whether it can collide with layer or not.</param>
+    </member>
+    <member name="M:UnityEngine.Physics2D.Simulate(System.Single)">
+      <summary>
+        <para>Simulate physics in the scene.</para>
+      </summary>
+      <param name="step">The time to advance physics by.</param>
+      <returns>
+        <para>Whether the simulation was run or not.  Running the simulation during physics callbacks will always fail.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics2D.SyncTransforms">
+      <summary>
+        <para>Synchronizes.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PhysicsMaterial2D">
+      <summary>
+        <para>Asset type that defines the surface properties of a Collider2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicsMaterial2D.bounciness">
+      <summary>
+        <para>The degree of elasticity during collisions.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicsMaterial2D.friction">
+      <summary>
+        <para>Coefficient of friction.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PhysicsUpdateBehaviour2D">
+      <summary>
+        <para>A base type for 2D physics components that required a callback during FixedUpdate.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PlatformEffector2D">
+      <summary>
+        <para>Applies "platform" behaviour such as one-way collisions etc.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.rotationalOffset">
+      <summary>
+        <para>The rotational offset angle from the local 'up'.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.sideArc">
+      <summary>
+        <para>The angle of an arc that defines the sides of the platform centered on the local 'left' and 'right' of the effector. Any collision normals within this arc are considered for the 'side' behaviours.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.surfaceArc">
+      <summary>
+        <para>The angle of an arc that defines the surface of the platform centered of the local 'up' of the effector.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.useOneWay">
+      <summary>
+        <para>Should the one-way collision behaviour be used?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.useOneWayGrouping">
+      <summary>
+        <para>Ensures that all contacts controlled by the one-way behaviour act the same.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.useSideBounce">
+      <summary>
+        <para>Should bounce be used on the platform sides?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PlatformEffector2D.useSideFriction">
+      <summary>
+        <para>Should friction be used on the platform sides?</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PointEffector2D">
+      <summary>
+        <para>Applies forces to attract/repulse against a point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.angularDrag">
+      <summary>
+        <para>The angular drag to apply to rigid-bodies.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.distanceScale">
+      <summary>
+        <para>The scale applied to the calculated distance between source and target.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.drag">
+      <summary>
+        <para>The linear drag to apply to rigid-bodies.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.forceMagnitude">
+      <summary>
+        <para>The magnitude of the force to be applied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.forceMode">
+      <summary>
+        <para>The mode used to apply the effector force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.forceSource">
+      <summary>
+        <para>The source which is used to calculate the centroid point of the effector.  The distance from the target is defined from this point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.forceTarget">
+      <summary>
+        <para>The target for where the effector applies any force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PointEffector2D.forceVariation">
+      <summary>
+        <para>The variation of the magnitude of the force to be applied.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PolygonCollider2D">
+      <summary>
+        <para>Collider for 2D physics representing an arbitrary polygon defined by its vertices.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PolygonCollider2D.autoTiling">
+      <summary>
+        <para>Determines whether the PolygonCollider2D's shape is automatically updated based on a SpriteRenderer's tiling properties.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PolygonCollider2D.pathCount">
+      <summary>
+        <para>The number of paths in the polygon.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PolygonCollider2D.points">
+      <summary>
+        <para>Corner points that define the collider's shape in local space.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.PolygonCollider2D.CreatePrimitive(System.Int32,UnityEngine.Vector2,UnityEngine.Vector2)">
+      <summary>
+        <para>Creates as regular primitive polygon with the specified number of sides.</para>
+      </summary>
+      <param name="sides">The number of sides in the polygon.  This must be greater than two.</param>
+      <param name="scale">The X/Y scale of the polygon.  These must be greater than zero.</param>
+      <param name="offset">The X/Y offset of the polygon.</param>
+    </member>
+    <member name="M:UnityEngine.PolygonCollider2D.GetPath(System.Int32)">
+      <summary>
+        <para>Gets a path from the Collider by its index.</para>
+      </summary>
+      <param name="index">The index of the path to retrieve.</param>
+      <returns>
+        <para>An ordered array of the vertices or points in the selected path.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.PolygonCollider2D.GetTotalPointCount">
+      <summary>
+        <para>Return the total number of points in the polygon in all paths.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.PolygonCollider2D.SetPath(System.Int32,UnityEngine.Vector2[])">
+      <summary>
+        <para>Define a path by its constituent points.</para>
+      </summary>
+      <param name="index">Index of the path to set.</param>
+      <param name="points">Points that define the path.</param>
+    </member>
+    <member name="T:UnityEngine.RaycastHit2D">
+      <summary>
+        <para>Information returned about an object detected by a raycast in 2D physics.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.centroid">
+      <summary>
+        <para>The centroid of the primitive used to perform the cast.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.collider">
+      <summary>
+        <para>The collider hit by the ray.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.distance">
+      <summary>
+        <para>The distance from the ray origin to the impact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.fraction">
+      <summary>
+        <para>Fraction of the distance along the ray that the hit occurred.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.normal">
+      <summary>
+        <para>The normal vector of the surface hit by the ray.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.point">
+      <summary>
+        <para>The point in world space where the ray hit the collider's surface.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.rigidbody">
+      <summary>
+        <para>The Rigidbody2D attached to the object that was hit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit2D.transform">
+      <summary>
+        <para>The Transform of the object that was hit.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RelativeJoint2D">
+      <summary>
+        <para>Keeps two Rigidbody2D at their relative orientations.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.angularOffset">
+      <summary>
+        <para>The current angular offset between the Rigidbody2D that the joint connects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.autoConfigureOffset">
+      <summary>
+        <para>Should both the linearOffset and angularOffset be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.correctionScale">
+      <summary>
+        <para>Scales both the linear and angular forces used to correct the required relative orientation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.linearOffset">
+      <summary>
+        <para>The current linear offset between the Rigidbody2D that the joint connects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.maxForce">
+      <summary>
+        <para>The maximum force that can be generated when trying to maintain the relative joint constraint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.maxTorque">
+      <summary>
+        <para>The maximum torque that can be generated when trying to maintain the relative joint constraint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RelativeJoint2D.target">
+      <summary>
+        <para>The world-space position that is currently trying to be maintained.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Rigidbody2D">
+      <summary>
+        <para>Rigidbody physics component for 2D sprites.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.angularDrag">
+      <summary>
+        <para>Coefficient of angular drag.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.angularVelocity">
+      <summary>
+        <para>Angular velocity in degrees per second.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.attachedColliderCount">
+      <summary>
+        <para>Returns the number of Collider2D attached to this Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.bodyType">
+      <summary>
+        <para>The physical behaviour type of the Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.centerOfMass">
+      <summary>
+        <para>The center of mass of the rigidBody in local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.collisionDetectionMode">
+      <summary>
+        <para>The method used by the physics engine to check if two objects have collided.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.constraints">
+      <summary>
+        <para>Controls which degrees of freedom are allowed for the simulation of this Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.drag">
+      <summary>
+        <para>Coefficient of drag.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.fixedAngle">
+      <summary>
+        <para>Should the rigidbody be prevented from rotating?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.freezeRotation">
+      <summary>
+        <para>Controls whether physics will change the rotation of the object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.gravityScale">
+      <summary>
+        <para>The degree to which this object is affected by gravity.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.inertia">
+      <summary>
+        <para>The rigidBody rotational inertia.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.interpolation">
+      <summary>
+        <para>Physics interpolation used between updates.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.isKinematic">
+      <summary>
+        <para>Should this rigidbody be taken out of physics control?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.mass">
+      <summary>
+        <para>Mass of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.position">
+      <summary>
+        <para>The position of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.rotation">
+      <summary>
+        <para>The rotation of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.sharedMaterial">
+      <summary>
+        <para>The PhysicsMaterial2D that is applied to all Collider2D attached to this Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.simulated">
+      <summary>
+        <para>Indicates whether the rigid body should be simulated or not by the physics system.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.sleepMode">
+      <summary>
+        <para>The sleep state that the rigidbody will initially be in.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.useAutoMass">
+      <summary>
+        <para>Should the total rigid-body mass be automatically calculated from the Collider2D.density of attached colliders?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.useFullKinematicContacts">
+      <summary>
+        <para>Should kinematickinematic and kinematicstatic collisions be allowed?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.velocity">
+      <summary>
+        <para>Linear velocity of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody2D.worldCenterOfMass">
+      <summary>
+        <para>Gets the center of mass of the rigidBody in global space.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.AddForce(UnityEngine.Vector2,UnityEngine.ForceMode2D)">
+      <summary>
+        <para>Apply a force to the rigidbody.</para>
+      </summary>
+      <param name="force">Components of the force in the X and Y axes.</param>
+      <param name="mode">The method used to apply the specified force.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.AddForceAtPosition(UnityEngine.Vector2,UnityEngine.Vector2,UnityEngine.ForceMode2D)">
+      <summary>
+        <para>Apply a force at a given position in space.</para>
+      </summary>
+      <param name="force">Components of the force in the X and Y axes.</param>
+      <param name="position">Position in world space to apply the force.</param>
+      <param name="mode">The method used to apply the specified force.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.AddRelativeForce(UnityEngine.Vector2,UnityEngine.ForceMode2D)">
+      <summary>
+        <para>Adds a force to the rigidbody2D relative to its coordinate system.</para>
+      </summary>
+      <param name="relativeForce">Components of the force in the X and Y axes.</param>
+      <param name="mode">The method used to apply the specified force.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.AddTorque(System.Single,UnityEngine.ForceMode2D)">
+      <summary>
+        <para>Apply a torque at the rigidbody's centre of mass.</para>
+      </summary>
+      <param name="torque">Torque to apply.</param>
+      <param name="mode">The force mode to use.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.Cast(UnityEngine.Vector2,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>All the Collider2D shapes attached to the Rigidbody2D are cast into the scene starting at each collider position ignoring the colliders attached to the same Rigidbody2D.</para>
+      </summary>
+      <param name="direction">Vector representing the direction to cast each Collider2D shape.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the shape(s).</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.Cast(UnityEngine.Vector2,UnityEngine.ContactFilter2D,UnityEngine.RaycastHit2D[],System.Single)">
+      <summary>
+        <para>All the Collider2D shapes attached to the Rigidbody2D are cast into the scene starting at each collider position ignoring the colliders attached to the same Rigidbody2D.</para>
+      </summary>
+      <param name="direction">Vector representing the direction to cast each Collider2D shape.</param>
+      <param name="contactFilter">Filter results defined by the contact filter.</param>
+      <param name="results">Array to receive results.</param>
+      <param name="distance">Maximum distance over which to cast the shape(s).</param>
+      <returns>
+        <para>The number of results returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.Distance(UnityEngine.Collider2D)">
+      <summary>
+        <para>Calculates the minimum distance of this collider against all Collider2D attached to this Rigidbody2D.</para>
+      </summary>
+      <param name="collider">A collider used to calculate the minimum distance against all colliders attached to this Rigidbody2D.</param>
+      <returns>
+        <para>The minimum distance of collider against all colliders attached to this Rigidbody2D.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetAttachedColliders(UnityEngine.Collider2D[])">
+      <summary>
+        <para>Returns all Collider2D that are attached to this Rigidbody2D.</para>
+      </summary>
+      <param name="results">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of Collider2D placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetContacts(UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points for all of the collider(s) attached to this rigidbody.</para>
+      </summary>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetContacts(UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with any of the collider(s) attached to this rigidbody.</para>
+      </summary>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetContacts(UnityEngine.ContactFilter2D,UnityEngine.ContactPoint2D[])">
+      <summary>
+        <para>Retrieves all contact points for all of the collider(s) attached to this rigidbody, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="contacts">An array of ContactPoint2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of contacts placed in the contacts array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetContacts(UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Retrieves all colliders in contact with any of the collider(s) attached to this rigidbody, with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <param name="colliders">An array of Collider2D used to receive the results.</param>
+      <returns>
+        <para>Returns the number of colliders placed in the colliders array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetPoint(UnityEngine.Vector2)">
+      <summary>
+        <para>Get a local space point given the point point in rigidBody global space.</para>
+      </summary>
+      <param name="point">The global space point to transform into local space.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetPointVelocity(UnityEngine.Vector2)">
+      <summary>
+        <para>The velocity of the rigidbody at the point Point in global space.</para>
+      </summary>
+      <param name="point">The global space point to calculate velocity for.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetRelativePoint(UnityEngine.Vector2)">
+      <summary>
+        <para>Get a global space point given the point relativePoint in rigidBody local space.</para>
+      </summary>
+      <param name="relativePoint">The local space point to transform into global space.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetRelativePointVelocity(UnityEngine.Vector2)">
+      <summary>
+        <para>The velocity of the rigidbody at the point Point in local space.</para>
+      </summary>
+      <param name="relativePoint">The local space point to calculate velocity for.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetRelativeVector(UnityEngine.Vector2)">
+      <summary>
+        <para>Get a global space vector given the vector relativeVector in rigidBody local space.</para>
+      </summary>
+      <param name="relativeVector">The local space vector to transform into a global space vector.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.GetVector(UnityEngine.Vector2)">
+      <summary>
+        <para>Get a local space vector given the vector vector in rigidBody global space.</para>
+      </summary>
+      <param name="vector">The global space vector to transform into a local space vector.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsAwake">
+      <summary>
+        <para>Is the rigidbody "awake"?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsSleeping">
+      <summary>
+        <para>Is the rigidbody "sleeping"?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsTouching(UnityEngine.Collider2D)">
+      <summary>
+        <para>Checks whether the collider  is touching any of the collider(s) attached to this rigidbody or not.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching any of the collider(s) attached to this rigidbody.</param>
+      <returns>
+        <para>Whether the collider is touching any of the collider(s) attached to this rigidbody or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsTouching(UnityEngine.Collider2D,UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Checks whether the collider  is touching any of the collider(s) attached to this rigidbody or not with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="collider">The collider to check if it is touching any of the collider(s) attached to this rigidbody.</param>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether the collider is touching any of the collider(s) attached to this rigidbody or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsTouching(UnityEngine.ContactFilter2D)">
+      <summary>
+        <para>Checks whether any collider is touching any of the collider(s) attached to this rigidbody or not with the results filtered by the ContactFilter2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth, or normal angle.</param>
+      <returns>
+        <para>Whether any collider is touching any of the collider(s) attached to this rigidbody or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.IsTouchingLayers(System.Int32)">
+      <summary>
+        <para>Checks whether any of the collider(s) attached to this rigidbody are touching any colliders on the specified layerMask or not.</para>
+      </summary>
+      <param name="layerMask">Any colliders on any of these layers count as touching.</param>
+      <returns>
+        <para>Whether any of the collider(s) attached to this rigidbody are touching any colliders on the specified layerMask or not.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.MovePosition(UnityEngine.Vector2)">
+      <summary>
+        <para>Moves the rigidbody to position.</para>
+      </summary>
+      <param name="position">The new position for the Rigidbody object.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.MoveRotation(System.Single)">
+      <summary>
+        <para>Rotates the rigidbody to angle (given in degrees).</para>
+      </summary>
+      <param name="angle">The new rotation angle for the Rigidbody object.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.OverlapCollider(UnityEngine.ContactFilter2D,UnityEngine.Collider2D[])">
+      <summary>
+        <para>Get a list of all colliders that overlap all colliders attached to this Rigidbody2D.</para>
+      </summary>
+      <param name="contactFilter">The contact filter used to filter the results differently, such as by layer mask, Z depth.  Note that normal angle is not used for overlap testing.</param>
+      <param name="results">The array to receive results.  The size of the array determines the maximum number of results that can be returned.</param>
+      <returns>
+        <para>Returns the number of results placed in the results array.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.OverlapPoint(UnityEngine.Vector2)">
+      <summary>
+        <para>Check if any of the Rigidbody2D colliders overlap a point in space.</para>
+      </summary>
+      <param name="point">A point in world space.</param>
+      <returns>
+        <para>Whether the point overlapped any of the Rigidbody2D colliders.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.Sleep">
+      <summary>
+        <para>Make the rigidbody "sleep".</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody2D.WakeUp">
+      <summary>
+        <para>Disables the "sleeping" state of a rigidbody.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodyConstraints2D">
+      <summary>
+        <para>Use these flags to constrain motion of the Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.FreezeAll">
+      <summary>
+        <para>Freeze rotation and motion along all axes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.FreezePosition">
+      <summary>
+        <para>Freeze motion along the X-axis and Y-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.FreezePositionX">
+      <summary>
+        <para>Freeze motion along the X-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.FreezePositionY">
+      <summary>
+        <para>Freeze motion along the Y-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.FreezeRotation">
+      <summary>
+        <para>Freeze rotation along the Z-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints2D.None">
+      <summary>
+        <para>No constraints.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodyInterpolation2D">
+      <summary>
+        <para>Interpolation mode for Rigidbody2D objects.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation2D.Extrapolate">
+      <summary>
+        <para>Smooth an object's movement based on an estimate of its position in the next frame.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation2D.Interpolate">
+      <summary>
+        <para>Smooth movement based on the object's positions in previous frames.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation2D.None">
+      <summary>
+        <para>Do not apply any smoothing to the object's movement.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodySleepMode2D">
+      <summary>
+        <para>Settings for a Rigidbody2D's initial sleep state.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodySleepMode2D.NeverSleep">
+      <summary>
+        <para>Rigidbody2D never automatically sleeps.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodySleepMode2D.StartAsleep">
+      <summary>
+        <para>Rigidbody2D is initially asleep.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodySleepMode2D.StartAwake">
+      <summary>
+        <para>Rigidbody2D is initially awake.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodyType2D">
+      <summary>
+        <para>The physical behaviour type of the Rigidbody2D.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyType2D.Dynamic">
+      <summary>
+        <para>Sets the Rigidbody2D to have dynamic behaviour.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyType2D.Kinematic">
+      <summary>
+        <para>Sets the Rigidbody2D to have kinematic behaviour.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyType2D.Static">
+      <summary>
+        <para>Sets the Rigidbody2D to have static behaviour.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SliderJoint2D">
+      <summary>
+        <para>Joint that restricts the motion of a Rigidbody2D object to a single line.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.angle">
+      <summary>
+        <para>The angle of the line in space (in degrees).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.autoConfigureAngle">
+      <summary>
+        <para>Should the angle be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.jointSpeed">
+      <summary>
+        <para>The current joint speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.jointTranslation">
+      <summary>
+        <para>The current joint translation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.limits">
+      <summary>
+        <para>Restrictions on how far the joint can slide in each direction along the line.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.limitState">
+      <summary>
+        <para>Gets the state of the joint limit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.motor">
+      <summary>
+        <para>Parameters for a motor force that is applied automatically to the Rigibody2D along the line.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.referenceAngle">
+      <summary>
+        <para>The angle (in degrees) referenced between the two bodies used as the constraint for the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.useLimits">
+      <summary>
+        <para>Should motion limits be used?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SliderJoint2D.useMotor">
+      <summary>
+        <para>Should a motor force be applied automatically to the Rigidbody2D?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.SliderJoint2D.GetMotorForce(System.Single)">
+      <summary>
+        <para>Gets the motor force of the joint given the specified timestep.</para>
+      </summary>
+      <param name="timeStep">The time to calculate the motor force for.</param>
+    </member>
+    <member name="T:UnityEngine.SpringJoint2D">
+      <summary>
+        <para>Joint that attempts to keep two Rigidbody2D objects a set distance apart by applying a force between them.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint2D.autoConfigureDistance">
+      <summary>
+        <para>Should the distance be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint2D.dampingRatio">
+      <summary>
+        <para>The amount by which the spring force is reduced in proportion to the movement speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint2D.distance">
+      <summary>
+        <para>The distance the spring will try to keep between the two objects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint2D.frequency">
+      <summary>
+        <para>The frequency at which the spring oscillates around the distance distance between the objects.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SurfaceEffector2D">
+      <summary>
+        <para>Applies tangent forces along the surfaces of colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.forceScale">
+      <summary>
+        <para>The scale of the impulse force applied while attempting to reach the surface speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.speed">
+      <summary>
+        <para>The speed to be maintained along the surface.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.speedVariation">
+      <summary>
+        <para>The speed variation (from zero to the variation) added to base speed to be applied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.useBounce">
+      <summary>
+        <para>Should bounce be used for any contact with the surface?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.useContactForce">
+      <summary>
+        <para>Should the impulse force but applied to the contact point?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SurfaceEffector2D.useFriction">
+      <summary>
+        <para>Should friction be used for any contact with the surface?</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.TargetJoint2D">
+      <summary>
+        <para>The joint attempts to move a Rigidbody2D to a specific target position.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.anchor">
+      <summary>
+        <para>The local-space anchor on the rigid-body the joint is attached to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.autoConfigureTarget">
+      <summary>
+        <para>Should the target be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.dampingRatio">
+      <summary>
+        <para>The amount by which the target spring force is reduced in proportion to the movement speed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.frequency">
+      <summary>
+        <para>The frequency at which the target spring oscillates around the target position.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.maxForce">
+      <summary>
+        <para>The maximum force that can be generated when trying to maintain the target joint constraint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TargetJoint2D.target">
+      <summary>
+        <para>The world-space position that the joint will attempt to move the body to.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.WheelJoint2D">
+      <summary>
+        <para>The wheel joint allows the simulation of wheels by providing a constraining suspension motion with an optional motor.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.jointAngle">
+      <summary>
+        <para>The current joint angle (in degrees) defined as the relative angle between the two Rigidbody2D that the joint connects to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.jointLinearSpeed">
+      <summary>
+        <para>The current joint linear speed in meters/sec.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.jointSpeed">
+      <summary>
+        <para>The current joint rotational speed in degrees/sec.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.jointTranslation">
+      <summary>
+        <para>The current joint translation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.motor">
+      <summary>
+        <para>Parameters for a motor force that is applied automatically to the Rigibody2D along the line.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.suspension">
+      <summary>
+        <para>Set the joint suspension configuration.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelJoint2D.useMotor">
+      <summary>
+        <para>Should a motor force be applied automatically to the Rigidbody2D?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WheelJoint2D.GetMotorTorque(System.Single)">
+      <summary>
+        <para>Gets the motor torque of the joint given the specified timestep.</para>
+      </summary>
+      <param name="timeStep">The time to calculate the motor torque for.</param>
+    </member>
+  </members>
+</doc>

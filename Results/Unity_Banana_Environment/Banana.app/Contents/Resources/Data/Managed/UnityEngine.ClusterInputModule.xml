@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.ClusterInputModule</name>
+    </assembly>
+    <member name="T:UnityEngine.ClusterInput">
+      <summary>
+        <para>Interface for reading and writing inputs in a Unity Cluster.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.AddInput(System.String,System.String,System.String,System.Int32,UnityEngine.ClusterInputType)">
+      <summary>
+        <para>Add a new VRPN input entry.</para>
+      </summary>
+      <param name="name">Name of the input entry. This has to be unique.</param>
+      <param name="deviceName">Device name registered to VRPN server.</param>
+      <param name="serverUrl">URL to the vrpn server.</param>
+      <param name="index">Index of the Input entry, refer to vrpn.cfg if unsure.</param>
+      <param name="type">Type of the input.</param>
+      <returns>
+        <para>True if the operation succeed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.CheckConnectionToServer(System.String)">
+      <summary>
+        <para>Check the connection status of the device to the VRPN server it connected to.</para>
+      </summary>
+      <param name="name">Name of the input entry.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.EditInput(System.String,System.String,System.String,System.Int32,UnityEngine.ClusterInputType)">
+      <summary>
+        <para>Edit an input entry which added via ClusterInput.AddInput.</para>
+      </summary>
+      <param name="name">Name of the input entry. This has to be unique.</param>
+      <param name="deviceName">Device name registered to VRPN server.</param>
+      <param name="serverUrl">URL to the vrpn server.</param>
+      <param name="index">Index of the Input entry, refer to vrpn.cfg if unsure.</param>
+      <param name="type">Type of the ClusterInputType as follow.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.GetAxis(System.String)">
+      <summary>
+        <para>Returns the axis value as a continous float.</para>
+      </summary>
+      <param name="name">Name of input to poll.c.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.GetButton(System.String)">
+      <summary>
+        <para>Returns the binary value of a button.</para>
+      </summary>
+      <param name="name">Name of input to poll.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.GetTrackerPosition(System.String)">
+      <summary>
+        <para>Return the position of a tracker as a Vector3.</para>
+      </summary>
+      <param name="name">Name of input to poll.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.GetTrackerRotation(System.String)">
+      <summary>
+        <para>Returns the rotation of a tracker as a Quaternion.</para>
+      </summary>
+      <param name="name">Name of input to poll.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.SetAxis(System.String,System.Single)">
+      <summary>
+        <para>Sets the axis value for this input. Only works for input typed Custom.</para>
+      </summary>
+      <param name="name">Name of input to modify.</param>
+      <param name="value">Value to set.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.SetButton(System.String,System.Boolean)">
+      <summary>
+        <para>Sets the button value for this input. Only works for input typed Custom.</para>
+      </summary>
+      <param name="name">Name of input to modify.</param>
+      <param name="value">Value to set.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.SetTrackerPosition(System.String,UnityEngine.Vector3)">
+      <summary>
+        <para>Sets the tracker position for this input. Only works for input typed Custom.</para>
+      </summary>
+      <param name="name">Name of input to modify.</param>
+      <param name="value">Value to set.</param>
+    </member>
+    <member name="M:UnityEngine.ClusterInput.SetTrackerRotation(System.String,UnityEngine.Quaternion)">
+      <summary>
+        <para>Sets the tracker rotation for this input. Only works for input typed Custom.</para>
+      </summary>
+      <param name="name">Name of input to modify.</param>
+      <param name="value">Value to set.</param>
+    </member>
+    <member name="T:UnityEngine.ClusterInputType">
+      <summary>
+        <para>Values to determine the type of input value to be expect from one entry of ClusterInput.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ClusterInputType.Axis">
+      <summary>
+        <para>Device is an analog axis that provides continuous value represented by a float.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ClusterInputType.Button">
+      <summary>
+        <para>Device that return a binary result of pressed or not pressed.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ClusterInputType.CustomProvidedInput">
+      <summary>
+        <para>A user customized input.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ClusterInputType.Tracker">
+      <summary>
+        <para>Device that provide position and orientation values.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

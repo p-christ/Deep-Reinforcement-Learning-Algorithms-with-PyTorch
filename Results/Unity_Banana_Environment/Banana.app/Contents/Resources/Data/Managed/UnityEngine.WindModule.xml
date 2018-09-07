@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.WindModule</name>
+    </assembly>
+    <member name="T:UnityEngine.WindZone">
+      <summary>
+        <para>Wind Zones add realism to the trees you create by making them wave their branches and leaves as if blown by the wind.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.mode">
+      <summary>
+        <para>Defines the type of wind zone to be used (Spherical or Directional).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.radius">
+      <summary>
+        <para>Radius of the Spherical Wind Zone (only active if the WindZoneMode is set to Spherical).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.windMain">
+      <summary>
+        <para>The primary wind force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.windPulseFrequency">
+      <summary>
+        <para>Defines the frequency of the wind changes.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.windPulseMagnitude">
+      <summary>
+        <para>Defines ow much the wind changes over time.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WindZone.windTurbulence">
+      <summary>
+        <para>The turbulence wind force.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WindZone.#ctor">
+      <summary>
+        <para>The constructor.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.WindZoneMode">
+      <summary>
+        <para>Modes a Wind Zone can have, either Spherical or Directional.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.WindZoneMode.Directional">
+      <summary>
+        <para>Wind zone affects the entire scene in one direction.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.WindZoneMode.Spherical">
+      <summary>
+        <para>Wind zone only has an effect inside the radius, and has a falloff from the center towards the edge.</para>
+      </summary>
+    </member>
+  </members>
+</doc>
