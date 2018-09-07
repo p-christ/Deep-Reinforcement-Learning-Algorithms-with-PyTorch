@@ -11,18 +11,18 @@ Contains
 # 1) Deep Reinforcement Learning Algorithms Implemented
 
 --------------------------------------------------
-### 1. Deep Q Learning
+### A. Deep Q Learning
 --------------------------------------------------
 
 
 --------------------------------------------------
-### 2. Deep Q Learning with Fixed Q-Targets
+### B. Deep Q Learning with Fixed Q-Targets
 --------------------------------------------------
 
 
 
 --------------------------------------------------
-### 3. Doule Deep Q Learning
+### C. Doule Deep Q Learning
 --------------------------------------------------
 
 
@@ -30,7 +30,7 @@ Contains
 # 2) Environments Analysed
 
 --------------------------------------------------
-### 1. Unity Banana Environment
+### A. Unity Banana Environment
 --------------------------------------------------
 
 To train the agents and see their results:
@@ -41,10 +41,8 @@ To train the agents and see their results:
   - cd Results/Unity_Banana_Environment
   - jupyter notebook
 - Then open the notebook Unity_Banana_Environment_Results.ipynb and run all cells  
-
-
 --------------------------------------------------
-### 2. Other Environments
+### B. Other Environments
 --------------------------------------------------
 
 TBD
