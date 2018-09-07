@@ -36,3 +36,5 @@ Other hyperparameter values were:
 * Gamma: 0.99
 * Tau: 0.001
 
+In order to improve performance on this environment we could also implement extensions like prioritised experience replay & duelling networks.
+
