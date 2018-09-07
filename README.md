@@ -46,6 +46,7 @@ To train the agents on the Unity Banana environment and see their results:
   - cd Results/Unity_Banana_Environment
   - jupyter notebook
 - Then open the notebook Unity_Banana_Environment_Results.ipynb and run all cells  
+- Results for the 3 agents are given below:
 
 
 ![Unity Banana Results](Results/Unity_Banana_Environment/unity_banana_results.png)
