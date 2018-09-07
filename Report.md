@@ -7,7 +7,7 @@ Three different algorithms were tried on the Unity Banana Environment:
 1. Double Deep Q Network
 
 
-The Double Q Network achieved the target average score of 13 (over 100 episodes) fastest after only 289 episodes. The graph below shows the performance of the three algorithms:
+The Double Q Network achieved the target average score of 13 (over 100 episodes) fastest after only *289 episodes*. The graph below shows the performance of the three algorithms:
 
 ![Unity Banana Results](Results/Unity_Banana_Environment/unity_banana_results.png)
 
