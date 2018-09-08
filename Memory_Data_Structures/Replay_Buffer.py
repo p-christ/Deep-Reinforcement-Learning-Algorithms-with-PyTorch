@@ -8,9 +8,8 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Replay_Buffer(object):
     
-    def __init__(self, action_size, buffer_size, batch_size, seed):
-        
-        self.action_size = action_size
+    def __init__(self, buffer_size, batch_size, seed):
+
         self.memory = deque(maxlen=buffer_size)
         self.batch_size = batch_size
         self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])

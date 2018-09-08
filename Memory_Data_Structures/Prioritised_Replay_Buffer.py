@@ -5,12 +5,16 @@ import random
 import torch
 import numpy as np
 
+
+# needs to be ~O(1) for insertion.  And O(1) for updating values...
+
+
 class Prioritised_Replay_Buffer(Replay_Buffer):
     
-    def __init__(self, action_size, buffer_size, batch_size, seed, alpha, incremental_priority):
+    def __init__(self, buffer_size, batch_size, seed, alpha, incremental_priority):
         
-        Replay_Buffer.__init__(self, action_size, buffer_size, batch_size, seed)
-        
+        Replay_Buffer.__init__(self, buffer_size, batch_size, seed)
+
         self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done", "td_error"])
         
         self.indices_to_update_td_error_for = None

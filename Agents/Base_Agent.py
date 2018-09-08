@@ -12,7 +12,7 @@ class Base_Agent(object):
         self.state_size = self.environment.get_state_size()        
         
         self.hyperparameters = hyperparameters
-        self.memory = Replay_Buffer(self.action_size, self.hyperparameters["buffer_size"], 
+        self.memory = Replay_Buffer(self.hyperparameters["buffer_size"],
                                     self.hyperparameters["batch_size"], seed)
         
         self.rolling_score_length = rolling_score_length
@@ -35,9 +35,9 @@ class Base_Agent(object):
         self.score = 0
         self.step_number = 0
 
-    def run_game_n_times(self, num_episodes_to_run=1):
-        
-        for episode in range(num_episodes_to_run): 
+    def run_game_n_times(self, num_episodes_to_run=1, save_model=False):
+
+        for episode in range(num_episodes_to_run):
             self.episode_number += 1
             self.run_game_once()
             self.save_and_print_result()          
@@ -47,7 +47,8 @@ class Base_Agent(object):
                 break
         
         self.summarise_results()
-        self.save_model()
+        if save_model:
+            self.save_model()
         return self.game_scores, self.rolling_results
 
     def run_game_once(self):
@@ -162,7 +163,6 @@ class Base_Agent(object):
     @abstractmethod
     def save_model(self):
         pass
-    
 
-    
+
     

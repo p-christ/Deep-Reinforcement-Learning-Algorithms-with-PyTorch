@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class Base_Environment(ABC):
             
     @abstractmethod
-    def conduct_action(self):
+    def conduct_action(self, action):
         pass
     
     @abstractmethod
@@ -29,10 +29,7 @@ class Base_Environment(ABC):
     @abstractmethod
     def get_done(self):
         pass     
-    
-    @abstractmethod
-    def get_reward(self):
-        pass      
+
     
     @abstractmethod
     def reset_environment(self):

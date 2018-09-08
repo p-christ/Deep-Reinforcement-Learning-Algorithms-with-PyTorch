@@ -28,10 +28,7 @@ class Unity_Banana_Environment(Base_Environment):
         return self.game_environment_info.rewards[0]                          
 
     def get_done(self):
-        return self.game_environment_info.local_done[0]              
-    
-    def get_reward(self):
-        return self.game_environment_info.rewards[0]  
+        return self.game_environment_info.local_done[0]
     
     def reset_environment(self):
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]                
