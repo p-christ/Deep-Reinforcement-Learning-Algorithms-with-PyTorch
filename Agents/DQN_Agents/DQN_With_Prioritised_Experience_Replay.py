@@ -14,35 +14,16 @@ class DQN_With_Prioritised_Experience_Replay(DQN_Agent):
     
     
     def __init__(self, environment, seed, hyperparameters, rolling_score_length, 
-                 average_score_required, agent_name, rank_prio):
+                 average_score_required, agent_name):
         DQN_Agent.__init__(self, environment=environment,
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
        
         # We have to use a slightly different data structure to enforce prioritised sampling
 
-        if rank_prio:
-            self.memory = Prioritised_Replay_Buffer_Rank_Prioritisation(self.hyperparameters["buffer_size"],
-                                                                    self.hyperparameters["batch_size"])
 
-            print("rank prioritisation")
-        #
-        # if list_data_structure:
-        #
-        #     self.memory = Prioritised_Replay_Buffer_As_List(self.hyperparameters["buffer_size"],
-        #                             self.hyperparameters["batch_size"], seed, alpha=self.hyperparameters["alpha"],
-        #                                        incremental_priority=self.hyperparameters["incremental_priority"])
-        #
-        else:
-
-            self.memory = Prioritised_Replay_Buffer(self.hyperparameters["buffer_size"],
-                                        self.hyperparameters["batch_size"], seed, alpha=self.hyperparameters["alpha"],
-                                                   incremental_priority=self.hyperparameters["incremental_priority"])
-
-            print("no rank prioritisation")
-
-        self.rank_prio = rank_prio
-
+        self.memory = Prioritised_Replay_Buffer_Rank_Prioritisation(self.hyperparameters["buffer_size"],
+                                                                self.hyperparameters["batch_size"])
 
     
     def save_experience(self):
@@ -106,11 +87,7 @@ class DQN_With_Prioritised_Experience_Replay(DQN_Agent):
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
             loss, td_errors = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss            
 
-            if self.rank_prio:
-                self.memory.add_batch(states, actions, rewards, next_states, dones, td_errors)
-
-            else:
-                self.memory.update_td_errors(td_errors) # update the td errors for those observsations...
+            self.memory.add_batch(states, actions, rewards, next_states, dones, td_errors)
 
             
             self.take_optimisation_step(loss) #Take an optimisation step            

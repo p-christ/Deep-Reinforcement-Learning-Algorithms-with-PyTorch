@@ -1,4 +1,5 @@
 import heapq as pq
+import random
 from collections import namedtuple
 import numpy as np
 import torch
@@ -28,27 +29,35 @@ class Prioritised_Replay_Buffer_Rank_Prioritisation(object):
                                      next_state,
                                      done)
 
-        adapted_td_error = 1.0 / (abs(td_error) + 0.000001)
+        # adapted_td_error = 1.0 / (abs(td_error) + 0.000001)
+        adapted_td_error = abs(td_error) + random.random() / 1000000.0
 
         if self.spare_space_in_memory():
-            self.current_memory_size += 1
+            try:
+                pq.heappush(self.memory, (adapted_td_error, experience))
+                self.current_memory_size += 1
+            except (RuntimeError, ValueError) as e:
+                print(e)
+                print((adapted_td_error, experience))
 
         else:
-            self.memory.pop()
+            pq.heapreplace(self.memory, (adapted_td_error, experience))
 
-        try:
-
-            pq.heappush(self.memory, (adapted_td_error, experience))
-
-        except (RuntimeError, ValueError):
-
-            print((adapted_td_error, experience))
+        #     self.memory.pop()
+        #
+        # try:
+        #
+        #     pq.heappush(self.memory, (adapted_td_error, experience))
+        #
+        # except (RuntimeError, ValueError):
+        #
+        #     print((adapted_td_error, experience))
 
     def sample(self):
         """Removes and returns batch_size amount of experiences with the highest td_errors. Note that this
         is not the same as in the DeepMind paper where they use stratified sampling instead."""
 
-        sample = self.memory[:self.batch_size]
+        sample = self.memory[-self.batch_size: ]
         sample_of_experiences = [values[1] for values in sample]
         states, actions, rewards, next_states, dones = self.separate_out_data_types(sample_of_experiences)
 
@@ -72,9 +81,16 @@ class Prioritised_Replay_Buffer_Rank_Prioritisation(object):
     def add_batch(self, states, actions, rewards, next_states, dones, td_errors):
 
         for state, action, reward, next_state, done, td_error in zip(states, actions, rewards, next_states, dones, td_errors):
-            self.add(state.data.cpu.numpy(), action.data.cpu.numpy()[0],
-                     reward.data.cpu.numpy()[0], next_state.data.cpu.numpy(),
-                     done.data.cpu.numpy()[0], td_error)
+
+            if not isinstance(td_error, np.float32):
+                print(type(td_error))
+                print("HELLO")
+                print(td_error)
+                td_error = td_error[0]
+
+            self.add(state.data.numpy(), action.data.numpy()[0],
+                     reward.data.numpy()[0], next_state.data.numpy(),
+                     done.data.numpy()[0], float(td_error))
 
 
     def spare_space_in_memory(self):
@@ -83,7 +99,7 @@ class Prioritised_Replay_Buffer_Rank_Prioritisation(object):
 
     def remove_sampled_experiences(self):
 
-        self.memory = self.memory[self.batch_size:]
+        self.memory = self.memory[ :-self.batch_size]
         self.current_memory_size -= self.batch_size
 
     def __len__(self):

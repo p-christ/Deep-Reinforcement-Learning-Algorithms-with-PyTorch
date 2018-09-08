@@ -11,7 +11,7 @@ import numpy as np
 SEED = 100
 ROLLING_SCORE_LENGTH = 100
 AVERAGE_SCORE_REQUIRED = 195
-EPISODES_TO_RUN = 500
+EPISODES_TO_RUN = 1000
 FILE_TO_SAVE_DATA_RESULTS = "Episode_results_by_agent.npy"
 
 hyperparameters = {
@@ -58,33 +58,19 @@ ENVIRONMENT = Cart_Pole_Environment()
 #
 # visualise_results_by_agent(agents, results, AVERAGE_SCORE_REQUIRED)
 
-start = time.time()
+for agent_class in agents:
 
-agent_class = DQN_With_Prioritised_Experience_Replay
-agent_name = agent_class.__name__
-print("\033[1m" + "{}: {}".format(agent_number, agent_name) + "\033[0m")
+    start = time.time()
 
-agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
-                    ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name, rank_prio=True)
-game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN, save_model=False)
-results[agent_name] = [game_scores, rolling_scores]
-agent_number += 1
-print_two_lines()
+    agent_name = agent_class.__name__
+    print("\033[1m" + "{}: {}".format(agent_number, agent_name) + "\033[0m")
 
-print(time.time() - start)
-#
+    agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
+                        ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name)
+    game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN, save_model=False)
+    results[agent_name] = [game_scores, rolling_scores]
+    agent_number += 1
+    print("Time taken: {}".format(time.time() - start))
+    print_two_lines()
 
-start = time.time()
-
-agent_class = DQN_With_Prioritised_Experience_Replay
-agent_name = agent_class.__name__
-print("\033[1m" + "{}: {}".format(agent_number, agent_name) + "\033[0m")
-
-agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
-                    ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name, rank_prio=False)
-game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN, save_model=False)
-results[agent_name] = [game_scores, rolling_scores]
-agent_number += 1
-print_two_lines()
-
-print(time.time() - start)
+visualise_results_by_agent(agents, results, AVERAGE_SCORE_REQUIRED)

@@ -25,7 +25,6 @@ class DQN_Agent(Base_Agent):
         self.qnetwork_local = Q_Network(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
-        print("Initialised DQN_Agent")
 
 #     @override
     def pick_action(self):
