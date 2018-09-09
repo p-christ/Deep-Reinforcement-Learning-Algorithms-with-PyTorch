@@ -1,6 +1,7 @@
 """This agent is TBD and not finished yet"""
 
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from DQN_Agents.DDQN_Agent import DDQN_Agent
 from Memory_Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 import torch
 import numpy as np
@@ -10,7 +11,7 @@ from Prioritised_Replay_Buffer_Rank_Prioritisation import Prioritised_Replay_Buf
 
 
 
-class DQN_With_Prioritised_Experience_Replay(DQN_Agent):
+class DDQN_With_Prioritised_Experience_Replay(DQN_Agent):
     
     
     def __init__(self, environment, seed, hyperparameters, rolling_score_length, 
@@ -88,10 +89,10 @@ class DQN_With_Prioritised_Experience_Replay(DQN_Agent):
             loss, td_errors = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss            
 
             self.memory.add_batch(states, actions, rewards, next_states, dones, td_errors)
-
             
-            self.take_optimisation_step(loss) #Take an optimisation step            
-    
+            self.take_optimisation_step(loss) #Take an optimisation step
+            # self.soft_update_of_target_network()  # Update the target network
+
     def compute_loss(self, states, next_states, rewards, actions, dones):
         
         Q_targets = self.compute_q_targets(next_states, rewards, dones)

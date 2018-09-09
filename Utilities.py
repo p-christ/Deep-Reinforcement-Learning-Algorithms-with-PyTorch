@@ -1,8 +1,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
-init_notebook_mode(connected=True)
 
 
 def override(parent_class):
@@ -50,7 +48,7 @@ def visualise_results_by_agent(agents, results, target_score):
     ax.hlines(y=target_score, xmin=0, xmax=max_episodes_seen,
               linewidth=2, color='k', linestyles='dotted')
 
-    ax.text(-55, target_score * 0.95, "Target \n score")
+    ax.text(max_episodes_seen, target_score * 0.965, "Target \n score")
 
     # Hide the right and top spines
     ax.spines['right'].set_visible(False)

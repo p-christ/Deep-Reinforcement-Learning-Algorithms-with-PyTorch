@@ -1,3 +1,5 @@
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
@@ -123,12 +125,20 @@ class Base_Agent(object):
                 self.max_rolling_score_seen = self.rolling_results[-1]
         
     def print_rolling_result(self):
-
-        print("""Episode {}, Rolling score: {}, Max rolling score seen: {}""".format(len(self.game_scores),
+        sys.stdout.write("\r Episode {}, Rolling score: {}, Max rolling score seen: {}".format(len(self.game_scores),
                                                                                      self.rolling_results[-1],
-                                                                                     self.max_rolling_score_seen), end="\r", flush=True)
-                 
-                 
+                                                                                     self.max_rolling_score_seen))
+        sys.stdout.flush()
+
+        #
+        # print("""Episode {}, Rolling score: {}, Max rolling score seen: {}""".format(len(self.game_scores),
+        #                                                                              self.rolling_results[-1],
+        #                                                                              self.max_rolling_score_seen), end="\r", flush=True)
+        # print("""\r Episode {}, Rolling score: {}, Max rolling score seen: {}""".format(len(self.game_scores),
+        #                                                                              self.rolling_results[-1],
+        #                                                                              self.max_rolling_score_seen),
+        #       end="", flush=True)
+
     def summarise_results(self):
         self.show_whether_achieved_goal()                                  
         self.visualise_results()
