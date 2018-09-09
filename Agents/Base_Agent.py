@@ -154,6 +154,7 @@ class Base_Agent(object):
     def show_whether_achieved_goal(self):
         
         index_achieved_goal = self.achieved_required_score_at_index()
+        print(" ")
         if index_achieved_goal == -1:
             print("\033[91m" + "\033[1m" + 
                   "{} did not achieve required score \n".format(self.agent_name) +

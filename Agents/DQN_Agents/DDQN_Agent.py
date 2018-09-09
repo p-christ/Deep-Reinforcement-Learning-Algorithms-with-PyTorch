@@ -1,5 +1,5 @@
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Networks.Q_Network import Q_Network
+from Networks.NN import NN
 
 class DDQN_Agent(DQN_Agent_With_Fixed_Q_Targets):
 

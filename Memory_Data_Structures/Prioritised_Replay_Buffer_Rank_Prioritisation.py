@@ -9,7 +9,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 print(device)
 
-use https://github.com/openai/baselines/blob/master/baselines/deepq/replay_buffer.py
+# use https://github.com/openai/baselines/blob/master/baselines/deepq/replay_buffer.py
 
 class Prioritised_Replay_Buffer_Rank_Prioritisation(object):
 

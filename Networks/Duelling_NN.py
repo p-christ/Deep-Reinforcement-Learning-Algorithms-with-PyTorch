@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 """WIP implementation of a duelling q network. Not finished yet"""
 
-class Duelling_Q_Network(nn.Module):
+class Duelling_NN(nn.Module):
 
     def __init__(self, state_size, action_size, seed, hyperparameters):
         nn.Module.__init__(self)
