@@ -1,5 +1,4 @@
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Networks.Vanilla_NN import Vanilla_NN
 
 class DDQN_Agent(DQN_Agent_With_Fixed_Q_Targets):
 

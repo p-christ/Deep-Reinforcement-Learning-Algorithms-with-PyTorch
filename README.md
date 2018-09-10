@@ -2,6 +2,7 @@
 
 1. Implement prioritised experience replay properly
 2. Evolution algorithm
+3. Think about and start adding tests
 
 
 Later. Implement algorithms from Berkley Deep RL course

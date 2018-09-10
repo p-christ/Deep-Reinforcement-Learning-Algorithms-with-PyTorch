@@ -14,12 +14,12 @@ ROLLING_SCORE_LENGTH = 100
 AVERAGE_SCORE_REQUIRED = 195
 EPISODES_TO_RUN = 1500
 FILE_TO_SAVE_DATA_RESULTS = "Episode_results_by_agent.npy"
+RUNS_PER_AGENT = 10
 
 hyperparameters = {
     "learning_rate": 0.0006,
     "batch_size": 64,
     "buffer_size": 15000,
-    "fc_units": [20, 20],
     "epsilon": 0.2,
     "gamma":  0.99,
     "tau": 1e-3,
@@ -38,22 +38,46 @@ results = {}
 agent_number = 1
 
 agents = [Hill_Climbing_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
+agents = [Hill_Climbing_Agent]
 
 ENVIRONMENT = Cart_Pole_Environment()
 
+
+print("""Change visualisation and results logging so it shows the average result after"
+      "10 tries """)
+
+
+import operator
+def produce_median_results(agent_results):
+
+    agent_results = sorted(agent_results, key=operator.itemgetter(2, 3))
+    median = agent_results[int(len(agent_results) / 2)]
+
+    return median
+
 for agent_class in agents:
 
-    start = time.time()
+    agent_results = []
 
-    agent_name = agent_class.__name__
-    print("\033[1m" + "{}: {}".format(agent_number, agent_name) + "\033[0m", flush=True)
+    for run in range(RUNS_PER_AGENT):
 
-    agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
-                        ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name)
-    game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN, save_model=False)
-    results[agent_name] = [game_scores, rolling_scores]
-    agent_number += 1
-    print("Time taken: {}".format(time.time() - start), flush=True)
-    print_two_lines()
+        start = time.time()
+
+        agent_name = agent_class.__name__
+        print("\033[1m" + "{}: {}".format(agent_number, agent_name) + "\033[0m", flush=True)
+
+        agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
+                            ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name)
+        game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN, save_model=False)
+        # results[agent_name] = [game_scores, rolling_scores]
+        agent_number += 1
+        print("Time taken: {}".format(time.time() - start), flush=True)
+        print_two_lines()
+
+        agent_results.append([game_scores, rolling_scores, len(rolling_scores), -1 * max(rolling_scores)])
+
+    median_result = produce_median_results(agent_results)
+
+    results[agent_name] = [median_result[0], median_result[1]]
 
 visualise_results_by_agent(agents, results, AVERAGE_SCORE_REQUIRED)
