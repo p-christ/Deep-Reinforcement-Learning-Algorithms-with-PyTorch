@@ -1,3 +1,12 @@
+# TO DO
+
+1. Implement prioritised experience replay properly
+2. Evolution algorithm
+
+
+Later. Implement algorithms from Berkley Deep RL course
+
+
 # Implementations of Deep Reinforcement Learning Algorithms
 
 This (WIP) repository contains:
