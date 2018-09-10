@@ -22,7 +22,9 @@ class DQN_Agent(Base_Agent):
         
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        self.qnetwork_local = NN(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
+        self.qnetwork_local = NN(self.state_size, self.action_size, seed, hyperparameters).get_model()
+
+            # .to(self.device)
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 

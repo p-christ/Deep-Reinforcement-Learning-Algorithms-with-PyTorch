@@ -19,12 +19,15 @@ hyperparameters = {
     "learning_rate": 0.0006,
     "batch_size": 64,
     "buffer_size": 15000,
-    "fc_units": [20, 10],
+    "fc_units": [20, 20],
     "epsilon": 0.2,
     "gamma":  0.99,
     "tau": 1e-3,
     "update_every_n_steps": 1,
-    "policy_network_type": "Linear"
+    "policy_network_type": "Linear",
+    "nn_layers": 3,
+    'nn_start_units': 20,
+    'nn_unit_decay': 1.0
     # "alpha": 0.5,
     # "incremental_priority": 1e-5
 }

@@ -19,7 +19,9 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
 
-        self.qnetwork_target = NN(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
+        self.qnetwork_target = NN(self.state_size, self.action_size, seed, hyperparameters).get_model()
+            # .to(self.device )
+            # to(self.device)
 
         
 #     @override        

@@ -13,6 +13,5 @@ class Duelling_DDQN_Agent(DDQN_Agent):
                             average_score_required=average_score_required, agent_name=agent_name)
 
         self.qnetwork_local = Duelling_NN(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
-
         self.qnetwork_target = Duelling_NN(self.state_size, self.action_size, seed, hyperparameters).to(self.device)
 
