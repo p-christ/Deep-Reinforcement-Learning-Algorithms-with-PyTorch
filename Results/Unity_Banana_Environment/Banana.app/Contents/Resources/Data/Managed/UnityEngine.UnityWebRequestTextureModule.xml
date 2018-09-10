@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.UnityWebRequestTextureModule</name>
+    </assembly>
+    <member name="T:UnityEngine.Networking.DownloadHandlerTexture">
+      <summary>
+        <para>A DownloadHandler subclass specialized for downloading images for use as Texture objects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandlerTexture.texture">
+      <summary>
+        <para>Returns the downloaded Texture, or null. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerTexture.#ctor">
+      <summary>
+        <para>Default constructor.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerTexture.#ctor(System.Boolean)">
+      <summary>
+        <para>Constructor, allows TextureImporter.isReadable property to be set.</para>
+      </summary>
+      <param name="readable">Value to set for TextureImporter.isReadable.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerTexture.GetContent(UnityEngine.Networking.UnityWebRequest)">
+      <summary>
+        <para>Returns the downloaded Texture, or null.</para>
+      </summary>
+      <param name="www">A finished UnityWebRequest object with DownloadHandlerTexture attached.</param>
+      <returns>
+        <para>The same as DownloadHandlerTexture.texture</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerTexture.GetData">
+      <summary>
+        <para>Called by DownloadHandler.data. Returns a copy of the downloaded image data as raw bytes.</para>
+      </summary>
+      <returns>
+        <para>A copy of the downloaded data.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.UnityWebRequestTexture">
+      <summary>
+        <para>Helpers for downloading image files into Textures using UnityWebRequest.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequestTexture.GetTexture(System.String)">
+      <summary>
+        <para>Create a UnityWebRequest intended to download an image via HTTP GET and create a Texture based on the retrieved data.</para>
+      </summary>
+      <param name="uri">The URI of the image to download.</param>
+      <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
+      <returns>
+        <para>A UnityWebRequest properly configured to download an image and convert it to a Texture.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequestTexture.GetTexture(System.String,System.Boolean)">
+      <summary>
+        <para>Create a UnityWebRequest intended to download an image via HTTP GET and create a Texture based on the retrieved data.</para>
+      </summary>
+      <param name="uri">The URI of the image to download.</param>
+      <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
+      <returns>
+        <para>A UnityWebRequest properly configured to download an image and convert it to a Texture.</para>
+      </returns>
+    </member>
+  </members>
+</doc>

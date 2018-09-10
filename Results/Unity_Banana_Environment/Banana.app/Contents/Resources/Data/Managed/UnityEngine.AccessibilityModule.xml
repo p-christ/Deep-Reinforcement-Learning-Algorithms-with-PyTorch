@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.AccessibilityModule</name>
+    </assembly>
+    <member name="T:UnityEngine.Accessibility.VisionUtility">
+      <summary>
+        <para>A class containing methods to assist with accessibility for users with different vision capabilities.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Accessibility.VisionUtility.GetColorBlindSafePalette(UnityEngine.Color[],System.Single,System.Single)">
+      <summary>
+        <para>Gets a palette of colors that should be distinguishable for normal vision, deuteranopia, protanopia, and tritanopia.</para>
+      </summary>
+      <param name="palette">An array of colors to populate with a palette.</param>
+      <param name="minimumLuminance">Minimum allowable perceived luminance from 0 to 1. A value of 0.2 or greater is recommended for dark backgrounds.</param>
+      <param name="maximumLuminance">Maximum allowable perceived luminance from 0 to 1. A value of 0.8 or less is recommended for light backgrounds.</param>
+      <returns>
+        <para>The number of unambiguous colors in the palette.</para>
+      </returns>
+    </member>
+  </members>
+</doc>

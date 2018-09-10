@@ -1,0 +1,2362 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.PhysicsModule</name>
+    </assembly>
+    <member name="T:UnityEngine.BoxCollider">
+      <summary>
+        <para>A box-shaped primitive collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BoxCollider.center">
+      <summary>
+        <para>The center of the box, measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.BoxCollider.size">
+      <summary>
+        <para>The size of the box, measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CapsuleCollider">
+      <summary>
+        <para>A capsule-shaped primitive collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider.center">
+      <summary>
+        <para>The center of the capsule, measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider.direction">
+      <summary>
+        <para>The direction of the capsule.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider.height">
+      <summary>
+        <para>The height of the capsule meased in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CapsuleCollider.radius">
+      <summary>
+        <para>The radius of the sphere, measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CharacterController">
+      <summary>
+        <para>A CharacterController allows you to easily do movement constrained by collisions without having to deal with a rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.center">
+      <summary>
+        <para>The center of the character's capsule relative to the transform's position.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.collisionFlags">
+      <summary>
+        <para>What part of the capsule collided with the environment during the last CharacterController.Move call.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.detectCollisions">
+      <summary>
+        <para>Determines whether other rigidbodies or character controllers collide with this character controller (by default this is always enabled).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.enableOverlapRecovery">
+      <summary>
+        <para>Enables or disables overlap recovery.
+ Enables or disables overlap recovery. Used to depenetrate character controllers from static objects when an overlap is detected.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.height">
+      <summary>
+        <para>The height of the character's capsule.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.isGrounded">
+      <summary>
+        <para>Was the CharacterController touching the ground during the last move?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.minMoveDistance">
+      <summary>
+        <para>Gets or sets the minimum move distance of the character controller.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.radius">
+      <summary>
+        <para>The radius of the character's capsule.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.skinWidth">
+      <summary>
+        <para>The character's collision skin width.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.slopeLimit">
+      <summary>
+        <para>The character controllers slope limit in degrees.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.stepOffset">
+      <summary>
+        <para>The character controllers step offset in meters.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterController.velocity">
+      <summary>
+        <para>The current relative velocity of the Character (see notes).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CharacterController.Move(UnityEngine.Vector3)">
+      <summary>
+        <para>A more complex move function taking absolute movement deltas.</para>
+      </summary>
+      <param name="motion"></param>
+    </member>
+    <member name="M:UnityEngine.CharacterController.SimpleMove(UnityEngine.Vector3)">
+      <summary>
+        <para>Moves the character with speed.</para>
+      </summary>
+      <param name="speed"></param>
+    </member>
+    <member name="T:UnityEngine.CharacterJoint">
+      <summary>
+        <para>Character Joints are mainly used for Ragdoll effects.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.enableProjection">
+      <summary>
+        <para>Brings violated constraints back into alignment even when the solver fails.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.highTwistLimit">
+      <summary>
+        <para>The upper limit around the primary axis of the character joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.lowTwistLimit">
+      <summary>
+        <para>The lower limit around the primary axis of the character joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.projectionAngle">
+      <summary>
+        <para>Set the angular tolerance threshold (in degrees) for projection.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.projectionDistance">
+      <summary>
+        <para>Set the linear tolerance threshold for projection.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.swing1Limit">
+      <summary>
+        <para>The angular limit of rotation (in degrees) around the primary axis of the character joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.swing2Limit">
+      <summary>
+        <para>The angular limit of rotation (in degrees) around the primary axis of the character joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.swingAxis">
+      <summary>
+        <para>The secondary axis around which the joint can rotate.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.swingLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the swing limits of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterJoint.twistLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the twist limits of the joint.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Collider">
+      <summary>
+        <para>A base class of all colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.attachedRigidbody">
+      <summary>
+        <para>The rigidbody the collider is attached to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.bounds">
+      <summary>
+        <para>The world space bounding volume of the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.contactOffset">
+      <summary>
+        <para>Contact offset value of this collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.enabled">
+      <summary>
+        <para>Enabled Colliders will collide with other Colliders, disabled Colliders won't.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.isTrigger">
+      <summary>
+        <para>Is the collider a trigger?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.material">
+      <summary>
+        <para>The material used by the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collider.sharedMaterial">
+      <summary>
+        <para>The shared physic material of this collider.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Collider.ClosestPoint(UnityEngine.Vector3)">
+      <summary>
+        <para>Returns a point on the collider that is closest to a given location.</para>
+      </summary>
+      <param name="position">Location you want to find the closest point to.</param>
+      <returns>
+        <para>The point on the collider that is closest to the specified location.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Collider.ClosestPointOnBounds(UnityEngine.Vector3)">
+      <summary>
+        <para>The closest point to the bounding box of the attached collider.</para>
+      </summary>
+      <param name="position"></param>
+    </member>
+    <member name="M:UnityEngine.Collider.Raycast(UnityEngine.Ray,UnityEngine.RaycastHit&amp;,System.Single)">
+      <summary>
+        <para>Casts a Ray that ignores all Colliders except this one.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit (See Also: RaycastHit).</param>
+      <param name="maxDistance">The max length of the ray.</param>
+      <returns>
+        <para>True when the ray intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Collision">
+      <summary>
+        <para>Describes a collision.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.collider">
+      <summary>
+        <para>The Collider we hit (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.contacts">
+      <summary>
+        <para>The contact points generated by the physics engine.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.gameObject">
+      <summary>
+        <para>The GameObject whose collider you are colliding with. (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.impulse">
+      <summary>
+        <para>The total impulse applied to this contact pair to resolve the collision.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.relativeVelocity">
+      <summary>
+        <para>The relative linear velocity of the two colliding objects (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.rigidbody">
+      <summary>
+        <para>The Rigidbody we hit (Read Only). This is null if the object we hit is a collider with no rigidbody attached.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Collision.transform">
+      <summary>
+        <para>The Transform of the object we hit (Read Only).</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CollisionDetectionMode">
+      <summary>
+        <para>The collision detection mode constants used for Rigidbody.collisionDetectionMode.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode.Continuous">
+      <summary>
+        <para>Continuous collision detection is on for colliding with static mesh geometry.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode.ContinuousDynamic">
+      <summary>
+        <para>Continuous collision detection is on for colliding with static and dynamic geometry.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionDetectionMode.Discrete">
+      <summary>
+        <para>Continuous collision detection is off for this Rigidbody.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.CollisionFlags">
+      <summary>
+        <para>CollisionFlags is a bitmask returned by CharacterController.Move.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionFlags.Above">
+      <summary>
+        <para>CollisionFlags is a bitmask returned by CharacterController.Move.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionFlags.Below">
+      <summary>
+        <para>CollisionFlags is a bitmask returned by CharacterController.Move.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionFlags.None">
+      <summary>
+        <para>CollisionFlags is a bitmask returned by CharacterController.Move.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CollisionFlags.Sides">
+      <summary>
+        <para>CollisionFlags is a bitmask returned by CharacterController.Move.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ConfigurableJoint">
+      <summary>
+        <para>The configurable joint is an extremely flexible joint giving you complete control over rotation and linear motion.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularXDrive">
+      <summary>
+        <para>Definition of how the joint's rotation will behave around its local X axis. Only used if Rotation Drive Mode is Swing &amp; Twist.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularXLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the angular X limit of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularXMotion">
+      <summary>
+        <para>Allow rotation around the X axis to be Free, completely Locked, or Limited according to Low and High Angular XLimit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularYLimit">
+      <summary>
+        <para>Boundary defining rotation restriction, based on delta from original rotation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularYMotion">
+      <summary>
+        <para>Allow rotation around the Y axis to be Free, completely Locked, or Limited according to Angular YLimit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularYZDrive">
+      <summary>
+        <para>Definition of how the joint's rotation will behave around its local Y and Z axes. Only used if Rotation Drive Mode is Swing &amp; Twist.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularYZLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the angular Y and angular Z limits of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularZLimit">
+      <summary>
+        <para>Boundary defining rotation restriction, based on delta from original rotation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.angularZMotion">
+      <summary>
+        <para>Allow rotation around the Z axis to be Free, completely Locked, or Limited according to Angular ZLimit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.configuredInWorldSpace">
+      <summary>
+        <para>If enabled, all Target values will be calculated in world space instead of the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.highAngularXLimit">
+      <summary>
+        <para>Boundary defining upper rotation restriction, based on delta from original rotation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.linearLimit">
+      <summary>
+        <para>Boundary defining movement restriction, based on distance from the joint's origin.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.linearLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the linear limit of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.lowAngularXLimit">
+      <summary>
+        <para>Boundary defining lower rotation restriction, based on delta from original rotation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.projectionAngle">
+      <summary>
+        <para>Set the angular tolerance threshold (in degrees) for projection.
+
+If the joint deviates by more than this angle around its locked angular degrees of freedom,
+the solver will move the bodies to close the angle.
+
+Setting a very small tolerance may result in simulation jitter or other artifacts.
+
+Sometimes it is not possible to project (for example when the joints form a cycle).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.projectionDistance">
+      <summary>
+        <para>Set the linear tolerance threshold for projection.
+
+If the joint separates by more than this distance along its locked degrees of freedom, the solver
+will move the bodies to close the distance.
+
+Setting a very small tolerance may result in simulation jitter or other artifacts.
+
+Sometimes it is not possible to project (for example when the joints form a cycle).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.projectionMode">
+      <summary>
+        <para>Brings violated constraints back into alignment even when the solver fails. Projection is not a physical process and does not preserve momentum or respect collision geometry. It is best avoided if practical, but can be useful in improving simulation quality where joint separation results in unacceptable artifacts.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.rotationDriveMode">
+      <summary>
+        <para>Control the object's rotation with either X &amp; YZ or Slerp Drive by itself.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.secondaryAxis">
+      <summary>
+        <para>The joint's secondary axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.slerpDrive">
+      <summary>
+        <para>Definition of how the joint's rotation will behave around all local axes. Only used if Rotation Drive Mode is Slerp Only.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.swapBodies">
+      <summary>
+        <para>If enabled, the two connected rigidbodies will be swapped, as if the joint was attached to the other body.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.targetAngularVelocity">
+      <summary>
+        <para>This is a Vector3. It defines the desired angular velocity that the joint should rotate into.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.targetPosition">
+      <summary>
+        <para>The desired position that the joint should move into.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.targetRotation">
+      <summary>
+        <para>This is a Quaternion. It defines the desired rotation that the joint should rotate into.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.targetVelocity">
+      <summary>
+        <para>The desired velocity that the joint should move along.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.xDrive">
+      <summary>
+        <para>Definition of how the joint's movement will behave along its local X axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.xMotion">
+      <summary>
+        <para>Allow movement along the X axis to be Free, completely Locked, or Limited according to Linear Limit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.yDrive">
+      <summary>
+        <para>Definition of how the joint's movement will behave along its local Y axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.yMotion">
+      <summary>
+        <para>Allow movement along the Y axis to be Free, completely Locked, or Limited according to Linear Limit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.zDrive">
+      <summary>
+        <para>Definition of how the joint's movement will behave along its local Z axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConfigurableJoint.zMotion">
+      <summary>
+        <para>Allow movement along the Z axis to be Free, completely Locked, or Limited according to Linear Limit.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ConfigurableJointMotion">
+      <summary>
+        <para>Constrains movement for a ConfigurableJoint along the 6 axes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ConfigurableJointMotion.Free">
+      <summary>
+        <para>Motion along the axis will be completely free and completely unconstrained.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ConfigurableJointMotion.Limited">
+      <summary>
+        <para>Motion along the axis will be limited by the respective limit.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ConfigurableJointMotion.Locked">
+      <summary>
+        <para>Motion along the axis will be locked.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ConstantForce">
+      <summary>
+        <para>A force applied constantly.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce.force">
+      <summary>
+        <para>The force applied to the rigidbody every frame.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce.relativeForce">
+      <summary>
+        <para>The force - relative to the rigid bodies coordinate system - applied every frame.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce.relativeTorque">
+      <summary>
+        <para>The torque - relative to the rigid bodies coordinate system - applied every frame.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ConstantForce.torque">
+      <summary>
+        <para>The torque applied to the rigidbody every frame.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ContactPoint">
+      <summary>
+        <para>Describes a contact point where the collision occurs.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint.normal">
+      <summary>
+        <para>Normal of the contact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint.otherCollider">
+      <summary>
+        <para>The other collider in contact at the point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint.point">
+      <summary>
+        <para>The point of contact.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint.separation">
+      <summary>
+        <para>The distance between the colliders at the contact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ContactPoint.thisCollider">
+      <summary>
+        <para>The first collider in contact at the point.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ControllerColliderHit">
+      <summary>
+        <para>ControllerColliderHit is used by CharacterController.OnControllerColliderHit to give detailed information about the collision and how to deal with it.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.collider">
+      <summary>
+        <para>The collider that was hit by the controller.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.controller">
+      <summary>
+        <para>The controller that hit the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.gameObject">
+      <summary>
+        <para>The game object that was hit by the controller.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.moveDirection">
+      <summary>
+        <para>The direction the CharacterController was moving in when the collision occured.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.moveLength">
+      <summary>
+        <para>How far the character has travelled until it hit the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.normal">
+      <summary>
+        <para>The normal of the surface we collided with in world space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.point">
+      <summary>
+        <para>The impact point in world space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.rigidbody">
+      <summary>
+        <para>The rigidbody that was hit by the controller.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.ControllerColliderHit.transform">
+      <summary>
+        <para>The transform that was hit by the controller.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.FixedJoint">
+      <summary>
+        <para>The Fixed joint groups together 2 rigidbodies, making them stick together in their bound position.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.ForceMode">
+      <summary>
+        <para>Use ForceMode to specify how to apply a force using Rigidbody.AddForce.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode.Acceleration">
+      <summary>
+        <para>Add a continuous acceleration to the rigidbody, ignoring its mass.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode.Force">
+      <summary>
+        <para>Add a continuous force to the rigidbody, using its mass.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode.Impulse">
+      <summary>
+        <para>Add an instant force impulse to the rigidbody, using its mass.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.ForceMode.VelocityChange">
+      <summary>
+        <para>Add an instant velocity change to the rigidbody, ignoring its mass.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.HingeJoint">
+      <summary>
+        <para>The HingeJoint groups together 2 rigid bodies, constraining them to move like connected by a hinge.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.angle">
+      <summary>
+        <para>The current angle in degrees of the joint relative to its rest position. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.limits">
+      <summary>
+        <para>Limit of angular rotation (in degrees) on the hinge joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.motor">
+      <summary>
+        <para>The motor will apply a force up to a maximum force to achieve the target velocity in degrees per second.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.spring">
+      <summary>
+        <para>The spring attempts to reach a target angle by adding spring and damping forces.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.useLimits">
+      <summary>
+        <para>Enables the joint's limits. Disabled by default.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.useMotor">
+      <summary>
+        <para>Enables the joint's motor. Disabled by default.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.useSpring">
+      <summary>
+        <para>Enables the joint's spring. Disabled by default.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.HingeJoint.velocity">
+      <summary>
+        <para>The angular velocity of the joint in degrees per second. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Joint">
+      <summary>
+        <para>Joint is the base class for all joints.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.anchor">
+      <summary>
+        <para>The Position of the anchor around which the joints motion is constrained.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.autoConfigureConnectedAnchor">
+      <summary>
+        <para>Should the connectedAnchor be calculated automatically?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.axis">
+      <summary>
+        <para>The Direction of the axis around which the body is constrained.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.breakForce">
+      <summary>
+        <para>The force that needs to be applied for this joint to break.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.breakTorque">
+      <summary>
+        <para>The torque that needs to be applied for this joint to break.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.connectedAnchor">
+      <summary>
+        <para>Position of the anchor relative to the connected Rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.connectedBody">
+      <summary>
+        <para>A reference to another rigidbody this joint connects to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.connectedMassScale">
+      <summary>
+        <para>The scale to apply to the inverse mass and inertia tensor of the connected body prior to solving the constraints.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.currentForce">
+      <summary>
+        <para>The force applied by the solver to satisfy all constraints.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.currentTorque">
+      <summary>
+        <para>The torque applied by the solver to satisfy all constraints.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.enableCollision">
+      <summary>
+        <para>Enable collision between bodies connected with the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.enablePreprocessing">
+      <summary>
+        <para>Toggle preprocessing for this joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Joint.massScale">
+      <summary>
+        <para>The scale to apply to the inverse mass and inertia tensor of the body prior to solving the constraints.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointDrive">
+      <summary>
+        <para>How the joint's movement will behave along its local X axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointDrive.maximumForce">
+      <summary>
+        <para>Amount of force applied to push the object toward the defined direction.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointDrive.mode">
+      <summary>
+        <para>Whether the drive should attempt to reach position, velocity, both or nothing.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointDrive.positionDamper">
+      <summary>
+        <para>Resistance strength against the Position Spring. Only used if mode includes Position.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointDrive.positionSpring">
+      <summary>
+        <para>Strength of a rubber-band pull toward the defined direction. Only used if mode includes Position.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointDriveMode">
+      <summary>
+        <para>The ConfigurableJoint attempts to attain position / velocity targets based on this flag.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointDriveMode.None">
+      <summary>
+        <para>Don't apply any forces to reach the target.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointDriveMode.Position">
+      <summary>
+        <para>Try to reach the specified target position.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointDriveMode.PositionAndVelocity">
+      <summary>
+        <para>Try to reach the specified target position and velocity.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointDriveMode.Velocity">
+      <summary>
+        <para>Try to reach the specified target velocity.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointLimits">
+      <summary>
+        <para>JointLimits is used by the HingeJoint to limit the joints angle.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointLimits.bounceMinVelocity">
+      <summary>
+        <para>The minimum impact velocity which will cause the joint to bounce.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointLimits.bounciness">
+      <summary>
+        <para>Determines the size of the bounce when the joint hits it's limit. Also known as restitution.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointLimits.contactDistance">
+      <summary>
+        <para>Distance inside the limit value at which the limit will be considered to be active by the solver.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointLimits.max">
+      <summary>
+        <para>The upper angular limit (in degrees) of the joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointLimits.min">
+      <summary>
+        <para>The lower angular limit (in degrees) of the joint.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointMotor">
+      <summary>
+        <para>The JointMotor is used to motorize a joint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointMotor.force">
+      <summary>
+        <para>The motor will apply a force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointMotor.freeSpin">
+      <summary>
+        <para>If freeSpin is enabled the motor will only accelerate but never slow down.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.JointMotor.targetVelocity">
+      <summary>
+        <para>The motor will apply a force up to force to achieve targetVelocity.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointProjectionMode">
+      <summary>
+        <para>Determines how to snap physics joints back to its constrained position when it drifts off too much.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointProjectionMode.None">
+      <summary>
+        <para>Don't snap at all.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointProjectionMode.PositionAndRotation">
+      <summary>
+        <para>Snap both position and rotation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointProjectionMode.PositionOnly">
+      <summary>
+        <para>Snap Position only.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.JointSpring">
+      <summary>
+        <para>JointSpring is used add a spring force to HingeJoint and PhysicMaterial.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointSpring.damper">
+      <summary>
+        <para>The damper force uses to dampen the spring.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointSpring.spring">
+      <summary>
+        <para>The spring forces used to reach the target position.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.JointSpring.targetPosition">
+      <summary>
+        <para>The target position the joint attempts to reach.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.MeshCollider">
+      <summary>
+        <para>A mesh collider allows you to do between meshes and primitives.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.convex">
+      <summary>
+        <para>Use a convex collider from the mesh.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.cookingOptions">
+      <summary>
+        <para>Options used to enable or disable certain features in mesh cooking.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.inflateMesh">
+      <summary>
+        <para>Allow the physics engine to increase the volume of the input mesh in attempt to generate a valid convex mesh.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.sharedMesh">
+      <summary>
+        <para>The mesh object used for collision detection.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.skinWidth">
+      <summary>
+        <para>Used when set to inflateMesh to determine how much inflation is acceptable.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.MeshCollider.smoothSphereCollisions">
+      <summary>
+        <para>Uses interpolated normals for sphere collisions instead of flat polygonal normals.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.MeshColliderCookingOptions">
+      <summary>
+        <para>Cooking options that are available with MeshCollider.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.MeshColliderCookingOptions.CookForFasterSimulation">
+      <summary>
+        <para>Toggle between cooking for faster simulation or faster cooking time.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.MeshColliderCookingOptions.EnableMeshCleaning">
+      <summary>
+        <para>Toggle cleaning of the mesh.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.MeshColliderCookingOptions.InflateConvexMesh">
+      <summary>
+        <para>Allow the physics engine to increase the volume of the input mesh in attempt to generate a valid convex mesh.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.MeshColliderCookingOptions.None">
+      <summary>
+        <para>No optional cooking steps will be run.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.MeshColliderCookingOptions.WeldColocatedVertices">
+      <summary>
+        <para>Toggle the removal of equal vertices.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.PhysicMaterial">
+      <summary>
+        <para>Physics material describes how to handle colliding objects (friction, bounciness).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.bounceCombine">
+      <summary>
+        <para>Determines how the bounciness is combined.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.bounciness">
+      <summary>
+        <para>How bouncy is the surface? A value of 0 will not bounce. A value of 1 will bounce without any loss of energy.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.dynamicFriction">
+      <summary>
+        <para>The friction used when already moving.  This value has to be between 0 and 1.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.dynamicFriction2">
+      <summary>
+        <para>If anisotropic friction is enabled, dynamicFriction2 will be applied along frictionDirection2.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.frictionCombine">
+      <summary>
+        <para>Determines how the friction is combined.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.frictionDirection2">
+      <summary>
+        <para>The direction of anisotropy. Anisotropic friction is enabled if the vector is not zero.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.staticFriction">
+      <summary>
+        <para>The friction coefficient used when an object is lying on a surface.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.PhysicMaterial.staticFriction2">
+      <summary>
+        <para>If anisotropic friction is enabled, staticFriction2 will be applied along frictionDirection2.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.PhysicMaterial.#ctor">
+      <summary>
+        <para>Creates a new material.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.PhysicMaterial.#ctor(System.String)">
+      <summary>
+        <para>Creates a new material named name.</para>
+      </summary>
+      <param name="name"></param>
+    </member>
+    <member name="T:UnityEngine.PhysicMaterialCombine">
+      <summary>
+        <para>Describes how physics materials of the colliding objects are combined.
+
+The friction force as well as the residual bounce impulse are applied symmertrically to both of the colliders in contact, so each pair of overlapping colliders must have a single set of friction and bouciness settings. However, one can set arbitrary physics materials to any colliders. For that particular reason, there is a mechanism that allows the combination of two different sets of properties that correspond to each of the colliders in contact into one set to be used in the solver.
+
+Specifying Average, Maximum, Minimum or Multiply as the physics material combine mode, you directly set the function that is used to combine the settings corresponding to the two overlapping colliders into one set of settings that can be used to apply the material effect.
+
+Note that there is a special case when the two overlapping colliders have physics materials with different combine modes set. In this particular case, the function that has the highest priority is used. The priority order is as follows: Average &lt; Minimum &lt; Multiply &lt; Maximum. For example, if one material has Average set but the other one has Maximum, then the combine function to be used is Maximum, since it has higher priority.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.PhysicMaterialCombine.Average">
+      <summary>
+        <para>Averages the friction/bounce of the two colliding materials.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.PhysicMaterialCombine.Maximum">
+      <summary>
+        <para>Uses the larger friction/bounce of the two colliding materials.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.PhysicMaterialCombine.Minimum">
+      <summary>
+        <para>Uses the smaller friction/bounce of the two colliding materials.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.PhysicMaterialCombine.Multiply">
+      <summary>
+        <para>Multiplies the friction/bounce of the two colliding materials.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Physics">
+      <summary>
+        <para>Global physics properties and helper methods.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.autoSimulation">
+      <summary>
+        <para>Sets whether the physics should be simulated automatically or not.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.autoSyncTransforms">
+      <summary>
+        <para>Whether or not to automatically sync transform changes with the physics system whenever a Transform component changes.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.bounceThreshold">
+      <summary>
+        <para>Two colliding objects with a relative velocity below this will not bounce (default 2). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.defaultContactOffset">
+      <summary>
+        <para>The default contact offset of the newly created colliders.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.defaultSolverIterations">
+      <summary>
+        <para>The defaultSolverIterations determines how accurately Rigidbody joints and collision contacts are resolved. (default 6). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.defaultSolverVelocityIterations">
+      <summary>
+        <para>The defaultSolverVelocityIterations affects how accurately the Rigidbody joints and collision contacts are resolved. (default 1). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.gravity">
+      <summary>
+        <para>The gravity applied to all rigid bodies in the scene.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.interCollisionDistance">
+      <summary>
+        <para>Sets the minimum separation distance for cloth inter-collision.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.interCollisionStiffness">
+      <summary>
+        <para>Sets the cloth inter-collision stiffness.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.maxAngularVelocity">
+      <summary>
+        <para>The default maximum angular velocity permitted for any rigid bodies (default 7). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.minPenetrationForPenalty">
+      <summary>
+        <para>The minimum contact penetration value in order to apply a penalty force (default 0.05). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.queriesHitBackfaces">
+      <summary>
+        <para>Whether physics queries should hit back-face triangles.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.queriesHitTriggers">
+      <summary>
+        <para>Specifies whether queries (raycasts, spherecasts, overlap tests, etc.) hit Triggers by default.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.sleepAngularVelocity">
+      <summary>
+        <para>The default angular velocity, below which objects start sleeping (default 0.14). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.sleepThreshold">
+      <summary>
+        <para>The mass-normalized energy threshold, below which objects start going to sleep.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Physics.sleepVelocity">
+      <summary>
+        <para>The default linear velocity, below which objects start going to sleep (default 0.15). Must be positive.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Physics.AllLayers">
+      <summary>
+        <para>Layer mask constant to select all layers.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics.BoxCast(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts the box along a ray and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half the size of the box in each dimension.</param>
+      <param name="direction">The direction in which to cast the box.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True, if any intersections were found.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.BoxCast(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,UnityEngine.Quaternion,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts the box along a ray and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half the size of the box in each dimension.</param>
+      <param name="direction">The direction in which to cast the box.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True, if any intersections were found.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.BoxCastAll(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Like Physics.BoxCast, but returns all hits.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half the size of the box in each dimension.</param>
+      <param name="direction">The direction in which to cast the box.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>All colliders that were hit.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.BoxCastNonAlloc(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.RaycastHit[],UnityEngine.Quaternion,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Cast the box along the direction, and store hits in the provided buffer.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half the size of the box in each dimension.</param>
+      <param name="direction">The direction in which to cast the box.</param>
+      <param name="results">The buffer to store the results in.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored to the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.CapsuleCast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a capsule against all colliders in the scene and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="point1">The center of the sphere at the start of the capsule.</param>
+      <param name="point2">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="direction">The direction into which to sweep the capsule.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the capsule sweep intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.CapsuleCast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para></para>
+      </summary>
+      <param name="point1">The center of the sphere at the start of the capsule.</param>
+      <param name="point2">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="direction">The direction into which to sweep the capsule.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.CapsuleCastAll(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Like Physics.CapsuleCast, but this function will return all hits the capsule sweep intersects.</para>
+      </summary>
+      <param name="point1">The center of the sphere at the start of the capsule.</param>
+      <param name="point2">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="direction">The direction into which to sweep the capsule.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>An array of all colliders hit in the sweep.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.CapsuleCastNonAlloc(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,UnityEngine.Vector3,UnityEngine.RaycastHit[],System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a capsule against all colliders in the scene and returns detailed information on what was hit into the buffer.</para>
+      </summary>
+      <param name="point1">The center of the sphere at the start of the capsule.</param>
+      <param name="point2">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="direction">The direction into which to sweep the capsule.</param>
+      <param name="results">The buffer to store the hits into.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored into the buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.CheckBox(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Check whether the given box overlaps with other colliders or not.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half the size of the box in each dimension.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True, if the box overlaps with any colliders.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.CheckCapsule(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Checks if any colliders overlap a capsule-shaped volume in world space.</para>
+      </summary>
+      <param name="start">The center of the sphere at the start of the capsule.</param>
+      <param name="end">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.CheckSphere(UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Returns true if there are any colliders overlapping the sphere defined by position and radius in world coordinates.</para>
+      </summary>
+      <param name="position">Center of the sphere.</param>
+      <param name="radius">Radius of the sphere.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.ClosestPoint(UnityEngine.Vector3,UnityEngine.Collider,UnityEngine.Vector3,UnityEngine.Quaternion)">
+      <summary>
+        <para>Returns a point on the given collider that is closest to the specified location.</para>
+      </summary>
+      <param name="point">Location you want to find the closest point to.</param>
+      <param name="collider">The collider that you find the closest point on.</param>
+      <param name="position">The position of the collider.</param>
+      <param name="rotation">The rotation of the collider.</param>
+      <returns>
+        <para>The point on the collider that is closest to the specified location.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.ComputePenetration(UnityEngine.Collider,UnityEngine.Vector3,UnityEngine.Quaternion,UnityEngine.Collider,UnityEngine.Vector3,UnityEngine.Quaternion,UnityEngine.Vector3&amp;,System.Single&amp;)">
+      <summary>
+        <para>Compute the minimal translation required to separate the given colliders apart at specified poses.</para>
+      </summary>
+      <param name="colliderA">The first collider.</param>
+      <param name="positionA">Position of the first collider.</param>
+      <param name="rotationA">Rotation of the first collider.</param>
+      <param name="colliderB">The second collider.</param>
+      <param name="positionB">Position of the second collider.</param>
+      <param name="rotationB">Rotation of the second collider.</param>
+      <param name="direction">Direction along which the translation required to separate the colliders apart is minimal.</param>
+      <param name="distance">The distance along direction that is required to separate the colliders apart.</param>
+      <returns>
+        <para>True, if the colliders overlap at the given poses.</para>
+      </returns>
+    </member>
+    <member name="F:UnityEngine.Physics.DefaultRaycastLayers">
+      <summary>
+        <para>Layer mask constant to select default raycast layers.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics.GetIgnoreLayerCollision(System.Int32,System.Int32)">
+      <summary>
+        <para>Are collisions between layer1 and layer2 being ignored?</para>
+      </summary>
+      <param name="layer1"></param>
+      <param name="layer2"></param>
+    </member>
+    <member name="M:UnityEngine.Physics.IgnoreCollision(UnityEngine.Collider,UnityEngine.Collider,System.Boolean)">
+      <summary>
+        <para>Makes the collision detection system ignore all collisions between collider1 and collider2.</para>
+      </summary>
+      <param name="start">Start point.</param>
+      <param name="end">End point.</param>
+      <param name="ignore">Ignore collision.</param>
+      <param name="collider1"></param>
+      <param name="collider2"></param>
+    </member>
+    <member name="M:UnityEngine.Physics.IgnoreLayerCollision(System.Int32,System.Int32,System.Boolean)">
+      <summary>
+        <para>Makes the collision detection system ignore all collisions between any collider in layer1 and any collider in layer2.
+
+Note that IgnoreLayerCollision will reset the trigger state of affected colliders, so you might receive OnTriggerExit and OnTriggerEnter messages in response to calling this.</para>
+      </summary>
+      <param name="layer1"></param>
+      <param name="layer2"></param>
+      <param name="ignore"></param>
+    </member>
+    <member name="F:UnityEngine.Physics.IgnoreRaycastLayer">
+      <summary>
+        <para>Layer mask constant to select ignore raycast layer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Physics.Linecast(UnityEngine.Vector3,UnityEngine.Vector3,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Returns true if there is any collider intersecting the line between start and end.</para>
+      </summary>
+      <param name="start">Start point.</param>
+      <param name="end">End point.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.Linecast(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Returns true if there is any collider intersecting the line between start and end.</para>
+      </summary>
+      <param name="start">Start point.</param>
+      <param name="end">End point.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapBox(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Quaternion,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Find all colliders touching or inside of the given box.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half of the size of the box in each dimension.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>Colliders that overlap with the given box.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapBoxNonAlloc(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.Collider[],UnityEngine.Quaternion,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Find all colliders touching or inside of the given box, and store them into the buffer.</para>
+      </summary>
+      <param name="center">Center of the box.</param>
+      <param name="halfExtents">Half of the size of the box in each dimension.</param>
+      <param name="results">The buffer to store the results in.</param>
+      <param name="orientation">Rotation of the box.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of colliders stored in results.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapCapsule(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Check the given capsule against the physics world and return all overlapping colliders.</para>
+      </summary>
+      <param name="point0">The center of the sphere at the start of the capsule.</param>
+      <param name="point1">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>Colliders touching or inside the capsule.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapCapsuleNonAlloc(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,UnityEngine.Collider[],System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Check the given capsule against the physics world and return all overlapping colliders in the user-provided buffer.</para>
+      </summary>
+      <param name="point0">The center of the sphere at the start of the capsule.</param>
+      <param name="point1">The center of the sphere at the end of the capsule.</param>
+      <param name="radius">The radius of the capsule.</param>
+      <param name="results">The buffer to store the results into.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of entries written to the buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapSphere(UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Returns an array with all colliders touching or inside the sphere.</para>
+      </summary>
+      <param name="position">Center of the sphere.</param>
+      <param name="radius">Radius of the sphere.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.OverlapSphereNonAlloc(UnityEngine.Vector3,System.Single,UnityEngine.Collider[],System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Computes and stores colliders touching or inside the sphere into the provided buffer.</para>
+      </summary>
+      <param name="position">Center of the sphere.</param>
+      <param name="radius">Radius of the sphere.</param>
+      <param name="results">The buffer to store the results into.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of colliders stored into the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.Raycast(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a ray, from point origin, in direction direction, of length maxDistance, against all colliders in the scene.</para>
+      </summary>
+      <param name="origin">The starting point of the ray in world coordinates.</param>
+      <param name="direction">The direction of the ray.</param>
+      <param name="maxDistance">The max distance the ray should check for collisions.</param>
+      <param name="layerMask">A that is used to selectively ignore Colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True if the ray intersects with a Collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.Raycast(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a ray against all colliders in the scene and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="origin">The starting point of the ray in world coordinates.</param>
+      <param name="direction">The direction of the ray.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="maxDistance">The max distance the ray should check for collisions.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the ray intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.Raycast(UnityEngine.Ray,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Same as above using ray.origin and ray.direction instead of origin and direction.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray.</param>
+      <param name="maxDistance">The max distance the ray should check for collisions.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the ray intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.Raycast(UnityEngine.Ray,UnityEngine.RaycastHit&amp;,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Same as above using ray.origin and ray.direction instead of origin and direction.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="maxDistance">The max distance the ray should check for collisions.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the ray intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.RaycastAll(UnityEngine.Ray,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a ray through the scene and returns all hits. Note that order is not guaranteed.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray.</param>
+      <param name="maxDistance">The max distance the rayhit is allowed to be from the start of the ray.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.RaycastAll(UnityEngine.Vector3,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>See Also: Raycast.</para>
+      </summary>
+      <param name="origin">The starting point of the ray in world coordinates.</param>
+      <param name="direction">The direction of the ray.</param>
+      <param name="maxDistance">The max distance the rayhit is allowed to be from the start of the ray.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.RaycastNonAlloc(UnityEngine.Ray,UnityEngine.RaycastHit[],System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Cast a ray through the scene and store the hits into the buffer.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray.</param>
+      <param name="results">The buffer to store the hits into.</param>
+      <param name="maxDistance">The max distance the rayhit is allowed to be from the start of the ray.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored into the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.RaycastNonAlloc(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.RaycastHit[],System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Cast a ray through the scene and store the hits into the buffer.</para>
+      </summary>
+      <param name="origin">The starting point and direction of the ray.</param>
+      <param name="results">The buffer to store the hits into.</param>
+      <param name="direction">The direction of the ray.</param>
+      <param name="maxDistance">The max distance the rayhit is allowed to be from the start of the ray.</param>
+      <param name="layermask">A that is used to selectively ignore colliders when casting a ray.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored into the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.RebuildBroadphaseRegions(UnityEngine.Bounds,System.Int32)">
+      <summary>
+        <para>Rebuild the broadphase interest regions as well as set the world boundaries.</para>
+      </summary>
+      <param name="worldBounds">Boundaries of the physics world.</param>
+      <param name="subdivisions">How many cells to create along x and z axis.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.Simulate(System.Single)">
+      <summary>
+        <para>Simulate physics in the scene.</para>
+      </summary>
+      <param name="step">The time to advance physics by.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCast(UnityEngine.Vector3,System.Single,UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a sphere along a ray and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="origin">The center of the sphere at the start of the sweep.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="direction">The direction into which to sweep the sphere.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the sphere sweep intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCast(UnityEngine.Ray,System.Single,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Casts a sphere along a ray and returns detailed information on what was hit.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray into which the sphere sweep is cast.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the sphere sweep intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCast(UnityEngine.Ray,System.Single,UnityEngine.RaycastHit&amp;,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para></para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray into which the sphere sweep is cast.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit. (See Also: RaycastHit).</param>
+      <param name="maxDistance">The max length of the cast.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a capsule.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCastAll(UnityEngine.Vector3,System.Single,UnityEngine.Vector3,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Like Physics.SphereCast, but this function will return all hits the sphere sweep intersects.</para>
+      </summary>
+      <param name="origin">The center of the sphere at the start of the sweep.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="direction">The direction in which to sweep the sphere.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a sphere.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>An array of all colliders hit in the sweep.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCastAll(UnityEngine.Ray,System.Single,System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Like Physics.SphereCast, but this function will return all hits the sphere sweep intersects.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray into which the sphere sweep is cast.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a sphere.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCastNonAlloc(UnityEngine.Vector3,System.Single,UnityEngine.Vector3,UnityEngine.RaycastHit[],System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Cast sphere along the direction and store the results into buffer.</para>
+      </summary>
+      <param name="origin">The center of the sphere at the start of the sweep.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="direction">The direction in which to sweep the sphere.</param>
+      <param name="results">The buffer to save the hits into.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a sphere.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored into the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.SphereCastNonAlloc(UnityEngine.Ray,System.Single,UnityEngine.RaycastHit[],System.Single,System.Int32,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Cast sphere along the direction and store the results into buffer.</para>
+      </summary>
+      <param name="ray">The starting point and direction of the ray into which the sphere sweep is cast.</param>
+      <param name="radius">The radius of the sphere.</param>
+      <param name="results">The buffer to save the results to.</param>
+      <param name="maxDistance">The max length of the sweep.</param>
+      <param name="layerMask">A that is used to selectively ignore colliders when casting a sphere.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>The amount of hits stored into the results buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Physics.SyncTransforms">
+      <summary>
+        <para>Apply Transform changes to the physics engine.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.QueryTriggerInteraction">
+      <summary>
+        <para>Overrides the global Physics.queriesHitTriggers.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.QueryTriggerInteraction.Collide">
+      <summary>
+        <para>Queries always report Trigger hits.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.QueryTriggerInteraction.Ignore">
+      <summary>
+        <para>Queries never report Trigger hits.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.QueryTriggerInteraction.UseGlobal">
+      <summary>
+        <para>Queries use the global Physics.queriesHitTriggers setting.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RaycastHit">
+      <summary>
+        <para>Structure used to get information back from a raycast.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.barycentricCoordinate">
+      <summary>
+        <para>The barycentric coordinate of the triangle we hit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.collider">
+      <summary>
+        <para>The Collider that was hit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.distance">
+      <summary>
+        <para>The distance from the ray's origin to the impact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.lightmapCoord">
+      <summary>
+        <para>The uv lightmap coordinate at the impact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.normal">
+      <summary>
+        <para>The normal of the surface the ray hit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.point">
+      <summary>
+        <para>The impact point in world space where the ray hit the collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.rigidbody">
+      <summary>
+        <para>The Rigidbody of the collider that was hit. If the collider is not attached to a rigidbody then it is null.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.textureCoord">
+      <summary>
+        <para>The uv texture coordinate at the collision location.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.textureCoord2">
+      <summary>
+        <para>The secondary uv texture coordinate at the impact point.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.transform">
+      <summary>
+        <para>The Transform of the rigidbody or collider that was hit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.RaycastHit.triangleIndex">
+      <summary>
+        <para>The index of the triangle that was hit.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Rigidbody">
+      <summary>
+        <para>Control of an object's position through physics simulation.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.angularDrag">
+      <summary>
+        <para>The angular drag of the object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.angularVelocity">
+      <summary>
+        <para>The angular velocity vector of the rigidbody measured in radians per second.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.centerOfMass">
+      <summary>
+        <para>The center of mass relative to the transform's origin.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.collisionDetectionMode">
+      <summary>
+        <para>The Rigidbody's collision detection mode.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.constraints">
+      <summary>
+        <para>Controls which degrees of freedom are allowed for the simulation of this Rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.detectCollisions">
+      <summary>
+        <para>Should collision detection be enabled? (By default always enabled).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.drag">
+      <summary>
+        <para>The drag of the object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.freezeRotation">
+      <summary>
+        <para>Controls whether physics will change the rotation of the object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.inertiaTensor">
+      <summary>
+        <para>The diagonal inertia tensor of mass relative to the center of mass.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.inertiaTensorRotation">
+      <summary>
+        <para>The rotation of the inertia tensor.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.interpolation">
+      <summary>
+        <para>Interpolation allows you to smooth out the effect of running physics at a fixed frame rate.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.isKinematic">
+      <summary>
+        <para>Controls whether physics affects the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.mass">
+      <summary>
+        <para>The mass of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.maxAngularVelocity">
+      <summary>
+        <para>The maximimum angular velocity of the rigidbody. (Default 7) range { 0, infinity }.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.maxDepenetrationVelocity">
+      <summary>
+        <para>Maximum velocity of a rigidbody when moving out of penetrating state.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.position">
+      <summary>
+        <para>The position of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.rotation">
+      <summary>
+        <para>The rotation of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.sleepAngularVelocity">
+      <summary>
+        <para>The angular velocity below which objects start going to sleep.  (Default 0.14) range { 0, infinity }.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.sleepThreshold">
+      <summary>
+        <para>The mass-normalized energy threshold, below which objects start going to sleep.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.sleepVelocity">
+      <summary>
+        <para>The linear velocity below which objects start going to sleep. (Default 0.14) range { 0, infinity }.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.solverIterations">
+      <summary>
+        <para>The solverIterations determines how accurately Rigidbody joints and collision contacts are resolved. Overrides Physics.defaultSolverIterations. Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.solverVelocityIterations">
+      <summary>
+        <para>The solverVelocityIterations affects how how accurately Rigidbody joints and collision contacts are resolved. Overrides Physics.defaultSolverVelocityIterations. Must be positive.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.useConeFriction">
+      <summary>
+        <para>Force cone friction to be used for this rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.useGravity">
+      <summary>
+        <para>Controls whether gravity affects this rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.velocity">
+      <summary>
+        <para>The velocity vector of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Rigidbody.worldCenterOfMass">
+      <summary>
+        <para>The center of mass of the rigidbody in world space (Read Only).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddExplosionForce(System.Single,UnityEngine.Vector3,System.Single)">
+      <summary>
+        <para>Applies a force to a rigidbody that simulates explosion effects.</para>
+      </summary>
+      <param name="explosionForce">The force of the explosion (which may be modified by distance).</param>
+      <param name="explosionPosition">The centre of the sphere within which the explosion has its effect.</param>
+      <param name="explosionRadius">The radius of the sphere within which the explosion has its effect.</param>
+      <param name="upwardsModifier">Adjustment to the apparent position of the explosion to make it seem to lift objects.</param>
+      <param name="mode">The method used to apply the force to its targets.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddExplosionForce(System.Single,UnityEngine.Vector3,System.Single,System.Single)">
+      <summary>
+        <para>Applies a force to a rigidbody that simulates explosion effects.</para>
+      </summary>
+      <param name="explosionForce">The force of the explosion (which may be modified by distance).</param>
+      <param name="explosionPosition">The centre of the sphere within which the explosion has its effect.</param>
+      <param name="explosionRadius">The radius of the sphere within which the explosion has its effect.</param>
+      <param name="upwardsModifier">Adjustment to the apparent position of the explosion to make it seem to lift objects.</param>
+      <param name="mode">The method used to apply the force to its targets.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddExplosionForce(System.Single,UnityEngine.Vector3,System.Single,System.Single,UnityEngine.ForceMode)">
+      <summary>
+        <para>Applies a force to a rigidbody that simulates explosion effects.</para>
+      </summary>
+      <param name="explosionForce">The force of the explosion (which may be modified by distance).</param>
+      <param name="explosionPosition">The centre of the sphere within which the explosion has its effect.</param>
+      <param name="explosionRadius">The radius of the sphere within which the explosion has its effect.</param>
+      <param name="upwardsModifier">Adjustment to the apparent position of the explosion to make it seem to lift objects.</param>
+      <param name="mode">The method used to apply the force to its targets.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForce(UnityEngine.Vector3)">
+      <summary>
+        <para>Adds a force to the Rigidbody.</para>
+      </summary>
+      <param name="force">Force vector in world coordinates.</param>
+      <param name="mode">Type of force to apply.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForce(UnityEngine.Vector3,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a force to the Rigidbody.</para>
+      </summary>
+      <param name="force">Force vector in world coordinates.</param>
+      <param name="mode">Type of force to apply.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForce(System.Single,System.Single,System.Single)">
+      <summary>
+        <para>Adds a force to the Rigidbody.</para>
+      </summary>
+      <param name="x">Size of force along the world x-axis.</param>
+      <param name="y">Size of force along the world y-axis.</param>
+      <param name="z">Size of force along the world z-axis.</param>
+      <param name="mode">Type of force to apply.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForce(System.Single,System.Single,System.Single,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a force to the Rigidbody.</para>
+      </summary>
+      <param name="x">Size of force along the world x-axis.</param>
+      <param name="y">Size of force along the world y-axis.</param>
+      <param name="z">Size of force along the world z-axis.</param>
+      <param name="mode">Type of force to apply.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForceAtPosition(UnityEngine.Vector3,UnityEngine.Vector3)">
+      <summary>
+        <para>Applies force at position. As a result this will apply a torque and force on the object.</para>
+      </summary>
+      <param name="force">Force vector in world coordinates.</param>
+      <param name="position">Position in world coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddForceAtPosition(UnityEngine.Vector3,UnityEngine.Vector3,UnityEngine.ForceMode)">
+      <summary>
+        <para>Applies force at position. As a result this will apply a torque and force on the object.</para>
+      </summary>
+      <param name="force">Force vector in world coordinates.</param>
+      <param name="position">Position in world coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeForce(UnityEngine.Vector3)">
+      <summary>
+        <para>Adds a force to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="force">Force vector in local coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeForce(UnityEngine.Vector3,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a force to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="force">Force vector in local coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeForce(System.Single,System.Single,System.Single)">
+      <summary>
+        <para>Adds a force to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="x">Size of force along the local x-axis.</param>
+      <param name="y">Size of force along the local y-axis.</param>
+      <param name="z">Size of force along the local z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeForce(System.Single,System.Single,System.Single,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a force to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="x">Size of force along the local x-axis.</param>
+      <param name="y">Size of force along the local y-axis.</param>
+      <param name="z">Size of force along the local z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeTorque(UnityEngine.Vector3)">
+      <summary>
+        <para>Adds a torque to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="torque">Torque vector in local coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeTorque(UnityEngine.Vector3,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a torque to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="torque">Torque vector in local coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeTorque(System.Single,System.Single,System.Single)">
+      <summary>
+        <para>Adds a torque to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="x">Size of torque along the local x-axis.</param>
+      <param name="y">Size of torque along the local y-axis.</param>
+      <param name="z">Size of torque along the local z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddRelativeTorque(System.Single,System.Single,System.Single,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a torque to the rigidbody relative to its coordinate system.</para>
+      </summary>
+      <param name="x">Size of torque along the local x-axis.</param>
+      <param name="y">Size of torque along the local y-axis.</param>
+      <param name="z">Size of torque along the local z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddTorque(UnityEngine.Vector3)">
+      <summary>
+        <para>Adds a torque to the rigidbody.</para>
+      </summary>
+      <param name="torque">Torque vector in world coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddTorque(UnityEngine.Vector3,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a torque to the rigidbody.</para>
+      </summary>
+      <param name="torque">Torque vector in world coordinates.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddTorque(System.Single,System.Single,System.Single)">
+      <summary>
+        <para>Adds a torque to the rigidbody.</para>
+      </summary>
+      <param name="x">Size of torque along the world x-axis.</param>
+      <param name="y">Size of torque along the world y-axis.</param>
+      <param name="z">Size of torque along the world z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.AddTorque(System.Single,System.Single,System.Single,UnityEngine.ForceMode)">
+      <summary>
+        <para>Adds a torque to the rigidbody.</para>
+      </summary>
+      <param name="x">Size of torque along the world x-axis.</param>
+      <param name="y">Size of torque along the world y-axis.</param>
+      <param name="z">Size of torque along the world z-axis.</param>
+      <param name="mode"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.ClosestPointOnBounds(UnityEngine.Vector3)">
+      <summary>
+        <para>The closest point to the bounding box of the attached colliders.</para>
+      </summary>
+      <param name="position"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.GetPointVelocity(UnityEngine.Vector3)">
+      <summary>
+        <para>The velocity of the rigidbody at the point worldPoint in global space.</para>
+      </summary>
+      <param name="worldPoint"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.GetRelativePointVelocity(UnityEngine.Vector3)">
+      <summary>
+        <para>The velocity relative to the rigidbody at the point relativePoint.</para>
+      </summary>
+      <param name="relativePoint"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.IsSleeping">
+      <summary>
+        <para>Is the rigidbody sleeping?</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.MovePosition(UnityEngine.Vector3)">
+      <summary>
+        <para>Moves the rigidbody to position.</para>
+      </summary>
+      <param name="position">The new position for the Rigidbody object.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.MoveRotation(UnityEngine.Quaternion)">
+      <summary>
+        <para>Rotates the rigidbody to rotation.</para>
+      </summary>
+      <param name="rot">The new rotation for the Rigidbody.</param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.ResetCenterOfMass">
+      <summary>
+        <para>Reset the center of mass of the rigidbody.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.ResetInertiaTensor">
+      <summary>
+        <para>Reset the inertia tensor value and rotation.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.SetDensity(System.Single)">
+      <summary>
+        <para>Sets the mass based on the attached colliders assuming a constant density.</para>
+      </summary>
+      <param name="density"></param>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.Sleep">
+      <summary>
+        <para>Forces a rigidbody to sleep at least one frame.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.SweepTest(UnityEngine.Vector3,UnityEngine.RaycastHit&amp;,System.Single,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Tests if a rigidbody would collide with anything, if it was moved through the scene.</para>
+      </summary>
+      <param name="direction">The direction into which to sweep the rigidbody.</param>
+      <param name="hitInfo">If true is returned, hitInfo will contain more information about where the collider was hit (See Also: RaycastHit).</param>
+      <param name="maxDistance">The length of the sweep.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>True when the rigidbody sweep intersects any collider, otherwise false.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.SweepTestAll(UnityEngine.Vector3,System.Single,UnityEngine.QueryTriggerInteraction)">
+      <summary>
+        <para>Like Rigidbody.SweepTest, but returns all hits.</para>
+      </summary>
+      <param name="direction">The direction into which to sweep the rigidbody.</param>
+      <param name="maxDistance">The length of the sweep.</param>
+      <param name="queryTriggerInteraction">Specifies whether this query should hit Triggers.</param>
+      <returns>
+        <para>An array of all colliders hit in the sweep.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rigidbody.WakeUp">
+      <summary>
+        <para>Forces a rigidbody to wake up.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodyConstraints">
+      <summary>
+        <para>Use these flags to constrain motion of Rigidbodies.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezeAll">
+      <summary>
+        <para>Freeze rotation and motion along all axes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezePosition">
+      <summary>
+        <para>Freeze motion along all axes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezePositionX">
+      <summary>
+        <para>Freeze motion along the X-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezePositionY">
+      <summary>
+        <para>Freeze motion along the Y-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezePositionZ">
+      <summary>
+        <para>Freeze motion along the Z-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezeRotation">
+      <summary>
+        <para>Freeze rotation along all axes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezeRotationX">
+      <summary>
+        <para>Freeze rotation along the X-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezeRotationY">
+      <summary>
+        <para>Freeze rotation along the Y-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.FreezeRotationZ">
+      <summary>
+        <para>Freeze rotation along the Z-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyConstraints.None">
+      <summary>
+        <para>No constraints.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RigidbodyInterpolation">
+      <summary>
+        <para>Rigidbody interpolation mode.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation.Extrapolate">
+      <summary>
+        <para>Extrapolation will predict the position of the rigidbody based on the current velocity.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation.Interpolate">
+      <summary>
+        <para>Interpolation will always lag a little bit behind but can be smoother than extrapolation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RigidbodyInterpolation.None">
+      <summary>
+        <para>No Interpolation.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.RotationDriveMode">
+      <summary>
+        <para>Control ConfigurableJoint's rotation with either X &amp; YZ or Slerp Drive.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RotationDriveMode.Slerp">
+      <summary>
+        <para>Use Slerp drive.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RotationDriveMode.XYAndZ">
+      <summary>
+        <para>Use XY &amp; Z Drive.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SoftJointLimit">
+      <summary>
+        <para>The limits defined by the CharacterJoint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimit.bounciness">
+      <summary>
+        <para>When the joint hits the limit, it can be made to bounce off it.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimit.contactDistance">
+      <summary>
+        <para>Determines how far ahead in space the solver can "see" the joint limit.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimit.damper">
+      <summary>
+        <para>If spring is greater than zero, the limit is soft.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimit.limit">
+      <summary>
+        <para>The limit position/angle of the joint (in degrees).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimit.spring">
+      <summary>
+        <para>If greater than zero, the limit is soft. The spring will pull the joint back.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SoftJointLimitSpring">
+      <summary>
+        <para>The configuration of the spring attached to the joint's limits: linear and angular. Used by CharacterJoint and ConfigurableJoint.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimitSpring.damper">
+      <summary>
+        <para>The damping of the spring limit. In effect when the stiffness of the sprint limit is not zero.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SoftJointLimitSpring.spring">
+      <summary>
+        <para>The stiffness of the spring limit. When stiffness is zero the limit is hard, otherwise soft.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SphereCollider">
+      <summary>
+        <para>A sphere-shaped primitive collider.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SphereCollider.center">
+      <summary>
+        <para>The center of the sphere in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SphereCollider.radius">
+      <summary>
+        <para>The radius of the sphere measured in the object's local space.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.SpringJoint">
+      <summary>
+        <para>The spring joint ties together 2 rigid bodies, spring forces will be automatically applied to keep the object at the given distance.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint.damper">
+      <summary>
+        <para>The damper force used to dampen the spring force.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint.maxDistance">
+      <summary>
+        <para>The maximum distance between the bodies relative to their initial distance.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint.minDistance">
+      <summary>
+        <para>The minimum distance between the bodies relative to their initial distance.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint.spring">
+      <summary>
+        <para>The spring force used to keep the two objects together.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.SpringJoint.tolerance">
+      <summary>
+        <para>The maximum allowed error between the current spring length and the length defined by minDistance and maxDistance.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.WheelFrictionCurve">
+      <summary>
+        <para>WheelFrictionCurve is used by the WheelCollider to describe friction properties of the wheel tire.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelFrictionCurve.asymptoteSlip">
+      <summary>
+        <para>Asymptote point slip (default 2).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelFrictionCurve.asymptoteValue">
+      <summary>
+        <para>Force at the asymptote slip (default 10000).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelFrictionCurve.extremumSlip">
+      <summary>
+        <para>Extremum point slip (default 1).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelFrictionCurve.extremumValue">
+      <summary>
+        <para>Force at the extremum slip (default 20000).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WheelFrictionCurve.stiffness">
+      <summary>
+        <para>Multiplier for the extremumValue and asymptoteValue values (default 1).</para>
+      </summary>
+    </member>
+  </members>
+</doc>

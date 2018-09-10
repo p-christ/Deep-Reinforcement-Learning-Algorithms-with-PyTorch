@@ -1,0 +1,1677 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.UNETModule</name>
+    </assembly>
+    <member name="T:UnityEngine.Networking.ChannelQOS">
+      <summary>
+        <para>Defines parameters of channels.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ChannelQOS.#ctor(UnityEngine.Networking.QosType)">
+      <summary>
+        <para>UnderlyingModel.MemDoc.MemDocModel.</para>
+      </summary>
+      <param name="value">Requested type of quality of service (default Unreliable).</param>
+      <param name="channel">Copy constructor.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.ChannelQOS.#ctor">
+      <summary>
+        <para>UnderlyingModel.MemDoc.MemDocModel.</para>
+      </summary>
+      <param name="value">Requested type of quality of service (default Unreliable).</param>
+      <param name="channel">Copy constructor.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.ChannelQOS.#ctor(UnityEngine.Networking.ChannelQOS)">
+      <summary>
+        <para>UnderlyingModel.MemDoc.MemDocModel.</para>
+      </summary>
+      <param name="value">Requested type of quality of service (default Unreliable).</param>
+      <param name="channel">Copy constructor.</param>
+    </member>
+    <member name="P:UnityEngine.Networking.ChannelQOS.QOS">
+      <summary>
+        <para>Channel quality of service.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.ConnectionAcksType">
+      <summary>
+        <para>Defines size of the buffer holding reliable messages, before they will be acknowledged.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ConnectionAcksType.Acks128">
+      <summary>
+        <para>Ack buffer can hold 128 messages.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ConnectionAcksType.Acks32">
+      <summary>
+        <para>Ack buffer can hold 32 messages.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ConnectionAcksType.Acks64">
+      <summary>
+        <para>Ack buffer can hold 64 messages.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ConnectionAcksType.Acks96">
+      <summary>
+        <para>Ack buffer can hold 96 messages.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.ConnectionConfig">
+      <summary>
+        <para>This class defines parameters of connection between two peers, this definition includes various timeouts and sizes as well as channel configuration.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.AckDelay">
+      <summary>
+        <para>Defines the duration in milliseconds that the receiver waits for before it sends an acknowledgement back without waiting for any data payload. Default value = 33.
+
+Network clients that send data to a server may do so using many different quality of service (QOS) modes, some of which (reliable modes) expect the server to send back acknowledgement of receipt of data sent.
+
+Servers must periodically acknowledge data packets received over channels with reliable QOS modes by sending packets containing acknowledgement data (also known as "acks") back to the client. If the server were to send an acknowledgement immediately after receiving each packet from the client there would be significant overhead (the acknowledgement is a 32 or 64 bit integer, which is very small compared to the whole size of the packet which also contains the IP and the UDP header). AckDelay allows the server some time to accumulate a list of received reliable data packets to acknowledge, and decreases traffic overhead by combining many acknowledgements into a single packet.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.AcksType">
+      <summary>
+        <para>Determines the size of the buffer used to store reliable messages that are waiting for acknowledgement. It can be set to Acks32, Acks64, Acks96, or Acks128. Depends of this setting buffer can hold 32, 64, 96, or 128 messages. Default value = Ack32.
+
+Messages sent on reliable quality of service channels are stored in a special buffer while they wait for acknowledgement from the peer. This buffer can be either 32, 64, 96 or 128 positions long. It is recommended to begin with this value set to Ack32, which defines a buffer up to 32 messages in size. If you receive NoResources errors often when you send reliable messages, change this value to the next possible size.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionConfig.AddChannel(UnityEngine.Networking.QosType)">
+      <summary>
+        <para>Adds a new channel to the configuration and returns the unique id of that channel.
+
+Channels are logical delimiters of traffic between peers. Every time you send data to a peer, you should use two ids: connection id and channel id. Channels are not only logically separate traffic but could each be configured with a different quality of service (QOS). In the example below, a configuration is created containing two channels with Unreliable and Reliable QOS types. This configuration is then used for sending data.</para>
+      </summary>
+      <param name="value">Add new channel to configuration.</param>
+      <returns>
+        <para>Channel id, user can use this id to send message via this channel.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.AllCostTimeout">
+      <summary>
+        <para>Defines the timeout in milliseconds after which messages sent via the AllCost channel will be re-sent without waiting for acknowledgement. Default value = 20 ms.
+
+AllCost delivery quality of service (QOS) is a special QOS for delivering game-critical information, such as when the game starts, or when bullets are shot.
+
+Due to packets dropping, sometimes reliable messages cannot be delivered and need to be re-sent. Reliable messages will re-sent after RTT+Delta time, (RTT is round trip time) where RTT is a dynamic value and can reach couple of hundred milliseconds. For the AllCost delivery channel this timeout can be user-defined to force game critical information to be re-sent.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.BandwidthPeakFactor">
+      <summary>
+        <para>Defines, when multiplied internally by InitialBandwidth, the maximum bandwidth that can be used under burst conditions.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.ChannelCount">
+      <summary>
+        <para>(Read Only) The number of channels in the current configuration.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.Channels">
+      <summary>
+        <para>The list of channels belonging to the current configuration.
+
+Note: any ConnectionConfig passed as a parameter to a function in Unity Multiplayer is deep copied (that is, an entirely new copy is made, with no references to the original).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.ConnectTimeout">
+      <summary>
+        <para>Timeout in ms which library will wait before it will send another connection request.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionConfig.#ctor">
+      <summary>
+        <para>Will create default connection config or will copy them from another.</para>
+      </summary>
+      <param name="config">Connection config.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionConfig.#ctor(UnityEngine.Networking.ConnectionConfig)">
+      <summary>
+        <para>Will create default connection config or will copy them from another.</para>
+      </summary>
+      <param name="config">Connection config.</param>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.DisconnectTimeout">
+      <summary>
+        <para>Defines the timeout in milliseconds before a connection is considered to have been disconnected. Default value = 2000.
+
+Unity Multiplayer defines conditions under which a connection is considered as disconnected. Disconnection can happen for the following reasons:
+
+(1) A disconnection request was received.
+
+(2) The connection has not received any traffic at all for a time longer than DisconnectTimeout (Note that live connections receive regular keep-alive packets, so in this case "no traffic" means not only no user traffic but also absence of any keep-alive traffic as well).
+
+(3) Flow control determines that the time between sending packets is longer than DisconnectTimeout. Keep-alive packets are regularly delivered from peers and contain statistical information. This information includes values of packet loss due to network and peer overflow conditions. Setting NetworkDropThreshold and OverflowDropThreshold defines thresholds for flow control which can decrease packet frequency. When the time before sending the next packet is longer than DisconnectTimeout, the connection will be considered as disconnected and a disconnect event is received.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.FragmentSize">
+      <summary>
+        <para>Defines the fragment size for fragmented messages (for QOS: ReliableFragmented and UnreliableFragmented). Default value = 500.
+
+Under fragmented quality of service modes, the original message is split into fragments (up to 64) of up to FragmentSize bytes each. The fragment size depends on the frequency and size of reliable messages sent. Each reliable message potentially could be re-sent, so you need to choose a fragment size less than the remaining free space in a UDP packet after retransmitted reliable messages are added to the packet. For example, if Networking.ConnectionConfig.PacketSize is 1440 bytes, and a reliable message's average size is 200 bytes, it would be wise to set this parameter to 900 – 1000 bytes.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionConfig.GetChannel(System.Byte)">
+      <summary>
+        <para>Return the QoS set for the given channel or throw an out of range exception.</para>
+      </summary>
+      <param name="idx">Index in array.</param>
+      <returns>
+        <para>Channel QoS.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.InitialBandwidth">
+      <summary>
+        <para>Gets or sets the bandwidth in bytes per second that can be used by Unity Multiplayer. No traffic over this limit is allowed. Unity Multiplayer may internally reduce the bandwidth it uses due to flow control. The default value is 1500MB/sec (1,536,000 bytes per second). The default value is intentionally a large number to allow all traffic to pass without delay.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.MaxCombinedReliableMessageCount">
+      <summary>
+        <para>Defines the maximum number of small reliable messages that can be included in one combined message. Default value = 10.
+
+Since each message sent to a server contains IP information and a UDP header, duplicating this information for every message sent can be inefficient in the case where there are many small messages being sent frequently. Many small reliable messages can be combined into one longer reliable message, saving space in the waiting buffer. Unity Multiplayer will automatically combine up to MaxCombinedReliableMessageCount small messages into one message. To qualify as a small message, the data payload of the message should not be greater than MaxCombinedReliableMessageSize.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.MaxCombinedReliableMessageSize">
+      <summary>
+        <para>Defines the maximum size in bytes of a reliable message which is considered small enough to include in a combined message. Default value = 100.
+
+Since each message sent to a server contains IP information and a UDP header, duplicating this information for every message sent can be inefficient in the case where there are many small messages being sent frequently. Many small reliable messages can be combined into one longer reliable message, saving space in the waiting buffer. Unity Multiplayer will automatically combine up to MaxCombinedReliableMessageCount small messages into one message. To qualify as a small message, the data payload of the message should not be greater than MaxCombinedReliableMessageSize.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.MaxConnectionAttempt">
+      <summary>
+        <para>Defines the maximum number of times Unity Multiplayer will attempt to send a connection request without receiving a response before it reports that it cannot establish a connection. Default value = 10.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.MaxSentMessageQueueSize">
+      <summary>
+        <para>Defines maximum number of messages that can be held in the queue for sending. Default value = 128.
+
+This buffer serves to smooth spikes in traffic and decreases network jitter. If the queue is full, a NoResources error will result from any calls to Send(). Setting this value greater than around 300 is likely to cause significant delaying of message delivering and can make game unplayable.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.MinUpdateTimeout">
+      <summary>
+        <para>Defines minimum time in milliseconds between sending packets. This duration may be automatically increased if required by flow control. Default value = 10.
+
+When Send() is called, Unity Multiplayer won’t send the message immediately. Instead, once every SendTimeout milliseconds each connection is checked to see if it has something to send. While initial and minimal send timeouts can be set, these may be increased internally due to network conditions or buffer overflows.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.NetworkDropThreshold">
+      <summary>
+        <para>Defines the percentage (from 0 to 100) of packets that need to be dropped due to network conditions before the SendUpdate timeout is automatically increased (and send rate is automatically decreased). Default value = 5.
+
+To avoid receiver overflow, Unity Multiplayer supports flow control. Each ping packet sent between connected peers contains two values:
+
+(1) Packets lost due to network conditions.
+
+(2) Packets lost because the receiver does not have free space in its incoming buffers.
+
+Like OverflowDropThreshold, both values are reported in percent. Use NetworkDropThreshold and OverflowDropThreshold to set thresholds for these values. If a value reported in the ping packet exceeds the corresponding threshold, Unity Multiplayer increases the sending timeout for packets up to a maximum value of DisconnectTimeout.
+
+Note: wireless networks usually exhibit 5% or greater packet loss. For wireless networks it is advisable to use a NetworkDropThreshold of 40-50%.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.OverflowDropThreshold">
+      <summary>
+        <para>Defines the percentage (from 0 to 100) of packets that need to be dropped due to lack of space in internal buffers before the SendUpdate timeout is automatically increased (and send rate is automatically decreased). Default value = 5.
+
+To avoid receiver overflow, Unity Multiplayer supports flow control. Each ping packet sent between connected peers contains two values:
+
+(1) Packets lost due to network conditions.
+
+(2) Packets lost because the receiver does not have free space in its incoming buffers.
+
+Like NetworkDropThreshold, both values are reported in percent. Use NetworkDropThreshold and OverflowDropThreshold to set thresholds for these values. If a value reported in the ping packet exceeds the corresponding threshold, Unity Multiplayer increases the sending timeout for packets up to a maximum value of DisconnectTimeout.
+
+Note: wireless networks usually exhibit 5% or greater packet loss. For wireless networks it is advisable to use a NetworkDropThreshold of 40-50%.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.PacketSize">
+      <summary>
+        <para>Defines maximum packet size (in bytes) (including payload and all header). Packet can contain multiple messages inside. Default value = 1500.
+
+Note that this default value is suitable for local testing only. Usually you should change this value; a recommended setting for PC or mobile is 1470. For games consoles this value should probably be less than ~1100. Wrong size definition can cause packet dropping.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.PingTimeout">
+      <summary>
+        <para>Defines the duration in milliseconds between keep-alive packets, also known as pings. Default value = 500.
+
+The ping frequency should be long enough to accumulate good statistics and short enough to compare with DisconnectTimeout. A good guideline is to have more than 3 pings per disconnect timeout, and more than 5 messages per ping. For example, with a DisconnectTimeout of 2000ms, a PingTimeout of 500ms works well.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.ResendTimeout">
+      <summary>
+        <para>Defines the maximum wait time in milliseconds before the "not acknowledged" message is re-sent. Default value = 1200.
+
+It does not make a lot of sense to wait for acknowledgement forever. This parameter sets an upper time limit at which point reliable messages are re-sent.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.SendDelay">
+      <summary>
+        <para>Gets or sets the delay in milliseconds after a call to Send() before packets are sent. During this time, new messages may be combined in queued packets. Default value: 10ms.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.SSLCAFilePath">
+      <summary>
+        <para>Defines the path to the file containing the certification authority (CA) certificate for WebSocket via SSL communication.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.SSLCertFilePath">
+      <summary>
+        <para>Defines path to SSL certificate file, for WebSocket via SSL communication.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.SSLPrivateKeyFilePath">
+      <summary>
+        <para>Defines the path to the file containing the private key for WebSocket via SSL communication.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.UdpSocketReceiveBufferMaxSize">
+      <summary>
+        <para>Defines the size in bytes of the receiving buffer for UDP sockets. It is useful to set this parameter equal to the maximum size of a fragmented message. Default value is OS specific (usually 8kb).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.UsePlatformSpecificProtocols">
+      <summary>
+        <para>When starting a server use protocols that make use of platform specific optimisations where appropriate rather than cross-platform protocols. (Sony consoles only).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionConfig.Validate(UnityEngine.Networking.ConnectionConfig)">
+      <summary>
+        <para>Validate parameters of connection config. Will throw exceptions if parameters are incorrect.</para>
+      </summary>
+      <param name="config"></param>
+    </member>
+    <member name="P:UnityEngine.Networking.ConnectionConfig.WebSocketReceiveBufferMaxSize">
+      <summary>
+        <para>WebSocket only. Defines the buffer size in bytes for received frames on a WebSocket host. If this value is 0 (the default), a 4 kilobyte buffer is used. Any other value results in a buffer of that size, in bytes.
+
+WebSocket message fragments are called "frames". A WebSocket host has a buffer to store incoming message frames. Therefore this buffer should be set to the largest legal frame size supported. If an incoming frame exceeds the buffer size, no error is reported. However, the buffer will invoke the user callback in order to create space for the overflow.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.ConnectionSimulatorConfig">
+      <summary>
+        <para>Create configuration for network simulator; You can use this class in editor and developer build only.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionSimulatorConfig.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Single)">
+      <summary>
+        <para>Will create object describing network simulation parameters.</para>
+      </summary>
+      <param name="outMinDelay">Minimal simulation delay for outgoing traffic in ms.</param>
+      <param name="outAvgDelay">Average simulation delay for outgoing traffic in ms.</param>
+      <param name="inMinDelay">Minimal  simulation delay for incoming traffic in ms.</param>
+      <param name="inAvgDelay">Average  simulation delay for incoming traffic in ms.</param>
+      <param name="packetLossPercentage">Probability of packet loss  0 &lt;= p &lt;= 1.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.ConnectionSimulatorConfig.Dispose">
+      <summary>
+        <para>Destructor.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.GlobalConfig">
+      <summary>
+        <para>Defines global paramters for network library.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.GlobalConfig.#ctor">
+      <summary>
+        <para>Create new global config object.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MaxHosts">
+      <summary>
+        <para>Defines how many hosts you can use. Default Value = 16. Max value = 128.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MaxNetSimulatorTimeout">
+      <summary>
+        <para>Deprecated. Defines maximum delay for network simulator. See Also: MaxTimerTimeout.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MaxPacketSize">
+      <summary>
+        <para>Defines maximum possible packet size in bytes for all network connections.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MaxTimerTimeout">
+      <summary>
+        <para>Defines the maximum timeout in milliseconds for any configuration. The default value is 12 seconds (12000ms).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MinNetSimulatorTimeout">
+      <summary>
+        <para>Deprecated. Defines the minimal timeout for network simulator. You cannot set up any delay less than this value. See Also: MinTimerTimeout.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.MinTimerTimeout">
+      <summary>
+        <para>Defines the minimum timeout in milliseconds recognised by the system. The default value is 1 ms.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.ReactorMaximumReceivedMessages">
+      <summary>
+        <para>This property determines the initial size of the queue that holds messages received by Unity Multiplayer before they are processed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.ReactorMaximumSentMessages">
+      <summary>
+        <para>Defines the initial size of the send queue. Messages are placed in this queue ready to be sent in packets to their destination.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.ReactorModel">
+      <summary>
+        <para>Defines reactor model for the network library.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.ThreadAwakeTimeout">
+      <summary>
+        <para>Defines (1) for select reactor, minimum time period, when system will check if there are any messages for send (2) for fixrate reactor, minimum interval of time, when system will check for sending and receiving messages.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.GlobalConfig.ThreadPoolSize">
+      <summary>
+        <para>Defines how many worker threads are available to handle incoming and outgoing messages.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.HostTopology">
+      <summary>
+        <para>Class defines network topology for host (socket opened by Networking.NetworkTransport.AddHost function). This topology defines: (1) how many connection with default config will be supported and (2) what will be special connections (connections with config different from default).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.HostTopology.AddSpecialConnectionConfig(UnityEngine.Networking.ConnectionConfig)">
+      <summary>
+        <para>Add special connection to topology (for example if you need to keep connection to standalone chat server you will need to use this function). Returned id should be use as one of parameters (with ip and port) to establish connection to this server.</para>
+      </summary>
+      <param name="config">Connection config for special connection.</param>
+      <returns>
+        <para>Id of this connection. You should use this id when you call Networking.NetworkTransport.Connect.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.HostTopology.#ctor(UnityEngine.Networking.ConnectionConfig,System.Int32)">
+      <summary>
+        <para>Create topology.</para>
+      </summary>
+      <param name="defaultConfig">Default config.</param>
+      <param name="maxDefaultConnections">Maximum default connections.</param>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.DefaultConfig">
+      <summary>
+        <para>Defines config for default connections in the topology.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.HostTopology.GetSpecialConnectionConfig(System.Int32)">
+      <summary>
+        <para>Return reference to special connection config. Parameters of this config can be changed.</para>
+      </summary>
+      <param name="i">Config id.</param>
+      <returns>
+        <para>Connection config.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.MaxDefaultConnections">
+      <summary>
+        <para>Defines how many connection with default config be permitted.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.ReceivedMessagePoolSize">
+      <summary>
+        <para>Defines the maximum number of messages that each host can hold in its pool of received messages. The default size is 128.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.SentMessagePoolSize">
+      <summary>
+        <para>Defines the maximum number of messages that each host can hold in its pool of messages waiting to be sent. The default size is 128.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.SpecialConnectionConfigs">
+      <summary>
+        <para>List of special connection configs.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.HostTopology.SpecialConnectionConfigsCount">
+      <summary>
+        <para>Returns count of special connection added to topology.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.MatchInfo">
+      <summary>
+        <para>Details about a UNET MatchMaker match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.accessToken">
+      <summary>
+        <para>The binary access token this client uses to authenticate its session for future commands.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.address">
+      <summary>
+        <para>IP address of the host of the match,.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.domain">
+      <summary>
+        <para>The numeric domain for the match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.networkId">
+      <summary>
+        <para>The unique ID of this match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.nodeId">
+      <summary>
+        <para>NodeID for this member client in the match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.port">
+      <summary>
+        <para>Port of the host of the match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfo.usingRelay">
+      <summary>
+        <para>This flag indicates whether or not the match is using a Relay server.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.MatchInfoSnapshot">
+      <summary>
+        <para>A class describing the match information as a snapshot at the time the request was processed on the MatchMaker.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.averageEloScore">
+      <summary>
+        <para>The average Elo score of the match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.currentSize">
+      <summary>
+        <para>The current number of players in the match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.directConnectInfos">
+      <summary>
+        <para>The collection of direct connect info classes describing direct connection information supplied to the MatchMaker.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.hostNodeId">
+      <summary>
+        <para>The NodeID of the host for this match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.isPrivate">
+      <summary>
+        <para>Describes if the match is private. Private matches are unlisted in ListMatch results.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.matchAttributes">
+      <summary>
+        <para>The collection of match attributes on this match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.maxSize">
+      <summary>
+        <para>The maximum number of players this match can grow to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.name">
+      <summary>
+        <para>The text name for this match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.networkId">
+      <summary>
+        <para>The network ID for this match.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.MatchInfoSnapshot.MatchInfoDirectConnectSnapshot">
+      <summary>
+        <para>A class describing one member of a match and what direct connect information other clients have supplied.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.MatchInfoDirectConnectSnapshot.hostPriority">
+      <summary>
+        <para>The host priority for this direct connect info. Host priority describes the order in which this match member occurs in the list of clients attached to a match.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.MatchInfoDirectConnectSnapshot.nodeId">
+      <summary>
+        <para>NodeID of the match member this info refers to.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.MatchInfoDirectConnectSnapshot.privateAddress">
+      <summary>
+        <para>The private network address supplied for this direct connect info.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.MatchInfoSnapshot.MatchInfoDirectConnectSnapshot.publicAddress">
+      <summary>
+        <para>The public network address supplied for this direct connect info.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.NetworkMatch">
+      <summary>
+        <para>A component for communicating with the Unity Multiplayer Matchmaking service.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Match.NetworkMatch.baseUri">
+      <summary>
+        <para>The base URI of the MatchMaker that this NetworkMatch will communicate with.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.NetworkMatch.BasicResponseDelegate">
+      <summary>
+        <para>A delegate that can handle MatchMaker responses that return basic response types (generally only indicating success or failure and extended information if a failure did happen).</para>
+      </summary>
+      <param name="success">Indicates if the request succeeded.</param>
+      <param name="extendedInfo">A text description of the failure if success is false.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.CreateMatch(System.String,System.UInt32,System.Boolean,System.String,System.String,System.String,System.Int32,System.Int32,UnityEngine.Networking.Match.NetworkMatch/DataResponseDelegate`1&lt;UnityEngine.Networking.Match.MatchInfo&gt;)">
+      <summary>
+        <para>Use this function to create a new match. The client which calls this function becomes the host of the match.</para>
+      </summary>
+      <param name="matchName">The text string describing the name for this match.</param>
+      <param name="matchSize">When creating a match, the matchmaker will use either this value, or the maximum size you have configured online at https:multiplayer.unity3d.com, whichever is lower. This way you can specify different match sizes for a particular game, but still maintain an overall size limit in the online control panel.</param>
+      <param name="matchAdvertise">A bool indicating if this match should be available in NetworkMatch.ListMatches results.</param>
+      <param name="matchPassword">A text string indicating if this match is password protected. If it is, all clients trying to join this match must supply the correct match password.</param>
+      <param name="publicClientAddress">The optional public client address. This value is stored on the matchmaker and given to clients listing matches. It is intended to be a network address for connecting to this client directly over the internet. This value will only be present if a publicly available address is known, and direct connection is supported by the matchmaker.</param>
+      <param name="privateClientAddress">The optional private client address. This value is stored on the matchmaker and given to clients listing matches. It is intended to be a network address for connecting to this client directly on a local area network. This value will only be present if direct connection is supported by the matchmaker. This may be an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
+      <param name="eloScoreForMatch">The Elo score for the client hosting the match being created.  If this number is set on all clients to indicate relative skill level, this number is used to return matches ordered by those that are most suitable for play given a listing player's skill level. This may be 0 on all clients, which would disable any Elo calculations in the MatchMaker.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback to be called when this function completes. This will be called regardless of whether the function succeeds or fails.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.Match.NetworkMatch.DataResponseDelegate_1">
+      <summary>
+        <para>Response delegate containing basic information plus a data member. This is used on a subset of MatchMaker callbacks that require data passed in along with the success/failure information of the call itself.</para>
+      </summary>
+      <param name="success">Indicates if the request succeeded.</param>
+      <param name="extendedInfo">If success is false, this will contain a text string indicating the reason.</param>
+      <param name="responseData">The generic passed in containing data required by the callback. This typically contains data returned from a call to the service backend.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.DestroyMatch(UnityEngine.Networking.Types.NetworkID,System.Int32,UnityEngine.Networking.Match.NetworkMatch/BasicResponseDelegate)">
+      <summary>
+        <para>This function is used to tell MatchMaker to destroy a match in progress, regardless of who is connected.</para>
+      </summary>
+      <param name="netId">The NetworkID of the match to terminate.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback to be called when the request completes.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.DropConnection(UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.NodeID,System.Int32,UnityEngine.Networking.Match.NetworkMatch/BasicResponseDelegate)">
+      <summary>
+        <para>A function to allow an individual client to be dropped from a match.</para>
+      </summary>
+      <param name="netId">The NetworkID of the match the client to drop belongs to.</param>
+      <param name="dropNodeId">The NodeID of the client to drop inside the specified match.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback to invoke when the request completes.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.JoinMatch(UnityEngine.Networking.Types.NetworkID,System.String,System.String,System.String,System.Int32,System.Int32,UnityEngine.Networking.Match.NetworkMatch/DataResponseDelegate`1&lt;UnityEngine.Networking.Match.MatchInfo&gt;)">
+      <summary>
+        <para>The function used to tell MatchMaker the current client wishes to join a specific match.</para>
+      </summary>
+      <param name="netId">The NetworkID of the match to join. This is found through calling NetworkMatch.ListMatches and picking a result from the returned list of matches.</param>
+      <param name="matchPassword">The password of the match. Leave empty if there is no password for the match, and supply the text string password if the match was configured to have one of the NetworkMatch.CreateMatch request.</param>
+      <param name="publicClientAddress">The optional public client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your players to be able to connect directly with each other over the internet. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
+      <param name="privateClientAddress">The optional private client address. This value will be stored on the matchmaker and given to other clients listing matches. You should send this value if you want your players to be able to connect directly with each other over a Local Area Network. Alternatively you can pass an empty string and it will not affect the ability to interface with matchmaker or use relay server.</param>
+      <param name="eloScoreForClient">The Elo score for the client joining the match being created. If this number is set on all clients to indicate relative skill level, this number is used to return matches ordered by those that are most suitable for play given a listing player's skill level. This may be 0 on all clients, which would disable any Elo calculations in the MatchMaker.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback to be invoked when this call completes.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.ListMatches(System.Int32,System.Int32,System.String,System.Boolean,System.Int32,System.Int32,UnityEngine.Networking.Match.NetworkMatch/DataResponseDelegate`1&lt;System.Collections.Generic.List`1&lt;UnityEngine.Networking.Match.MatchInfoSnapshot&gt;&gt;)">
+      <summary>
+        <para>The function to list ongoing matches in the MatchMaker.</para>
+      </summary>
+      <param name="startPageNumber">The current page to list in the return results.</param>
+      <param name="resultPageSize">The size of the page requested. This determines the maximum number of matches contained in the list of matches passed into the callback.</param>
+      <param name="matchNameFilter">The text string name filter. This is a partial wildcard search against match names that are currently active, and can be thought of as matching equivalent to *&lt;matchNameFilter&gt;* where any result containing the entire string supplied here will be in the result set.</param>
+      <param name="filterOutPrivateMatchesFromResults">Boolean that indicates if the response should contain matches that are private (meaning matches that are password protected).</param>
+      <param name="eloScoreTarget">The Elo score target for the match list results to be grouped around. If used, this should be set to the Elo level of the client listing the matches so results will more closely match that player's skill level. If not used this can be set to 0 along with all other Elo refereces in funcitons like NetworkMatch.CreateMatch or NetworkMatch.JoinMatch.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback invoked when this call completes on the MatchMaker.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.SetMatchAttributes(UnityEngine.Networking.Types.NetworkID,System.Boolean,System.Int32,UnityEngine.Networking.Match.NetworkMatch/BasicResponseDelegate)">
+      <summary>
+        <para>This function allows the caller to change attributes on a match in progress.</para>
+      </summary>
+      <param name="networkId">The NetworkID of the match to set attributes on.</param>
+      <param name="isListed">A bool indicating whether the match should be listed in NetworkMatch.ListMatches results after this call is complete.</param>
+      <param name="requestDomain">The request domain for this request. Only requests in the same domain can interface with each other. For example if a NetworkMatch.CreateMatch is made with domain 1, only ListMatches that also specify domain 1 will find that match. Use this value to silo different (possibly incompatible) client versions.</param>
+      <param name="callback">The callback invoked after the call has completed, indicating if it was successful or not.</param>
+      <returns>
+        <para>This function is asynchronous and will complete at some point in the future, when the coroutine has finished communicating with the service backend.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.Match.NetworkMatch.SetProgramAppID(UnityEngine.Networking.Types.AppID)">
+      <summary>
+        <para>This method is deprecated. Please instead log in through the editor services panel and setup the project under the Unity Multiplayer section. This will populate the required infomation from the cloud site automatically.</para>
+      </summary>
+      <param name="programAppID">Deprecated, see description.</param>
+    </member>
+    <member name="T:UnityEngine.Networking.NetworkError">
+      <summary>
+        <para>Possible Networking.NetworkTransport errors.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.BadMessage">
+      <summary>
+        <para>Not a data message.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.CRCMismatch">
+      <summary>
+        <para>The Networking.ConnectionConfig  does not match the other endpoint.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.DNSFailure">
+      <summary>
+        <para>The address supplied to connect to was invalid or could not be resolved.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.MessageToLong">
+      <summary>
+        <para>The message is too long to fit the buffer.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.NoResources">
+      <summary>
+        <para>Not enough resources are available to process this request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.Ok">
+      <summary>
+        <para>The operation completed successfully.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.Timeout">
+      <summary>
+        <para>Connection timed out.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.UsageError">
+      <summary>
+        <para>This error will occur if any function is called with inappropriate parameter values.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.VersionMismatch">
+      <summary>
+        <para>The protocol versions are not compatible. Check your library versions.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.WrongChannel">
+      <summary>
+        <para>The specified channel doesn't exist.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.WrongConnection">
+      <summary>
+        <para>The specified connectionId doesn't exist.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.WrongHost">
+      <summary>
+        <para>The specified host not available.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkError.WrongOperation">
+      <summary>
+        <para>Operation is not supported.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.NetworkEventType">
+      <summary>
+        <para>Event that is returned when calling the Networking.NetworkTransport.Receive and Networking.NetworkTransport.ReceiveFromHost functions.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkEventType.BroadcastEvent">
+      <summary>
+        <para>Broadcast discovery event received.
+To obtain sender connection info and possible complimentary message from them, call Networking.NetworkTransport.GetBroadcastConnectionInfo() and Networking.NetworkTransport.GetBroadcastConnectionMessage() functions.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkEventType.ConnectEvent">
+      <summary>
+        <para>Connection event received. Indicating that a new connection was established.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkEventType.DataEvent">
+      <summary>
+        <para>Data event received. Indicating that data was received.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkEventType.DisconnectEvent">
+      <summary>
+        <para>Disconnection event received.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.NetworkEventType.Nothing">
+      <summary>
+        <para>No new event was received.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.NetworkTransport">
+      <summary>
+        <para>Transport Layer API.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.AddHost(UnityEngine.Networking.HostTopology,System.Int32,System.String)">
+      <summary>
+        <para>Creates a host based on Networking.HostTopology.</para>
+      </summary>
+      <param name="topology">The Networking.HostTopology associated with the host.</param>
+      <param name="port">Port to bind to (when 0 is selected, the OS will choose a port at random).</param>
+      <param name="ip">IP address to bind to.</param>
+      <returns>
+        <para>Returns the ID of the host that was created.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.AddHostWithSimulator(UnityEngine.Networking.HostTopology,System.Int32,System.Int32,System.Int32,System.String)">
+      <summary>
+        <para>Create a host and configure them to simulate Internet latency (works on Editor and development build only).</para>
+      </summary>
+      <param name="topology">The Networking.HostTopology associated with the host.</param>
+      <param name="minTimeout">Minimum simulated delay in milliseconds.</param>
+      <param name="maxTimeout">Maximum simulated delay in milliseconds.</param>
+      <param name="port">Port to bind to (when 0 is selected, the OS will choose a port at random).</param>
+      <param name="ip">IP address to bind to.</param>
+      <returns>
+        <para>Returns host ID just created.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.AddWebsocketHost(UnityEngine.Networking.HostTopology,System.Int32)">
+      <summary>
+        <para>Created web socket host.</para>
+      </summary>
+      <param name="port">Port to bind to.</param>
+      <param name="topology">The Networking.HostTopology associated with the host.</param>
+      <param name="ip">IP address to bind to.</param>
+      <returns>
+        <para>Web socket host id.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.AddWebsocketHost(UnityEngine.Networking.HostTopology,System.Int32,System.String)">
+      <summary>
+        <para>Created web socket host.</para>
+      </summary>
+      <param name="port">Port to bind to.</param>
+      <param name="topology">The Networking.HostTopology associated with the host.</param>
+      <param name="ip">IP address to bind to.</param>
+      <returns>
+        <para>Web socket host id.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Connect(System.Int32,System.String,System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Tries to establish a connection to another peer.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="address">IPv4 address of the other peer.</param>
+      <param name="port">Port of the other peer.</param>
+      <param name="exceptionConnectionId">Set to 0 in the case of a default connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="exeptionConnectionId"></param>
+      <returns>
+        <para>A unique connection identifier on success (otherwise zero).</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ConnectAsNetworkHost(System.Int32,System.String,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Byte&amp;)">
+      <summary>
+        <para>Create dedicated connection to Relay server.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (Retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="address">IPv4 address of the relay.</param>
+      <param name="port">Port of the relay.</param>
+      <param name="network">GUID for the relay match, retrieved by calling Networking.Match.NetworkMatch.CreateMatch and using the Networking.Match.MatchInfo.networkId.</param>
+      <param name="source">GUID for the source, can be retrieved by calling Utility.GetSourceID.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="node">Slot ID for this user, retrieved by calling Networking.Match.NetworkMatch.CreateMatch and using the Networking.Match.MatchInfo.nodeId.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ConnectEndPoint(System.Int32,System.Net.EndPoint,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Try to establish connection to other peer, where the peer is specified using a C# System.EndPoint.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (Retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="xboxOneEndPoint">A valid System.EndPoint.</param>
+      <param name="exceptionConnectionId">Set to 0 in the case of a default connection.</param>
+      <param name="endPoint"></param>
+      <returns>
+        <para>A unique connection identifier on success (otherwise zero).</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ConnectToNetworkPeer(System.Int32,System.String,System.Int32,System.Int32,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Int32,System.Single,System.Byte&amp;)">
+      <summary>
+        <para>Create a connection to another peer in the Relay group.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="address">IP address of the peer, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.address.</param>
+      <param name="port">Port of the peer, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.port.</param>
+      <param name="exceptionConnectionId">Set to 0 in the case of a default connection.</param>
+      <param name="relaySlotId">ID of the remote peer in relay.</param>
+      <param name="network">GUID for the relay match, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.networkId.</param>
+      <param name="source">GUID for the source, can be retrieved by calling Utility.GetSourceID.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="node">Slot ID reserved for the user, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.nodeId.</param>
+      <param name="bucketSizeFactor">Allowed peak bandwidth (peak bandwidth = factor*bytesPerSec, recommended value is 2.0) If data has not been sent for a long time, it is allowed to send more data, with factor 2 it is allowed send 2*bytesPerSec bytes per sec.</param>
+      <param name="bytesPerSec">Average bandwidth (bandwidth will be throttled on this level).</param>
+      <returns>
+        <para>A unique connection identifier on success (otherwise zero).</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ConnectToNetworkPeer(System.Int32,System.String,System.Int32,System.Int32,System.Int32,UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.SourceID,UnityEngine.Networking.Types.NodeID,System.Byte&amp;)">
+      <summary>
+        <para>Create a connection to another peer in the Relay group.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="address">IP address of the peer, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.address.</param>
+      <param name="port">Port of the peer, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.port.</param>
+      <param name="exceptionConnectionId">Set to 0 in the case of a default connection.</param>
+      <param name="relaySlotId">ID of the remote peer in relay.</param>
+      <param name="network">GUID for the relay match, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.networkId.</param>
+      <param name="source">GUID for the source, can be retrieved by calling Utility.GetSourceID.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="node">Slot ID reserved for the user, retrieved by calling Networking.Match.NetworkMatch.JoinMatch and using the Networking.Match.MatchInfo.nodeId.</param>
+      <param name="bucketSizeFactor">Allowed peak bandwidth (peak bandwidth = factor*bytesPerSec, recommended value is 2.0) If data has not been sent for a long time, it is allowed to send more data, with factor 2 it is allowed send 2*bytesPerSec bytes per sec.</param>
+      <param name="bytesPerSec">Average bandwidth (bandwidth will be throttled on this level).</param>
+      <returns>
+        <para>A unique connection identifier on success (otherwise zero).</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ConnectWithSimulator(System.Int32,System.String,System.Int32,System.Int32,System.Byte&amp;,UnityEngine.Networking.ConnectionSimulatorConfig)">
+      <summary>
+        <para>Connect with simulated latency.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (Retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="address">IPv4 address of the other peer.</param>
+      <param name="port">Port of the other peer.</param>
+      <param name="exeptionConnectionId">Set to 0 in the case of a default connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="conf">A Networking.ConnectionSimulatorConfig defined for this connection.</param>
+      <returns>
+        <para>A unique connection identifier on success (otherwise zero).</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Disconnect(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Send a disconnect signal to the connected peer and close the connection. Poll Networking.NetworkTransport.Receive() to be notified that the connection is closed. This signal is only sent once (best effort delivery).  If this packet is dropped for some reason, the peer closes the connection by timeout.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">The connection ID of the connection you want to close.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.DisconnectNetworkHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>This will disconnect the host and disband the group.
+DisconnectNetworkHost can only be called by the group owner on the relay server.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.FinishSendMulticast(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Finalizes sending of a message to a group of connections. Only one multicast message at a time is allowed per host.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection (retrieved when calling Networking.NetworkTransport.AddHost).</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetAckBufferCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns size of reliable buffer.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Size of ack buffer.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetAssetId(UnityEngine.GameObject)">
+      <summary>
+        <para>The Unity Multiplayer spawning system uses assetIds to identify what remote objects to spawn. This function allows you to get the assetId for the prefab associated with an object.</para>
+      </summary>
+      <param name="go">Target GameObject to get assetId for.</param>
+      <returns>
+        <para>The assetId of the game object's prefab.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetBroadcastConnectionInfo(System.Int32,System.String&amp;,System.Int32&amp;,System.Byte&amp;)">
+      <summary>
+        <para>After Networking.NetworkTransport.Receive() returns Networking.NetworkEventType.BroadcastEvent, this function will return the connection information of the broadcast sender. This information can then be used for connecting to the broadcast sender.</para>
+      </summary>
+      <param name="hostId">ID of the broadcast receiver.</param>
+      <param name="address">IPv4 address of broadcast sender.</param>
+      <param name="port">Port of broadcast sender.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetBroadcastConnectionMessage(System.Int32,System.Byte[],System.Int32,System.Int32&amp;,System.Byte&amp;)">
+      <summary>
+        <para>After Networking.NetworkTransport.Receive() returns Networking.NetworkEventType.BroadcastEvent, this function returns a complimentary message from the broadcast sender.</para>
+      </summary>
+      <param name="hostId">ID of broadcast receiver.</param>
+      <param name="buffer">Message buffer provided by caller.</param>
+      <param name="bufferSize">Buffer size.</param>
+      <param name="receivedSize">Received size (if received size &gt; bufferSize, corresponding error will be set).</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetConnectionInfo(System.Int32,System.Int32,System.String&amp;,System.Int32&amp;,UnityEngine.Networking.Types.NetworkID&amp;,UnityEngine.Networking.Types.NodeID&amp;,System.Byte&amp;)">
+      <summary>
+        <para>Returns the connection parameters for the specified connectionId. These parameters can be sent to other users to establish a direct connection to this peer. If this peer is connected to the host via Relay, the Relay-related parameters are set.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of connection.</param>
+      <param name="address">IP address.</param>
+      <param name="port">Port.</param>
+      <param name="network">Relay network guid.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="dstNode">Destination slot id.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetCurrentIncomingMessageAmount">
+      <summary>
+        <para>Returns the number of unread messages in the read-queue.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetCurrentOutgoingMessageAmount">
+      <summary>
+        <para>Returns the total number of messages still in the write-queue.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetCurrentRTT(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Return the round trip time for the given connectionId.</para>
+      </summary>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <returns>
+        <para>Current round trip time in ms.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingMessageQueueSize(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the number of received messages waiting in the queue for processing.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this queue.</param>
+      <param name="error">Error code. Cast this value to Networking.NetworkError for more information.</param>
+      <returns>
+        <para>The number of messages in the queue.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many packets have been received from start for connection.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The absolute number of packets received since the connection was established.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketCountForAllHosts">
+      <summary>
+        <para>Returns how many packets have been received from start. (from Networking.NetworkTransport.Init call).</para>
+      </summary>
+      <returns>
+        <para>Packets count received from start for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketDropCountForAllHosts">
+      <summary>
+        <para>How many packets have been dropped due lack space in incoming queue (absolute value, countinf from start).</para>
+      </summary>
+      <returns>
+        <para>Dropping packet count.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetIncomingPacketLossCount(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many incoming packets have been lost due transmitting (dropped by network).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The absolute number of packets that have been lost since the connection was established.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetMaxAllowedBandwidth(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Gets the currently-allowed network bandwidth in bytes per second. The value returned can vary because bandwidth can be throttled by flow control. If the bandwidth is throttled to zero, the connection is disconnected.ted.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Currently-allowed bandwidth in bytes per second.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetNetIOTimeuS">
+      <summary>
+        <para>Function returns time spent on network I/O operations in microseconds.</para>
+      </summary>
+      <returns>
+        <para>Time in micro seconds.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetNetworkLostPacketNum(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Return the total number of packets that has been lost.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetNetworkTimestamp">
+      <summary>
+        <para>Get a network timestamp. Can be used in your messages to investigate network delays together with Networking.GetRemoteDelayTimeMS.</para>
+      </summary>
+      <returns>
+        <para>Timestamp.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingFullBytesCount">
+      <summary>
+        <para>Returns how much raw data (in bytes) have been sent from start for all hosts (from Networking.NetworkTransport.Init call).</para>
+      </summary>
+      <returns>
+        <para>Total data (user payload, protocol specific data, ip and udp headers) (in bytes) sent from start for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingFullBytesCountForConnection(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much raw data (in bytes) have been sent from start for connection (from call Networking.NetworkTransport.Connect for active connect or from connection request receiving for passive connect).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total data (user payload, protocol specific data, ip and udp headers) (in bytes) sent from start for connection.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingFullBytesCountForHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much raw data (in bytes) have been sent from start for the host (from call Networking.NetworkTransport.AddHost).</para>
+      </summary>
+      <param name="hostId">ID of the host.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total data (user payload, protocol specific data, ip and udp headers) (in bytes) sent from start for the host.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingMessageCount">
+      <summary>
+        <para>Returns how many messages have been sent from start (from Networking.NetworkTransport.Init call).</para>
+      </summary>
+      <returns>
+        <para>Messages count sent from start (from call Networking.NetworkTransport.Init) for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingMessageCountForConnection(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many packets have been sent from start for connection (from call Networking.NetworkTransport.Connect for active connect or from connection request receiving for passive connect).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Messages count sending from start for connection.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingMessageCountForHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many messages have been sent from start for host (from call Networking.NetworkTransport.AddHost).</para>
+      </summary>
+      <param name="hostId">ID of the host.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Messages count sending from start for the host.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingMessageQueueSize(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the number of messages waiting in the outgoing message queue to be sent.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this queue.</param>
+      <param name="error">Error code. Cast this value to Networking.NetworkError for more information.</param>
+      <returns>
+        <para>The number of messages waiting in the outgoing message queue to be sent.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketCount">
+      <summary>
+        <para>Returns how many packets have been sent from start (from call Networking.NetworkTransport.Init) for all hosts.</para>
+      </summary>
+      <returns>
+        <para>Packets count sent from networking library start (from call Networking.NetworkTransport.Init)  for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketCountForConnection(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many packets have been sent for connection from it start (from call Networking.NetworkTransport.Connect for active connect or from connection request receiving for passive connect).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Packets count sent for connection from it start.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketCountForHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how many packets have been sent for host from it start (from call Networking.NetworkTransport.AddHost).</para>
+      </summary>
+      <param name="hostId">ID of the host.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Count packets have been sent from host start.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketNetworkLossPercent(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the value in percent of the number of sent packets that were dropped by the network and not received by the peer.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The number of packets dropped by the network in the last ping timeout period expressed as an integer percentage from 0 to 100.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingPacketOverflowLossPercent(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the value in percent of the number of sent packets that were dropped by the peer.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>The number of packets dropped by the peer in the last ping timeout period expressed as an integer percentage from 0 to 100.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingSystemBytesCount">
+      <summary>
+        <para>Returns how much user payload and protocol system headers (in bytes)  have been sent from start (from Networking.NetworkTransport.Init call).</para>
+      </summary>
+      <returns>
+        <para>Total payload and protocol system headers (in bytes) sent from start for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingSystemBytesCountForConnection(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much payload and protocol system headers (in bytes) have been sent from start for connection (from call Networking.NetworkTransport.Connect for active connect or from connection request receiving for passive connect).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total user payload and protocol system headers (in bytes) sent from start for connection.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingSystemBytesCountForHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much payload and protocol system headers (in bytes) have been sent from start for the host (from call Networking.NetworkTransport.AddHost).</para>
+      </summary>
+      <param name="hostId">ID of the host.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total user payload and protocol system headers (in bytes) sent from start for the host.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingUserBytesCount">
+      <summary>
+        <para>Returns how much payload (user) bytes have been sent from start (from Networking.NetworkTransport.Init call).</para>
+      </summary>
+      <returns>
+        <para>Total payload (in bytes) sent from start for all hosts.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingUserBytesCountForConnection(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much payload (user) bytes have been sent from start for connection (from call Networking.NetworkTransport.Connect for active connect or from connection request receiving for passive connect).</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total payload (in bytes) sent from start for connection.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetOutgoingUserBytesCountForHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns how much payload (user) bytes have been sent from start for the host (from call Networking.NetworkTransport.AddHost).</para>
+      </summary>
+      <param name="hostId">ID of the host.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Total payload (in bytes) sent from start for the host.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetPacketReceivedRate(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Return the current receive rate in bytes per second.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetPacketSentRate(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Return the current send rate in bytes per second.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetRemoteDelayTimeMS(System.Int32,System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Returns the delay for the timestamp received.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="remoteTime">Timestamp delivered from peer.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.GetRemotePacketReceivedRate(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Deprecated. Use Networking.NetworkTransport.GetNetworkLostPacketNum() instead.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Init">
+      <summary>
+        <para>Initializes the NetworkTransport. Should be called before any other operations on the NetworkTransport are done.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.IsBroadcastDiscoveryRunning">
+      <summary>
+        <para>Check if the broadcast discovery sender is running.</para>
+      </summary>
+      <returns>
+        <para>True if it is running. False if it is not running.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.NetworkTransport.IsStarted">
+      <summary>
+        <para>Deprecated.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.QueueMessageForSending(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Function is queueing but not sending messages.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <param name="channelId">The channel ID to send on.</param>
+      <param name="buffer">Buffer containing the data to send.</param>
+      <param name="size">Size of the buffer.</param>
+      <returns>
+        <para>True if success.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Receive(System.Int32&amp;,System.Int32&amp;,System.Int32&amp;,System.Byte[],System.Int32,System.Int32&amp;,System.Byte&amp;)">
+      <summary>
+        <para>Called to poll the underlying system for events.</para>
+      </summary>
+      <param name="hostId">Host ID associated with the event.</param>
+      <param name="connectionId">The connectionID that received the event.</param>
+      <param name="channelId">The channel ID associated with the event.</param>
+      <param name="buffer">The buffer that will hold the data received.</param>
+      <param name="bufferSize">Size of the buffer supplied.</param>
+      <param name="receivedSize">The actual receive size of the data.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Type of event returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ReceiveFromHost(System.Int32,System.Int32&amp;,System.Int32&amp;,System.Byte[],System.Int32,System.Int32&amp;,System.Byte&amp;)">
+      <summary>
+        <para>Similar to Networking.NetworkTransport.Receive but will only poll for the provided hostId.</para>
+      </summary>
+      <param name="hostId">The host ID to check for events.</param>
+      <param name="connectionId">The connection ID that received the event.</param>
+      <param name="channelId">The channel ID associated with the event.</param>
+      <param name="buffer">The buffer that will hold the data received.</param>
+      <param name="bufferSize">Size of the buffer supplied.</param>
+      <param name="receivedSize">The actual receive size of the data.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Type of event returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.ReceiveRelayEventFromHost(System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Polls the host for the following events:  Networking.NetworkEventType.ConnectEvent and Networking.NetworkEventType.DisconnectEvent.
+Can only be called by the relay group owner.</para>
+      </summary>
+      <param name="hostId">The host ID to check for events.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Type of event returned.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.RemoveHost(System.Int32)">
+      <summary>
+        <para>Closes the opened socket, and closes all connections belonging to that socket.</para>
+      </summary>
+      <param name="hostId">Host ID to remove.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Send(System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Send data to peer.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="channelId">The channel ID to send on.</param>
+      <param name="buffer">Buffer containing the data to send.</param>
+      <param name="size">Size of the buffer.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.SendMulticast(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Add a connection for the multicast send.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.SendQueuedMessages(System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Sends messages, previously queued by NetworkTransport.QueueMessageForSending function.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="connectionId">ID of the connection.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>True if hostId and connectioId are valid.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.SetBroadcastCredentials(System.Int32,System.Int32,System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Sets the credentials required for receiving broadcast messages. Should any credentials of a received broadcast message not match, the broadcast discovery message is dropped.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this broadcast.</param>
+      <param name="key">Key part of the credentials associated with this broadcast.</param>
+      <param name="version">Version part of the credentials associated with this broadcast.</param>
+      <param name="subversion">Subversion part of the credentials associated with this broadcast.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.SetPacketStat">
+      <summary>
+        <para>Used to inform the profiler of network packet statistics.</para>
+      </summary>
+      <param name="packetStatId">The ID of the message being reported.</param>
+      <param name="numMsgs">Number of message being reported.</param>
+      <param name="numBytes">Number of bytes used by reported messages.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.Shutdown">
+      <summary>
+        <para>Shut down the NetworkTransport.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.StartBroadcastDiscovery(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Starts sending a broadcasting message in all local subnets.</para>
+      </summary>
+      <param name="hostId">Host ID which should be reported via broadcast (broadcast receivers will connect to this host).</param>
+      <param name="broadcastPort">Port used for the broadcast message.</param>
+      <param name="key">Key part of the credentials associated with this broadcast.</param>
+      <param name="version">Version part of the credentials associated with this broadcast.</param>
+      <param name="subversion">Subversion part of the credentials associated with this broadcast.</param>
+      <param name="buffer">Complimentary message. This message will delivered to the receiver with the broadcast event.</param>
+      <param name="size">Size of message.</param>
+      <param name="timeout">Specifies how often the broadcast message should be sent in milliseconds.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+      <returns>
+        <para>Return true if broadcasting request has been submitted.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.StartSendMulticast(System.Int32,System.Int32,System.Byte[],System.Int32,System.Byte&amp;)">
+      <summary>
+        <para>Start to multicast send.</para>
+      </summary>
+      <param name="hostId">Host ID associated with this connection.</param>
+      <param name="channelId">The channel ID.</param>
+      <param name="buffer">Buffer containing the data to send.</param>
+      <param name="size">Size of the buffer.</param>
+      <param name="error">Error (can be cast to Networking.NetworkError for more information).</param>
+    </member>
+    <member name="M:UnityEngine.Networking.NetworkTransport.StopBroadcastDiscovery">
+      <summary>
+        <para>Stop sending the broadcast discovery message.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.QosType">
+      <summary>
+        <para>Enumeration of all supported quality of service channel modes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.AllCostDelivery">
+      <summary>
+        <para>A reliable message that will be re-sent with a high frequency until it is acknowledged.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.Reliable">
+      <summary>
+        <para>Each message is guaranteed to be delivered but not guaranteed to be in order.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.ReliableFragmented">
+      <summary>
+        <para>Each message is guaranteed to be delivered, also allowing fragmented messages with up to 32 fragments per message.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.ReliableFragmentedSequenced">
+      <summary>
+        <para>Each message is guaranteed to be delivered in order, also allowing fragmented messages with up to 32 fragments per message.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.ReliableSequenced">
+      <summary>
+        <para>Each message is guaranteed to be delivered and in order.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.ReliableStateUpdate">
+      <summary>
+        <para>A reliable message. Note: Only the last message in the send buffer is sent. Only the most recent message in the receive buffer will be delivered.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.StateUpdate">
+      <summary>
+        <para>An unreliable message. Only the last message in the send buffer is sent. Only the most recent message in the receive buffer will be delivered.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.Unreliable">
+      <summary>
+        <para>There is no guarantee of delivery or ordering.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.UnreliableFragmented">
+      <summary>
+        <para>There is no guarantee of delivery or ordering, but allowing fragmented messages with up to 32 fragments per message.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.UnreliableFragmentedSequenced">
+      <summary>
+        <para>There is garantee of ordering, no guarantee of delivery, but allowing fragmented messages with up to 32 fragments per message.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.QosType.UnreliableSequenced">
+      <summary>
+        <para>There is no guarantee of delivery and all unordered messages will be dropped. Example: VoIP.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.ReactorModel">
+      <summary>
+        <para>Define how unet will handle network io operation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ReactorModel.FixRateReactor">
+      <summary>
+        <para>Network thread will sleep up to threadawake timeout, after that it will try receive up to maxpoolsize amount of messages and then will try perform send operation for connection whihc ready to send.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.ReactorModel.SelectReactor">
+      <summary>
+        <para>Network thread will sleep up to threadawake timeout, or up to receive event on socket will happened. Awaked thread will try to read up to maxpoolsize packets from socket and will try update connections ready to send (with fixing awaketimeout rate).</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.AppID">
+      <summary>
+        <para>The AppID identifies the application on the Unity Cloud or UNET servers.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.AppID.Invalid">
+      <summary>
+        <para>Invalid AppID.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.HostPriority">
+      <summary>
+        <para>An Enum representing the priority of a client in a match, starting at 0 and increasing.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.HostPriority.Invalid">
+      <summary>
+        <para>The Invalid case for a HostPriority. An Invalid host priority is not a valid host.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.NetworkAccessLevel">
+      <summary>
+        <para>Describes the access levels granted to this client.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkAccessLevel.Admin">
+      <summary>
+        <para>Administration access level, generally describing clearence to perform game altering actions against anyone inside a particular match.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkAccessLevel.Invalid">
+      <summary>
+        <para>Invalid access level, signifying no access level has been granted/specified.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkAccessLevel.Owner">
+      <summary>
+        <para>Access level Owner, generally granting access for operations key to the peer host server performing it's work.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkAccessLevel.User">
+      <summary>
+        <para>User access level. This means you can do operations which affect yourself only, like disconnect yourself from the match.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.NetworkAccessToken">
+      <summary>
+        <para>Access token used to authenticate a client session for the purposes of allowing or disallowing match operations requested by that client.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkAccessToken.array">
+      <summary>
+        <para>Binary field for the actual token.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.Types.NetworkAccessToken.GetByteString">
+      <summary>
+        <para>Accessor to get an encoded string from the m_array data.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.Types.NetworkAccessToken.IsValid">
+      <summary>
+        <para>Checks if the token is a valid set of data with respect to default values (returns true if the values are not default, does not validate the token is a current legitimate token with respect to the server's auth framework).</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.NetworkID">
+      <summary>
+        <para>Network ID, used for match making.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NetworkID.Invalid">
+      <summary>
+        <para>Invalid NetworkID.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.NodeID">
+      <summary>
+        <para>The NodeID is the ID used in Relay matches to track nodes in a network.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.NodeID.Invalid">
+      <summary>
+        <para>The invalid case of a NodeID.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Types.SourceID">
+      <summary>
+        <para>Identifies a specific game instance.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.Types.SourceID.Invalid">
+      <summary>
+        <para>Invalid SourceID.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.Utility">
+      <summary>
+        <para>Networking Utility.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.Utility.useRandomSourceID">
+      <summary>
+        <para>This property is deprecated and does not need to be set or referenced.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.Utility.GetAccessTokenForNetwork(UnityEngine.Networking.Types.NetworkID)">
+      <summary>
+        <para>Utility function to get this client's access token for a particular network, if it has been set.</para>
+      </summary>
+      <param name="netId"></param>
+    </member>
+    <member name="M:UnityEngine.Networking.Utility.GetAppID">
+      <summary>
+        <para>Utility function to fetch the program's ID for UNET Cloud interfacing.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.Utility.GetSourceID">
+      <summary>
+        <para>Utility function to get the client's SourceID for unique identification.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.Utility.SetAccessTokenForNetwork(UnityEngine.Networking.Types.NetworkID,UnityEngine.Networking.Types.NetworkAccessToken)">
+      <summary>
+        <para>Utility function that accepts the access token for a network after it's received from the server.</para>
+      </summary>
+      <param name="netId"></param>
+      <param name="accessToken"></param>
+    </member>
+    <member name="M:UnityEngine.Networking.Utility.SetAppID(UnityEngine.Networking.Types.AppID)">
+      <summary>
+        <para>Deprecated; Setting the AppID is no longer necessary. Please log in through the editor and set up the project there.</para>
+      </summary>
+      <param name="newAppID"></param>
+    </member>
+  </members>
+</doc>

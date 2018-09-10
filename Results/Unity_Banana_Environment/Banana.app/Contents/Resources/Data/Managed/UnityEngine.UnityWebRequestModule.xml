@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.UnityWebRequestModule</name>
+    </assembly>
+    <member name="T:UnityEngine.Networking.DownloadHandler">
+      <summary>
+        <para>Manage and process HTTP response body data received from a remote server.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandler.data">
+      <summary>
+        <para>Returns the raw bytes downloaded from the remote server, or null. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandler.isDone">
+      <summary>
+        <para>Returns true if this DownloadHandler has been informed by its parent UnityWebRequest that all data has been received, and this DownloadHandler has completed any necessary post-download processing. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandler.text">
+      <summary>
+        <para>Convenience property. Returns the bytes from data interpreted as a UTF8 string. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.CompleteContent">
+      <summary>
+        <para>Callback, invoked when all data has been received from the remote server.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.Dispose">
+      <summary>
+        <para>Signals that this [DownloadHandler] is no longer being used, and should clean up any resources it is using.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.GetData">
+      <summary>
+        <para>Callback, invoked when the data property is accessed.</para>
+      </summary>
+      <returns>
+        <para>Byte array to return as the value of the data property.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.GetProgress">
+      <summary>
+        <para>Callback, invoked when UnityWebRequest.downloadProgress is accessed.</para>
+      </summary>
+      <returns>
+        <para>The return value for UnityWebRequest.downloadProgress.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.GetText">
+      <summary>
+        <para>Callback, invoked when the text property is accessed.</para>
+      </summary>
+      <returns>
+        <para>String to return as the return value of the text property.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.ReceiveContentLength(System.Int32)">
+      <summary>
+        <para>Callback, invoked with a Content-Length header is received.</para>
+      </summary>
+      <param name="contentLength">The value of the received Content-Length header.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.ReceiveData(System.Byte[],System.Int32)">
+      <summary>
+        <para>Callback, invoked as data is received from the remote server.</para>
+      </summary>
+      <param name="data">A buffer containing unprocessed data, received from the remote server.</param>
+      <param name="dataLength">The number of bytes in data which are new.</param>
+      <returns>
+        <para>True if the download should continue, false to abort.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.DownloadHandlerAssetBundle">
+      <summary>
+        <para>A DownloadHandler subclass specialized for downloading AssetBundles.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandlerAssetBundle.assetBundle">
+      <summary>
+        <para>Returns the downloaded AssetBundle, or null. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.#ctor(System.String,System.UInt32)">
+      <summary>
+        <para>Standard constructor for non-cached asset bundles.</para>
+      </summary>
+      <param name="url">The nominal (pre-redirect) URL at which the asset bundle is located.</param>
+      <param name="crc">A checksum to compare to the downloaded data for integrity checking, or zero to skip integrity checking.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.#ctor(System.String,System.UInt32,System.UInt32)">
+      <summary>
+        <para>Simple versioned constructor. Caches downloaded asset bundles.</para>
+      </summary>
+      <param name="url">The nominal (pre-redirect) URL at which the asset bundle is located.</param>
+      <param name="crc">A checksum to compare to the downloaded data for integrity checking, or zero to skip integrity checking.</param>
+      <param name="version">Current version number of the asset bundle at url. Increment to redownload.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.#ctor(System.String,UnityEngine.Hash128,System.UInt32)">
+      <summary>
+        <para>Versioned constructor. Caches downloaded asset bundles.</para>
+      </summary>
+      <param name="url">The nominal (pre-redirect) URL at which the asset bundle is located.</param>
+      <param name="crc">A checksum to compare to the downloaded data for integrity checking, or zero to skip integrity checking.</param>
+      <param name="hash">A hash object defining the version of the asset bundle.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.GetContent(UnityEngine.Networking.UnityWebRequest)">
+      <summary>
+        <para>Returns the downloaded AssetBundle, or null.</para>
+      </summary>
+      <param name="www">A finished UnityWebRequest object with DownloadHandlerAssetBundle attached.</param>
+      <returns>
+        <para>The same as DownloadHandlerAssetBundle.assetBundle</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.GetData">
+      <summary>
+        <para>Not implemented. Throws &lt;a href="http:msdn.microsoft.comen-uslibrarysystem.notsupportedexception"&gt;NotSupportedException&lt;a&gt;.</para>
+      </summary>
+      <returns>
+        <para>Not implemented.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerAssetBundle.GetText">
+      <summary>
+        <para>Not implemented. Throws &lt;a href="http:msdn.microsoft.comen-uslibrarysystem.notsupportedexception"&gt;NotSupportedException&lt;a&gt;.</para>
+      </summary>
+      <returns>
+        <para>Not implemented.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.DownloadHandlerBuffer">
+      <summary>
+        <para>A general-purpose DownloadHandler implementation which stores received data in a native byte buffer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerBuffer.#ctor">
+      <summary>
+        <para>Default constructor.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerBuffer.GetContent(UnityEngine.Networking.UnityWebRequest)">
+      <summary>
+        <para>Returns a copy of the native-memory buffer interpreted as a UTF8 string.</para>
+      </summary>
+      <param name="www">A finished UnityWebRequest object with DownloadHandlerBuffer attached.</param>
+      <returns>
+        <para>The same as DownloadHandlerBuffer.text</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerBuffer.GetData">
+      <summary>
+        <para>Returns a copy of the contents of the native-memory data buffer as a byte array.</para>
+      </summary>
+      <returns>
+        <para>A copy of the data which has been downloaded.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.DownloadHandlerFile">
+      <summary>
+        <para>Download handler for saving the downloaded data to file.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.DownloadHandlerFile.removeFileOnAbort">
+      <summary>
+        <para>Should the created file be removed if download is aborted (manually or due to an error). Default: false.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerFile.#ctor(System.String)">
+      <summary>
+        <para>Creates a new instance and a file on disk where downloaded data will be written to.</para>
+      </summary>
+      <param name="path">Path to file to be written.</param>
+    </member>
+    <member name="T:UnityEngine.Networking.DownloadHandlerScript">
+      <summary>
+        <para>An abstract base class for user-created scripting-driven DownloadHandler implementations.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerScript.#ctor">
+      <summary>
+        <para>Create a DownloadHandlerScript which allocates new buffers when passing data to callbacks.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.DownloadHandlerScript.#ctor(System.Byte[])">
+      <summary>
+        <para>Create a DownloadHandlerScript which reuses a preallocated buffer to pass data to callbacks.</para>
+      </summary>
+      <param name="preallocatedBuffer">A byte buffer into which data will be copied, for use by DownloadHandler.ReceiveData.</param>
+    </member>
+    <member name="?:UnityEngine.Networking.IMultipartFormSection">
+      <summary>
+        <para>An interface for composition of data into multipart forms.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.IMultipartFormSection.contentType">
+      <summary>
+        <para>Returns the value to use in the Content-Type header for this form section.</para>
+      </summary>
+      <returns>
+        <para>The value to use in the Content-Type header, or null.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.IMultipartFormSection.fileName">
+      <summary>
+        <para>Returns a string denoting the desired filename of this section on the destination server.</para>
+      </summary>
+      <returns>
+        <para>The desired file name of this section, or null if this is not a file section.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.IMultipartFormSection.sectionData">
+      <summary>
+        <para>Returns the raw binary data contained in this section. Must not return null or a zero-length array.</para>
+      </summary>
+      <returns>
+        <para>The raw binary data contained in this section. Must not be null or empty.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.IMultipartFormSection.sectionName">
+      <summary>
+        <para>Returns the name of this section, if any.</para>
+      </summary>
+      <returns>
+        <para>The section's name, or null.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Networking.MultipartFormDataSection">
+      <summary>
+        <para>A helper object for form sections containing generic, non-file data.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormDataSection.contentType">
+      <summary>
+        <para>Returns the value to use in this section's Content-Type header.</para>
+      </summary>
+      <returns>
+        <para>The Content-Type header for this section, or null.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormDataSection.fileName">
+      <summary>
+        <para>Returns a string denoting the desired filename of this section on the destination server.</para>
+      </summary>
+      <returns>
+        <para>The desired file name of this section, or null if this is not a file section.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormDataSection.sectionData">
+      <summary>
+        <para>Returns the raw binary data contained in this section. Will not return null or a zero-length array.</para>
+      </summary>
+      <returns>
+        <para>The raw binary data contained in this section. Will not be null or empty.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormDataSection.sectionName">
+      <summary>
+        <para>Returns the name of this section, if any.</para>
+      </summary>
+      <returns>
+        <para>The section's name, or null.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.Byte[])">
+      <summary>
+        <para>Raw data section, unnamed and no Content-Type header.</para>
+      </summary>
+      <param name="data">Data payload of this section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String,System.Byte[])">
+      <summary>
+        <para>Raw data section with a section name, no Content-Type header.</para>
+      </summary>
+      <param name="name">Section name.</param>
+      <param name="data">Data payload of this section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String,System.Byte[],System.String)">
+      <summary>
+        <para>A raw data section with a section name and a Content-Type header.</para>
+      </summary>
+      <param name="name">Section name.</param>
+      <param name="data">Data payload of this section.</param>
+      <param name="contentType">The value for this section's Content-Type header.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String,System.String,System.Text.Encoding,System.String)">
+      <summary>
+        <para>A named raw data section whose payload is derived from a string, with a Content-Type header.</para>
+      </summary>
+      <param name="name">Section name.</param>
+      <param name="data">String data payload for this section.</param>
+      <param name="contentType">The value for this section's Content-Type header.</param>
+      <param name="encoding">An encoding to marshal data to or from raw bytes.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String,System.String,System.String)">
+      <summary>
+        <para>A named raw data section whose payload is derived from a UTF8 string, with a Content-Type header.</para>
+      </summary>
+      <param name="name">Section name.</param>
+      <param name="data">String data payload for this section.</param>
+      <param name="contentType">C.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String,System.String)">
+      <summary>
+        <para>A names raw data section whose payload is derived from a UTF8 string, with a default Content-Type.</para>
+      </summary>
+      <param name="name">Section name.</param>
+      <param name="data">String data payload for this section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormDataSection.#ctor(System.String)">
+      <summary>
+        <para>An anonymous raw data section whose payload is derived from a UTF8 string, with a default Content-Type.</para>
+      </summary>
+      <param name="data">String data payload for this section.</param>
+    </member>
+    <member name="T:UnityEngine.Networking.MultipartFormFileSection">
+      <summary>
+        <para>A helper object for adding file uploads to multipart forms via the [IMultipartFormSection] API.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormFileSection.contentType">
+      <summary>
+        <para>Returns the value of the section's Content-Type header.</para>
+      </summary>
+      <returns>
+        <para>The Content-Type header for this section, or null.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormFileSection.fileName">
+      <summary>
+        <para>Returns a string denoting the desired filename of this section on the destination server.</para>
+      </summary>
+      <returns>
+        <para>The desired file name of this section, or null if this is not a file section.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormFileSection.sectionData">
+      <summary>
+        <para>Returns the raw binary data contained in this section. Will not return null or a zero-length array.</para>
+      </summary>
+      <returns>
+        <para>The raw binary data contained in this section. Will not be null or empty.</para>
+      </returns>
+    </member>
+    <member name="P:UnityEngine.Networking.MultipartFormFileSection.sectionName">
+      <summary>
+        <para>Returns the name of this section, if any.</para>
+      </summary>
+      <returns>
+        <para>The section's name, or null.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.String,System.Byte[],System.String,System.String)">
+      <summary>
+        <para>Contains a named file section based on the raw bytes from data, with a custom Content-Type and file name.</para>
+      </summary>
+      <param name="name">Name of this form section.</param>
+      <param name="data">Raw contents of the file to upload.</param>
+      <param name="fileName">Name of the file uploaded by this form section.</param>
+      <param name="contentType">The value for this section's Content-Type header.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.Byte[])">
+      <summary>
+        <para>Contains an anonymous file section based on the raw bytes from data, assigns a default Content-Type and file name.</para>
+      </summary>
+      <param name="data">Raw contents of the file to upload.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.String,System.Byte[])">
+      <summary>
+        <para>Contains an anonymous file section based on the raw bytes from data with a specific file name. Assigns a default Content-Type.</para>
+      </summary>
+      <param name="data">Raw contents of the file to upload.</param>
+      <param name="fileName">Name of the file uploaded by this form section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.String,System.String,System.Text.Encoding,System.String)">
+      <summary>
+        <para>Contains a named file section with data drawn from data, as marshaled by dataEncoding. Assigns a specific file name from fileName and a default Content-Type.</para>
+      </summary>
+      <param name="name">Name of this form section.</param>
+      <param name="data">Contents of the file to upload.</param>
+      <param name="dataEncoding">A string encoding.</param>
+      <param name="fileName">Name of the file uploaded by this form section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.String,System.Text.Encoding,System.String)">
+      <summary>
+        <para>An anonymous file section with data drawn from data, as marshaled by dataEncoding. Assigns a specific file name from fileName and a default Content-Type.</para>
+      </summary>
+      <param name="data">Contents of the file to upload.</param>
+      <param name="dataEncoding">A string encoding.</param>
+      <param name="fileName">Name of the file uploaded by this form section.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.MultipartFormFileSection.#ctor(System.String,System.String)">
+      <summary>
+        <para>An anonymous file section with data drawn from the UTF8 string data. Assigns a specific file name from fileName and a default Content-Type.</para>
+      </summary>
+      <param name="data">Contents of the file to upload.</param>
+      <param name="fileName">Name of the file uploaded by this form section.</param>
+    </member>
+    <member name="T:UnityEngine.Networking.UnityWebRequest">
+      <summary>
+        <para>The UnityWebRequest object is used to communicate with web servers.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.chunkedTransfer">
+      <summary>
+        <para>Indicates whether the UnityWebRequest system should employ the HTTP/1.1 chunked-transfer encoding method.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.disposeDownloadHandlerOnDispose">
+      <summary>
+        <para>If true, any DownloadHandler attached to this UnityWebRequest will have DownloadHandler.Dispose called automatically when UnityWebRequest.Dispose is called.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.disposeUploadHandlerOnDispose">
+      <summary>
+        <para>If true, any UploadHandler attached to this UnityWebRequest will have UploadHandler.Dispose called automatically when UnityWebRequest.Dispose is called.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.downloadedBytes">
+      <summary>
+        <para>Returns the number of bytes of body data the system has downloaded from the remote server. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.downloadHandler">
+      <summary>
+        <para>Holds a reference to a DownloadHandler object, which manages body data received from the remote server by this UnityWebRequest.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.downloadProgress">
+      <summary>
+        <para>Returns a floating-point value between 0.0 and 1.0, indicating the progress of downloading body data from the server. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.error">
+      <summary>
+        <para>A human-readable string describing any system errors encountered by this UnityWebRequest object while handling HTTP requests or responses. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.isDone">
+      <summary>
+        <para>Returns true after the UnityWebRequest has finished communicating with the remote server. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.isHttpError">
+      <summary>
+        <para>Returns true after this UnityWebRequest receives an HTTP response code indicating an error. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.isModifiable">
+      <summary>
+        <para>Returns true while a UnityWebRequest’s configuration properties can be altered. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.isNetworkError">
+      <summary>
+        <para>Returns true after this UnityWebRequest encounters a system error. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbCREATE">
+      <summary>
+        <para>The string "CREATE", commonly used as the verb for an HTTP CREATE request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbDELETE">
+      <summary>
+        <para>The string "DELETE", commonly used as the verb for an HTTP DELETE request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbGET">
+      <summary>
+        <para>The string "GET", commonly used as the verb for an HTTP GET request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbHEAD">
+      <summary>
+        <para>The string "HEAD", commonly used as the verb for an HTTP HEAD request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbPOST">
+      <summary>
+        <para>The string "POST", commonly used as the verb for an HTTP POST request.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Networking.UnityWebRequest.kHttpVerbPUT">
+      <summary>
+        <para>The string "PUT", commonly used as the verb for an HTTP PUT request.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.method">
+      <summary>
+        <para>Defines the HTTP verb used by this UnityWebRequest, such as GET or POST.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.redirectLimit">
+      <summary>
+        <para>Indicates the number of redirects which this UnityWebRequest will follow before halting with a “Redirect Limit Exceeded” system error.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.responseCode">
+      <summary>
+        <para>The numeric HTTP response code returned by the server, such as 200, 404 or 500. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.timeout">
+      <summary>
+        <para>Sets UnityWebRequest to attempt to abort after the number of seconds in timeout have passed.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.uploadedBytes">
+      <summary>
+        <para>Returns the number of bytes of body data the system has uploaded to the remote server. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.uploadHandler">
+      <summary>
+        <para>Holds a reference to the UploadHandler object which manages body data to be uploaded to the remote server.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.uploadProgress">
+      <summary>
+        <para>Returns a floating-point value between 0.0 and 1.0, indicating the progress of uploading body data to the server.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.url">
+      <summary>
+        <para>Defines the target URL for the UnityWebRequest to communicate with.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequest.useHttpContinue">
+      <summary>
+        <para>Determines whether this UnityWebRequest will include Expect: 100-Continue in its outgoing request headers. (Default: true).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Abort">
+      <summary>
+        <para>If in progress, halts the UnityWebRequest as soon as possible.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.#ctor">
+      <summary>
+        <para>Creates a UnityWebRequest with the default options and no attached DownloadHandler or UploadHandler. Default method is GET.</para>
+      </summary>
+      <param name="url">The target URL with which this UnityWebRequest will communicate. Also accessible via the url property.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.#ctor(System.String)">
+      <summary>
+        <para>Creates a UnityWebRequest with the default options and no attached DownloadHandler or UploadHandler. Default method is GET.</para>
+      </summary>
+      <param name="url">The target URL with which this UnityWebRequest will communicate. Also accessible via the url property.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Delete(System.String)">
+      <summary>
+        <para>Creates a UnityWebRequest configured for HTTP DELETE.</para>
+      </summary>
+      <param name="uri">The URI to which a DELETE request should be sent.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send an HTTP DELETE request.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Dispose">
+      <summary>
+        <para>Signals that this [UnityWebRequest] is no longer being used, and should clean up any resources it is using.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.EscapeURL(System.String)">
+      <summary>
+        <para>Escapes characters in a string to ensure they are URL-friendly.</para>
+      </summary>
+      <param name="s">A string with characters to be escaped.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.EscapeURL(System.String,System.Text.Encoding)">
+      <summary>
+        <para>Escapes characters in a string to ensure they are URL-friendly.</para>
+      </summary>
+      <param name="s">A string with characters to be escaped.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GenerateBoundary">
+      <summary>
+        <para>Generate a random 40-byte array for use as a multipart form boundary.</para>
+      </summary>
+      <returns>
+        <para>40 random bytes, guaranteed to contain only printable ASCII values.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Get(System.String)">
+      <summary>
+        <para>Creates a UnityWebRequest configured for HTTP GET.</para>
+      </summary>
+      <param name="uri">The URI of the resource to retrieve via HTTP GET.</param>
+      <returns>
+        <para>A UnityWebRequest object configured to retrieve data from uri.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetAssetBundle(System.String,System.UInt32)">
+      <summary>
+        <para>Creates a UnityWebRequest optimized for downloading a Unity Asset Bundle via HTTP GET.</para>
+      </summary>
+      <param name="uri">The URI of the asset bundle to download.</param>
+      <param name="crc">If nonzero, this number will be compared to the checksum of the downloaded asset bundle data. If the CRCs do not match, an error will be logged and the asset bundle will not be loaded. If set to zero, CRC checking will be skipped.</param>
+      <param name="version">An integer version number, which will be compared to the cached version of the asset bundle to download. Increment this number to force Unity to redownload a cached asset bundle.
+
+Analogous to the version parameter for WWW.LoadFromCacheOrDownload.</param>
+      <param name="hash">A version hash. If this hash does not match the hash for the cached version of this asset bundle, the asset bundle will be redownloaded.</param>
+      <param name="cachedAssetBundle">A structure used to download a given version of AssetBundle to a customized cache path.</param>
+      <returns>
+        <para>A UnityWebRequest configured to downloading a Unity Asset Bundle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetAssetBundle(System.String,System.UInt32,System.UInt32)">
+      <summary>
+        <para>Creates a UnityWebRequest optimized for downloading a Unity Asset Bundle via HTTP GET.</para>
+      </summary>
+      <param name="uri">The URI of the asset bundle to download.</param>
+      <param name="crc">If nonzero, this number will be compared to the checksum of the downloaded asset bundle data. If the CRCs do not match, an error will be logged and the asset bundle will not be loaded. If set to zero, CRC checking will be skipped.</param>
+      <param name="version">An integer version number, which will be compared to the cached version of the asset bundle to download. Increment this number to force Unity to redownload a cached asset bundle.
+
+Analogous to the version parameter for WWW.LoadFromCacheOrDownload.</param>
+      <param name="hash">A version hash. If this hash does not match the hash for the cached version of this asset bundle, the asset bundle will be redownloaded.</param>
+      <param name="cachedAssetBundle">A structure used to download a given version of AssetBundle to a customized cache path.</param>
+      <returns>
+        <para>A UnityWebRequest configured to downloading a Unity Asset Bundle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetAssetBundle(System.String,UnityEngine.Hash128,System.UInt32)">
+      <summary>
+        <para>Creates a UnityWebRequest optimized for downloading a Unity Asset Bundle via HTTP GET.</para>
+      </summary>
+      <param name="uri">The URI of the asset bundle to download.</param>
+      <param name="crc">If nonzero, this number will be compared to the checksum of the downloaded asset bundle data. If the CRCs do not match, an error will be logged and the asset bundle will not be loaded. If set to zero, CRC checking will be skipped.</param>
+      <param name="version">An integer version number, which will be compared to the cached version of the asset bundle to download. Increment this number to force Unity to redownload a cached asset bundle.
+
+Analogous to the version parameter for WWW.LoadFromCacheOrDownload.</param>
+      <param name="hash">A version hash. If this hash does not match the hash for the cached version of this asset bundle, the asset bundle will be redownloaded.</param>
+      <param name="cachedAssetBundle">A structure used to download a given version of AssetBundle to a customized cache path.</param>
+      <returns>
+        <para>A UnityWebRequest configured to downloading a Unity Asset Bundle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetAssetBundle(System.String,UnityEngine.CachedAssetBundle,System.UInt32)">
+      <summary>
+        <para>Creates a UnityWebRequest optimized for downloading a Unity Asset Bundle via HTTP GET.</para>
+      </summary>
+      <param name="uri">The URI of the asset bundle to download.</param>
+      <param name="crc">If nonzero, this number will be compared to the checksum of the downloaded asset bundle data. If the CRCs do not match, an error will be logged and the asset bundle will not be loaded. If set to zero, CRC checking will be skipped.</param>
+      <param name="version">An integer version number, which will be compared to the cached version of the asset bundle to download. Increment this number to force Unity to redownload a cached asset bundle.
+
+Analogous to the version parameter for WWW.LoadFromCacheOrDownload.</param>
+      <param name="hash">A version hash. If this hash does not match the hash for the cached version of this asset bundle, the asset bundle will be redownloaded.</param>
+      <param name="cachedAssetBundle">A structure used to download a given version of AssetBundle to a customized cache path.</param>
+      <returns>
+        <para>A UnityWebRequest configured to downloading a Unity Asset Bundle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetAudioClip(System.String,UnityEngine.AudioType)">
+      <summary>
+        <para>OBSOLETE. Use UnityWebRequestMultimedia.GetAudioClip().</para>
+      </summary>
+      <param name="uri"></param>
+      <param name="audioType"></param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetRequestHeader(System.String)">
+      <summary>
+        <para>Retrieves the value of a custom request header.</para>
+      </summary>
+      <param name="name">Name of the custom request header. Case-insensitive.</param>
+      <returns>
+        <para>The value of the custom request header. If no custom header with a matching name has been set, returns an empty string.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetResponseHeader(System.String)">
+      <summary>
+        <para>Retrieves the value of a response header from the latest HTTP response received.</para>
+      </summary>
+      <param name="name">The name of the HTTP header to retrieve. Case-insensitive.</param>
+      <returns>
+        <para>The value of the HTTP header from the latest HTTP response. If no header with a matching name has been received, or no responses have been received, returns null.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetResponseHeaders">
+      <summary>
+        <para>Retrieves a dictionary containing all the response headers received by this UnityWebRequest in the latest HTTP response.</para>
+      </summary>
+      <returns>
+        <para>A dictionary containing all the response headers received in the latest HTTP response. If no responses have been received, returns null.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetTexture(System.String)">
+      <summary>
+        <para>Create a UnityWebRequest intended to download an image via HTTP GET and create a Texture based on the retrieved data.</para>
+      </summary>
+      <param name="uri">The URI of the image to download.</param>
+      <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
+      <returns>
+        <para>A UnityWebRequest properly configured to download an image and convert it to a Texture.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.GetTexture(System.String,System.Boolean)">
+      <summary>
+        <para>Create a UnityWebRequest intended to download an image via HTTP GET and create a Texture based on the retrieved data.</para>
+      </summary>
+      <param name="uri">The URI of the image to download.</param>
+      <param name="nonReadable">If true, the texture's raw data will not be accessible to script. This can conserve memory. Default: false.</param>
+      <returns>
+        <para>A UnityWebRequest properly configured to download an image and convert it to a Texture.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Head(System.String)">
+      <summary>
+        <para>Creates a UnityWebRequest configured to send a HTTP HEAD request.</para>
+      </summary>
+      <param name="uri">The URI to which to send a HTTP HEAD request.</param>
+      <returns>
+        <para>A UnityWebRequest configured to transmit a HTTP HEAD request.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Post(System.String,System.String)">
+      <summary>
+        <para>Create a UnityWebRequest configured to send form data to a server via HTTP POST.</para>
+      </summary>
+      <param name="uri">The target URI to which form data will be transmitted.</param>
+      <param name="postData">Form body data. Will be URLEncoded prior to transmission.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send form data to uri via POST.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Post(System.String,UnityEngine.WWWForm)">
+      <summary>
+        <para>Create a UnityWebRequest configured to send form data to a server via HTTP POST.</para>
+      </summary>
+      <param name="uri">The target URI to which form data will be transmitted.</param>
+      <param name="formData">Form fields or files encapsulated in a WWWForm object, for formatting and transmission to the remote server.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send form data to uri via POST.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Post(System.String,System.Collections.Generic.List`1&lt;UnityEngine.Networking.IMultipartFormSection&gt;)">
+      <summary>
+        <para>Create a UnityWebRequest configured to send form data to a server via HTTP POST.</para>
+      </summary>
+      <param name="uri">The target URI to which form data will be transmitted.</param>
+      <param name="multipartFormSections">A list of form fields or files to be formatted and transmitted to the remote server.</param>
+      <param name="boundary">A unique boundary string, which will be used when separating form fields in a multipart form.  If not supplied, a boundary will be generated for you.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send form data to uri via POST.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Post(System.String,System.Collections.Generic.List`1&lt;UnityEngine.Networking.IMultipartFormSection&gt;,System.Byte[])">
+      <summary>
+        <para>Create a UnityWebRequest configured to send form data to a server via HTTP POST.</para>
+      </summary>
+      <param name="uri">The target URI to which form data will be transmitted.</param>
+      <param name="multipartFormSections">A list of form fields or files to be formatted and transmitted to the remote server.</param>
+      <param name="boundary">A unique boundary string, which will be used when separating form fields in a multipart form.  If not supplied, a boundary will be generated for you.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send form data to uri via POST.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Post(System.String,System.Collections.Generic.Dictionary`2&lt;System.String,System.String&gt;)">
+      <summary>
+        <para>Create a UnityWebRequest configured to send form data to a server via HTTP POST.</para>
+      </summary>
+      <param name="uri">The target URI to which form data will be transmitted.</param>
+      <param name="formFields">Strings indicating the keys and values of form fields. Will be automatically formatted into a URL-encoded form body.</param>
+      <returns>
+        <para>A UnityWebRequest configured to send form data to uri via POST.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Put(System.String,System.Byte[])">
+      <summary>
+        <para>Create a UnityWebRequest configured to upload raw data to a remote server via HTTP PUT.</para>
+      </summary>
+      <param name="uri">The URI to which the data will be sent.</param>
+      <param name="bodyData">The data to transmit to the remote server.
+
+If a string, the string will be converted to raw bytes via &lt;a href="http:msdn.microsoft.comen-uslibrarysystem.text.encoding.utf8"&gt;System.Text.Encoding.UTF8&lt;a&gt;.</param>
+      <returns>
+        <para>A UnityWebRequest configured to transmit bodyData to uri via HTTP PUT.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Put(System.String,System.String)">
+      <summary>
+        <para>Create a UnityWebRequest configured to upload raw data to a remote server via HTTP PUT.</para>
+      </summary>
+      <param name="uri">The URI to which the data will be sent.</param>
+      <param name="bodyData">The data to transmit to the remote server.
+
+If a string, the string will be converted to raw bytes via &lt;a href="http:msdn.microsoft.comen-uslibrarysystem.text.encoding.utf8"&gt;System.Text.Encoding.UTF8&lt;a&gt;.</param>
+      <returns>
+        <para>A UnityWebRequest configured to transmit bodyData to uri via HTTP PUT.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.Send">
+      <summary>
+        <para>Begin communicating with the remote server.</para>
+      </summary>
+      <returns>
+        <para>An AsyncOperation indicating the progress/completion state of the UnityWebRequest. Yield this object to wait until the UnityWebRequest is done.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.SendWebRequest">
+      <summary>
+        <para>Begin communicating with the remote server.
+
+After calling this method, the UnityWebRequest will perform DNS resolution (if necessary), transmit an HTTP request to the remote server at the target URL and process the server’s response.
+
+This method can only be called once on any given UnityWebRequest object. Once this method is called, you cannot change any of the UnityWebRequest’s properties.
+
+This method returns a WebRequestAsyncOperation object. Yielding the WebRequestAsyncOperation inside a coroutine will cause the coroutine to pause until the UnityWebRequest encounters a system error or finishes communicating.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.SerializeFormSections(System.Collections.Generic.List`1&lt;UnityEngine.Networking.IMultipartFormSection&gt;,System.Byte[])">
+      <summary>
+        <para>Converts a List of IMultipartFormSection objects into a byte array containing raw multipart form data.</para>
+      </summary>
+      <param name="multipartFormSections">A List of IMultipartFormSection objects.</param>
+      <param name="boundary">A unique boundary string to separate the form sections.</param>
+      <returns>
+        <para>A byte array of raw multipart form data.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.SerializeSimpleForm(System.Collections.Generic.Dictionary`2&lt;System.String,System.String&gt;)">
+      <summary>
+        <para>Serialize a dictionary of strings into a byte array containing URL-encoded UTF8 characters.</para>
+      </summary>
+      <param name="formFields">A dictionary containing the form keys and values to serialize.</param>
+      <returns>
+        <para>A byte array containing the serialized form. The form's keys and values have been URL-encoded.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.SetRequestHeader(System.String,System.String)">
+      <summary>
+        <para>Set a HTTP request header to a custom value.</para>
+      </summary>
+      <param name="name">The key of the header to be set. Case-sensitive.</param>
+      <param name="value">The header's intended value.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.UnEscapeURL(System.String)">
+      <summary>
+        <para>Converts URL-friendly escape sequences back to normal text.</para>
+      </summary>
+      <param name="s">A string containing escaped characters.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.Networking.UnityWebRequest.UnEscapeURL(System.String,System.Text.Encoding)">
+      <summary>
+        <para>Converts URL-friendly escape sequences back to normal text.</para>
+      </summary>
+      <param name="s">A string containing escaped characters.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="T:UnityEngine.Networking.UnityWebRequestAsyncOperation">
+      <summary>
+        <para>Asynchronous operation object returned from UnityWebRequest.SendWebRequest().
+
+You can yield until it continues, register an event handler with AsyncOperation.completed, or manually check whether it's done (AsyncOperation.isDone) or progress (AsyncOperation.progress).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UnityWebRequestAsyncOperation.webRequest">
+      <summary>
+        <para>Returns the associated UnityWebRequest that created the operation.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.UploadHandler">
+      <summary>
+        <para>Helper object for UnityWebRequests. Manages the buffering and transmission of body data during HTTP requests.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UploadHandler.contentType">
+      <summary>
+        <para>Determines the default Content-Type header which will be transmitted with the outbound HTTP request.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UploadHandler.data">
+      <summary>
+        <para>The raw data which will be transmitted to the remote server as body data. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Networking.UploadHandler.progress">
+      <summary>
+        <para>Returns the proportion of data uploaded to the remote server compared to the total amount of data to upload. (Read Only)</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UploadHandler.Dispose">
+      <summary>
+        <para>Signals that this [UploadHandler] is no longer being used, and should clean up any resources it is using.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Networking.UploadHandlerRaw">
+      <summary>
+        <para>A general-purpose UploadHandler subclass, using a native-code memory buffer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Networking.UploadHandlerRaw.#ctor(System.Byte[])">
+      <summary>
+        <para>General constructor. Contents of the input argument are copied into a native buffer.</para>
+      </summary>
+      <param name="data">Raw data to transmit to the remote server.</param>
+    </member>
+    <member name="T:UnityEngine.WWWForm">
+      <summary>
+        <para>Helper class to generate form data to post to web servers using the UnityWebRequest or WWW classes.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWWForm.data">
+      <summary>
+        <para>(Read Only) The raw data to pass as the POST request body when sending the form.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWWForm.headers">
+      <summary>
+        <para>(Read Only) Returns the correct request headers for posting the form using the WWW class.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddBinaryData(System.String,System.Byte[])">
+      <summary>
+        <para>Add binary data to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="contents"></param>
+      <param name="fileName"></param>
+      <param name="mimeType"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddBinaryData(System.String,System.Byte[],System.String)">
+      <summary>
+        <para>Add binary data to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="contents"></param>
+      <param name="fileName"></param>
+      <param name="mimeType"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddBinaryData(System.String,System.Byte[],System.String,System.String)">
+      <summary>
+        <para>Add binary data to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="contents"></param>
+      <param name="fileName"></param>
+      <param name="mimeType"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddField(System.String,System.String)">
+      <summary>
+        <para>Add a simple field to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="value"></param>
+      <param name="e"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddField(System.String,System.String,System.Text.Encoding)">
+      <summary>
+        <para>Add a simple field to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="value"></param>
+      <param name="e"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.AddField(System.String,System.Int32)">
+      <summary>
+        <para>Adds a simple field to the form.</para>
+      </summary>
+      <param name="fieldName"></param>
+      <param name="i"></param>
+    </member>
+    <member name="M:UnityEngine.WWWForm.#ctor">
+      <summary>
+        <para>Creates an empty WWWForm object.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

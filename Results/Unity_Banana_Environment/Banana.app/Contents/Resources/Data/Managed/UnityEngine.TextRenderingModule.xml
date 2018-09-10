@@ -1,0 +1,828 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.TextRenderingModule</name>
+    </assembly>
+    <member name="T:UnityEngine.CharacterInfo">
+      <summary>
+        <para>Specification for how to render a character from the font texture. See Font.characterInfo.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.advance">
+      <summary>
+        <para>The horizontal distance from the origin of this character to the origin of the next character.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.bearing">
+      <summary>
+        <para>The horizontal distance from the origin of this glyph to the begining of the glyph image.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.flipped">
+      <summary>
+        <para>Is the character flipped?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.glyphHeight">
+      <summary>
+        <para>The height of the glyph image.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.glyphWidth">
+      <summary>
+        <para>The width of the glyph image.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.index">
+      <summary>
+        <para>Unicode value of the character.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.maxX">
+      <summary>
+        <para>The maximum extend of the glyph image in the x-axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.maxY">
+      <summary>
+        <para>The maximum extend of the glyph image in the y-axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.minX">
+      <summary>
+        <para>The minium extend of the glyph image in the x-axis.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.minY">
+      <summary>
+        <para>The minimum extend of the glyph image in the y-axis.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.size">
+      <summary>
+        <para>The size of the character or 0 if it is the default font size.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.style">
+      <summary>
+        <para>The style of the character.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.uv">
+      <summary>
+        <para>UV coordinates for the character in the texture.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.uvBottomLeft">
+      <summary>
+        <para>The uv coordinate matching the bottom left of the glyph image in the font texture.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.uvBottomRight">
+      <summary>
+        <para>The uv coordinate matching the bottom right of the glyph image in the font texture.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.uvTopLeft">
+      <summary>
+        <para>The uv coordinate matching the top left of the glyph image in the font texture.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CharacterInfo.uvTopRight">
+      <summary>
+        <para>The uv coordinate matching the top right of the glyph image in the font texture.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.vert">
+      <summary>
+        <para>Screen coordinates for the character in generated text meshes.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.CharacterInfo.width">
+      <summary>
+        <para>How far to advance between the beginning of this charcater and the next.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Font">
+      <summary>
+        <para>Script interface for.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.ascent">
+      <summary>
+        <para>The ascent of the font.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.characterInfo">
+      <summary>
+        <para>Access an array of all characters contained in the font texture.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.dynamic">
+      <summary>
+        <para>Is the font a dynamic font.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.fontSize">
+      <summary>
+        <para>The default size of the font.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.lineHeight">
+      <summary>
+        <para>The line height of the font.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Font.material">
+      <summary>
+        <para>The material used for the font display.</para>
+      </summary>
+    </member>
+    <member name="?:UnityEngine.Font.textureRebuilt(System.Action`1&lt;UnityEngine.Font&gt;)">
+      <summary>
+        <para>Set a function to be called when the dynamic font texture is rebuilt.</para>
+      </summary>
+      <param name="value"></param>
+    </member>
+    <member name="M:UnityEngine.Font.CreateDynamicFontFromOSFont(System.String,System.Int32)">
+      <summary>
+        <para>Creates a Font object which lets you render a font installed on the user machine.</para>
+      </summary>
+      <param name="fontname">The name of the OS font to use for this font object.</param>
+      <param name="size">The default character size of the generated font.</param>
+      <param name="fontnames">Am array of names of OS fonts to use for this font object. When rendering characters using this font object, the first font which is installed on the machine, which contains the requested character will be used.</param>
+      <returns>
+        <para>The generate Font object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Font.CreateDynamicFontFromOSFont(System.String[],System.Int32)">
+      <summary>
+        <para>Creates a Font object which lets you render a font installed on the user machine.</para>
+      </summary>
+      <param name="fontname">The name of the OS font to use for this font object.</param>
+      <param name="size">The default character size of the generated font.</param>
+      <param name="fontnames">Am array of names of OS fonts to use for this font object. When rendering characters using this font object, the first font which is installed on the machine, which contains the requested character will be used.</param>
+      <returns>
+        <para>The generate Font object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Font.#ctor">
+      <summary>
+        <para>Create a new Font.</para>
+      </summary>
+      <param name="name">The name of the created Font object.</param>
+    </member>
+    <member name="M:UnityEngine.Font.#ctor(System.String)">
+      <summary>
+        <para>Create a new Font.</para>
+      </summary>
+      <param name="name">The name of the created Font object.</param>
+    </member>
+    <member name="M:UnityEngine.Font.GetCharacterInfo(System.Char,UnityEngine.CharacterInfo&amp;)">
+      <summary>
+        <para>Get rendering info for a specific character.</para>
+      </summary>
+      <param name="ch">The character you need rendering information for.</param>
+      <param name="info">Returns the CharacterInfo struct with the rendering information for the character (if available).</param>
+      <param name="size">The size of the character (default value of zero will use font default size).</param>
+      <param name="style">The style of the character.</param>
+    </member>
+    <member name="M:UnityEngine.Font.GetCharacterInfo(System.Char,UnityEngine.CharacterInfo&amp;,System.Int32)">
+      <summary>
+        <para>Get rendering info for a specific character.</para>
+      </summary>
+      <param name="ch">The character you need rendering information for.</param>
+      <param name="info">Returns the CharacterInfo struct with the rendering information for the character (if available).</param>
+      <param name="size">The size of the character (default value of zero will use font default size).</param>
+      <param name="style">The style of the character.</param>
+    </member>
+    <member name="M:UnityEngine.Font.GetCharacterInfo(System.Char,UnityEngine.CharacterInfo&amp;,System.Int32,UnityEngine.FontStyle)">
+      <summary>
+        <para>Get rendering info for a specific character.</para>
+      </summary>
+      <param name="ch">The character you need rendering information for.</param>
+      <param name="info">Returns the CharacterInfo struct with the rendering information for the character (if available).</param>
+      <param name="size">The size of the character (default value of zero will use font default size).</param>
+      <param name="style">The style of the character.</param>
+    </member>
+    <member name="M:UnityEngine.Font.GetMaxVertsForString(System.String)">
+      <summary>
+        <para>Returns the maximum number of verts that the text generator may return for a given string.</para>
+      </summary>
+      <param name="str">Input string.</param>
+    </member>
+    <member name="M:UnityEngine.Font.GetOSInstalledFontNames">
+      <summary>
+        <para>Get names of fonts installed on the machine.</para>
+      </summary>
+      <returns>
+        <para>An array of the names of all fonts installed on the machine.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Font.HasCharacter(System.Char)">
+      <summary>
+        <para>Does this font have a specific character?</para>
+      </summary>
+      <param name="c">The character to check for.</param>
+      <returns>
+        <para>Whether or not the font has the character specified.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Font.RequestCharactersInTexture(System.String,System.Int32,UnityEngine.FontStyle)">
+      <summary>
+        <para>Request characters to be added to the font texture (dynamic fonts only).</para>
+      </summary>
+      <param name="characters">The characters which are needed to be in the font texture.</param>
+      <param name="size">The size of the requested characters (the default value of zero will use the font's default size).</param>
+      <param name="style">The style of the requested characters.</param>
+    </member>
+    <member name="T:UnityEngine.FontStyle">
+      <summary>
+        <para>Font Style applied to GUI Texts, Text Meshes or GUIStyles.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.FontStyle.Bold">
+      <summary>
+        <para>Bold style applied to your texts.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.FontStyle.BoldAndItalic">
+      <summary>
+        <para>Bold and Italic styles applied to your texts.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.FontStyle.Italic">
+      <summary>
+        <para>Italic style applied to your texts.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.FontStyle.Normal">
+      <summary>
+        <para>No special style is applied.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.GUIText">
+      <summary>
+        <para>A text string displayed in a GUI.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.alignment">
+      <summary>
+        <para>The alignment of the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.anchor">
+      <summary>
+        <para>The anchor of the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.color">
+      <summary>
+        <para>The color used to render the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.font">
+      <summary>
+        <para>The font used for the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.fontSize">
+      <summary>
+        <para>The font size to use (for dynamic fonts).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.fontStyle">
+      <summary>
+        <para>The font style to use (for dynamic fonts).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.lineSpacing">
+      <summary>
+        <para>The line spacing multiplier.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.material">
+      <summary>
+        <para>The Material to use for rendering.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.pixelOffset">
+      <summary>
+        <para>The pixel offset of the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.richText">
+      <summary>
+        <para>Enable HTML-style tags for Text Formatting Markup.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.tabSize">
+      <summary>
+        <para>The tab width multiplier.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.GUIText.text">
+      <summary>
+        <para>The text to display.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.HorizontalWrapMode">
+      <summary>
+        <para>Wrapping modes for text that reaches the horizontal boundary.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.HorizontalWrapMode.Overflow">
+      <summary>
+        <para>Text can exceed the horizontal boundary.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.HorizontalWrapMode.Wrap">
+      <summary>
+        <para>Text will word-wrap when reaching the horizontal boundary.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.TextAlignment">
+      <summary>
+        <para>How multiline text should be aligned.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAlignment.Center">
+      <summary>
+        <para>Text lines are centered.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAlignment.Left">
+      <summary>
+        <para>Text lines are aligned on the left side.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAlignment.Right">
+      <summary>
+        <para>Text lines are aligned on the right side.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.TextAnchor">
+      <summary>
+        <para>Where the anchor of the text is placed.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.LowerCenter">
+      <summary>
+        <para>Text is anchored in lower side, centered horizontally.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.LowerLeft">
+      <summary>
+        <para>Text is anchored in lower left corner.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.LowerRight">
+      <summary>
+        <para>Text is anchored in lower right corner.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.MiddleCenter">
+      <summary>
+        <para>Text is centered both horizontally and vertically.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.MiddleLeft">
+      <summary>
+        <para>Text is anchored in left side, centered vertically.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.MiddleRight">
+      <summary>
+        <para>Text is anchored in right side, centered vertically.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.UpperCenter">
+      <summary>
+        <para>Text is anchored in upper side, centered horizontally.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.UpperLeft">
+      <summary>
+        <para>Text is anchored in upper left corner.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextAnchor.UpperRight">
+      <summary>
+        <para>Text is anchored in upper right corner.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.TextGenerationSettings">
+      <summary>
+        <para>A struct that stores the settings for TextGeneration.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.alignByGeometry">
+      <summary>
+        <para>Use the extents of glyph geometry to perform horizontal alignment rather than glyph metrics.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.color">
+      <summary>
+        <para>The base color for the text generation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.font">
+      <summary>
+        <para>Font to use for generation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.fontSize">
+      <summary>
+        <para>Font size.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.fontStyle">
+      <summary>
+        <para>Font style.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.generateOutOfBounds">
+      <summary>
+        <para>Continue to generate characters even if the text runs out of bounds.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.generationExtents">
+      <summary>
+        <para>Extents that the generator will attempt to fit the text in.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.horizontalOverflow">
+      <summary>
+        <para>What happens to text when it reaches the horizontal generation bounds.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.lineSpacing">
+      <summary>
+        <para>The line spacing multiplier.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.pivot">
+      <summary>
+        <para>Generated vertices are offset by the pivot.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.resizeTextForBestFit">
+      <summary>
+        <para>Should the text be resized to fit the configured bounds?</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.resizeTextMaxSize">
+      <summary>
+        <para>Maximum size for resized text.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.resizeTextMinSize">
+      <summary>
+        <para>Minimum size for resized text.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.richText">
+      <summary>
+        <para>Allow rich text markup in generation.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.scaleFactor">
+      <summary>
+        <para>A scale factor for the text. This is useful if the Text is on a Canvas and the canvas is scaled.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.textAnchor">
+      <summary>
+        <para>How is the generated text anchored.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.updateBounds">
+      <summary>
+        <para>Should the text generator update the bounds from the generated text.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.TextGenerationSettings.verticalOverflow">
+      <summary>
+        <para>What happens to text when it reaches the bottom generation bounds.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.TextGenerator">
+      <summary>
+        <para>Class that can be used to generate text for rendering.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.characterCount">
+      <summary>
+        <para>The number of characters that have been generated.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.characterCountVisible">
+      <summary>
+        <para>The number of characters that have been generated and are included in the visible lines.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.characters">
+      <summary>
+        <para>Array of generated characters.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.fontSizeUsedForBestFit">
+      <summary>
+        <para>The size of the font that was found if using best fit mode.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.lineCount">
+      <summary>
+        <para>Number of text lines generated.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.lines">
+      <summary>
+        <para>Information about each generated text line.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.rectExtents">
+      <summary>
+        <para>Extents of the generated text in rect format.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.vertexCount">
+      <summary>
+        <para>Number of vertices generated.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextGenerator.verts">
+      <summary>
+        <para>Array of generated vertices.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.#ctor">
+      <summary>
+        <para>Create a TextGenerator.</para>
+      </summary>
+      <param name="initialCapacity"></param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.#ctor(System.Int32)">
+      <summary>
+        <para>Create a TextGenerator.</para>
+      </summary>
+      <param name="initialCapacity"></param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetCharacters(System.Collections.Generic.List`1&lt;UnityEngine.UICharInfo&gt;)">
+      <summary>
+        <para>Populate the given List with UICharInfo.</para>
+      </summary>
+      <param name="characters">List to populate.</param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetCharactersArray">
+      <summary>
+        <para>Returns the current UICharInfo.</para>
+      </summary>
+      <returns>
+        <para>Character information.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetLines(System.Collections.Generic.List`1&lt;UnityEngine.UILineInfo&gt;)">
+      <summary>
+        <para>Populate the given list with UILineInfo.</para>
+      </summary>
+      <param name="lines">List to populate.</param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetLinesArray">
+      <summary>
+        <para>Returns the current UILineInfo.</para>
+      </summary>
+      <returns>
+        <para>Line information.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetPreferredHeight(System.String,UnityEngine.TextGenerationSettings)">
+      <summary>
+        <para>Given a string and settings, returns the preferred height for a container that would hold this text.</para>
+      </summary>
+      <param name="str">Generation text.</param>
+      <param name="settings">Settings for generation.</param>
+      <returns>
+        <para>Preferred height.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetPreferredWidth(System.String,UnityEngine.TextGenerationSettings)">
+      <summary>
+        <para>Given a string and settings, returns the preferred width for a container that would hold this text.</para>
+      </summary>
+      <param name="str">Generation text.</param>
+      <param name="settings">Settings for generation.</param>
+      <returns>
+        <para>Preferred width.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetVertices(System.Collections.Generic.List`1&lt;UnityEngine.UIVertex&gt;)">
+      <summary>
+        <para>Populate the given list with generated Vertices.</para>
+      </summary>
+      <param name="vertices">List to populate.</param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.GetVerticesArray">
+      <summary>
+        <para>Returns the current UILineInfo.</para>
+      </summary>
+      <returns>
+        <para>Vertices.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.Invalidate">
+      <summary>
+        <para>Mark the text generator as invalid. This will force a full text generation the next time Populate is called.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.Populate(System.String,UnityEngine.TextGenerationSettings)">
+      <summary>
+        <para>Will generate the vertices and other data for the given string with the given settings.</para>
+      </summary>
+      <param name="str">String to generate.</param>
+      <param name="settings">Settings.</param>
+    </member>
+    <member name="M:UnityEngine.TextGenerator.PopulateWithErrors(System.String,UnityEngine.TextGenerationSettings,UnityEngine.GameObject)">
+      <summary>
+        <para>Will generate the vertices and other data for the given string with the given settings.</para>
+      </summary>
+      <param name="str">String to generate.</param>
+      <param name="settings">Generation settings.</param>
+      <param name="context">The object used as context of the error log message, if necessary.</param>
+      <returns>
+        <para>True if the generation is a success, false otherwise.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.TextMesh">
+      <summary>
+        <para>A script interface for the.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.alignment">
+      <summary>
+        <para>How lines of text are aligned (Left, Right, Center).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.anchor">
+      <summary>
+        <para>Which point of the text shares the position of the Transform.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.characterSize">
+      <summary>
+        <para>The size of each character (This scales the whole text).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.color">
+      <summary>
+        <para>The color used to render the text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.font">
+      <summary>
+        <para>The Font used.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.fontSize">
+      <summary>
+        <para>The font size to use (for dynamic fonts).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.fontStyle">
+      <summary>
+        <para>The font style to use (for dynamic fonts).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.lineSpacing">
+      <summary>
+        <para>How much space will be in-between lines of text.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.offsetZ">
+      <summary>
+        <para>How far should the text be offset from the transform.position.z when drawing.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.richText">
+      <summary>
+        <para>Enable HTML-style tags for Text Formatting Markup.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.tabSize">
+      <summary>
+        <para>How much space will be inserted for a tab '\t' character. This is a multiplum of the 'spacebar' character offset.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.TextMesh.text">
+      <summary>
+        <para>The text that is displayed.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.UICharInfo">
+      <summary>
+        <para>Class that specifies some information about a renderable character.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UICharInfo.charWidth">
+      <summary>
+        <para>Character width.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UICharInfo.cursorPos">
+      <summary>
+        <para>Position of the character cursor in local (text generated) space.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.UILineInfo">
+      <summary>
+        <para>Information about a generated line of text.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UILineInfo.height">
+      <summary>
+        <para>Height of the line.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UILineInfo.leading">
+      <summary>
+        <para>Space in pixels between this line and the next line.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UILineInfo.startCharIdx">
+      <summary>
+        <para>Index of the first character in the line.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UILineInfo.topY">
+      <summary>
+        <para>The upper Y position of the line in pixels. This is used for text annotation such as the caret and selection box in the InputField.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.UIVertex">
+      <summary>
+        <para>Vertex class used by a Canvas for managing vertices.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.color">
+      <summary>
+        <para>Vertex color.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.normal">
+      <summary>
+        <para>Normal.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.position">
+      <summary>
+        <para>Vertex position.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.simpleVert">
+      <summary>
+        <para>Simple UIVertex with sensible settings for use in the UI system.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.tangent">
+      <summary>
+        <para>Tangent.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.uv0">
+      <summary>
+        <para>The first texture coordinate set of the mesh. Used by UI elements by default.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.uv1">
+      <summary>
+        <para>The second texture coordinate set of the mesh, if present.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.uv2">
+      <summary>
+        <para>The Third texture coordinate set of the mesh, if present.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.UIVertex.uv3">
+      <summary>
+        <para>The forth texture coordinate set of the mesh, if present.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.VerticalWrapMode">
+      <summary>
+        <para>Wrapping modes for text that reaches the vertical boundary.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.VerticalWrapMode.Overflow">
+      <summary>
+        <para>Text well continue to generate when reaching vertical boundary.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.VerticalWrapMode.Truncate">
+      <summary>
+        <para>Text will be clipped when reaching the vertical boundary.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

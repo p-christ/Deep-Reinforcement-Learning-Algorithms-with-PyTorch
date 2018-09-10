@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.UIModule</name>
+    </assembly>
+    <member name="T:UnityEngine.AdditionalCanvasShaderChannels">
+      <summary>
+        <para>Enum mask of possible shader channel properties that can also be included when the Canvas mesh is created.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.None">
+      <summary>
+        <para>No additional shader parameters are needed.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.Normal">
+      <summary>
+        <para>Include the normals on the mesh vertices.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.Tangent">
+      <summary>
+        <para>Include the Tangent on the mesh vertices.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.TexCoord1">
+      <summary>
+        <para>Include UV1 on the mesh vertices.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.TexCoord2">
+      <summary>
+        <para>Include UV2 on the mesh vertices.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.AdditionalCanvasShaderChannels.TexCoord3">
+      <summary>
+        <para>Include UV3 on the mesh vertices.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Canvas">
+      <summary>
+        <para>Element that can be used for screen rendering.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.additionalShaderChannels">
+      <summary>
+        <para>Get or set the mask of additional shader channels to be used when creating the Canvas mesh.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.cachedSortingLayerValue">
+      <summary>
+        <para>Cached calculated value based upon SortingLayerID.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.isRootCanvas">
+      <summary>
+        <para>Is this the root Canvas?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.normalizedSortingGridSize">
+      <summary>
+        <para>The normalized grid size that the canvas will split the renderable area into.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.overridePixelPerfect">
+      <summary>
+        <para>Allows for nested canvases to override pixelPerfect settings inherited from parent canvases.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.overrideSorting">
+      <summary>
+        <para>Override the sorting of canvas.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.pixelPerfect">
+      <summary>
+        <para>Force elements in the canvas to be aligned with pixels. Only applies with renderMode is Screen Space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.pixelRect">
+      <summary>
+        <para>Get the render rect for the Canvas.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.planeDistance">
+      <summary>
+        <para>How far away from the camera is the Canvas generated.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.referencePixelsPerUnit">
+      <summary>
+        <para>The number of pixels per unit that is considered the default.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.renderMode">
+      <summary>
+        <para>Is the Canvas in World or Overlay mode?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.renderOrder">
+      <summary>
+        <para>The render order in which the canvas is being emitted to the scene.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.rootCanvas">
+      <summary>
+        <para>Returns the Canvas closest to root, by checking through each parent and returning the last canvas found. If no other canvas is found then the canvas will return itself.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.scaleFactor">
+      <summary>
+        <para>Used to scale the entire canvas, while still making it fit the screen. Only applies with renderMode is Screen Space.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.sortingGridNormalizedSize">
+      <summary>
+        <para>The normalized grid size that the canvas will split the renderable area into.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.sortingLayerID">
+      <summary>
+        <para>Unique ID of the Canvas' sorting layer.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.sortingLayerName">
+      <summary>
+        <para>Name of the Canvas' sorting layer.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.sortingOrder">
+      <summary>
+        <para>Canvas' order within a sorting layer.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.Canvas.targetDisplay">
+      <summary>
+        <para>For Overlay mode, display index on which the UI canvas will appear.</para>
+      </summary>
+    </member>
+    <member name="?:UnityEngine.Canvas.willRenderCanvases(UnityEngine.Canvas/WillRenderCanvases)">
+      <summary>
+        <para>Event that is called just before Canvas rendering happens.</para>
+      </summary>
+      <param name="value"></param>
+    </member>
+    <member name="P:UnityEngine.Canvas.worldCamera">
+      <summary>
+        <para>Camera used for sizing the Canvas when in Screen Space - Camera. Also used as the Camera that events will be sent through for a World Space [[Canvas].</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Canvas.ForceUpdateCanvases">
+      <summary>
+        <para>Force all canvases to update their content.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Canvas.GetDefaultCanvasMaterial">
+      <summary>
+        <para>Returns the default material that can be used for rendering normal elements on the Canvas.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Canvas.GetDefaultCanvasTextMaterial">
+      <summary>
+        <para>Returns the default material that can be used for rendering text elements on the Canvas.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Canvas.GetETC1SupportedCanvasMaterial">
+      <summary>
+        <para>Gets or generates the ETC1 Material.</para>
+      </summary>
+      <returns>
+        <para>The generated ETC1 Material from the Canvas.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.CanvasGroup">
+      <summary>
+        <para>A Canvas placable element that can be used to modify children Alpha, Raycasting, Enabled state.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasGroup.alpha">
+      <summary>
+        <para>Set the alpha of the group.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasGroup.blocksRaycasts">
+      <summary>
+        <para>Does this group block raycasting (allow collision).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasGroup.ignoreParentGroups">
+      <summary>
+        <para>Should the group ignore parent groups?</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasGroup.interactable">
+      <summary>
+        <para>Is the group interactable (are the elements beneath the group enabled).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasGroup.IsRaycastLocationValid(UnityEngine.Vector2,UnityEngine.Camera)">
+      <summary>
+        <para>Returns true if the Group allows raycasts.</para>
+      </summary>
+      <param name="sp"></param>
+      <param name="eventCamera"></param>
+    </member>
+    <member name="T:UnityEngine.CanvasRenderer">
+      <summary>
+        <para>A component that will render to the screen after all normal rendering has completed when attached to a Canvas. Designed for GUI application.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.absoluteDepth">
+      <summary>
+        <para>Depth of the renderer relative to the root canvas.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.cull">
+      <summary>
+        <para>Indicates whether geometry emitted by this renderer is ignored.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.hasMoved">
+      <summary>
+        <para>True if any change has occured that would invalidate the positions of generated geometry.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.hasPopInstruction">
+      <summary>
+        <para>Enable 'render stack' pop draw call.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.hasRectClipping">
+      <summary>
+        <para>True if rect clipping has been enabled on this renderer.
+See Also: CanvasRenderer.EnableRectClipping, CanvasRenderer.DisableRectClipping.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.isMask">
+      <summary>
+        <para>Is the UIRenderer a mask component.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.materialCount">
+      <summary>
+        <para>The number of materials usable by this renderer.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.popMaterialCount">
+      <summary>
+        <para>The number of materials usable by this renderer. Used internally for masking.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.CanvasRenderer.relativeDepth">
+      <summary>
+        <para>Depth of the renderer realative to the parent canvas.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.AddUIVertexStream(System.Collections.Generic.List`1&lt;UnityEngine.UIVertex&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Color32&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector4&gt;)">
+      <summary>
+        <para>Take the Vertex steam and split it corrisponding arrays (positions, colors, uv0s, uv1s, normals and tangents).</para>
+      </summary>
+      <param name="verts">The UIVertex list to split.</param>
+      <param name="positions">The destination list for the verts positions.</param>
+      <param name="colors">The destination list for the verts colors.</param>
+      <param name="uv0S">The destination list for the verts uv0s.</param>
+      <param name="uv1S">The destination list for the verts uv1s.</param>
+      <param name="normals">The destination list for the verts normals.</param>
+      <param name="tangents">The destination list for the verts tangents.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.Clear">
+      <summary>
+        <para>Remove all cached vertices.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.CreateUIVertexStream(System.Collections.Generic.List`1&lt;UnityEngine.UIVertex&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Color32&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector4&gt;,System.Collections.Generic.List`1&lt;System.Int32&gt;)">
+      <summary>
+        <para>Convert a set of vertex components into a stream of UIVertex.</para>
+      </summary>
+      <param name="verts"></param>
+      <param name="positions"></param>
+      <param name="colors"></param>
+      <param name="uv0S"></param>
+      <param name="uv1S"></param>
+      <param name="normals"></param>
+      <param name="tangents"></param>
+      <param name="indices"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.DisableRectClipping">
+      <summary>
+        <para>Disables rectangle clipping for this CanvasRenderer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.EnableRectClipping(UnityEngine.Rect)">
+      <summary>
+        <para>Enables rect clipping on the CanvasRendered. Geometry outside of the specified rect will be clipped (not rendered).</para>
+      </summary>
+      <param name="rect"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.GetAlpha">
+      <summary>
+        <para>Get the current alpha of the renderer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.GetColor">
+      <summary>
+        <para>Get the current color of the renderer.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.GetMaterial(System.Int32)">
+      <summary>
+        <para>Gets the current Material assigned to the CanvasRenderer.</para>
+      </summary>
+      <param name="index">The material index to retrieve (0 if this parameter is omitted).</param>
+      <returns>
+        <para>Result.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.GetMaterial">
+      <summary>
+        <para>Gets the current Material assigned to the CanvasRenderer.</para>
+      </summary>
+      <param name="index">The material index to retrieve (0 if this parameter is omitted).</param>
+      <returns>
+        <para>Result.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.GetPopMaterial(System.Int32)">
+      <summary>
+        <para>Gets the current Material assigned to the CanvasRenderer. Used internally for masking.</para>
+      </summary>
+      <param name="index"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetAlpha(System.Single)">
+      <summary>
+        <para>Set the alpha of the renderer. Will be multiplied with the UIVertex alpha and the Canvas alpha.</para>
+      </summary>
+      <param name="alpha">Alpha.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetAlphaTexture(UnityEngine.Texture)">
+      <summary>
+        <para>The Alpha Texture that will be passed to the Shader under the _AlphaTex property.</para>
+      </summary>
+      <param name="texture">The Texture to be passed.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetColor(UnityEngine.Color)">
+      <summary>
+        <para>Set the color of the renderer. Will be multiplied with the UIVertex color and the Canvas color.</para>
+      </summary>
+      <param name="color">Renderer multiply color.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetMaterial(UnityEngine.Material,System.Int32)">
+      <summary>
+        <para>Set the material for the canvas renderer. If a texture is specified then it will be used as the 'MainTex' instead of the material's 'MainTex'.
+See Also: CanvasRenderer.SetMaterialCount, CanvasRenderer.SetTexture.</para>
+      </summary>
+      <param name="material">Material for rendering.</param>
+      <param name="texture">Material texture overide.</param>
+      <param name="index">Material index.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetMaterial(UnityEngine.Material,UnityEngine.Texture)">
+      <summary>
+        <para>Set the material for the canvas renderer. If a texture is specified then it will be used as the 'MainTex' instead of the material's 'MainTex'.
+See Also: CanvasRenderer.SetMaterialCount, CanvasRenderer.SetTexture.</para>
+      </summary>
+      <param name="material">Material for rendering.</param>
+      <param name="texture">Material texture overide.</param>
+      <param name="index">Material index.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetMesh(UnityEngine.Mesh)">
+      <summary>
+        <para>Sets the Mesh used by this renderer.</para>
+      </summary>
+      <param name="mesh"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetPopMaterial(UnityEngine.Material,System.Int32)">
+      <summary>
+        <para>Set the material for the canvas renderer. Used internally for masking.</para>
+      </summary>
+      <param name="material"></param>
+      <param name="index"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetTexture(UnityEngine.Texture)">
+      <summary>
+        <para>Sets the texture used by this renderer's material.</para>
+      </summary>
+      <param name="texture"></param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetVertices(System.Collections.Generic.List`1&lt;UnityEngine.UIVertex&gt;)">
+      <summary>
+        <para>Set the vertices for the UIRenderer.</para>
+      </summary>
+      <param name="vertices">Array of vertices to set.</param>
+      <param name="size">Number of vertices to set.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SetVertices(UnityEngine.UIVertex[],System.Int32)">
+      <summary>
+        <para>Set the vertices for the UIRenderer.</para>
+      </summary>
+      <param name="vertices">Array of vertices to set.</param>
+      <param name="size">Number of vertices to set.</param>
+    </member>
+    <member name="M:UnityEngine.CanvasRenderer.SplitUIVertexStreams(System.Collections.Generic.List`1&lt;UnityEngine.UIVertex&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Color32&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector2&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector3&gt;,System.Collections.Generic.List`1&lt;UnityEngine.Vector4&gt;,System.Collections.Generic.List`1&lt;System.Int32&gt;)">
+      <summary>
+        <para>Given a list of UIVertex, split the stream into it's component types.</para>
+      </summary>
+      <param name="verts"></param>
+      <param name="positions"></param>
+      <param name="colors"></param>
+      <param name="uv0S"></param>
+      <param name="uv1S"></param>
+      <param name="normals"></param>
+      <param name="tangents"></param>
+      <param name="indices"></param>
+    </member>
+    <member name="?:UnityEngine.ICanvasRaycastFilter">
+      <summary>
+        <para>This element can filter raycasts. If the top level element is hit it can further 'check' if the location is valid.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.ICanvasRaycastFilter.IsRaycastLocationValid(UnityEngine.Vector2,UnityEngine.Camera)">
+      <summary>
+        <para>Given a point and a camera is the raycast valid.</para>
+      </summary>
+      <param name="sp">Screen position.</param>
+      <param name="eventCamera">Raycast camera.</param>
+      <returns>
+        <para>Valid.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.RectTransformUtility">
+      <summary>
+        <para>Utility class containing helper methods for working with  RectTransform.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.FlipLayoutAxes(UnityEngine.RectTransform,System.Boolean,System.Boolean)">
+      <summary>
+        <para>Flips the horizontal and vertical axes of the RectTransform size and alignment, and optionally its children as well.</para>
+      </summary>
+      <param name="rect">The RectTransform to flip.</param>
+      <param name="keepPositioning">Flips around the pivot if true. Flips within the parent rect if false.</param>
+      <param name="recursive">Flip the children as well?</param>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.FlipLayoutOnAxis(UnityEngine.RectTransform,System.Int32,System.Boolean,System.Boolean)">
+      <summary>
+        <para>Flips the alignment of the RectTransform along the horizontal or vertical axis, and optionally its children as well.</para>
+      </summary>
+      <param name="rect">The RectTransform to flip.</param>
+      <param name="keepPositioning">Flips around the pivot if true. Flips within the parent rect if false.</param>
+      <param name="recursive">Flip the children as well?</param>
+      <param name="axis">The axis to flip along. 0 is horizontal and 1 is vertical.</param>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.PixelAdjustPoint(UnityEngine.Vector2,UnityEngine.Transform,UnityEngine.Canvas)">
+      <summary>
+        <para>Convert a given point in screen space into a pixel correct point.</para>
+      </summary>
+      <param name="point"></param>
+      <param name="elementTransform"></param>
+      <param name="canvas"></param>
+      <returns>
+        <para>Pixel adjusted point.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.PixelAdjustRect(UnityEngine.RectTransform,UnityEngine.Canvas)">
+      <summary>
+        <para>Given a rect transform, return the corner points in pixel accurate coordinates.</para>
+      </summary>
+      <param name="rectTransform"></param>
+      <param name="canvas"></param>
+      <returns>
+        <para>Pixel adjusted rect.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.RectangleContainsScreenPoint(UnityEngine.RectTransform,UnityEngine.Vector2,UnityEngine.Camera)">
+      <summary>
+        <para>Does the RectTransform contain the screen point as seen from the given camera?</para>
+      </summary>
+      <param name="rect">The RectTransform to test with.</param>
+      <param name="screenPoint">The screen point to test.</param>
+      <param name="cam">The camera from which the test is performed from. (Optional)</param>
+      <returns>
+        <para>True if the point is inside the rectangle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.ScreenPointToLocalPointInRectangle(UnityEngine.RectTransform,UnityEngine.Vector2,UnityEngine.Camera,UnityEngine.Vector2&amp;)">
+      <summary>
+        <para>Transform a screen space point to a position in the local space of a RectTransform that is on the plane of its rectangle.</para>
+      </summary>
+      <param name="rect">The RectTransform to find a point inside.</param>
+      <param name="cam">The camera associated with the screen space position.</param>
+      <param name="screenPoint">Screen space position.</param>
+      <param name="localPoint">Point in local space of the rect transform.</param>
+      <returns>
+        <para>Returns true if the plane of the RectTransform is hit, regardless of whether the point is inside the rectangle.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.RectTransformUtility.ScreenPointToWorldPointInRectangle(UnityEngine.RectTransform,UnityEngine.Vector2,UnityEngine.Camera,UnityEngine.Vector3&amp;)">
+      <summary>
+        <para>Transform a screen space point to a position in world space that is on the plane of the given RectTransform.</para>
+      </summary>
+      <param name="rect">The RectTransform to find a point inside.</param>
+      <param name="cam">The camera associated with the screen space position.</param>
+      <param name="screenPoint">Screen space position.</param>
+      <param name="worldPoint">Point in world space.</param>
+      <returns>
+        <para>Returns true if the plane of the RectTransform is hit, regardless of whether the point is inside the rectangle.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.RenderMode">
+      <summary>
+        <para>RenderMode for the Canvas.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RenderMode.ScreenSpaceCamera">
+      <summary>
+        <para>Render using the Camera configured on the Canvas.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RenderMode.ScreenSpaceOverlay">
+      <summary>
+        <para>Render at the end of the scene using a 2D Canvas.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.RenderMode.WorldSpace">
+      <summary>
+        <para>Render using any Camera in the scene that can render the layer.</para>
+      </summary>
+    </member>
+  </members>
+</doc>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.ARModule</name>
+    </assembly>
+    <member name="T:UnityEngine.XR.ARBackgroundRenderer">
+      <summary>
+        <para>Class used to override a camera's default background rendering path to instead render a given Texture and/or Material. This will typically be used with images from the color camera for rendering the AR background on mobile devices.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.XR.ARBackgroundRenderer.backgroundMaterial">
+      <summary>
+        <para>The Material used for AR rendering.</para>
+      </summary>
+    </member>
+    <member name="?:UnityEngine.XR.ARBackgroundRenderer.backgroundRendererChanged(System.Action)">
+      <summary>
+        <para>Called when any of the public properties of this class have been changed.</para>
+      </summary>
+      <param name="value"></param>
+    </member>
+    <member name="P:UnityEngine.XR.ARBackgroundRenderer.backgroundTexture">
+      <summary>
+        <para>An optional Texture used for AR rendering. If this property is not set then the texture set in XR.ARBackgroundRenderer._backgroundMaterial as "_MainTex" is used.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.XR.ARBackgroundRenderer.camera">
+      <summary>
+        <para>An optional Camera whose background rendering will be overridden by this class. If this property is not set then the main Camera in the scene is used.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.XR.ARBackgroundRenderer.mode">
+      <summary>
+        <para>When set to XR.ARRenderMode.StandardBackground (default) the camera is not overridden to display the background image. Setting this property to XR.ARRenderMode.MaterialAsBackground will render the texture specified by XR.ARBackgroundRenderer._backgroundMaterial and or XR.ARBackgroundRenderer._backgroundTexture as the background.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.XR.ARBackgroundRenderer.DisableARBackgroundRendering">
+      <summary>
+        <para>Disables AR background rendering. This method is called internally but can be overridden by users who wish to subclass XR.ARBackgroundRenderer to customize handling of AR background rendering.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.XR.ARRenderMode">
+      <summary>
+        <para>Enumeration describing the AR rendering mode used with XR.ARBackgroundRenderer.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.ARRenderMode.MaterialAsBackground">
+      <summary>
+        <para>The material associated with XR.ARBackgroundRenderer is being rendered as the background.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.ARRenderMode.StandardBackground">
+      <summary>
+        <para>The standard background is rendered. (Skybox, Solid Color, etc.)</para>
+      </summary>
+    </member>
+  </members>
+</doc>

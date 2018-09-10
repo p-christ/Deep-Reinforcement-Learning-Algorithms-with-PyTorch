@@ -12,15 +12,15 @@ import numpy as np
 SEED = 100
 ROLLING_SCORE_LENGTH = 100
 AVERAGE_SCORE_REQUIRED = 195
-EPISODES_TO_RUN = 1000
+EPISODES_TO_RUN = 1500
 FILE_TO_SAVE_DATA_RESULTS = "Episode_results_by_agent.npy"
 
 hyperparameters = {
     "learning_rate": 0.0006,
     "batch_size": 64,
-    "buffer_size": 2000,
+    "buffer_size": 15000,
     "fc_units": [20, 10],
-    "epsilon": 0.5,
+    "epsilon": 0.2,
     "gamma":  0.99,
     "tau": 1e-3,
     "update_every_n_steps": 1,
@@ -35,9 +35,8 @@ results = {}
 agent_number = 1
 
 agents = [Hill_Climbing_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
-#
-ENVIRONMENT = Cart_Pole_Environment()
 
+ENVIRONMENT = Cart_Pole_Environment()
 
 for agent_class in agents:
 

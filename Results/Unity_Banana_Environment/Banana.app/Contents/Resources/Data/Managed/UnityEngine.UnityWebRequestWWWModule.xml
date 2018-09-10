@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.UnityWebRequestWWWModule</name>
+    </assembly>
+    <member name="T:UnityEngine.WWW">
+      <summary>
+        <para>Simple access to web pages.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.assetBundle">
+      <summary>
+        <para>Streams an AssetBundle that can contain any kind of asset from the project folder.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.audioClip">
+      <summary>
+        <para>Returns a AudioClip generated from the downloaded data (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.bytes">
+      <summary>
+        <para>Returns the contents of the fetched web page as a byte array (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.bytesDownloaded">
+      <summary>
+        <para>The number of bytes downloaded by this WWW query (read only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.error">
+      <summary>
+        <para>Returns an error message if there was an error during the download (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.isDone">
+      <summary>
+        <para>Is the download already finished? (Read Only)</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.movie">
+      <summary>
+        <para>Returns a MovieTexture generated from the downloaded data (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.progress">
+      <summary>
+        <para>How far has the download progressed (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.responseHeaders">
+      <summary>
+        <para>Dictionary of headers returned by the request.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.text">
+      <summary>
+        <para>Returns the contents of the fetched web page as a string (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.texture">
+      <summary>
+        <para>Returns a Texture2D generated from the downloaded data (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.textureNonReadable">
+      <summary>
+        <para>Returns a non-readable Texture2D generated from the downloaded data (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.threadPriority">
+      <summary>
+        <para>Obsolete, has no effect.</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.uploadProgress">
+      <summary>
+        <para>How far has the upload progressed (Read Only).</para>
+      </summary>
+    </member>
+    <member name="P:UnityEngine.WWW.url">
+      <summary>
+        <para>The URL of this WWW request (Read Only).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WWW.#ctor(System.String)">
+      <summary>
+        <para>Creates a WWW request with the given URL.</para>
+      </summary>
+      <param name="url">The url to download. Must be '%' escaped.</param>
+      <returns>
+        <para>A new WWW object. When it has been downloaded, the results can be fetched from the returned object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.#ctor(System.String,UnityEngine.WWWForm)">
+      <summary>
+        <para>Creates a WWW request with the given URL.</para>
+      </summary>
+      <param name="url">The url to download. Must be '%' escaped.</param>
+      <param name="form">A WWWForm instance containing the form data to post.</param>
+      <returns>
+        <para>A new WWW object. When it has been downloaded, the results can be fetched from the returned object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.#ctor(System.String,System.Byte[])">
+      <summary>
+        <para>Creates a WWW request with the given URL.</para>
+      </summary>
+      <param name="url">The url to download. Must be '%' escaped.</param>
+      <param name="postData">A byte array of data to be posted to the url.</param>
+      <returns>
+        <para>A new WWW object. When it has been downloaded, the results can be fetched from the returned object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.#ctor(System.String,System.Byte[],System.Collections.Hashtable)">
+      <summary>
+        <para>Creates a WWW request with the given URL.</para>
+      </summary>
+      <param name="url">The url to download. Must be '%' escaped.</param>
+      <param name="postData">A byte array of data to be posted to the url.</param>
+      <param name="headers">A hash table of custom headers to send with the request.</param>
+      <returns>
+        <para>A new WWW object. When it has been downloaded, the results can be fetched from the returned object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.#ctor(System.String,System.Byte[],System.Collections.Generic.Dictionary`2&lt;System.String,System.String&gt;)">
+      <summary>
+        <para>Creates a WWW request with the given URL.</para>
+      </summary>
+      <param name="url">The url to download. Must be '%' escaped.</param>
+      <param name="postData">A byte array of data to be posted to the url.</param>
+      <param name="headers">A dictionary that contains the header keys and values to pass to the server.</param>
+      <returns>
+        <para>A new WWW object. When it has been downloaded, the results can be fetched from the returned object.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.Dispose">
+      <summary>
+        <para>Disposes of an existing WWW object.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WWW.EscapeURL(System.String)">
+      <summary>
+        <para>Escapes characters in a string to ensure they are URL-friendly.</para>
+      </summary>
+      <param name="s">A string with characters to be escaped.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.WWW.EscapeURL(System.String,System.Text.Encoding)">
+      <summary>
+        <para>Escapes characters in a string to ensure they are URL-friendly.</para>
+      </summary>
+      <param name="s">A string with characters to be escaped.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClip(System.Boolean)">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip
+the .audioClip property defaults to 3D.</param>
+      <param name="stream">Sets whether the clip should be completely downloaded before it's ready to play (false) or the stream can be played even if only part of the clip is downloaded (true).
+The latter will disable seeking on the clip (with .time and/or .timeSamples).</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClip(System.Boolean,System.Boolean)">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip
+the .audioClip property defaults to 3D.</param>
+      <param name="stream">Sets whether the clip should be completely downloaded before it's ready to play (false) or the stream can be played even if only part of the clip is downloaded (true).
+The latter will disable seeking on the clip (with .time and/or .timeSamples).</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClip(System.Boolean,System.Boolean,UnityEngine.AudioType)">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip
+the .audioClip property defaults to 3D.</param>
+      <param name="stream">Sets whether the clip should be completely downloaded before it's ready to play (false) or the stream can be played even if only part of the clip is downloaded (true).
+The latter will disable seeking on the clip (with .time and/or .timeSamples).</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClipCompressed">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data that is compressed in memory (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip.</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClipCompressed(System.Boolean)">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data that is compressed in memory (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip.</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetAudioClipCompressed(System.Boolean,UnityEngine.AudioType)">
+      <summary>
+        <para>Returns an AudioClip generated from the downloaded data that is compressed in memory (Read Only).</para>
+      </summary>
+      <param name="threeD">Use this to specify whether the clip should be a 2D or 3D clip.</param>
+      <param name="audioType">The AudioType of the content your downloading. If this is not set Unity will try to determine the type from URL.</param>
+      <returns>
+        <para>The returned AudioClip.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.GetMovieTexture">
+      <summary>
+        <para>Returns a MovieTexture generated from the downloaded data (Read Only).</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.WWW.LoadFromCacheOrDownload(System.String,System.Int32)">
+      <summary>
+        <para>Loads an AssetBundle with the specified version number from the cache. If the AssetBundle is not currently cached, it will automatically be downloaded and stored in the cache for future retrieval from local storage.</para>
+      </summary>
+      <param name="url">The URL to download the AssetBundle from, if it is not present in the cache. Must be '%' escaped.</param>
+      <param name="version">Version of the AssetBundle. The file will only be loaded from the disk cache if it has previously been downloaded with the same version parameter. By incrementing the version number requested by your application, you can force Caching to download a new copy of the AssetBundle from url.</param>
+      <param name="hash">Hash128 which is used as the version of the AssetBundle.</param>
+      <param name="cachedBundle">A structure used to download a given version of AssetBundle to a customized cache path.
+
+Analogous to the cachedAssetBundle parameter for UnityWebRequest.GetAssetBundle.&lt;/param&gt;</param>
+      <param name="crc">An optional CRC-32 Checksum of the uncompressed contents. If this is non-zero, then the content will be compared against the checksum before loading it, and give an error if it does not match. You can use this to avoid data corruption from bad downloads or users tampering with the cached files on disk. If the CRC does not match, Unity will try to redownload the data, and if the CRC on the server does not match it will fail with an error. Look at the error string returned to see the correct CRC value to use for an AssetBundle.</param>
+      <returns>
+        <para>A WWW instance, which can be used to access the data once the load/download operation is completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.LoadFromCacheOrDownload(System.String,System.Int32,System.UInt32)">
+      <summary>
+        <para>Loads an AssetBundle with the specified version number from the cache. If the AssetBundle is not currently cached, it will automatically be downloaded and stored in the cache for future retrieval from local storage.</para>
+      </summary>
+      <param name="url">The URL to download the AssetBundle from, if it is not present in the cache. Must be '%' escaped.</param>
+      <param name="version">Version of the AssetBundle. The file will only be loaded from the disk cache if it has previously been downloaded with the same version parameter. By incrementing the version number requested by your application, you can force Caching to download a new copy of the AssetBundle from url.</param>
+      <param name="hash">Hash128 which is used as the version of the AssetBundle.</param>
+      <param name="cachedBundle">A structure used to download a given version of AssetBundle to a customized cache path.
+
+Analogous to the cachedAssetBundle parameter for UnityWebRequest.GetAssetBundle.&lt;/param&gt;</param>
+      <param name="crc">An optional CRC-32 Checksum of the uncompressed contents. If this is non-zero, then the content will be compared against the checksum before loading it, and give an error if it does not match. You can use this to avoid data corruption from bad downloads or users tampering with the cached files on disk. If the CRC does not match, Unity will try to redownload the data, and if the CRC on the server does not match it will fail with an error. Look at the error string returned to see the correct CRC value to use for an AssetBundle.</param>
+      <returns>
+        <para>A WWW instance, which can be used to access the data once the load/download operation is completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.LoadFromCacheOrDownload(System.String,UnityEngine.Hash128,System.UInt32)">
+      <summary>
+        <para>Loads an AssetBundle with the specified version number from the cache. If the AssetBundle is not currently cached, it will automatically be downloaded and stored in the cache for future retrieval from local storage.</para>
+      </summary>
+      <param name="url">The URL to download the AssetBundle from, if it is not present in the cache. Must be '%' escaped.</param>
+      <param name="version">Version of the AssetBundle. The file will only be loaded from the disk cache if it has previously been downloaded with the same version parameter. By incrementing the version number requested by your application, you can force Caching to download a new copy of the AssetBundle from url.</param>
+      <param name="hash">Hash128 which is used as the version of the AssetBundle.</param>
+      <param name="cachedBundle">A structure used to download a given version of AssetBundle to a customized cache path.
+
+Analogous to the cachedAssetBundle parameter for UnityWebRequest.GetAssetBundle.&lt;/param&gt;</param>
+      <param name="crc">An optional CRC-32 Checksum of the uncompressed contents. If this is non-zero, then the content will be compared against the checksum before loading it, and give an error if it does not match. You can use this to avoid data corruption from bad downloads or users tampering with the cached files on disk. If the CRC does not match, Unity will try to redownload the data, and if the CRC on the server does not match it will fail with an error. Look at the error string returned to see the correct CRC value to use for an AssetBundle.</param>
+      <returns>
+        <para>A WWW instance, which can be used to access the data once the load/download operation is completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.LoadFromCacheOrDownload(System.String,UnityEngine.CachedAssetBundle,System.UInt32)">
+      <summary>
+        <para>Loads an AssetBundle with the specified version number from the cache. If the AssetBundle is not currently cached, it will automatically be downloaded and stored in the cache for future retrieval from local storage.</para>
+      </summary>
+      <param name="url">The URL to download the AssetBundle from, if it is not present in the cache. Must be '%' escaped.</param>
+      <param name="version">Version of the AssetBundle. The file will only be loaded from the disk cache if it has previously been downloaded with the same version parameter. By incrementing the version number requested by your application, you can force Caching to download a new copy of the AssetBundle from url.</param>
+      <param name="hash">Hash128 which is used as the version of the AssetBundle.</param>
+      <param name="cachedBundle">A structure used to download a given version of AssetBundle to a customized cache path.
+
+Analogous to the cachedAssetBundle parameter for UnityWebRequest.GetAssetBundle.&lt;/param&gt;</param>
+      <param name="crc">An optional CRC-32 Checksum of the uncompressed contents. If this is non-zero, then the content will be compared against the checksum before loading it, and give an error if it does not match. You can use this to avoid data corruption from bad downloads or users tampering with the cached files on disk. If the CRC does not match, Unity will try to redownload the data, and if the CRC on the server does not match it will fail with an error. Look at the error string returned to see the correct CRC value to use for an AssetBundle.</param>
+      <returns>
+        <para>A WWW instance, which can be used to access the data once the load/download operation is completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.WWW.LoadImageIntoTexture(UnityEngine.Texture2D)">
+      <summary>
+        <para>Replaces the contents of an existing Texture2D with an image from the downloaded data.</para>
+      </summary>
+      <param name="tex">An existing texture object to be overwritten with the image data.</param>
+      <param name="texture"></param>
+    </member>
+    <member name="M:UnityEngine.WWW.UnEscapeURL(System.String)">
+      <summary>
+        <para>Converts URL-friendly escape sequences back to normal text.</para>
+      </summary>
+      <param name="s">A string containing escaped characters.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+    <member name="M:UnityEngine.WWW.UnEscapeURL(System.String,System.Text.Encoding)">
+      <summary>
+        <para>Converts URL-friendly escape sequences back to normal text.</para>
+      </summary>
+      <param name="s">A string containing escaped characters.</param>
+      <param name="e">The text encoding to use.</param>
+    </member>
+  </members>
+</doc>
