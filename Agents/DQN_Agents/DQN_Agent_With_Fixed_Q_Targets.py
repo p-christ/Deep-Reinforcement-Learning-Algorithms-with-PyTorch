@@ -1,4 +1,4 @@
-from Networks.NN import NN
+from Networks.Vanilla_NN import Vanilla_NN
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 from Utilities import override
@@ -19,7 +19,7 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
 
-        self.qnetwork_target = NN(self.state_size, self.action_size, seed, hyperparameters).get_model()
+        self.qnetwork_target = Vanilla_NN(self.state_size, self.action_size, seed, hyperparameters).get_model().to(self.device)
             # .to(self.device )
             # to(self.device)
 

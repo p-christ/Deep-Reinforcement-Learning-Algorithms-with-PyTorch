@@ -1,7 +1,7 @@
 
 from Agents.Base_Agent import Base_Agent
 from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
-from Networks.NN import NN
+from Networks.Vanilla_NN import Vanilla_NN
 from Utilities import override
 import torch
 import torch.nn as nn
@@ -22,9 +22,7 @@ class DQN_Agent(Base_Agent):
         
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        self.qnetwork_local = NN(self.state_size, self.action_size, seed, hyperparameters).get_model()
-
-            # .to(self.device)
+        self.qnetwork_local = Vanilla_NN(self.state_size, self.action_size, seed, hyperparameters).get_model().to(self.device)
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 

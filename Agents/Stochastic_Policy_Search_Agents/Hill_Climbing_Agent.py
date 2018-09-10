@@ -4,7 +4,7 @@ import torch
 
 from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
-from NN import NN
+from Vanilla_NN import Vanilla_NN
 import numpy as np
 
 

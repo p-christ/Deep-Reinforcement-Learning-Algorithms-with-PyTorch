@@ -3,19 +3,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-# class NN(nn.Module):
-#
-class NN:
+class Vanilla_NN:
     
     def __init__(self, state_size, action_size, seed, hyperparameters):
-        # nn.Module.__init__(self)
-        # self.seed = torch.manual_seed(seed)
-        # self.fc1 = nn.Linear(state_size, hyperparameters['fc_units'][0])
-        # self.fc2 = nn.Linear(hyperparameters['fc_units'][0], hyperparameters['fc_units'][1])
-        # self.fc3 = nn.Linear(hyperparameters['fc_units'][1], action_size)
-
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
+        self.seed = torch.manual_seed(seed)
 
         self.state_size = state_size
         self.action_size = action_size
@@ -23,17 +14,7 @@ class NN:
 
         self.model_layers = self.create_model_layers()
 
-        # details = [torch.nn.Linear(state_size, hyperparameters['fc_units'][0]),
-        #                     torch.nn.ReLU(),
-        #                     torch.nn.Linear(hyperparameters['fc_units'][0], hyperparameters['fc_units'][1]),
-        #                     torch.nn.ReLU(),
-        #                     torch.nn.Linear(hyperparameters['fc_units'][1], action_size)]
-
-        self.model = torch.nn.Sequential(*self.model_layers).to(self.device)
-
-    def get_model(self):
-        return self.model
-
+        self.model = torch.nn.Sequential(*self.model_layers)
 
     def create_model_layers(self):
 
@@ -46,8 +27,8 @@ class NN:
             output_dim = int(self.hyperparameters['nn_start_units'] * self.hyperparameters['nn_unit_decay'] ** layer_num)
 
             layer = torch.nn.Linear(input_dim, output_dim)
-            model_layers.append(layer)
-            model_layers.append(torch.nn.ReLU())
+
+            model_layers = self.add_layer_and_relu(layer, model_layers)
 
             input_dim = output_dim
 
@@ -58,7 +39,15 @@ class NN:
 
         return model_layers
 
+    def add_layer_and_relu(self, layer, model_layers):
+        model_layers.append(layer)
+        model_layers.append(torch.nn.ReLU())
+        return model_layers
 
+
+
+    def get_model(self):
+        return self.model
 
 
     def forward(self, state):
