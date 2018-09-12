@@ -60,4 +60,4 @@ class Cart_Pole_Environment(Base_Environment):
             if done:
                 break
 
-        env.close() # Not sure when i nee
+        env.close() 

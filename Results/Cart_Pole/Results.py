@@ -14,7 +14,7 @@ ROLLING_SCORE_LENGTH = 100
 AVERAGE_SCORE_REQUIRED = 195
 EPISODES_TO_RUN = 1500
 FILE_TO_SAVE_DATA_RESULTS = "Episode_results_by_agent.npy"
-RUNS_PER_AGENT = 10
+RUNS_PER_AGENT = 1
 
 hyperparameters = {
     "learning_rate": 0.0006,
@@ -38,7 +38,7 @@ results = {}
 agent_number = 1
 
 agents = [Hill_Climbing_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
-agents = [Hill_Climbing_Agent]
+# agents = [Hill_Climbing_Agent]
 
 ENVIRONMENT = Cart_Pole_Environment()
 

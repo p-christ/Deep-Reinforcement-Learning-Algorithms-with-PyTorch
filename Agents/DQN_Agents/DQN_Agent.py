@@ -2,7 +2,6 @@
 from Agents.Base_Agent import Base_Agent
 from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
 from Networks.NN_Creators import create_vanilla_NN
-from Utilities import override
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -19,7 +18,10 @@ class DQN_Agent(Base_Agent):
         Base_Agent.__init__(self, environment=environment, 
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
-        
+
+        self.memory = Replay_Buffer(self.hyperparameters["buffer_size"],
+                                    self.hyperparameters["batch_size"], seed)
+
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         self.qnetwork_local = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
@@ -28,7 +30,10 @@ class DQN_Agent(Base_Agent):
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
-#     @override
+    def pick_and_conduct_action(self):
+        self.action = self.pick_action()
+        self.conduct_action()
+
     def pick_action(self):
         
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device) #gets state in format ready for network
@@ -50,8 +55,7 @@ class DQN_Agent(Base_Agent):
             return np.argmax(action_values.cpu().data.numpy())
         return random.choice(np.arange(self.action_size))
     
-#     @override
-    def learn(self):        
+    def learn(self):
         if self.time_to_learn():
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
             loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
@@ -90,8 +94,26 @@ class DQN_Agent(Base_Agent):
         self.optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
         self.optimizer.step() #this applies the gradients
+
+    def save_experience(self):
+        self.memory.add(self.state, self.action, self.reward, self.next_state, self.done)
         
-    def save_model(self):
+    def locally_save_policy(self):
         torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
     
             
+    def time_to_learn(self):
+        return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
+
+    def right_amount_of_steps_taken(self):
+        return self.step_number % self.hyperparameters["update_every_n_steps"] == 0
+
+    def enough_experiences_to_learn_from(self):
+        return len(self.memory) > self.hyperparameters["batch_size"]
+
+    def sample_experiences(self):
+        experiences = self.memory.sample()
+        states, actions, rewards, next_states, dones = experiences
+        return states, actions, rewards, next_states, dones
+
+

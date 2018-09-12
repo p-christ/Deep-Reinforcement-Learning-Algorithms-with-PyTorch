@@ -1,13 +1,11 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from abc import ABCMeta
 
 
-def override(parent_class):
-    def overrider(method):
-        assert method.__name__ in dir(parent_class), "You aren't overriding anything"
-        return method
-    return overrider
+def abstract(cls):
+    return ABCMeta(cls.__name__, cls.__bases__, dict(cls.__dict__))
 
 def print_two_lines():
     print("-----------------------------------------------------------------------------------")
