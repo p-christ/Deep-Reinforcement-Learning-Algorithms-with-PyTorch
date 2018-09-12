@@ -1,5 +1,7 @@
 from Environments.Base_Environment import Base_Environment
 import gym
+from pyvirtualdisplay import Display
+import matplotlib.pyplot as plt
 
 class Cart_Pole_Environment(Base_Environment):
 
@@ -38,3 +40,24 @@ class Cart_Pole_Environment(Base_Environment):
 
     def reset_environment(self):
         self.state = self.game_environment.reset()
+
+    def visualise_agent(self, policy):
+
+        env = gym.make('CartPole-v0')
+
+        display = Display(visible=0, size=(1400, 900))
+        display.start()
+
+        state = env.reset()
+        img = plt.imshow(env.render(mode='rgb_array'))
+        for t in range(1000):
+            action, _ = policy.act(state)
+            img.set_data(env.render(mode='rgb_array'))
+            plt.axis('off')
+            display.display(env.gcf())
+            display.clear_output(wait=True)
+            state, reward, done, _ = env.step(action)
+            if done:
+                break
+
+        env.close() # Not sure when i nee

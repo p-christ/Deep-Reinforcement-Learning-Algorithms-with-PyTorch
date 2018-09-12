@@ -105,14 +105,16 @@ class Hill_Climbing_Agent(Base_Agent):
     #
     def learn(self):
 
+        raw_noise = (2.0*(np.random.rand(*self.policy.weights.shape) - 0.5))
+
         if self.done:
 
             if self.episode_reward >= self.best_episode_score_seen:
 
                 self.best_episode_score_seen = self.episode_reward
                 self.best_weights_seen = self.policy.weights
-                noise_scale = max(1e-3, self.noise_scale / 2)
-                self.policy.weights += noise_scale * np.random.rand(*self.policy.weights.shape)
+                noise_scale = max(1e-3, self.noise_scale / 2.0)
+                self.policy.weights += noise_scale * raw_noise
 
                 #
                 # self.last_round_found_better_weights = True
@@ -122,8 +124,8 @@ class Hill_Climbing_Agent(Base_Agent):
                 # print("Old network better: {} vs. {}".format(self.episode_reward, self.last_episode_reward))
                 # self.last_round_found_better_weights = False
 
-                noise_scale = min(2, self.noise_scale * 2)
-                self.policy.weights = self.best_weights_seen + noise_scale * np.random.rand(*self.policy.weights.shape)
+                noise_scale = min(2.0, self.noise_scale * 2.0)
+                self.policy.weights = self.best_weights_seen + noise_scale * raw_noise
     #
             # self.previous_policy.weights = self.best_weights_seen
             # self.last_round_found_better_weights = True
