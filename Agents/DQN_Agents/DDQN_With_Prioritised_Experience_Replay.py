@@ -64,7 +64,7 @@ class DDQN_With_Prioritised_Experience_Replay(DQN_Agent):
 
         Q_targets_next = Q_targets_next.data[0][0].cpu().numpy()
         
-        Q_targets = self.reward + (self.hyperparameters["gamma"] * Q_targets_next * (1 - self.done))
+        Q_targets = self.reward + (self.hyperparameters["discount_rate"] * Q_targets_next * (1 - self.done))
         
         return Q_targets
         

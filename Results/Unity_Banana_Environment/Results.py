@@ -61,7 +61,7 @@ for agent_class in agents:
 
     agent = agent_class(ENVIRONMENT, SEED, hyperparameters,
                         ROLLING_SCORE_LENGTH, AVERAGE_SCORE_REQUIRED, agent_name)
-    game_scores, rolling_scores = agent.run_game_n_times(num_episodes_to_run=EPISODES_TO_RUN)
+    game_scores, rolling_scores = agent.run_n_episodes(num_episodes_to_run=EPISODES_TO_RUN)
     results[agent_name] = [game_scores, rolling_scores]
     agent_number += 1
     print_two_lines()

@@ -2,6 +2,8 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
+
 from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
 from abc import ABC, abstractmethod
 
@@ -20,13 +22,14 @@ class Base_Agent(object):
         self.rolling_score_length = rolling_score_length
         self.average_score_required = average_score_required
         self.score = 0
-        self.last_episode_reward = None
         self.reset_game()        
-        self.game_scores = []
+        self.game_full_episode_scores = []
         self.rolling_results = []
         self.max_rolling_score_seen = float("-inf")
         self.agent_name = agent_name
         self.episode_number = 0
+
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
     def reset_game(self):
@@ -36,16 +39,15 @@ class Base_Agent(object):
         self.next_state = None
         self.action = None
         self.reward = None
-        self.done = False                
+        self.done = False
         self.score = 0
         self.step_number = 0
-        self.last_episode_reward = self.score
 
-    def run_game_n_times(self, num_episodes_to_run=1, save_model=False):
+    def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         for episode in range(num_episodes_to_run):
             self.episode_number += 1
-            self.run_game_once()
+            self.run_episode()
             self.save_and_print_result()          
             self.reset_game()
             
@@ -55,35 +57,19 @@ class Base_Agent(object):
         self.summarise_results()
         if save_model:
             self.locally_save_policy()
-        return self.game_scores, self.rolling_results
+        return self.game_full_episode_scores, self.rolling_results
 
-    def run_game_once(self):
-        """Runs a full game"""
+    def run_episode(self):
+        """Runs a full episode"""
         while not self.done:
-                self.step()                
-
-    def step(self):
-        """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action()
-
-        self.update_next_state_reward_done_and_score()
-
-        if self.time_to_learn():
-            self.learn()
-
-        self.save_experience()
-        self.state = self.next_state #this is to set the state for the next iteration
-
-
-    def pick_and_conduct_action(self):
-        self.action = self.pick_action()
-        self.conduct_action()
+                self.step()
 
     @abstractmethod
-    def pick_action(self):
+    def step(self):
         pass
 
-    def conduct_action(self):        
+
+    def conduct_action(self):
         self.environment.conduct_action(self.action)
 
         
@@ -112,8 +98,8 @@ class Base_Agent(object):
         self.print_rolling_result()
 
     def save_result(self):
-        self.game_scores.append(self.score)
-        self.rolling_results.append(np.mean(self.game_scores[-1 * self.rolling_score_length:]))
+        self.game_full_episode_scores.append(self.score)
+        self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_length:]))
         self.save_max_result_seen()
 
     def save_max_result_seen(self):
@@ -123,15 +109,10 @@ class Base_Agent(object):
 
     def print_rolling_result(self):
         sys.stdout.write(
-            "\r Episode {0}, Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}".format(len(self.game_scores),
+            "\r Episode {0}, Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}".format(len(self.game_full_episode_scores),
                                                                                                self.rolling_results[-1],
                                                                                                self.max_rolling_score_seen))
         sys.stdout.flush()
-
-    @abstractmethod
-    def locally_save_policy(self):
-        pass
-
 
     def summarise_results(self):
         self.show_whether_achieved_goal()                                  
@@ -162,7 +143,11 @@ class Base_Agent(object):
         plt.ylabel('Episode score')
         plt.xlabel('Episode number')
         plt.show()   
-        
+
+    @abstractmethod
+    def locally_save_policy(self):
+        pass
+
 
         
 

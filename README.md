@@ -3,6 +3,7 @@
 1. Implement prioritised experience replay properly
 2. Evolution algorithm
 3. Think about and start adding tests
+4. Have hill climbing pick probabilistically instead of max
 
 
 Later. Implement algorithms from Berkley Deep RL course

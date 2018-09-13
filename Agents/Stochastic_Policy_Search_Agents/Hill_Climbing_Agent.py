@@ -14,9 +14,10 @@ class Hill_Climbing_Agent(Base_Agent):
     def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
                  agent_name):
 
+        self.hyperparameters = hyperparameters["Stochastic_Policy_Search_Agents"]
 
         Base_Agent.__init__(self, environment=environment,
-                            seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
+                            seed=seed, hyperparameters=self.hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -27,19 +28,44 @@ class Hill_Climbing_Agent(Base_Agent):
 
         self.best_episode_score_seen = float("-inf")
 
-        self.noise_scale = 1e-2
+        self.stochastic_action_decision = self.hyperparameters["stochastic_action_decision"]
+        self.noise_scale = self.hyperparameters["noise_scale_start"]
+        self.noise_scale_min = self.hyperparameters["noise_scale_min"]
+        self.noise_scale_max = self.hyperparameters["noise_scale_max"]
+        self.noise_scale_growth_factor = self.hyperparameters["noise_scale_growth_factor"]
 
-    def time_to_learn(self):
-        """Tells agent to perturb weights at end of every episode"""
-        return self.done
+
+    def step(self):
+        """Runs a step within a game including a learning step if required"""
+        self.pick_and_conduct_action()
+
+        self.update_next_state_reward_done_and_score()
+
+        if self.time_to_learn():
+            self.learn()
+
+        self.save_experience()
+        self.state = self.next_state #this is to set the state for the next iteration
+
+    def pick_and_conduct_action(self):
+        self.action = self.pick_action()
+        self.conduct_action()
 
     def pick_action(self):
 
         policy_values = self.policy.forward(self.state)
-        action = np.argmax(policy_values)
+
+        if self.stochastic_action_decision:
+            action = np.random.choice(self.action_size, p=policy_values) # option 1: stochastic policy
+        else:
+            action = np.argmax(policy_values)  # option 2: deterministic policy
 
         return action
 
+
+    def time_to_learn(self):
+        """Tells agent to perturb weights at end of every episode"""
+        return self.done
 
     def learn(self):
 
@@ -49,12 +75,12 @@ class Hill_Climbing_Agent(Base_Agent):
 
             self.best_episode_score_seen = self.score
             self.best_weights_seen = self.policy.weights
-            noise_scale = max(1e-3, self.noise_scale / 2.0)
+            noise_scale = max(self.noise_scale_min, self.noise_scale / self.noise_scale_growth_factor)
             self.policy.weights += noise_scale * raw_noise
 
         else:
 
-            noise_scale = min(2.0, self.noise_scale * 2.0)
+            noise_scale = min(self.noise_scale_max, self.noise_scale * self.noise_scale_growth_factor)
             self.policy.weights = self.best_weights_seen + noise_scale * raw_noise
 
     def save_experience(self):

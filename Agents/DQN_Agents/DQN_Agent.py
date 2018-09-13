@@ -15,6 +15,9 @@ class DQN_Agent(Base_Agent):
     
     def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
                  agent_name):
+
+        hyperparameters = hyperparameters["DQN_Agents"]
+
         Base_Agent.__init__(self, environment=environment, 
                             seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
@@ -22,13 +25,23 @@ class DQN_Agent(Base_Agent):
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"],
                                     self.hyperparameters["batch_size"], seed)
 
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
         self.qnetwork_local = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
 
             # Vanilla_NN(self.state_size, self.action_size, seed, hyperparameters).get_model().to(self.device)
 
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
+
+    def step(self):
+        """Runs a step within a game including a learning step if required"""
+        self.pick_and_conduct_action()
+
+        self.update_next_state_reward_done_and_score()
+
+        if self.time_to_learn():
+            self.learn()
+
+        self.save_experience()
+        self.state = self.next_state #this is to set the state for the next iteration
 
     def pick_and_conduct_action(self):
         self.action = self.pick_action()
@@ -80,7 +93,7 @@ class DQN_Agent(Base_Agent):
         return Q_targets_next    
         
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
-        Q_targets_current = rewards + (self.hyperparameters["gamma"] * Q_targets_next * (1 - dones))
+        Q_targets_current = rewards + (self.hyperparameters["discount_rate"] * Q_targets_next * (1 - dones))
         return Q_targets_current
     
     def compute_expected_q_values(self, states, actions):

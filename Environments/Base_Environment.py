@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from Utilities import abstract
 
+@abstract
 class Base_Environment(ABC):
             
     @abstractmethod
@@ -28,8 +30,7 @@ class Base_Environment(ABC):
     
     @abstractmethod
     def get_done(self):
-        pass     
-
+        pass
     
     @abstractmethod
     def reset_environment(self):

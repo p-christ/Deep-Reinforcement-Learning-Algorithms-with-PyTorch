@@ -29,6 +29,9 @@ def create_model_layers(state_size, action_size, hyperparameters):
 
     add_linear_layer(input_dim, output_dim, model_layers)
 
+    if hyperparameters["softmax_final_layer"]:
+        add_softmax_layer(model_layers)
+
     return model_layers
 
 def add_linear_layer(input_dim, output_dim, model_layers):
@@ -38,3 +41,5 @@ def add_linear_layer(input_dim, output_dim, model_layers):
 def add_relu_layer(model_layers):
     model_layers.append(torch.nn.ReLU())
 
+def add_softmax_layer(model_layers):
+    model_layers.append(torch.nn.Softmax())
