@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch.distributions import Categorical
 import torch.optim as optim
-from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import ReduceLROnPlateau, LambdaLR
 
 from Base_Agent import Base_Agent
 from NN_Creators import create_vanilla_NN
@@ -23,10 +23,6 @@ class REINFORCE_Agent(Base_Agent):
 
         self.policy = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
-        # self.scheduler = ReduceLROnPlateau(self.optimizer, 'max'
-        # Manual way: ? ?
-        # for g in optim.param_groups:
-        #     g['lr'] = 0.001)
 
         self.episode_rewards = []
         self.episode_log_probabilities = []
@@ -43,6 +39,8 @@ class REINFORCE_Agent(Base_Agent):
 
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
+
+
 
 
     def pick_and_conduct_action_and_save_log_probabilities(self):
@@ -119,7 +117,7 @@ class REINFORCE_Agent(Base_Agent):
         self.action = None
         self.reward = None
         self.done = False
-        self.score = 0
+        self.total_episode_score_so_far = 0
         self.episode_rewards = []
         self.episode_log_probabilities = []
 

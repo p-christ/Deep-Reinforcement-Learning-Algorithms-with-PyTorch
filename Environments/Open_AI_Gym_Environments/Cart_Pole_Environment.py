@@ -41,9 +41,9 @@ class Cart_Pole_Environment(Base_Environment):
     def reset_environment(self):
         self.state = self.game_environment.reset()
 
-    def visualise_agent(self, policy):
+    def visualise_agent(self, agent):
 
-        env = gym.make('CartPole-v0')
+        env = self.game_environment
 
         display = Display(visible=0, size=(1400, 900))
         display.start()
@@ -51,13 +51,15 @@ class Cart_Pole_Environment(Base_Environment):
         state = env.reset()
         img = plt.imshow(env.render(mode='rgb_array'))
         for t in range(1000):
-            action, _ = policy.act(state)
+            # action, _ = policy.act(state)
+            agent.step()
+
             img.set_data(env.render(mode='rgb_array'))
             plt.axis('off')
             display.display(env.gcf())
             display.clear_output(wait=True)
-            state, reward, done, _ = env.step(action)
-            if done:
+            # state, reward, done, _ = env.step(action)
+            if agent.done:
                 break
 
         env.close() 

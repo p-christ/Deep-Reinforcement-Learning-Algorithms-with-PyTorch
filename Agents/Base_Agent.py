@@ -21,8 +21,7 @@ class Base_Agent(object):
 
         self.rolling_score_length = rolling_score_length
         self.average_score_required = average_score_required
-        self.score = 0
-        self.reset_game()        
+        self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
         self.max_rolling_score_seen = float("-inf")
@@ -40,16 +39,17 @@ class Base_Agent(object):
         self.action = None
         self.reward = None
         self.done = False
-        self.score = 0
+        self.total_episode_score_so_far = 0
         self.step_number = 0
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         for episode in range(num_episodes_to_run):
+            self.reset_game()
             self.episode_number += 1
             self.run_episode()
             self.save_and_print_result()          
-            self.reset_game()
+
             
             if self.max_rolling_score_seen > self.average_score_required: #stop once we achieve required score
                 break
@@ -77,7 +77,7 @@ class Base_Agent(object):
         self.next_state = self.environment.get_next_state()
         self.reward = self.environment.get_reward()
         self.done = self.environment.get_done()
-        self.score += self.environment.get_reward()
+        self.total_episode_score_so_far += self.environment.get_reward()
 
 
     @abstractmethod
@@ -98,7 +98,7 @@ class Base_Agent(object):
         self.print_rolling_result()
 
     def save_result(self):
-        self.game_full_episode_scores.append(self.score)
+        self.game_full_episode_scores.append(self.total_episode_score_so_far)
         self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_length:]))
         self.save_max_result_seen()
 

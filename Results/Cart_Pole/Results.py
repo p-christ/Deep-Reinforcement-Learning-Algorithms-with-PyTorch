@@ -23,10 +23,12 @@ hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.0006,
         "batch_size": 64,
-        "buffer_size": 15000,
+        "buffer_size": 10000,
         "epsilon": 0.2,
         "discount_rate": 0.99,
         "tau": 1e-3,
+        "alpha_prioritised_replay": 0.6,
+        "beta_prioritised_replay": 0.4,
         "update_every_n_steps": 1,
         "nn_layers": 3,
         "nn_start_units": 20,
@@ -75,8 +77,8 @@ results = {}
 
 agent_number = 1
 
-agents = [Hill_Climbing_Agent, REINFORCE_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
-# agents = [Hill_Climbing_Agent]
+agents = [DDQN_With_Prioritised_Experience_Replay, Hill_Climbing_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, REINFORCE_Agent]
+# agents = [REINFORCE_Agent]
 
 ENVIRONMENT = Cart_Pole_Environment()
 
@@ -111,6 +113,8 @@ for agent_class in agents:
         agent_number += 1
         print("Time taken: {}".format(time.time() - start), flush=True)
         print_two_lines()
+
+
 
         agent_results.append([game_scores, rolling_scores, len(rolling_scores), -1 * max(rolling_scores)])
 

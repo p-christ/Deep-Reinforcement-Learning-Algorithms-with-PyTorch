@@ -7,8 +7,6 @@ from Linear_Model import Linear_Model
 
 import numpy as np
 
-
-
 class Hill_Climbing_Agent(Base_Agent):
 
     def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
@@ -71,9 +69,9 @@ class Hill_Climbing_Agent(Base_Agent):
 
         raw_noise = (2.0*(np.random.rand(*self.policy.weights.shape) - 0.5))
 
-        if self.score >= self.best_episode_score_seen:
+        if self.total_episode_score_so_far >= self.best_episode_score_seen:
 
-            self.best_episode_score_seen = self.score
+            self.best_episode_score_seen = self.total_episode_score_so_far
             self.best_weights_seen = self.policy.weights
             noise_scale = max(self.noise_scale_min, self.noise_scale / self.noise_scale_growth_factor)
             self.policy.weights += noise_scale * raw_noise
