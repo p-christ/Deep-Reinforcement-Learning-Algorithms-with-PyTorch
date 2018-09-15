@@ -1,18 +1,15 @@
 import sys
-
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
 from abc import ABC, abstractmethod
-
 from Utilities import abstract
 
 @abstract
 class Base_Agent(object):    
     
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
+    def __init__(self, environment, hyperparameters, rolling_score_length, average_score_required,
                  agent_name):
         self.environment = environment        
         self.action_size = self.environment.get_action_size()
@@ -25,11 +22,10 @@ class Base_Agent(object):
         self.game_full_episode_scores = []
         self.rolling_results = []
         self.max_rolling_score_seen = float("-inf")
+
         self.agent_name = agent_name
         self.episode_number = 0
-
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -50,7 +46,6 @@ class Base_Agent(object):
             self.run_episode()
             self.save_and_print_result()          
 
-            
             if self.max_rolling_score_seen > self.average_score_required: #stop once we achieve required score
                 break
         
@@ -68,22 +63,18 @@ class Base_Agent(object):
     def step(self):
         pass
 
-
     def conduct_action(self):
         self.environment.conduct_action(self.action)
 
-        
     def update_next_state_reward_done_and_score(self): 
         self.next_state = self.environment.get_next_state()
         self.reward = self.environment.get_reward()
         self.done = self.environment.get_done()
         self.total_episode_score_so_far += self.environment.get_reward()
 
-
     @abstractmethod
     def time_to_learn(self):
         pass
-
 
     @abstractmethod
     def learn(self):
@@ -119,7 +110,6 @@ class Base_Agent(object):
         self.visualise_results()
 
     def show_whether_achieved_goal(self):
-
         index_achieved_goal = self.achieved_required_score_at_index()
         print(" ")
         if index_achieved_goal == -1: #this means agent never achieved goal

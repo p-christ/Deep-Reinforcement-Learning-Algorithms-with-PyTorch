@@ -52,15 +52,12 @@ class REINFORCE_Agent(Base_Agent):
 
         self.conduct_action()
 
-    def store_reward(self):
-        self.episode_rewards.append(self.reward)
-
-    def store_action(self, action):
-        self.action = action
-
     def pick_action_and_get_log_probabilities(self):
 
+        # PyTorch only accepts mini-batches and not individual observations so we have to add
+        # a "fake" dimension to our observation using unsqueeze
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
+
 
         action_probabilities = self.policy.forward(state).cpu()
         # action_probabilities = torch.nn.functional.softmax(action_probabilities) # we could put this in network class instead
@@ -68,11 +65,17 @@ class REINFORCE_Agent(Base_Agent):
         action_distribution = Categorical(action_probabilities) # this creates a distribution to sample from
         action = action_distribution.sample()
 
-
         return action.item(), action_distribution.log_prob(action)
 
     def store_log_probabilities(self, log_probabilities):
         self.episode_log_probabilities.append(log_probabilities)
+
+    def store_action(self, action):
+        self.action = action
+
+
+    def store_reward(self):
+        self.episode_rewards.append(self.reward)
 
 
     def learn(self):
@@ -94,18 +97,19 @@ class REINFORCE_Agent(Base_Agent):
         policy_loss = []
         for log_prob in self.episode_log_probabilities:
             policy_loss.append(-log_prob * total_discounted_reward)
-        policy_loss = torch.cat(policy_loss).sum() #This concatenates the sequence and then adds them up
+        policy_loss = torch.cat(policy_loss).sum() # We need to add up the losses across the mini-batch to get 1 overall loss
         # policy_loss = Variable(policy_loss, requires_grad = True)
         return policy_loss
 
 
     def time_to_learn(self):
-        """With REINFORCE we only learn at the end of every episode"""
+        """Tells us whether it is time for the algorithm to learn. With REINFORCE we only learn at the end of every
+        episode so this just returns whether the episode is over"""
         return self.done
 
 
     def save_experience(self):
-        """We don't save our experiences with this algorithm"""
+        """We don't save past experiences with this algorithm because we only use each experience once"""
         pass
 
 
@@ -120,8 +124,6 @@ class REINFORCE_Agent(Base_Agent):
         self.total_episode_score_so_far = 0
         self.episode_rewards = []
         self.episode_log_probabilities = []
-
-
 
 
     def locally_save_policy(self):

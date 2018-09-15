@@ -4,6 +4,14 @@ import matplotlib.pyplot as plt
 from abc import ABCMeta
 
 
+
+def produce_median_results(agent_results):
+
+    agent_results = sorted(agent_results, key=operator.itemgetter(2, 3))
+    median = agent_results[int(len(agent_results) / 2)]
+
+    return median
+
 def abstract(cls):
     return ABCMeta(cls.__name__, cls.__bases__, dict(cls.__dict__))
 
