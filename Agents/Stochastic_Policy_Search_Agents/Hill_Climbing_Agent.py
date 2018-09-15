@@ -1,11 +1,8 @@
-import copy
-
 import torch
+import numpy as np
 
 from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
-
-import numpy as np
 
 class Hill_Climbing_Agent(Base_Agent):
 
@@ -17,8 +14,6 @@ class Hill_Climbing_Agent(Base_Agent):
         Base_Agent.__init__(self, environment=environment,
                             seed=seed, hyperparameters=self.hyperparameters, rolling_score_length=rolling_score_length,
                             average_score_required=average_score_required, agent_name=agent_name)
-
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         if self.hyperparameters["policy_network_type"] == "Linear":
             self.policy = Linear_Model(self.state_size, self.action_size)
@@ -82,8 +77,8 @@ class Hill_Climbing_Agent(Base_Agent):
             self.policy.weights = self.best_weights_seen + noise_scale * raw_noise
 
     def save_experience(self):
+        """We don't save past experiences for this algorithm"""
         pass
-
 
 
     def locally_save_policy(self):

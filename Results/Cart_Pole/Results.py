@@ -6,6 +6,7 @@ from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Tar
 from DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
+from Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
 from Utilities import print_two_lines, produce_median_results, visualise_results_by_agent
 
@@ -42,7 +43,8 @@ hyperparameters = {
         "noise_scale_min": 1e-3,
         "noise_scale_max": 2.0,
         "noise_scale_growth_factor": 2.0,
-        "stochastic_action_decision": False
+        "stochastic_action_decision": False,
+        "num_policies": 10
     },
 
     "Policy_Gradient_Agents": {
@@ -60,8 +62,8 @@ results = {}
 
 agent_number = 1
 
-agents = [DDQN_With_Prioritised_Experience_Replay, DQN_Agent, Hill_Climbing_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, REINFORCE_Agent]
-# agents = [REINFORCE_Agent]
+agents = [Genetic_Agent, Hill_Climbing_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, REINFORCE_Agent]
+agents = [Genetic_Agent]
 
 ENVIRONMENT = Cart_Pole_Environment()
 

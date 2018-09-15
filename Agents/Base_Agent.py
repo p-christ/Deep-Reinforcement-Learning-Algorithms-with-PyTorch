@@ -9,9 +9,11 @@ from Utilities import abstract
 @abstract
 class Base_Agent(object):    
     
-    def __init__(self, environment, hyperparameters, rolling_score_length, average_score_required,
+    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
                  agent_name):
-        self.environment = environment        
+        self.environment = environment
+        torch.manual_seed(seed)
+        np.random.seed(seed)
         self.action_size = self.environment.get_action_size()
         self.state_size = self.environment.get_state_size()
         self.hyperparameters = hyperparameters
