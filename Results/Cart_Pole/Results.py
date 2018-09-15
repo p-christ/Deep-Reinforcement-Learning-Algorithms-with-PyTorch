@@ -44,7 +44,9 @@ hyperparameters = {
         "noise_scale_max": 2.0,
         "noise_scale_growth_factor": 2.0,
         "stochastic_action_decision": False,
-        "num_policies": 10
+        "num_policies": 10,
+        "episodes_per_policy": 1,
+        "num_policies_to_keep": 5
     },
 
     "Policy_Gradient_Agents": {
