@@ -19,7 +19,7 @@ SEED = 100
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
 
-AGENTS = [REINFORCE_Agent]
+AGENTS = [Genetic_Agent]
 
 hyperparameters = {
     "DQN_Agents": {

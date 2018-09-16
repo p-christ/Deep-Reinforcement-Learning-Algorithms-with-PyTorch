@@ -6,6 +6,7 @@ import pickle
 import time
 import os
 
+
 def run_games_for_agents(environment, agents, runs_per_agent, hyperparameters, requirements_to_solve_game,
                          max_episodes_to_run, visualise_results, save_data_filename=None,
                          file_to_save_results_graph=None, seed=100):
@@ -101,8 +102,10 @@ def visualise_results_by_agent(results, target_score, file_to_save_results_graph
 
         ax.plot(range(episodes_seen), rolling_scores)
 
-        legend_values.append(agent_name)    
-    
+        legend_values.append(agent_name)
+
+    # ax.set_position([0.1, 0.1, 0.5, 0.8])
+
     ax.hlines(y=target_score, xmin=0, xmax=max_episodes_seen,
               linewidth=2, color='k', linestyles='dotted')
 
@@ -123,7 +126,7 @@ def visualise_results_by_agent(results, target_score, file_to_save_results_graph
     plt.xlabel('Episode number')
 
     if file_to_save_results_graph is not None:
-        plt.savefig(file_to_save_results_graph)
+        plt.savefig(file_to_save_results_graph, bbox_inches = "tight")
     plt.show()
 
 
