@@ -45,6 +45,8 @@ The Deep Q Learning algorithm was also extended to a Doulbe Deep Q Learning algo
 
 # 2) Environments Analysed
 
+Each agent plays each game 10 times and then the median result is shown below. 
+
 --------------------------------------------------
 ### A. Unity Banana Environment
 --------------------------------------------------
@@ -64,7 +66,8 @@ To train the agents on the Unity Banana environment and see their results:
 
 
 --------------------------------------------------
-### B. Other Environments
+### B. Cart Pole
 --------------------------------------------------
 
-TBD
+![Unity Banana Results](Results/Cart_Pole/Results_Graph.png)
+

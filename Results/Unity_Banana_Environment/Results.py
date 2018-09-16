@@ -17,7 +17,7 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.Duelling_DDQN_Agent import Duelling_DDQN_Agent
-from Utilities import print_two_lines, save_score_results, visualise_results_by_agent
+from Utilities import print_two_empty_lines, save_score_results, visualise_results_by_agent
 import numpy as np
 import torch
 
@@ -64,6 +64,6 @@ for agent_class in agents:
     game_scores, rolling_scores = agent.run_n_episodes(num_episodes_to_run=EPISODES_TO_RUN)
     results[agent_name] = [game_scores, rolling_scores]
     agent_number += 1
-    print_two_lines()
+    print_two_empty_lines()
 
 save_score_results(FILE_TO_SAVE_DATA_RESULTS, results)

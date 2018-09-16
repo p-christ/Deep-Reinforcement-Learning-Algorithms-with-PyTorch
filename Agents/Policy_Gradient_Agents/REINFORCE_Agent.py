@@ -27,6 +27,18 @@ class REINFORCE_Agent(Base_Agent):
         self.episode_rewards = []
         self.episode_log_probabilities = []
 
+    def reset_game(self):
+        """Resets the game information so we are ready to play a new episode"""
+        self.environment.reset_environment()
+        self.state = self.environment.get_state()
+        self.next_state = None
+        self.action = None
+        self.reward = None
+        self.done = False
+        self.total_episode_score_so_far = 0
+        self.episode_rewards = []
+        self.episode_log_probabilities = []
+
     def step(self):
         """Runs a step within a game including a learning step if required"""
         self.pick_and_conduct_action_and_save_log_probabilities()
@@ -112,20 +124,6 @@ class REINFORCE_Agent(Base_Agent):
         """We don't save past experiences with this algorithm because we only use each experience once"""
         pass
 
-
-    def reset_game(self):
-        """Resets the game information so we are ready to play a new episode"""
-        self.environment.reset_environment()
-        self.state = self.environment.get_state()
-        self.next_state = None
-        self.action = None
-        self.reward = None
-        self.done = False
-        self.total_episode_score_so_far = 0
-        self.episode_rewards = []
-        self.episode_log_probabilities = []
-
-
     def locally_save_policy(self):
-        torch.save(self.qnetwork_local.state_dict(), "Models/{}_policy.pt".format(self.agent_name))
+        pass
 

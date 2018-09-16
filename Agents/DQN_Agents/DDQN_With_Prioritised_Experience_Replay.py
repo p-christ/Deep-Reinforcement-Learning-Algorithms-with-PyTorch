@@ -1,7 +1,7 @@
 """This agent is TBD and not finished yet"""
 
 from DQN_Agents.DDQN_Agent import DDQN_Agent
-from Memory_Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
+from Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 import torch
 import numpy as np
 import torch.nn.functional as F

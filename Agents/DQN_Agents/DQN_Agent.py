@@ -1,5 +1,5 @@
 from Agents.Base_Agent import Base_Agent
-from Memory_Data_Structures.Replay_Buffer import Replay_Buffer
+from Data_Structures.Replay_Buffer import Replay_Buffer
 from Networks.NN_Creators import create_vanilla_NN
 import torch
 import torch.optim as optim
@@ -99,7 +99,8 @@ class DQN_Agent(Base_Agent):
         self.memory.add(self.state, self.action, self.reward, self.next_state, self.done)
         
     def locally_save_policy(self):
-        torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
+        pass
+        # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
             
     def time_to_learn(self):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
