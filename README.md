@@ -69,5 +69,5 @@ To train the agents on the Unity Banana environment and see their results:
 ### B. Cart Pole
 --------------------------------------------------
 
-![Unity Banana Results](Results/Cart_Pole/Results_Graph.png)
+![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
 
