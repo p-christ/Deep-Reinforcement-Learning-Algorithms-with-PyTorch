@@ -119,8 +119,8 @@ def visualise_results_by_agent(results, target_score, file_to_save_results_graph
     plt.ylim(ymin=min_score_seen)
     plt.ylim(ymax=target_score)
 
-    plt.legend(legend_values, loc='center', bbox_to_anchor=(0.5, -0.3),
-               prop={'size': 8}, fancybox=True, framealpha=0.5, ncol=2)
+    plt.legend(legend_values, loc='center', bbox_to_anchor=(1.4, 0.5),
+               prop={'size': 12}, fancybox=True, framealpha=0.5, ncol=1)
 
     plt.ylabel('Episode score')
     plt.xlabel('Episode number')
