@@ -97,3 +97,16 @@ def test_give_max_element_always_keeps_max_at_top():
         max_value = np.max(elements_added[-max_buffer_size:])
         assert buffer.give_max_element() == max_value, "{}".format(elements_added)
 
+def test_give_sum_of_elements_is_always_correct():
+    max_buffer_size = 50
+    round_to_this_many_decimal_places = 6
+    for _ in range(1000):
+        buffer = Prioritised_Replay_Buffer_NEW(max_size=max_buffer_size)
+        elements_added = []
+        for _ in range(100):
+            element = round(random.random())
+            elements_added.append(element)
+            buffer.add_element(element)
+
+        sum_value = np.sum(elements_added[-max_buffer_size:])
+        assert round(buffer.give_sum_of_elements(), round_to_this_many_decimal_places) == round(sum_value, round_to_this_many_decimal_places), "{}".format(elements_added)

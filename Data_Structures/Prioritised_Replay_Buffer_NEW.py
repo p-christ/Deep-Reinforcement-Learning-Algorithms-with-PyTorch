@@ -31,6 +31,8 @@ class Prioritised_Replay_Buffer_NEW(object):
 
     def add_element(self, value):
 
+        self.update_overall_sum(value)
+
         self.queue[self.queue_index_to_overwrite_next].value = value
 
         if not self.reached_max_capacity:
@@ -43,6 +45,9 @@ class Prioritised_Replay_Buffer_NEW(object):
         self.reorganise_heap(heap_index_change)
 
         self.update_queue_index_to_overwrite_next()
+
+    def update_overall_sum(self, value):
+        self.overall_sum += value - self.queue[self.queue_index_to_overwrite_next].value
 
     def update_queue_index_to_overwrite_next(self):
 
@@ -85,6 +90,9 @@ class Prioritised_Replay_Buffer_NEW(object):
 
     def give_max_element(self):
         return self.heap[1].value
+
+    def give_sum_of_elements(self):
+        return self.overall_sum
 
     #
     #
