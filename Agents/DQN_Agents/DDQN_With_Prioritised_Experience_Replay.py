@@ -96,10 +96,14 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
         return Q_targets, Q_expected
 
     def compute_q_values_for_next_states(self, next_states):
+        # self.qnetwork_local.eval()  # puts network in evaluation mode
+        # self.qnetwork_target.eval()  # puts network in evaluation mode
+        # with torch.no_grad():
+        max_action_indexes = self.qnetwork_local(next_states).detach().argmax(1)
+        Q_targets_next = self.qnetwork_target(next_states).gather(1, max_action_indexes.unsqueeze(1))
+        # self.qnetwork_local.train()  # puts network back in training mode
+        # self.qnetwork_target.train()  # puts network back in training mode
 
-        with torch.no_grad():
-            max_action_indexes = self.qnetwork_local(next_states).detach().argmax(1)
-            Q_targets_next = self.qnetwork_target(next_states).gather(1, max_action_indexes.unsqueeze(1))
         return Q_targets_next
 
     def compute_td_errors(self, Q_targets, Q_expected):

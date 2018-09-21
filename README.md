@@ -4,6 +4,7 @@
 2. Evolution algorithm
 3. Think about and start adding tests
 4. implement decayed learning rate
+5. Write TESTS
 
 
 Later. Implement algorithms from Berkley Deep RL course

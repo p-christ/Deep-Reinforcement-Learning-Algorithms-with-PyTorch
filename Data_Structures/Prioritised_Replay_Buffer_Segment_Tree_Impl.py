@@ -10,8 +10,16 @@ import time
 """ Note they don't calculate the td error for each new observation straight away, they instead put it to front of queue for sampling """
 
 
+# Operations that need to be done alot imply the data structures we want
+# Operations:
+
+1) Calc Sum of td errors
+2) Calc Max of td errors --> heap
+3) Update td errors
+4) Randomly sample with probability of td errors
 
 #
+
 class Prioritised_Replay_Buffer_Segment_Tree_Impl(object):
 
     def __init__(self, max_buffer_size, batch_size, seed, alpha, beta, state_size):
