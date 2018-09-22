@@ -1,12 +1,11 @@
 from DQN_Agents.DDQN_Agent import DDQN_Agent
 from DQN_Agents.DQN_Agent import DQN_Agent
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 from Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
-from Utilities import run_games_for_agents
+from Utilities.Utilities import run_games_for_agents
 
 ENVIRONMENT = Cart_Pole_Environment()
 REQUIREMENTS_TO_SOLVE_GAME = {"average_score_required": 195, "rolling_score_window": 100}

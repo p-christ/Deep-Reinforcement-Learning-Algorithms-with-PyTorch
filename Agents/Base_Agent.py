@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from abc import ABC, abstractmethod
-from Utilities import abstract
+from abc import abstractmethod
+from Utilities.Utilities import abstract
 
 @abstract
 class Base_Agent(object):    

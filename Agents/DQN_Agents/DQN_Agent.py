@@ -1,5 +1,5 @@
 from Agents.Base_Agent import Base_Agent
-from Data_Structures.Replay_Buffer import Replay_Buffer
+from Replay_Buffer import Replay_Buffer
 from Networks.NN_Creators import create_vanilla_NN
 import torch
 import torch.optim as optim

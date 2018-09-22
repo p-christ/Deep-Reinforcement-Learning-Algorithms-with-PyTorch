@@ -1,13 +1,12 @@
 """This agent is TBD and not finished yet"""
 
 from DQN_Agents.DDQN_Agent import DDQN_Agent
-from Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 import torch
-import numpy as np
 import torch.nn.functional as F
 
 from Prioritised_Replay_Buffer_Segment_Tree_Impl import Prioritised_Replay_Buffer_Segment_Tree_Impl
 
+# TODO change time to learn so that it learns more often if our score far away from goal and vice versa
 
 
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
@@ -116,6 +115,9 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
         td_errors_times_importance_weights = importance_sampling_weights.view(-1, 1).float() * td_errors.float()
 
         return td_errors_times_importance_weights
+
+
+
 
 
     # def take_optimisation_step(self, Q_expected, td_errors_times_importance_weights):

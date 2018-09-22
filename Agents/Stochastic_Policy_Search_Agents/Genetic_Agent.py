@@ -124,6 +124,7 @@ class Genetic_Agent(Base_Agent):
                     new_policy.weights[row][col] = policy2.weights[row][col]
         return new_policy
 
+    # TODO - just create a matrix of random values and add that in one go rather than 1 value by 1
     def mutation(self, policy, p=0.05):
         """For each weight in the policy, with some probability this replaces the weight with a random number"""
         new_policy = copy.deepcopy(policy)

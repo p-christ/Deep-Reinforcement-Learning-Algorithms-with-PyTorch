@@ -10,16 +10,11 @@ PROJECT_PATH = os.path.split(nb_dir)[0]
 if PROJECT_PATH not in sys.path:
     sys.path.append(PROJECT_PATH)
 
-
-from Agents.Base_Agent import Base_Agent
 from Environments.Unity_Environments.Unity_Banana_Environment import Unity_Banana_Environment
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
-from Agents.DQN_Agents.Duelling_DDQN_Agent import Duelling_DDQN_Agent
-from Utilities import print_two_empty_lines, save_score_results, visualise_results_by_agent
-import numpy as np
-import torch
+from Utilities.Utilities import print_two_empty_lines, save_score_results
 
 ENVIRONMENT = None
 
