@@ -5,7 +5,7 @@ from Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 from Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
-from Utilities.Utilities import run_games_for_agents
+from Utilities.Utility_Functions import run_games_for_agents
 
 ENVIRONMENT = Cart_Pole_Environment()
 REQUIREMENTS_TO_SOLVE_GAME = {"average_score_required": 195, "rolling_score_window": 100}
@@ -18,13 +18,13 @@ SEED = 100
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
 
-AGENTS = [Genetic_Agent]
+AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
 
 hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.0006,
         "batch_size": 64,
-        "buffer_size": 10000,
+        "buffer_size": 1000000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
         "tau": 1e-3,

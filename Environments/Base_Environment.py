@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from Utilities.Utilities import abstract
+from Utilities.Utility_Functions import abstract
 
 @abstract
 class Base_Environment(ABC):

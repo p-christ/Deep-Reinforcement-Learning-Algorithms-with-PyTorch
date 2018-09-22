@@ -19,8 +19,6 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
                             average_score_required=average_score_required, agent_name=agent_name)
 
         # We have to use a slightly different data structure to enforce prioritised sampling
-
-
         self.memory = Prioritised_Replay_Buffer_Segment_Tree_Impl(self.hyperparameters["buffer_size"],
                                                                 self.hyperparameters["batch_size"], seed,
                                                                   self.hyperparameters["alpha_prioritised_replay"],
