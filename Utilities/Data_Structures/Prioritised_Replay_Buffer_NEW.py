@@ -48,6 +48,7 @@ class Prioritised_Replay_Buffer_NEW(object):
 
         self.queue_index_to_overwrite_next = 0
         self.heap_index_to_overwrite_next = 1
+        self.number_experiences_in_buffer = 0
         self.reached_max_capacity = False
         self.overall_sum = 0
 
@@ -69,6 +70,7 @@ class Prioritised_Replay_Buffer_NEW(object):
         td_error = abs(td_error) + 1e-6
         self.update_overall_sum(td_error)
         self.update_queue(td_error, state, action, reward, next_state, done)
+        self.update_number_experiences_in_buffer()
         self.update_heap_and_heap_index_to_overwrite()
         self.update_queue_index_to_overwrite_next()
 
@@ -108,6 +110,10 @@ class Prioritised_Replay_Buffer_NEW(object):
         the nodes the heap points to start being changed directly rather than the pointers on the heap changing"""
         self.heap_index_to_overwrite_next += 1
 
+    def update_number_experiences_in_buffer(self):
+        if not self.reached_max_capacity:
+            self.number_experiences_in_buffer += 1
+
     def reorganise_heap(self, heap_index_changed):
         """This reorganises the heap after a new value is added so as to keep the max value at the top of the heap which
         is index position 1 in the array self.heap"""
@@ -134,13 +140,20 @@ class Prioritised_Replay_Buffer_NEW(object):
     def swap_heap_elements_and_update_node_heap_indexes(self, index1, index2):
         """Swaps two heap elements position and then updates the heap_index stored in the two nodes"""
         self.heap[index1], self.heap[index2] = self.heap[index2], self.heap[index1]
-
         self.heap[index1].heap_index = index1
         self.heap[index2].heap_index = index2
 
     def give_sample(self):
         """Randomly samples from the experiences in the buffer giving a bias towards experiences higher up the heap
-         and therefore experiences more likely to have higher td_errors"""
+         and therefore experiences more likely to have higher td_errors. Specifically it randomly picks 1 experience from each level
+         of the tree (starting at the top) until it has created a sample of big enough batch size"""
+
+        first_level = [1]
+        second_level = [2, 3]
+        third_level = [4, 5, 6, 7]
+        fourth_level = [8, 9, 10, 11, 12, 13, 14, 15]
+
+        # indices_by_level = [1 * 2**level : 1 * 2**level + 2**level]
 
         sample = []
         heap_indexes_chosen = []
@@ -148,6 +161,8 @@ class Prioritised_Replay_Buffer_NEW(object):
         sum_td_errors = self.give_sum_of_td_errors()
 
         index = 1
+
+
 
         if self.reached_max_capacity:
 
@@ -169,6 +184,20 @@ class Prioritised_Replay_Buffer_NEW(object):
 
         return sample, heap_indexes_chosen
 
+    def give_sample_indexes(self):
+
+        random_sample = np.random(self.batch_size)
+
+        num_layers = math.log(self.number_experiences_in_buffer, 2)
+
+        pass
+
+    def give_num_layers_in_heap(self):
+        num_layers = math.log(self.number_experiences_in_buffer, 2)
+        num_layers = int(num_layers) + 1 # round down plus 1 because number of layers has to be an integer
+        return num_layers
+
+
     def update_td_errors(self, td_errors, heap_indexes):
         for td_error, index in zip(td_errors, heap_indexes):
             self.heap[index].td_error = td_error
@@ -179,6 +208,8 @@ class Prioritised_Replay_Buffer_NEW(object):
 
     def give_sum_of_td_errors(self):
         return self.overall_sum
+
+
 
     #
     #
