@@ -33,6 +33,5 @@ class Duelling_NN(nn.Module):
         state_values = self.state_values_fc2(state_values)
 
         output = advantages + state_values  - advantages.mean(1).unsqueeze(1).expand(x.size(0), self.num_actions)
-        # TO DO: check this final equation
 
         return output

@@ -91,12 +91,58 @@ class DQN_Agent(Base_Agent):
         return Q_expected
         
     def take_optimisation_step(self, loss):
+        self.update_learning_rate()
+
         self.optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
+        torch.nn.utils.clip_grad_norm_(self.qnetwork_local.parameters(), 5)
         self.optimizer.step() #this applies the gradients
 
+    def update_learning_rate(self):
+
+        starting_lr = self.hyperparameters["learning_rate"]
+
+        last_rolling_score = self.rolling_results[-1]
+
+        if last_rolling_score > 0.75 * self.average_score_required:
+            new_lr = starting_lr / 100.0
+
+        elif last_rolling_score > 0.5 * self.average_score_required:
+            new_lr = starting_lr / 10.0
+
+        elif last_rolling_score > 0.25 * self.average_score_required:
+            new_lr = starting_lr / 2.0
+
+        else:
+            new_lr = starting_lr
+        #
+        # if self.done and len(self.game_full_episode_scores) > 30:
+        #
+        # # if self.episode_step_number % 100 == 0 and self.episode_step_number > 0 :
+        #
+        #
+        #     if np.mean(self.game_full_episode_scores[-30])  > self.average_score_required:
+        #         new_lr = 0.0
+        #
+        #     else:
+        #         new_lr = starting_lr * (1.0 - np.mean(self.game_full_episode_scores[-30]) / self.average_score_required)**2
+        #
+        #
+        #     # new_lr = starting_lr * (1.0 - (self.rolling_results[-1] / self.average_score_required))**2
+        #
+        #     # new_lr = starting_lr * (1.0 - (np.mean(self.game_full_episode_scores[-10]) / (200.0))) ** 2
+        #
+        #     # print(new_lr)
+        #     #
+        #     #
+        #     # if self.episode_step_number % 1000000 == 0:
+
+        # print(new_lr)
+        for g in self.optimizer.param_groups:
+            g['lr'] = new_lr
+
     def save_experience(self):
-        self.memory.add(self.state, self.action, self.reward, self.next_state, self.done)
+        self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
         
     def locally_save_policy(self):
         pass
@@ -106,7 +152,7 @@ class DQN_Agent(Base_Agent):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
     def right_amount_of_steps_taken(self):
-        return self.step_number % self.hyperparameters["update_every_n_steps"] == 0
+        return self.episode_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
     def enough_experiences_to_learn_from(self):
         return len(self.memory) > self.hyperparameters["batch_size"]

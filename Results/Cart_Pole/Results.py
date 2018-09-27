@@ -1,6 +1,8 @@
 from DQN_Agents.DDQN_Agent import DDQN_Agent
+from DQN_Agents.DQN_With_Prioritised_Experience_Replay import DQN_With_Prioritised_Experience_Replay
 from DQN_Agents.DQN_Agent import DQN_Agent
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
+from DQN_Agents.Duelling_DDQN_Agent import Duelling_DDQN_Agent
 from Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 from Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
@@ -10,21 +12,21 @@ from Utilities.Utility_Functions import run_games_for_agents
 ENVIRONMENT = Cart_Pole_Environment()
 REQUIREMENTS_TO_SOLVE_GAME = {"average_score_required": 195, "rolling_score_window": 100}
 MAX_EPISODES_TO_RUN = 5000
-FILE_TO_SAVE_DATA_RESULTS = "Results_Data.pkl"
-FILE_TO_SAVE_RESULTS_GRAPH = "Results_Graph.png"
+FILE_TO_SAVE_DATA_RESULTS = "Results_Data2.pkl"
+FILE_TO_SAVE_RESULTS_GRAPH = "Results_Graph2.png"
 RUNS_PER_AGENT = 10
 SEED = 100
 
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
-          DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
+          DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, Duelling_DDQN_Agent, DDQN_Agent]
 
-AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
+AGENTS = [DQN_With_Prioritised_Experience_Replay, DQN_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets]
 
 hyperparameters = {
     "DQN_Agents": {
-        "learning_rate": 0.0006,
+        "learning_rate": 0.005,
         "batch_size": 64,
-        "buffer_size": 1000000,
+        "buffer_size": 10000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
         "tau": 1e-3,

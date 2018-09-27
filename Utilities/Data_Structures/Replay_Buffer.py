@@ -16,7 +16,7 @@ class Replay_Buffer(object):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-    def add(self, state, action, reward, next_state, done):
+    def add_experience(self, state, action, reward, next_state, done):
         
         experience = self.experience(state, action, reward, next_state, done)
         self.memory.append(experience)

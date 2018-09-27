@@ -40,7 +40,7 @@ class Base_Agent(object):
         self.reward = None
         self.done = False
         self.total_episode_score_so_far = 0
-        self.step_number = 0
+        self.episode_step_number = 0
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
@@ -62,6 +62,7 @@ class Base_Agent(object):
         """Runs a full episode"""
         while not self.done:
                 self.step()
+                self.episode_step_number += 1
 
     @abstractmethod
     def step(self):

@@ -12,7 +12,9 @@ class DDQN_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
     def compute_q_values_for_next_states(self, next_states):
 
+# try with no grad?
         max_action_indexes = self.qnetwork_local(next_states).detach().argmax(1)        
         Q_targets_next = self.qnetwork_target(next_states).gather(1, max_action_indexes.unsqueeze(1))
         return Q_targets_next 
             
+

@@ -1,7 +1,6 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
+from torch import nn
+from torch.nn.init import xavier_normal_
 
 
 def create_vanilla_NN(state_size, action_size, seed, hyperparameters):
@@ -10,6 +9,8 @@ def create_vanilla_NN(state_size, action_size, seed, hyperparameters):
     model_layers = create_model_layers(state_size, action_size, hyperparameters)
 
     model = torch.nn.Sequential(*model_layers)
+    model.apply(linear_layer_weights_xavier_initialisation)
+
     return model
 
 def create_model_layers(state_size, action_size, hyperparameters):
@@ -43,3 +44,8 @@ def add_relu_layer(model_layers):
 
 def add_softmax_layer(model_layers):
     model_layers.append(torch.nn.Softmax())
+
+def linear_layer_weights_xavier_initialisation(layer):
+    if isinstance(layer, nn.Linear):
+        xavier_normal_(layer.weight.data)
+        # xavier_normal_(layer.bias.data)
