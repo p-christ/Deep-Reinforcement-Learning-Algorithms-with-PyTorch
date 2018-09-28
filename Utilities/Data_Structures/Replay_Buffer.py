@@ -38,8 +38,7 @@ class Replay_Buffer(object):
     
     def pick_experiences(self):        
         return random.sample(self.memory, k=self.batch_size)        
-        
-    
+
     def __len__(self):
         
         return len(self.memory)

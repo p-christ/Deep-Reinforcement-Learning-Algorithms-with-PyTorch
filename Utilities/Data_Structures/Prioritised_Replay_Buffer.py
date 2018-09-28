@@ -1,13 +1,13 @@
 import numpy as np
 import torch
 
+from Data_Structures.Deque import Deque
 from Data_Structures.Max_Heap import Max_Heap
 from Data_Structures.Node import Node
-from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 
 
-class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
-    """Data structure that maintains a queue, a heap and an array. The queue keeps track of which experiences are the oldest and so
+class Prioritised_Replay_Buffer(Max_Heap, Deque):
+    """Data structure that maintains a deque, a heap and an array. The deque keeps track of which experiences are the oldest and so
      tells us which ones to delete once the buffer starts getting full. The heap lets us quickly retrieve the experience
      with the max td_value. And the array lets us do quick random samples with probabilities equal to the proportional td errors.
      We also keep track of the sum of the td values using a simple variable.
@@ -24,18 +24,16 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
 
     def __init__(self, hyperparameters, seed=0):
         hyperparameters = hyperparameters["DQN_Agents"]
-        Replay_Buffer.__init__(self, hyperparameters["buffer_size"], hyperparameters["batch_size"], seed=0)
         Max_Heap.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
+        Deque.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
         np.random.seed(seed)
-        self.max_buffer_size = hyperparameters["buffer_size"]
 
-        self.queue = self.initialise_queue()
-        self.queues_td_errors = self.initialise_td_errors_array()
+        # self.deque = self.initialise_deque()
+        self.deques_td_errors = self.initialise_td_errors_array()
 
-        self.queue_index_to_overwrite_next = 0
+        # self.deque_index_to_overwrite_next = 0
         self.heap_index_to_overwrite_next = 1
-        self.number_experiences_in_buffer = 0
-        self.reached_max_capacity = False
+        self.number_experiences_in_deque = 0
         self.adapted_overall_sum_of_td_errors = 0
 
         self.alpha = hyperparameters["alpha_prioritised_replay"]
@@ -53,63 +51,46 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
             "done": 4
         }
 
-    def initialise_queue(self):
-        """Initialises a queue of Nodes of length self.max_size"""
-        return np.array([Node(0, (None, None, None, None, None)) for queue_index in range(self.max_buffer_size)])
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     def initialise_td_errors_array(self):
-        """Initialises a queue of Nodes of length self.max_size"""
-        return np.zeros(self.max_buffer_size)
+        """Initialises a deque of Nodes of length self.max_size"""
+        return np.zeros(self.max_size)
 
     def add_experience(self, raw_td_error, state, action, reward, next_state, done):
         td_error = (abs(raw_td_error) + self.incremental_td_error) ** self.alpha
-        self.update_overall_sum(td_error, self.queue[self.queue_index_to_overwrite_next].key)
-        self.update_queue_and_queue_td_errors(td_error, state, action, reward, next_state, done)
-        self.update_number_experiences_in_buffer()
+        self.update_overall_sum(td_error, self.deque[self.deque_index_to_overwrite_next].key)
+        self.update_deque_and_deque_td_errors(td_error, state, action, reward, next_state, done)
+        self.update_number_experiences_in_deque()
         self.update_heap_and_heap_index_to_overwrite()
-        self.update_queue_index_to_overwrite_next()
+        self.update_deque_index_to_overwrite_next()
 
     def update_overall_sum(self, new_td_error, old_td_error):
         """Updates the overall sum of td_values present in the buffer"""
         self.adapted_overall_sum_of_td_errors += new_td_error  - old_td_error
 
-    def update_queue_and_queue_td_errors(self, td_error, state, action, reward, next_state, done):
-        """Updates the queue by overwriting the oldest experience with the experience provided"""
-        self.queue[self.queue_index_to_overwrite_next].update_key_and_value(td_error, (state, action, reward,
-                                                                                next_state, done))
-        self.queues_td_errors[self.queue_index_to_overwrite_next] = td_error
+    def update_deque_and_deque_td_errors(self, td_error, state, action, reward, next_state, done):
+        """Updates the deque by overwriting the oldest experience with the experience provided"""
+        self.update_deque_node_key_and_value(self.deque_index_to_overwrite_next, td_error,
+                                             (state, action, reward, next_state, done))
+        self.deques_td_errors[self.deque_index_to_overwrite_next] = td_error
 
     def update_heap_and_heap_index_to_overwrite(self):
         """Updates the heap by rearranging it given the new experience that was just incorporated into it. If we haven't
         reached max capacity then the new experience is added directly into the heap, otherwise a pointer on the heap has
         changed to reflect the new experience so there's no need to add it in"""
         if not self.reached_max_capacity:
-            self.update_key(self.heap_index_to_overwrite_next, self.queue[self.queue_index_to_overwrite_next])
-            self.queue[self.queue_index_to_overwrite_next].heap_index = self.heap_index_to_overwrite_next
+            self.update_heap_element_key(self.heap_index_to_overwrite_next, self.deque[self.deque_index_to_overwrite_next])
+            self.deque[self.deque_index_to_overwrite_next].heap_index = self.heap_index_to_overwrite_next
             self.update_heap_index_to_overwrite_next()
 
-        heap_index_change = self.queue[self.queue_index_to_overwrite_next].heap_index
+        heap_index_change = self.deque[self.deque_index_to_overwrite_next].heap_index
         self.reorganise_heap(heap_index_change)
-
-
-    def update_queue_index_to_overwrite_next(self):
-        """Updates the queue index that we should write over next. When the buffer gets full we begin writing over
-         older experiences"""
-        if self.queue_index_to_overwrite_next < self.max_buffer_size - 1:
-            self.queue_index_to_overwrite_next += 1
-        else:
-            self.reached_max_capacity = True
-            self.queue_index_to_overwrite_next = 0
 
     def update_heap_index_to_overwrite_next(self):
         """This updates the heap index to write over next. Once the buffer gets full we stop calling this function because
         the nodes the heap points to start being changed directly rather than the pointers on the heap changing"""
         self.heap_index_to_overwrite_next += 1
-
-    def update_number_experiences_in_buffer(self):
-        """Keeps track of how many experiences there are in the buffer"""
-        if not self.reached_max_capacity:
-            self.number_experiences_in_buffer += 1
 
     def swap_heap_elements(self, index1, index2):
         """Swaps two position of two heap elements and then updates the heap_index stored in the two nodes. We have to override
@@ -122,18 +103,18 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
         """Randomly samples a batch from experiences giving a higher likelihood to experiences with a higher td error. It then
         calculates an importance sampling weight for each sampled experience, you can read about this in the paper:
         https://arxiv.org/pdf/1511.05952.pdf"""
-        experiences, queue_sample_indexes = self.pick_experiences_based_on_proportional_td_error()
+        experiences, deque_sample_indexes = self.pick_experiences_based_on_proportional_td_error()
         states, actions, rewards, next_states, dones = self.separate_out_data_types(experiences)
-        self.queue_sample_indexes_to_update_td_error_for = queue_sample_indexes
+        self.deque_sample_indexes_to_update_td_error_for = deque_sample_indexes
         importance_sampling_weights = self.calculate_importance_sampling_weights(experiences)
         return (states, actions, rewards, next_states, dones), importance_sampling_weights
 
     def pick_experiences_based_on_proportional_td_error(self):
         """Randomly picks a batch of experiences with probability equal to their proportional td_errors"""
-        probabilities = self.queues_td_errors / self.give_adapted_sum_of_td_errors()
-        queue_sample_indexes = np.random.choice(range(len(self.queues_td_errors)), size=self.batch_size, replace=False, p=probabilities)
-        experiences = self.queue[queue_sample_indexes]
-        return experiences, queue_sample_indexes
+        probabilities = self.deques_td_errors / self.give_adapted_sum_of_td_errors()
+        deque_sample_indexes = np.random.choice(range(len(self.deques_td_errors)), size=self.batch_size, replace=False, p=probabilities)
+        experiences = self.deque[deque_sample_indexes]
+        return experiences, deque_sample_indexes
 
     def separate_out_data_types(self, experiences):
         states = torch.from_numpy(np.vstack([e.value[self.indexes_in_node_value_tuple["state"]] for e in experiences])).float().to(self.device)
@@ -149,7 +130,7 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
         """Calculates the importance sampling weight of each observation in the sample. The weight is proportional to the td_error of the observation,
         see the paper here for more details: https://arxiv.org/pdf/1511.05952.pdf"""
         td_errors = [experience.key for experience in experiences]
-        importance_sampling_weights = [((1.0 / self.number_experiences_in_buffer) * (self.give_adapted_sum_of_td_errors() / td_error)) ** self.beta for td_error in td_errors]
+        importance_sampling_weights = [((1.0 / self.number_experiences_in_deque) * (self.give_adapted_sum_of_td_errors() / td_error)) ** self.beta for td_error in td_errors]
         sample_max_importance_weight = max(importance_sampling_weights)
         importance_sampling_weights = [is_weight / sample_max_importance_weight for is_weight in importance_sampling_weights]
         importance_sampling_weights = torch.tensor(importance_sampling_weights).float().to(self.device)
@@ -158,13 +139,13 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
     def update_td_errors(self, td_errors):
         """Updates the td_errors for the provided heap indexes. The indexes should be the observations provided most
         recently by the give_sample method"""
-        for raw_td_error, queue_index in zip(td_errors, self.queue_sample_indexes_to_update_td_error_for):
+        for raw_td_error, deque_index in zip(td_errors, self.deque_sample_indexes_to_update_td_error_for):
             td_error =  (abs(raw_td_error) + self.incremental_td_error) ** self.alpha
-            corresponding_heap_index = self.queue[queue_index].heap_index
+            corresponding_heap_index = self.deque[deque_index].heap_index
             self.update_overall_sum(td_error, self.heap[corresponding_heap_index].key)
             self.heap[corresponding_heap_index].key = td_error
             self.reorganise_heap(corresponding_heap_index)
-            self.queues_td_errors[queue_index] = td_error
+            self.deques_td_errors[deque_index] = td_error
 
     def give_max_td_error(self):
         """Returns the maximum td error currently in the heap. Because it is a max heap this is the top element of the heap"""
@@ -175,5 +156,5 @@ class Prioritised_Replay_Buffer(Replay_Buffer, Max_Heap):
         return self.adapted_overall_sum_of_td_errors
 
     def __len__(self):
-        return self.number_experiences_in_buffer
+        return self.number_experiences_in_deque
 

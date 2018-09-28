@@ -19,11 +19,12 @@ class Max_Heap(object):
         heap[0] = Node(float("inf"), (None, None, None, None, None))
         return heap
 
-    def update_key_and_reorganise(self, heap_index_for_change, new_key):
-        self.update_key(heap_index_for_change, new_key)
+
+    def update_key_and_reorganise_heap(self, heap_index_for_change, new_key):
+        self.update_heap_element_key(heap_index_for_change, new_key)
         self.reorganise_heap(heap_index_for_change)
 
-    def update_key(self, heap_index, new_key):
+    def update_heap_element_key(self, heap_index, new_key):
         self.heap[heap_index] = new_key
 
     def reorganise_heap(self, heap_index_changed):
