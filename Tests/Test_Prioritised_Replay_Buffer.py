@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
+from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 
 hyperparameters = {
     "alpha_prioritised_replay": 0.5,
