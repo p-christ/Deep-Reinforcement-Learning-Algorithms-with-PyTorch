@@ -2,8 +2,6 @@ altgraph==0.10.2
 astroid==1.5.3
 backports.functools-lru-cache==1.4
 bdist-mpkg==0.5.0
-bonjour-py==0.3
-certifi==2017.11.5
 chardet==3.0.4
 configparser==3.5.0
 decorator==4.1.2

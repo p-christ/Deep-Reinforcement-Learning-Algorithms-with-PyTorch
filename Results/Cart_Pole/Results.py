@@ -20,7 +20,7 @@ SEED = 100
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, Duelling_DDQN_Agent, DDQN_Agent]
 
-AGENTS = [DQN_With_Prioritised_Experience_Replay, DQN_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets]
+AGENTS = [DQN_Agent_With_Fixed_Q_Targets, DQN_With_Prioritised_Experience_Replay, DDQN_Agent, DQN_Agent]
 
 hyperparameters = {
     "DQN_Agents": {
@@ -29,9 +29,10 @@ hyperparameters = {
         "buffer_size": 10000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
-        "tau": 1e-3,
+        "tau": 0.1,
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.4,
+        "incremental_td_error": 1e-8,
         "update_every_n_steps": 1,
         "nn_layers": 3,
         "nn_start_units": 20,
