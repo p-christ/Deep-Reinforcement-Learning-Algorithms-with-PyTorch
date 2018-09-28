@@ -1,9 +1,7 @@
 import numpy as np
 import torch
-
 from Data_Structures.Deque import Deque
 from Data_Structures.Max_Heap import Max_Heap
-from Data_Structures.Node import Node
 
 
 class Prioritised_Replay_Buffer(Max_Heap, Deque):
@@ -31,7 +29,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         # self.deque = self.initialise_deque()
         self.deques_td_errors = self.initialise_td_errors_array()
 
-        # self.deque_index_to_overwrite_next = 0
         self.heap_index_to_overwrite_next = 1
         self.number_experiences_in_deque = 0
         self.adapted_overall_sum_of_td_errors = 0
@@ -61,9 +58,7 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         td_error = (abs(raw_td_error) + self.incremental_td_error) ** self.alpha
         self.update_overall_sum(td_error, self.deque[self.deque_index_to_overwrite_next].key)
         self.update_deque_and_deque_td_errors(td_error, state, action, reward, next_state, done)
-        self.update_number_experiences_in_deque()
         self.update_heap_and_heap_index_to_overwrite()
-        self.update_deque_index_to_overwrite_next()
 
     def update_overall_sum(self, new_td_error, old_td_error):
         """Updates the overall sum of td_values present in the buffer"""
@@ -71,9 +66,8 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
 
     def update_deque_and_deque_td_errors(self, td_error, state, action, reward, next_state, done):
         """Updates the deque by overwriting the oldest experience with the experience provided"""
-        self.update_deque_node_key_and_value(self.deque_index_to_overwrite_next, td_error,
-                                             (state, action, reward, next_state, done))
         self.deques_td_errors[self.deque_index_to_overwrite_next] = td_error
+        self.add_element_to_deque(td_error, (state, action, reward, next_state, done))
 
     def update_heap_and_heap_index_to_overwrite(self):
         """Updates the heap by rearranging it given the new experience that was just incorporated into it. If we haven't
