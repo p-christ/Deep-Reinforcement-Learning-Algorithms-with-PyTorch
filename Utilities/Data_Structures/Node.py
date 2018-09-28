@@ -15,3 +15,5 @@ class Node(object):
     def update_value(self, new_value):
         self.value = new_value
 
+    def __eq__(self, other):
+        return self.key == other.key and self.value == other.value
