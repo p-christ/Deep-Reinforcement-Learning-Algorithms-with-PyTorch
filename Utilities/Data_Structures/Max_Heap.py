@@ -4,42 +4,42 @@ from Data_Structures.Node import Node
 
 class Max_Heap(object):
 
-    def __init__(self, max_size, dimension_of_value_attribute):
+    def __init__(self, max_size, dimension_of_value_attribute, default_key_to_use):
 
         self.max_size = max_size
         self.dimension_of_value_attribute = dimension_of_value_attribute
-
+        self.default_key_to_use = default_key_to_use
         self.heap = self.initialise_heap()
 
     def initialise_heap(self):
         """Initialises a heap of Nodes of length self.max_size * 4 + 1"""
-        heap = np.array([Node(0, tuple([None for _ in range(self.dimension_of_value_attribute)])) for _ in range(self.max_size * 4 + 1)])
+        heap = np.array([Node(self.default_key_to_use, tuple([None for _ in range(self.dimension_of_value_attribute)])) for _ in range(self.max_size * 4 + 1)])
 
         # We don't use the 0th element in a heap so we want it to have infinite value so it is never swapped with a lower node
         heap[0] = Node(float("inf"), (None, None, None, None, None))
         return heap
 
-
-    def update_key_and_reorganise_heap(self, heap_index_for_change, new_key):
-        self.update_heap_element_key(heap_index_for_change, new_key)
+    def update_element_and_reorganise_heap(self, heap_index_for_change, new_element):
+        self.update_heap_element(heap_index_for_change, new_element)
         self.reorganise_heap(heap_index_for_change)
 
-    def update_heap_element_key(self, heap_index, new_key):
-        self.heap[heap_index] = new_key
+    def update_heap_element(self, heap_index, new_element):
+        self.heap[heap_index] = new_element
 
     def reorganise_heap(self, heap_index_changed):
         """This reorganises the heap after a new value is added so as to keep the max value at the top of the heap which
         is index position 1 in the array self.heap"""
-        node_td_error = self.heap[heap_index_changed].key
+
+        node_key = self.heap[heap_index_changed].key
         parent_index = int(heap_index_changed / 2)
 
-        if node_td_error > self.heap[parent_index].key:
+        if node_key > self.heap[parent_index].key:
             self.swap_heap_elements(heap_index_changed, parent_index)
             self.reorganise_heap(parent_index)
 
         else:
             biggest_child_index = self.calculate_index_of_biggest_child(heap_index_changed)
-            if node_td_error < self.heap[biggest_child_index].key:
+            if node_key < self.heap[biggest_child_index].key:
                 self.swap_heap_elements(heap_index_changed, biggest_child_index)
                 self.reorganise_heap(biggest_child_index)
 

@@ -12,7 +12,6 @@ class Deque(object):
         self.deque = self.initialise_deque()
         self.deque_index_to_overwrite_next = 0
         self.reached_max_capacity = False
-
         self.number_experiences_in_deque = 0
 
     def initialise_deque(self):
@@ -24,8 +23,8 @@ class Deque(object):
         """Adds an element to the deque and then updates the index of the next element to be overwritten and also the
         amount of elements in the deque"""
         self.update_deque_node_key_and_value(self.deque_index_to_overwrite_next, new_key, new_value)
-        self.update_deque_index_to_overwrite_next()
         self.update_number_experiences_in_deque()
+        self.update_deque_index_to_overwrite_next()
 
     def update_deque_node_key_and_value(self, index, new_key, new_value):
         self.update_deque_node_key(index, new_key)

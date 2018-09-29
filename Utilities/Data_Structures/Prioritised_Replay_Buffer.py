@@ -22,7 +22,7 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
 
     def __init__(self, hyperparameters, seed=0):
         hyperparameters = hyperparameters["DQN_Agents"]
-        Max_Heap.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
+        Max_Heap.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5, default_key_to_use=0)
         Deque.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
         np.random.seed(seed)
 
@@ -59,6 +59,9 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         self.update_overall_sum(td_error, self.deque[self.deque_index_to_overwrite_next].key)
         self.update_deque_and_deque_td_errors(td_error, state, action, reward, next_state, done)
         self.update_heap_and_heap_index_to_overwrite()
+        self.update_number_experiences_in_deque()
+        self.update_deque_index_to_overwrite_next()
+
 
     def update_overall_sum(self, new_td_error, old_td_error):
         """Updates the overall sum of td_values present in the buffer"""
@@ -69,17 +72,23 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         self.deques_td_errors[self.deque_index_to_overwrite_next] = td_error
         self.add_element_to_deque(td_error, (state, action, reward, next_state, done))
 
+    def add_element_to_deque(self, new_key, new_value):
+        """Adds an element to the deque"""
+        self.update_deque_node_key_and_value(self.deque_index_to_overwrite_next, new_key, new_value)
+
     def update_heap_and_heap_index_to_overwrite(self):
         """Updates the heap by rearranging it given the new experience that was just incorporated into it. If we haven't
         reached max capacity then the new experience is added directly into the heap, otherwise a pointer on the heap has
         changed to reflect the new experience so there's no need to add it in"""
         if not self.reached_max_capacity:
-            self.update_heap_element_key(self.heap_index_to_overwrite_next, self.deque[self.deque_index_to_overwrite_next])
+            self.update_heap_element(self.heap_index_to_overwrite_next, self.deque[self.deque_index_to_overwrite_next])
             self.deque[self.deque_index_to_overwrite_next].heap_index = self.heap_index_to_overwrite_next
             self.update_heap_index_to_overwrite_next()
 
         heap_index_change = self.deque[self.deque_index_to_overwrite_next].heap_index
         self.reorganise_heap(heap_index_change)
+
+
 
     def update_heap_index_to_overwrite_next(self):
         """This updates the heap index to write over next. Once the buffer gets full we stop calling this function because

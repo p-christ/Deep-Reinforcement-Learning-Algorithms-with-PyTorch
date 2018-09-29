@@ -115,29 +115,7 @@ class DQN_Agent(Base_Agent):
 
         else:
             new_lr = starting_lr
-        #
-        # if self.done and len(self.game_full_episode_scores) > 30:
-        #
-        # # if self.episode_step_number % 100 == 0 and self.episode_step_number > 0 :
-        #
-        #
-        #     if np.mean(self.game_full_episode_scores[-30])  > self.average_score_required:
-        #         new_lr = 0.0
-        #
-        #     else:
-        #         new_lr = starting_lr * (1.0 - np.mean(self.game_full_episode_scores[-30]) / self.average_score_required)**2
-        #
-        #
-        #     # new_lr = starting_lr * (1.0 - (self.rolling_results[-1] / self.average_score_required))**2
-        #
-        #     # new_lr = starting_lr * (1.0 - (np.mean(self.game_full_episode_scores[-10]) / (200.0))) ** 2
-        #
-        #     # print(new_lr)
-        #     #
-        #     #
-        #     # if self.episode_step_number % 1000000 == 0:
 
-        # print(new_lr)
         for g in self.optimizer.param_groups:
             g['lr'] = new_lr
 

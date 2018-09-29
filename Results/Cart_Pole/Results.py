@@ -20,14 +20,14 @@ SEED = 100
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, Duelling_DDQN_Agent, DDQN_Agent]
 
-AGENTS = [DQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DQN_Agent]
+AGENTS = [DQN_With_Prioritised_Experience_Replay, DDQN_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets]
 
 hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
         "batch_size": 64,
         "buffer_size": 10000,
-        "epsilon": 0.1,
+        "epsilon": 0.1, #0.1 and divide by 200 in DQN_Agent...
         "discount_rate": 0.99,
         "tau": 0.1,
         "alpha_prioritised_replay": 0.6,
