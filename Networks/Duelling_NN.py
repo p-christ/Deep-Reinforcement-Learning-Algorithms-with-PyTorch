@@ -7,8 +7,6 @@ import torch.nn.functional as F
 
 class Duelling_NN(nn.Module):
 
-
-
     def __init__(self, state_size, action_size, seed, hyperparameters):
 
         print("Need to turn the Duelling NN into same form as other NN and extend it")

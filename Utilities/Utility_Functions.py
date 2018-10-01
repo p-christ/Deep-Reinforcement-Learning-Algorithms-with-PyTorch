@@ -21,22 +21,23 @@ def run_games_for_agents(environment, agents, runs_per_agent, hyperparameters, r
         agent_results = []
         agent_round = 1
         for run in range(runs_per_agent):
-            start = time.time()
             agent_name = agent_class.__name__
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             agent = agent_class(environment, seed, hyperparameters,
                                 requirements_to_solve_game["rolling_score_window"],
                                 requirements_to_solve_game["average_score_required"], agent_name)
-            game_scores, rolling_scores = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
-            print("Time taken: {}".format(time.time() - start), flush=True)
+            game_scores, rolling_scores, time_taken = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
+            print("Time taken: {}".format(time_taken), flush=True)
             print_two_empty_lines()
-            agent_results.append([game_scores, rolling_scores, len(rolling_scores), -1 * max(rolling_scores)])
+            agent_results.append([game_scores, rolling_scores, len(rolling_scores), -1 * max(rolling_scores), time_taken])
             agent_round += 1
         agent_number += 1
 
         median_result = produce_median_results(agent_results)
 
-        results[agent_name] = [median_result[0], median_result[1]]
+        print(median_result)
+
+        results[agent_name] = [median_result[0], median_result[1], median_result[4]]
 
     if save_data_filename is not None:
         save_obj(results, save_data_filename)
@@ -82,53 +83,70 @@ def visualise_results_by_agent(results, target_score, file_to_save_results_graph
 
     agents = results.keys()
 
-    legend_values = []
-    max_episodes_seen = 0
-    min_score_seen = float("inf")
-    fig, ax = plt.subplots()
+    fig, axes = plt.subplots(1, 2, sharex=False, figsize = (14, 9)) # plt.subplots()
+
+    lines = []
 
     for agent_name in agents:
 
         rolling_scores = results[agent_name][1]
 
+        lines.append(rolling_scores)
+
         episodes_seen = len(rolling_scores)
 
-        if episodes_seen > max_episodes_seen:
-            max_episodes_seen = episodes_seen
+        time_taken = results[agent_name][2]
+        starting_point = time_taken / len(rolling_scores)
+        time_axes = [starting_point * (t + 1.0) for t in range(len(rolling_scores))]
 
-        min_score = min(rolling_scores)
-        if min_score < min_score_seen:
-            min_score_seen = min_score
+        axes[0].plot(range(episodes_seen), rolling_scores)
+        axes[1].plot(time_axes, rolling_scores)
 
-        ax.plot(range(episodes_seen), rolling_scores)
 
-        legend_values.append(agent_name)
+    max_episodes_seen_by_any_agent = max([len(rolling_scores) for rolling_scores in [results[agent_name][1] for agent_name in agents]])
+    max_time_taken_by_any_agent =  max([results[agent_name][2] for agent_name in agents])
 
-    # ax.set_position([0.1, 0.1, 0.5, 0.8])
+    min_score_achieved_by_any_agent = min([min(rolling_scores) for rolling_scores in [results[agent_name][1] for agent_name in agents]])
 
-    ax.hlines(y=target_score, xmin=0, xmax=max_episodes_seen,
-              linewidth=2, color='k', linestyles='dotted')
+    draw_horizontal_line_with_label(axes[0], y_value=target_score, x_min=0, x_max=max_episodes_seen_by_any_agent, label="Target \n score")
+    draw_horizontal_line_with_label(axes[1], y_value=target_score, x_min=0, x_max=max_time_taken_by_any_agent, label="Target \n score")
 
-    ax.text(max_episodes_seen, target_score * 0.965, "Target \n score")
+    hide_spines(axes[0], ['right', 'top'])
+    hide_spines(axes[1], ['right', 'top'])
 
-    # Hide the right and top spines
-    ax.spines['right'].set_visible(False)
-    ax.spines['top'].set_visible(False)
+    set_graph_axis_limits(axes[0], 0, max_episodes_seen_by_any_agent, min_score_achieved_by_any_agent, target_score)
+    set_graph_axis_limits(axes[1], 0, max_time_taken_by_any_agent, min_score_achieved_by_any_agent, target_score)
 
-    plt.xlim(xmin=0)
-    plt.ylim(ymin=min_score_seen)
-    plt.ylim(ymax=target_score)
 
-    plt.legend(legend_values, loc='center', bbox_to_anchor=(1.4, 0.5),
-               prop={'size': 12}, fancybox=True, framealpha=0.5, ncol=1)
+    plt.figlegend(lines, labels=agents, loc='lower center', ncol=3, labelspacing=0.)
 
-    plt.ylabel('Episode score')
-    plt.xlabel('Episode number')
+    axes[0].set_title("Score vs. Episodes Played", y=1.03, fontweight='bold')
+    axes[1].set_title("Score vs. Time Elapsed", y=1.03, fontweight='bold')
+
+    set_graph_labels(axes[0], xlabel='Rolling Episode Scores', ylabel='Episode number')
+    set_graph_labels(axes[1], xlabel='Rolling Episode Scores', ylabel='Time in Seconds')
 
     if file_to_save_results_graph is not None:
         plt.savefig(file_to_save_results_graph, bbox_inches = "tight")
     plt.show()
 
+def draw_horizontal_line_with_label(ax, y_value, x_min, x_max, label):
+    ax.hlines(y=y_value, xmin=x_min, xmax=x_max,
+              linewidth=2, color='k', linestyles='dotted', alpha=0.5)
+    ax.text(x_max, y_value * 0.965, label)
+
+def hide_spines(ax, spines_to_hide):
+    for spine in spines_to_hide:
+        ax.spines[spine].set_visible(False)
 
 
+def set_graph_axis_limits(ax, xmin, xmax, ymin, ymax):
+    ax.set_xlim([xmin, xmax])
+    ax.set_ylim([ymin, ymax])
 
+def set_graph_labels(ax, xlabel, ylabel):
+    ax.set_ylabel(xlabel)
+    ax.set_xlabel(ylabel)
+# #
+# results = load_obj("/Users/petroschristodoulou/Documents/Deep_RL_Implementations/Results/Cart_Pole/Results_Data.pkl")
+# visualise_results_by_agent(results, 195.0, "hello.png")

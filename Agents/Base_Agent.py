@@ -2,9 +2,8 @@ import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import time
 
-
-print(sys.path)
 from abc import abstractmethod
 from Utilities.Utility_Functions import abstract
 
@@ -44,6 +43,9 @@ class Base_Agent(object):
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
+
+        start = time.time()
+
         for episode in range(num_episodes_to_run):
             self.reset_game()
             self.episode_number += 1
@@ -52,11 +54,15 @@ class Base_Agent(object):
 
             if self.max_rolling_score_seen > self.average_score_required: #stop once we achieve required score
                 break
-        
+
+        time_taken = time.time() - start
+
         self.summarise_results()
         if save_model:
             self.locally_save_policy()
-        return self.game_full_episode_scores, self.rolling_results
+
+
+        return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def run_episode(self):
         """Runs a full episode"""
@@ -112,7 +118,7 @@ class Base_Agent(object):
 
     def summarise_results(self):
         self.show_whether_achieved_goal()                                  
-        self.visualise_results()
+        # self.visualise_results()
 
     def show_whether_achieved_goal(self):
         index_achieved_goal = self.achieved_required_score_at_index()

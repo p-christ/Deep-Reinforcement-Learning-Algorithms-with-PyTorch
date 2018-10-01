@@ -1,10 +1,7 @@
-import random
 import numpy as np
 import torch
 from torch.distributions import Categorical
 import torch.optim as optim
-from torch.optim.lr_scheduler import ReduceLROnPlateau, LambdaLR
-
 from Base_Agent import Base_Agent
 from NN_Creators import create_vanilla_NN
 
@@ -38,6 +35,7 @@ class REINFORCE_Agent(Base_Agent):
         self.total_episode_score_so_far = 0
         self.episode_rewards = []
         self.episode_log_probabilities = []
+        self.episode_step_number = 0
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
@@ -49,19 +47,12 @@ class REINFORCE_Agent(Base_Agent):
         if self.time_to_learn():
             self.learn()
 
-        self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
 
-
-
-
     def pick_and_conduct_action_and_save_log_probabilities(self):
-
         action, log_probabilities = self.pick_action_and_get_log_probabilities()
-
         self.store_log_probabilities(log_probabilities)
         self.store_action(action)
-
         self.conduct_action()
 
     def pick_action_and_get_log_probabilities(self):
@@ -70,10 +61,7 @@ class REINFORCE_Agent(Base_Agent):
         # a "fake" dimension to our observation using unsqueeze
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
 
-
         action_probabilities = self.policy.forward(state).cpu()
-        # action_probabilities = torch.nn.functional.softmax(action_probabilities) # we could put this in network class instead
-
         action_distribution = Categorical(action_probabilities) # this creates a distribution to sample from
         action = action_distribution.sample()
 
@@ -85,16 +73,12 @@ class REINFORCE_Agent(Base_Agent):
     def store_action(self, action):
         self.action = action
 
-
     def store_reward(self):
         self.episode_rewards.append(self.reward)
 
-
     def learn(self):
-
         total_discounted_reward = self.calculate_episode_discounted_reward()
         policy_loss = self.calculate_policy_loss_on_episode(total_discounted_reward)
-
         self.optimizer.zero_grad()
         policy_loss.backward()
         self.optimizer.step()
@@ -113,17 +97,13 @@ class REINFORCE_Agent(Base_Agent):
         # policy_loss = Variable(policy_loss, requires_grad = True)
         return policy_loss
 
-
     def time_to_learn(self):
         """Tells us whether it is time for the algorithm to learn. With REINFORCE we only learn at the end of every
         episode so this just returns whether the episode is over"""
         return self.done
 
-
-    def save_experience(self):
-        """We don't save past experiences with this algorithm because we only use each experience once"""
-        pass
-
     def locally_save_policy(self):
         pass
 
+    def save_experience(self):
+        pass
