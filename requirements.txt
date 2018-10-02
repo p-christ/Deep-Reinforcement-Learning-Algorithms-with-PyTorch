@@ -29,10 +29,6 @@ plotly==2.2.2
 py==1.5.2
 py2app==0.7.3
 pyglet==1.3.2
-pyobjc-core==5.0
-pyobjc-framework-Cocoa==5.0
-pyobjc-framework-CoreData==5.0
-pyobjc-framework-Quartz==5.0
 pyparsing==2.0.1
 pytest==3.2.5
 python-dateutil==2.7.3
