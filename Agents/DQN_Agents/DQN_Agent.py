@@ -62,8 +62,8 @@ class DQN_Agent(Base_Agent):
             self.take_optimisation_step(loss) #Take an optimisation step            
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
-        Q_targets = self.compute_q_targets(next_states, rewards, dones).to(self.device)
-        Q_expected = self.compute_expected_q_values(states, actions).to(self.device)
+        Q_targets = self.compute_q_targets(next_states, rewards, dones)
+        Q_expected = self.compute_expected_q_values(states, actions)
         loss = F.mse_loss(Q_expected, Q_targets)
         return loss
 
@@ -86,6 +86,8 @@ class DQN_Agent(Base_Agent):
 
     def take_optimisation_step(self, loss):
         self.update_learning_rate()
+
+        loss = loss.to(self.device)
 
         self.optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
