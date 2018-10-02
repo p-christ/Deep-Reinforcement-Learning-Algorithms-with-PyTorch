@@ -3,6 +3,7 @@ import torch
 from torch.distributions import Categorical
 import torch.optim as optim
 from Base_Agent import Base_Agent
+from Model import Model
 from NN_Creators import create_vanilla_NN
 
 
@@ -12,7 +13,7 @@ class REINFORCE_Agent(Base_Agent):
 
         Base_Agent.__init__(self, config, agent_name)
 
-        self.policy = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
 
         self.episode_rewards = []

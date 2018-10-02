@@ -1,3 +1,4 @@
+from Model import Model
 from Networks.NN_Creators import create_vanilla_NN
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
@@ -7,7 +8,7 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
     def __init__(self, config, agent_name):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
         DQN_Agent.__init__(self, config, agent_name)
-        self.qnetwork_target = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.qnetwork_target = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
     def learn(self):
         if self.time_to_learn():

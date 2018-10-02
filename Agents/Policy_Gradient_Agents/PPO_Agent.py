@@ -4,6 +4,7 @@ from torch import optim
 from torch.distributions import Categorical
 
 from Base_Agent import Base_Agent
+from Model import Model
 from NN_Creators import create_vanilla_NN
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 
@@ -19,8 +20,8 @@ class PPO_Agent(Base_Agent):
 
         Base_Agent.__init__(self, config, agent_name)
 
-        self.policy_new = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
-        self.policy_old = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy_new = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy_old = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
         self.max_steps_per_episode = config.environment.give_max_steps_per_episode()
 
