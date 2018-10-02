@@ -9,13 +9,12 @@ import numpy as np
 
 
 class DQN_Agent(Base_Agent):
-    
-    def __init__(self, config, hyperparameters, agent_name):
 
-        print("Initialising DQN_Agent Agent")
-        hyperparameters = hyperparameters["DQN_Agents"]
+    def __init__(self, config, agent_name):
 
-        Base_Agent.__init__(self, config, hyperparameters, agent_name)
+        DQN_Agent.__name__ = "DQN Agent XXXX"
+
+        Base_Agent.__init__(self, config, agent_name)
 
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
         self.qnetwork_local = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
@@ -43,50 +42,50 @@ class DQN_Agent(Base_Agent):
 
         self.qnetwork_local.eval() #puts network in evaluation mode
         with torch.no_grad():
-            action_values = self.qnetwork_local(state)        
+            action_values = self.qnetwork_local(state)
         self.qnetwork_local.train() #puts network back in training mode        
-        
+
         action = self.make_epsilon_greedy_choice(action_values)
-        
+
         return action
-            
+
     def make_epsilon_greedy_choice(self, action_values):
         epsilon = self.hyperparameters["epsilon"] / (1.0 + self.episode_number / 200.0)
-        
+
         if random.random() > epsilon:
             return np.argmax(action_values.cpu().data.numpy())
         return random.choice(np.arange(self.action_size))
-    
+
     def learn(self):
         if self.time_to_learn():
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
             loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
             self.take_optimisation_step(loss) #Take an optimisation step            
-    
+
     def compute_loss(self, states, next_states, rewards, actions, dones):
         Q_targets = self.compute_q_targets(next_states, rewards, dones)
-        Q_expected = self.compute_expected_q_values(states, actions)        
+        Q_expected = self.compute_expected_q_values(states, actions)
         loss = F.mse_loss(Q_expected, Q_targets)
-        
-        return loss    
-    
+
+        return loss
+
     def compute_q_targets(self, next_states, rewards, dones):
         Q_targets_next = self.compute_q_values_for_next_states(next_states)
         Q_targets = self.compute_q_values_for_current_states(rewards, Q_targets_next, dones)
-        return Q_targets            
-    
+        return Q_targets
+
     def compute_q_values_for_next_states(self, next_states):
         Q_targets_next = self.qnetwork_local(next_states).detach().max(1)[0].unsqueeze(1)
-        return Q_targets_next    
-        
+        return Q_targets_next
+
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
         Q_targets_current = rewards + (self.hyperparameters["discount_rate"] * Q_targets_next * (1 - dones))
         return Q_targets_current
-    
+
     def compute_expected_q_values(self, states, actions):
         Q_expected = self.qnetwork_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
         return Q_expected
-        
+
     def take_optimisation_step(self, loss):
         self.update_learning_rate()
 
@@ -118,11 +117,11 @@ class DQN_Agent(Base_Agent):
 
     def save_experience(self):
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
-        
+
     def locally_save_policy(self):
         pass
         # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
-            
+
     def time_to_learn(self):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
@@ -136,5 +135,3 @@ class DQN_Agent(Base_Agent):
         experiences = self.memory.sample()
         states, actions, rewards, next_states, dones = experiences
         return states, actions, rewards, next_states, dones
-
-

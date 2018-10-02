@@ -10,14 +10,14 @@ from Utilities.Utility_Functions import abstract
 @abstract
 class Base_Agent(object):    
     
-    def __init__(self, config, hyperparameters, agent_name):
+    def __init__(self, config, agent_name):
 
         torch.manual_seed(config.seed)
         np.random.seed(config.seed)
         self.environment = config.environment
         self.action_size = self.environment.get_action_size()
         self.state_size = self.environment.get_state_size()
-        self.hyperparameters = hyperparameters
+        self.hyperparameters = config.hyperparameters
 
         self.rolling_score_window = config.requirements_to_solve_game["rolling_score_window"]
         self.average_score_required = config.requirements_to_solve_game["average_score_required"]
@@ -153,6 +153,7 @@ class Base_Agent(object):
     @abstractmethod
     def locally_save_policy(self):
         pass
+
 
 
         

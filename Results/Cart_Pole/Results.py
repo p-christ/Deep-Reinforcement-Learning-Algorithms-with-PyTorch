@@ -1,4 +1,4 @@
-from Config import Config
+from Utilities.Config import Config
 from DQN_Agents.DDQN_Agent import DDQN_Agent
 from DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from DQN_Agents.DQN_Agent import DQN_Agent
@@ -14,12 +14,12 @@ config = Config()
 config.seed = 100
 config.environment = Cart_Pole_Environment()
 config.requirements_to_solve_game = {"average_score_required": 195, "rolling_score_window": 100}
-config.max_episodes_to_run = 5000
+config.max_episodes_to_run = 20
 config.file_to_save_data_results = "Results_Data51.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 2
+config.runs_per_agent = 1
 
 config.hyperparameters = {
     "DQN_Agents": {
@@ -65,7 +65,7 @@ AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
           REINFORCE_Agent, PPO_Agent]
 
-AGENTS = [PPO_Agent]
+AGENTS = [DQN_Agent]
 
 
 run_games_for_agents(config, AGENTS)

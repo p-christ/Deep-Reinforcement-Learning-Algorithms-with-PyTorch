@@ -7,10 +7,9 @@ from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Repl
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
 
 
-    def __init__(self, config, hyperparameters, agent_name):
-        DDQN_Agent.__init__(self, config, hyperparameters, agent_name)
+    def __init__(self, config, agent_name):
+        DDQN_Agent.__init__(self, config, agent_name)
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
-
 
     def learn(self):
         sampled_experiences, importance_sampling_weights = self.memory.sample()

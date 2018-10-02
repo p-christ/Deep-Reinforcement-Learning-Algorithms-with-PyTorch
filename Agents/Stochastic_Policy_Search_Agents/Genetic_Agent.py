@@ -8,11 +8,9 @@ from Linear_Model import Linear_Model
 
 class Genetic_Agent(Base_Agent):
 
-    def __init__(self, config, hyperparameters, agent_name):
+    def __init__(self, config, agent_name):
 
-        self.hyperparameters = hyperparameters["Stochastic_Policy_Search_Agents"]
-
-        Base_Agent.__init__(self, config, hyperparameters, agent_name)
+        Base_Agent.__init__(self, config, agent_name)
 
         self.num_policies = self.hyperparameters["num_policies"]
 

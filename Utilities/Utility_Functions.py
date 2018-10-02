@@ -10,7 +10,6 @@ def run_games_for_agents(config, agents):
 
 
     runs_per_agent = config.runs_per_agent
-    hyperparameters = config.hyperparameters
     requirements_to_solve_game = config.requirements_to_solve_game
     max_episodes_to_run = config.max_episodes_to_run
     visualise_overall_results = config.visualise_overall_results
@@ -18,6 +17,18 @@ def run_games_for_agents(config, agents):
     file_to_save_data_results = config.file_to_save_data_results
     file_to_save_data_results_graph = config.file_to_save_data_results_graph
 
+    all_hyperparameters = config.hyperparameters
+
+    hyperparameter_finder = {
+        "DQN_Agent": "DQN_Agents",
+        "DDQN_Agent": "DQN_Agents",
+        "DDQN_With_Prioritised_Experience_Replay": "DQN_Agents",
+        "DQN_Agent_With_Fixed_Q_Targets": "DQN_Agents",
+        "PPO_Agent": "Policy_Gradient_Agents",
+        "REINFORCE_Agent": "Policy_Gradient_Agents",
+        "Genetic_Agent": "Stochastic_Policy_Search_Agents",
+        "Hill_Climbing_Agent": "Stochastic_Policy_Search_Agents"
+    }
 
 
     agent_number = 1
@@ -31,8 +42,11 @@ def run_games_for_agents(config, agents):
         agent_round = 1
         for run in range(runs_per_agent):
             agent_name = agent_class.__name__
+            print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
-            agent = agent_class(config, hyperparameters, agent_name)
+            config.hyperparameters = all_hyperparameters[hyperparameter_finder[agent_name]]
+
+            agent = agent_class(config, agent_name)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
             print("Time taken: {}".format(time_taken), flush=True)
             print_two_empty_lines()

@@ -15,11 +15,9 @@ from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 class PPO_Agent(Base_Agent):
 
 
-    def __init__(self, config, hyperparameters, agent_name):
+    def __init__(self, config, agent_name):
 
-        hyperparameters = hyperparameters["Policy_Gradient_Agents"]
-
-        Base_Agent.__init__(self, config, hyperparameters, agent_name)
+        Base_Agent.__init__(self, config, agent_name)
 
         self.policy_new = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.policy_old = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
