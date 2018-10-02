@@ -52,7 +52,7 @@ class DQN_Agent(Base_Agent):
         epsilon = self.hyperparameters["epsilon"] / (1.0 + self.episode_number / 200.0)
 
         if random.random() > epsilon:
-            return np.argmax(action_values.data.numpy())
+            return np.argmax(action_values.cpu.data.numpy())
         return random.choice(np.arange(self.action_size))
 
     def learn(self):
