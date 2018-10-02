@@ -8,7 +8,6 @@ class Model(nn.Module):
     def __init__(self, state_size, action_size, seed, hyperparameters):
         nn.Module.__init__(self)
         self.model = self.create_vanilla_NN(state_size, action_size, seed, hyperparameters)
-        self.model.to(self.device)
 
     def forward(self, input):
         return self.model(input)

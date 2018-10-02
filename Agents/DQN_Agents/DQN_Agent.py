@@ -12,9 +12,11 @@ class DQN_Agent(Base_Agent):
 
     def __init__(self, config, agent_name):
         Base_Agent.__init__(self, config, agent_name)
+        print(self.device)
 
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.qnetwork_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.qnetwork_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters)
+        self.qnetwork_local = self.qnetwork_local.to(self.device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):
@@ -35,7 +37,7 @@ class DQN_Agent(Base_Agent):
 
         # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
         # a "fake" dimension to make it a mini-batch rather than a single observation
-        state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
+        state = torch.from_numpy(self.state).float().unsqueeze(0)
 
         self.qnetwork_local.eval() #puts network in evaluation mode
         with torch.no_grad():
@@ -50,34 +52,33 @@ class DQN_Agent(Base_Agent):
         epsilon = self.hyperparameters["epsilon"] / (1.0 + self.episode_number / 200.0)
 
         if random.random() > epsilon:
-            return np.argmax(action_values.cpu().data.numpy())
+            return np.argmax(action_values.data.numpy())
         return random.choice(np.arange(self.action_size))
 
     def learn(self):
         if self.time_to_learn():
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
-            loss = self.compute_loss(states, next_states, rewards, actions, dones).to(self.device) #Compute the loss
+            loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
             self.take_optimisation_step(loss) #Take an optimisation step            
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
-        Q_targets = self.compute_q_targets(next_states, rewards, dones)
-        Q_expected = self.compute_expected_q_values(states, actions)
+        Q_targets = self.compute_q_targets(next_states, rewards, dones).to(self.device)
+        Q_expected = self.compute_expected_q_values(states, actions).to(self.device)
         loss = F.mse_loss(Q_expected, Q_targets)
-
         return loss
 
     def compute_q_targets(self, next_states, rewards, dones):
         Q_targets_next = self.compute_q_values_for_next_states(next_states)
-        Q_targets = self.compute_q_values_for_current_states(rewards, Q_targets_next, dones).to(self.device)
+        Q_targets = self.compute_q_values_for_current_states(rewards, Q_targets_next, dones)
         return Q_targets
 
     def compute_q_values_for_next_states(self, next_states):
-        Q_targets_next = self.qnetwork_local(next_states).detach().max(1)[0].unsqueeze(1).to(self.device)
+        Q_targets_next = self.qnetwork_local(next_states).detach().max(1)[0].unsqueeze(1)
         return Q_targets_next
 
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
         Q_targets_current = rewards + (self.hyperparameters["discount_rate"] * Q_targets_next * (1 - dones))
-        return Q_targets_current.to(self.device)
+        return Q_targets_current
 
     def compute_expected_q_values(self, states, actions):
         Q_expected = self.qnetwork_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
