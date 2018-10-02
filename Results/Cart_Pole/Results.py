@@ -1,3 +1,4 @@
+from Config import Config
 from DQN_Agents.DDQN_Agent import DDQN_Agent
 from DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from DQN_Agents.DQN_Agent import DQN_Agent
@@ -9,21 +10,18 @@ from Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
 from Utilities.Utility_Functions import run_games_for_agents
 
-ENVIRONMENT = Cart_Pole_Environment()
-REQUIREMENTS_TO_SOLVE_GAME = {"average_score_required": 195, "rolling_score_window": 100}
-MAX_EPISODES_TO_RUN = 5000
-FILE_TO_SAVE_DATA_RESULTS = "Results_Data51.pkl"
-FILE_TO_SAVE_RESULTS_GRAPH = "Results_Graph.png"
-RUNS_PER_AGENT = 2
-SEED = 100
+config = Config()
+config.seed = 100
+config.environment = Cart_Pole_Environment()
+config.requirements_to_solve_game = {"average_score_required": 195, "rolling_score_window": 100}
+config.max_episodes_to_run = 5000
+config.file_to_save_data_results = "Results_Data51.pkl"
+config.file_to_save_data_results_graph = "Results_Graph.png"
+config.visualise_individual_results = False
+config.visualise_overall_results = True
+config.runs_per_agent = 2
 
-AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
-          DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
-          REINFORCE_Agent, PPO_Agent]
-
-AGENTS = [DQN_Agent]
-
-hyperparameters = {
+config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
         "batch_size": 64,
@@ -58,11 +56,17 @@ hyperparameters = {
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
         "softmax_final_layer": True,
-        "discount_rate": 0.99
+        "discount_rate": 0.99,
+        "batch_norm": False
     }
 }
 
-run_games_for_agents(ENVIRONMENT, AGENTS, RUNS_PER_AGENT, hyperparameters, REQUIREMENTS_TO_SOLVE_GAME,
-                     MAX_EPISODES_TO_RUN, visualise_results=True, save_data_filename=FILE_TO_SAVE_DATA_RESULTS,
-                     file_to_save_results_graph=FILE_TO_SAVE_RESULTS_GRAPH, seed=SEED)
+AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
+          DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
+          REINFORCE_Agent, PPO_Agent]
+
+AGENTS = [PPO_Agent]
+
+
+run_games_for_agents(config, AGENTS)
 

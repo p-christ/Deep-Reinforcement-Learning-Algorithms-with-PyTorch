@@ -8,21 +8,23 @@ from NN_Creators import create_vanilla_NN
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 
 
+# TODO implement clipping
+# TODO calculate advantages rather than just discounted return
+
+
 class PPO_Agent(Base_Agent):
 
 
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
-                 agent_name):
+    def __init__(self, config, hyperparameters, agent_name):
 
         hyperparameters = hyperparameters["Policy_Gradient_Agents"]
 
-        Base_Agent.__init__(self, environment=environment,
-                                 seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
-                                 average_score_required=average_score_required, agent_name=agent_name)
+        Base_Agent.__init__(self, config, hyperparameters, agent_name)
 
-        self.policy_new = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
-        self.policy_old = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
+        self.policy_new = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy_old = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
+        self.max_steps_per_episode = config.environment.give_max_steps_per_episode()
 
         self.optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
 
@@ -86,38 +88,19 @@ class PPO_Agent(Base_Agent):
         self.one_episode_rewards.append(self.reward)
 
     def learn(self):
-        future_episode_discounted_rewards = self.calculate_future_episode_discounted_rewards()
+        # future_episode_discounted_rewards = self.calculate_future_episode_discounted_rewards()
+        # policy_loss = self.calculate_policy_loss_on_episode(future_episode_discounted_rewards)
 
-        # total_discounted_reward = self.calculate_episode_discounted_reward()
-        policy_loss = self.calculate_policy_loss_on_episode(future_episode_discounted_rewards)
+
         self.optimizer.zero_grad()
         policy_loss.backward()
         self.optimizer.step()
 
-    def calculate_future_episode_discounted_rewards(self):
-
-        future_episode_discounted_rewards = []
-
-        for ix in range(len(self.one_episode_rewards)):
-            future_rewards = self.one_episode_rewards[ix:]
-            discounted_future_reward = self.calculate_discounted_reward(future_rewards)
-            future_episode_discounted_rewards.append(discounted_future_reward)
-
-        return future_episode_discounted_rewards
 
     def calculate_discounted_reward(self, rewards):
         discounts = self.hyperparameters["discount_rate"] ** np.arange(len(rewards))
         total_discounted_reward = np.dot(discounts, rewards)
         return total_discounted_reward
-
-
-    def calculate_policy_loss_on_episode(self, future_episode_discounted_rewards):
-        policy_loss = []
-        for probability_ratio, future_episode_discounted_reward in zip(self.episode_policy_probability_ratios, future_episode_discounted_rewards):
-            policy_loss.append(probability_ratio * future_episode_discounted_reward)
-        policy_loss = torch.cat(policy_loss).sum() # We need to add up the losses across the mini-batch to get 1 overall loss
-        # policy_loss = Variable(policy_loss, requires_grad = True)
-        return policy_loss
 
     def time_to_learn(self):
         return self.done

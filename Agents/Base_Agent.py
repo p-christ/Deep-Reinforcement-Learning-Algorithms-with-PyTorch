@@ -10,17 +10,19 @@ from Utilities.Utility_Functions import abstract
 @abstract
 class Base_Agent(object):    
     
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
-                 agent_name):
-        self.environment = environment
-        torch.manual_seed(seed)
-        np.random.seed(seed)
+    def __init__(self, config, hyperparameters, agent_name):
+
+        torch.manual_seed(config.seed)
+        np.random.seed(config.seed)
+        self.environment = config.environment
         self.action_size = self.environment.get_action_size()
         self.state_size = self.environment.get_state_size()
         self.hyperparameters = hyperparameters
 
-        self.rolling_score_length = rolling_score_length
-        self.average_score_required = average_score_required
+        self.rolling_score_window = config.requirements_to_solve_game["rolling_score_window"]
+        self.average_score_required = config.requirements_to_solve_game["average_score_required"]
+
+
         self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
@@ -29,6 +31,8 @@ class Base_Agent(object):
         self.agent_name = agent_name
         self.episode_number = 0
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+        self.visualise_results_boolean = config.visualise_individual_results
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -101,12 +105,12 @@ class Base_Agent(object):
 
     def save_result(self):
         self.game_full_episode_scores.append(self.total_episode_score_so_far)
-        self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_length:]))
+        self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]))
         self.save_max_result_seen()
 
     def save_max_result_seen(self):
         if self.rolling_results[-1] > self.max_rolling_score_seen:
-            if len(self.rolling_results) > self.rolling_score_length:
+            if len(self.rolling_results) > self.rolling_score_window:
                 self.max_rolling_score_seen = self.rolling_results[-1]
 
     def print_rolling_result(self):
@@ -117,8 +121,9 @@ class Base_Agent(object):
         sys.stdout.flush()
 
     def summarise_results(self):
-        self.show_whether_achieved_goal()                                  
-        # self.visualise_results()
+        self.show_whether_achieved_goal()
+        if self.visualise_results_boolean:
+            self.visualise_results()
 
     def show_whether_achieved_goal(self):
         index_achieved_goal = self.achieved_required_score_at_index()

@@ -54,4 +54,8 @@ class Base_Environment(ABC):
     def reset_environment(self):
         """Must reset the environment and update self.state. Must not return anything"""
         pass
-    
+
+    @abstractmethod
+    def give_max_steps_per_episode(self):
+        """Must return the max number of steps per episode"""
+        pass

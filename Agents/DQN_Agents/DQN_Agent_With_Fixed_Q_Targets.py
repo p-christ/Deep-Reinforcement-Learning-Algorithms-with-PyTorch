@@ -1,31 +1,14 @@
 from Networks.NN_Creators import create_vanilla_NN
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
-from torch.autograd import Variable
-import random
-import numpy as np
-
 
 class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
     
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, 
-                 average_score_required, agent_name):
+    def __init__(self, config, hyperparameters, agent_name):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
-        DQN_Agent.__init__(self, environment=environment,
-                            seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
-                            average_score_required=average_score_required, agent_name=agent_name)
+        DQN_Agent.__init__(self, config, hyperparameters, agent_name)
+        self.qnetwork_target = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
-
-        self.qnetwork_target = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
-
-            # .to(self.device )
-            # to(self.device)
-
-        
     def learn(self):
         if self.time_to_learn():
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        

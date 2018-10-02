@@ -8,17 +8,13 @@ from NN_Creators import create_vanilla_NN
 
 class REINFORCE_Agent(Base_Agent):
 
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
-                 agent_name):
+    def __init__(self, config, hyperparameters, agent_name):
 
         hyperparameters = hyperparameters["Policy_Gradient_Agents"]
 
-        Base_Agent.__init__(self, environment=environment,
-                            seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
-                            average_score_required=average_score_required, agent_name=agent_name)
+        Base_Agent.__init__(self, config, hyperparameters, agent_name)
 
-
-        self.policy = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
+        self.policy = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
 
         self.episode_rewards = []

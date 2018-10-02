@@ -10,18 +10,15 @@ import numpy as np
 
 class DQN_Agent(Base_Agent):
     
-    def __init__(self, environment, seed, hyperparameters, rolling_score_length, average_score_required,
-                 agent_name):
+    def __init__(self, config, hyperparameters, agent_name):
 
         print("Initialising DQN_Agent Agent")
         hyperparameters = hyperparameters["DQN_Agents"]
 
-        Base_Agent.__init__(self, environment=environment, 
-                            seed=seed, hyperparameters=hyperparameters, rolling_score_length=rolling_score_length,
-                            average_score_required=average_score_required, agent_name=agent_name)
+        Base_Agent.__init__(self, config, hyperparameters, agent_name)
 
-        self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], seed)
-        self.qnetwork_local = create_vanilla_NN(self.state_size, self.action_size, seed, self.hyperparameters).to(self.device)
+        self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
+        self.qnetwork_local = create_vanilla_NN(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):

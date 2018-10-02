@@ -62,4 +62,7 @@ class Cart_Pole_Environment(Base_Environment):
             if agent.done:
                 break
 
-        env.close() 
+        env.close()
+
+    def give_max_steps_per_episode(self):
+        return 200

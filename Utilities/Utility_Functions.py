@@ -3,17 +3,26 @@ import matplotlib.pyplot as plt
 from abc import ABCMeta
 import operator
 import pickle
-import time
 import os
 
 
-def run_games_for_agents(environment, agents, runs_per_agent, hyperparameters, requirements_to_solve_game,
-                         max_episodes_to_run, visualise_results, save_data_filename=None,
-                         file_to_save_results_graph=None, seed=100):
+def run_games_for_agents(config, agents):
+
+
+    runs_per_agent = config.runs_per_agent
+    hyperparameters = config.hyperparameters
+    requirements_to_solve_game = config.requirements_to_solve_game
+    max_episodes_to_run = config.max_episodes_to_run
+    visualise_overall_results = config.visualise_overall_results
+
+    file_to_save_data_results = config.file_to_save_data_results
+    file_to_save_data_results_graph = config.file_to_save_data_results_graph
+
+
 
     agent_number = 1
-    if os.path.isfile(save_data_filename):
-        results = load_obj(save_data_filename)
+    if os.path.isfile(file_to_save_data_results):
+        results = load_obj(file_to_save_data_results)
     else:
         results = {}
 
@@ -23,9 +32,7 @@ def run_games_for_agents(environment, agents, runs_per_agent, hyperparameters, r
         for run in range(runs_per_agent):
             agent_name = agent_class.__name__
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
-            agent = agent_class(environment, seed, hyperparameters,
-                                requirements_to_solve_game["rolling_score_window"],
-                                requirements_to_solve_game["average_score_required"], agent_name)
+            agent = agent_class(config, hyperparameters, agent_name)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
             print("Time taken: {}".format(time_taken), flush=True)
             print_two_empty_lines()
@@ -39,11 +46,11 @@ def run_games_for_agents(environment, agents, runs_per_agent, hyperparameters, r
 
         results[agent_name] = [median_result[0], median_result[1], median_result[4]]
 
-    if save_data_filename is not None:
-        save_obj(results, save_data_filename)
+    if file_to_save_data_results is not None:
+        save_obj(results, file_to_save_data_results)
 
-    if visualise_results:
-        visualise_results_by_agent(results, requirements_to_solve_game["average_score_required"], file_to_save_results_graph)
+    if visualise_overall_results:
+        visualise_results_by_agent(results, requirements_to_solve_game["average_score_required"], file_to_save_data_results_graph)
 
 
 

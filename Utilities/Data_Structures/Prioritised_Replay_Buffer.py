@@ -21,7 +21,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
      """
 
     def __init__(self, hyperparameters, seed=0):
-        hyperparameters = hyperparameters["DQN_Agents"]
         Max_Heap.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5, default_key_to_use=0)
         Deque.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
         np.random.seed(seed)
