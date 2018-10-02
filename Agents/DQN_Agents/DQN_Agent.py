@@ -11,9 +11,6 @@ import numpy as np
 class DQN_Agent(Base_Agent):
 
     def __init__(self, config, agent_name):
-
-        DQN_Agent.__name__ = "DQN Agent XXXX"
-
         Base_Agent.__init__(self, config, agent_name)
 
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
