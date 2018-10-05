@@ -20,14 +20,15 @@ def run_games_for_agents(config, agents):
     all_hyperparameters = config.hyperparameters
 
     hyperparameter_finder = {
-        "DQN_Agent": "DQN_Agents",
-        "DDQN_Agent": "DQN_Agents",
-        "DDQN_With_Prioritised_Experience_Replay": "DQN_Agents",
-        "DQN_Agent_With_Fixed_Q_Targets": "DQN_Agents",
-        "PPO_Agent": "Policy_Gradient_Agents",
-        "REINFORCE_Agent": "Policy_Gradient_Agents",
-        "Genetic_Agent": "Stochastic_Policy_Search_Agents",
-        "Hill_Climbing_Agent": "Stochastic_Policy_Search_Agents"
+        "DQN": "DQN_Agents",
+        "DDQN": "DQN_Agents",
+        "DDQN with Prioritised Replay": "DQN_Agents",
+        "DQN with Fixed Q Targets": "DQN_Agents",
+        "PPO": "Policy_Gradient_Agents",
+        "REINFORCE": "Policy_Gradient_Agents",
+        "Genetic": "Stochastic_Policy_Search_Agents",
+        "Hill Climbing": "Stochastic_Policy_Search_Agents",
+        "DDPG": "Actor_Critic_Agents"
     }
 
 
@@ -41,7 +42,7 @@ def run_games_for_agents(config, agents):
         agent_results = []
         agent_round = 1
         for run in range(runs_per_agent):
-            agent_name = agent_class.__name__
+            agent_name = agent_class.agent_name
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             config.hyperparameters = all_hyperparameters[hyperparameter_finder[agent_name]]

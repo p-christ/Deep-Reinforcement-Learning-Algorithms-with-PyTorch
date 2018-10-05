@@ -4,6 +4,7 @@ from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
 
 class Hill_Climbing_Agent(Base_Agent):
+    agent_name = "Hill Climbing"
 
     def __init__(self, config, agent_name):
 
@@ -29,7 +30,7 @@ class Hill_Climbing_Agent(Base_Agent):
         self.update_next_state_reward_done_and_score()
 
         if self.time_to_learn():
-            self.learn()
+            self.critic_learn()
 
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
@@ -54,7 +55,7 @@ class Hill_Climbing_Agent(Base_Agent):
         """Tells agent to perturb weights at end of every episode"""
         return self.done
 
-    def learn(self):
+    def critic_learn(self):
 
         raw_noise = (2.0*(np.random.rand(*self.policy.weights.shape) - 0.5))
 

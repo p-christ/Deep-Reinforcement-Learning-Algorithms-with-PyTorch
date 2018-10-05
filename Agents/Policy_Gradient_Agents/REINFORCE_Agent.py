@@ -8,6 +8,7 @@ from NN_Creators import create_vanilla_NN
 
 
 class REINFORCE_Agent(Base_Agent):
+    agent_name = "REINFORCE"
 
     def __init__(self, config, agent_name):
 
@@ -40,7 +41,7 @@ class REINFORCE_Agent(Base_Agent):
         self.store_reward()
 
         if self.time_to_learn():
-            self.learn()
+            self.critic_learn()
 
         self.state = self.next_state #this is to set the state for the next iteration
 
@@ -71,7 +72,8 @@ class REINFORCE_Agent(Base_Agent):
     def store_reward(self):
         self.episode_rewards.append(self.reward)
 
-    def learn(self):
+
+    def policy_learn(self):
         total_discounted_reward = self.calculate_episode_discounted_reward()
         policy_loss = self.calculate_policy_loss_on_episode(total_discounted_reward)
         self.optimizer.zero_grad()
@@ -96,9 +98,3 @@ class REINFORCE_Agent(Base_Agent):
         """Tells us whether it is time for the algorithm to learn. With REINFORCE we only learn at the end of every
         episode so this just returns whether the episode is over"""
         return self.done
-
-    def locally_save_policy(self):
-        pass
-
-    def save_experience(self):
-        pass

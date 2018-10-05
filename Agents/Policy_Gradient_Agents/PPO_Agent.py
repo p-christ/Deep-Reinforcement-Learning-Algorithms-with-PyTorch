@@ -14,7 +14,7 @@ from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 
 
 class PPO_Agent(Base_Agent):
-
+    agent_name = "PPO"
 
     def __init__(self, config, agent_name):
 
@@ -48,7 +48,7 @@ class PPO_Agent(Base_Agent):
         self.store_reward()
 
         if self.time_to_learn():
-            self.learn()
+            self.critic_learn()
 
         if self.time_to_equalise_policies():
             for old_param, new_param in zip(self.policy_old.parameters(), self.policy_new.parameters()):
@@ -91,7 +91,7 @@ class PPO_Agent(Base_Agent):
     def store_reward(self):
         self.one_episode_rewards.append(self.reward)
 
-    def learn(self):
+    def policy_learn(self):
         # future_episode_discounted_rewards = self.calculate_future_episode_discounted_rewards()
         # policy_loss = self.calculate_policy_loss_on_episode(future_episode_discounted_rewards)
 
@@ -109,12 +109,5 @@ class PPO_Agent(Base_Agent):
     def time_to_learn(self):
         return self.done
 
-    def locally_save_policy(self):
-        pass
-
-    def save_experience(self):
-        pass
-
     def time_to_equalise_policies(self):
         return self.episode_number % 3 == 0
-

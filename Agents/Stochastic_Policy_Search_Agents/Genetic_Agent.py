@@ -7,6 +7,7 @@ from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
 
 class Genetic_Agent(Base_Agent):
+    agent_name = "Genetic"
 
     def __init__(self, config, agent_name):
 
@@ -36,7 +37,7 @@ class Genetic_Agent(Base_Agent):
         self.update_next_state_reward_done_and_score()
 
         if self.time_to_learn():
-            self.learn()
+            self.critic_learn()
 
         self.state = self.next_state #this is to set the state for the next iteration
 
@@ -73,7 +74,7 @@ class Genetic_Agent(Base_Agent):
         """We don't save past experiences for this algorithm"""
         pass
 
-    def learn(self):
+    def critic_learn(self):
         """Creates a new set of policies by evolving the previous policies and resets scores"""
         self.policies = self.create_new_set_of_policies()
         self.reset_round_policy_scores()

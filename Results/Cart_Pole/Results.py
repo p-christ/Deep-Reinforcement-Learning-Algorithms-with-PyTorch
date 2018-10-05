@@ -1,3 +1,4 @@
+from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
 from Open_AI_Gym_Environments.Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from Utilities.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
@@ -14,6 +15,9 @@ from Utilities.Utility_Functions import run_games_for_agents
 config = Config()
 config.seed = 100
 config.environment = Mountain_Car_Continuous_Environment()
+#
+# config.environment = Cart_Pole_Environment()
+
 config.max_episodes_to_run = 5000
 config.file_to_save_data_results = "Results_Data51.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
@@ -28,7 +32,7 @@ config.hyperparameters = {
         "buffer_size": 10000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
-        "tau": 0.1,
+        "tau": 0.05, # got good results with 0.1 and 0.05
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.4,
         "incremental_td_error": 1e-8,
@@ -58,14 +62,46 @@ config.hyperparameters = {
         "softmax_final_layer": True,
         "discount_rate": 0.99,
         "batch_norm": False
+    },
+
+    "Actor_Critic_Agents": {
+        "Actor": {
+            "learning_rate": 0.0001,
+            "nn_layers": 2,
+            "nn_start_units": 100,
+            "nn_unit_decay": 1.0,
+            "softmax_final_layer": False,
+            "batch_norm": False,
+            "tau": 0.001,
+            "update_every_n_steps": 10
+        },
+
+        "Critic": {
+            "learning_rate": 0.001,
+            "nn_layers": 3,
+            "nn_start_units": 100,
+            "nn_unit_decay": 1.0,
+            "softmax_final_layer": False,
+            "batch_norm": True,
+            "buffer_size": 100000,
+            "tau": 0.001,
+            "update_every_n_steps": 10
+        },
+
+        "batch_size": 64,
+        "discount_rate": 0.99
+
+
     }
+
 }
 
 AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
           REINFORCE_Agent, PPO_Agent]
 
-AGENTS = [DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
+AGENTS = [DDPG_Agent, DDQN_With_Prioritised_Experience_Replay, DDQN_With_Prioritised_Experience_Replay, DDQN_Agent]
+
 
 
 run_games_for_agents(config, AGENTS)

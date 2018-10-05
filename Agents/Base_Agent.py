@@ -22,8 +22,6 @@ class Base_Agent(object):
         self.average_score_required_to_win = self.environment.get_score_to_win()
         self.rolling_score_window = self.environment.get_rolling_period_to_calculate_score_over()
 
-
-
         self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
@@ -76,10 +74,6 @@ class Base_Agent(object):
                 self.step()
                 self.episode_step_number += 1
 
-    @abstractmethod
-    def step(self):
-        pass
-
     def conduct_action(self):
         self.environment.conduct_action(self.action)
 
@@ -88,18 +82,6 @@ class Base_Agent(object):
         self.reward = self.environment.get_reward()
         self.done = self.environment.get_done()
         self.total_episode_score_so_far += self.environment.get_reward()
-
-    @abstractmethod
-    def time_to_learn(self):
-        pass
-
-    @abstractmethod
-    def learn(self):
-        pass
-
-    @abstractmethod
-    def save_experience(self):
-        pass
 
     def save_and_print_result(self):
         self.save_result()
@@ -152,15 +134,6 @@ class Base_Agent(object):
         plt.xlabel('Episode number')
         plt.show()   
 
-    @abstractmethod
-    def locally_save_policy(self):
-        pass
-
-
-
-        
-
-    
 
 
 

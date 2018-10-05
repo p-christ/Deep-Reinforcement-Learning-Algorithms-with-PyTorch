@@ -5,19 +5,19 @@ from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Repl
 
 
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
-
+    agent_name = "DDQN with Prioritised Replay"
 
     def __init__(self, config, agent_name):
         DDQN_Agent.__init__(self, config, agent_name)
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
 
-    def learn(self):
+    def critic_learn(self):
         sampled_experiences, importance_sampling_weights = self.memory.sample()
         states, actions, rewards, next_states, dones = sampled_experiences
         loss, td_errors = self.compute_loss_and_td_errors(states, next_states, rewards, actions, dones, importance_sampling_weights)
 
-        self.take_optimisation_step(loss)
-        self.soft_update_of_target_network()
+        self.take_critic_optimisation_step(loss)
+        self.soft_update_of_target_network(self.critic_local, self.critic_target, self.hyperparameters["tau"])
         self.memory.update_td_errors(td_errors.squeeze(1))
 
     def save_experience(self):

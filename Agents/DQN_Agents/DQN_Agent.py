@@ -9,21 +9,22 @@ import numpy as np
 
 
 class DQN_Agent(Base_Agent):
+    agent_name = "DQN"
 
     def __init__(self, config, agent_name):
         Base_Agent.__init__(self, config, agent_name)
         print(self.device)
 
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.qnetwork_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
-        self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.critic_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
         self.pick_and_conduct_action()
         self.update_next_state_reward_done_and_score()
-        if self.time_to_learn():
-            self.learn()
+        if self.time_for_critic_to_learn():
+            self.critic_learn()
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
 
@@ -38,10 +39,10 @@ class DQN_Agent(Base_Agent):
         # a "fake" dimension to make it a mini-batch rather than a single observation
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
 
-        self.qnetwork_local.eval() #puts network in evaluation mode
+        self.critic_local.eval() #puts network in evaluation mode
         with torch.no_grad():
-            action_values = self.qnetwork_local(state)
-        self.qnetwork_local.train() #puts network back in training mode        
+            action_values = self.critic_local(state)
+        self.critic_local.train() #puts network back in training mode
 
         action = self.make_epsilon_greedy_choice(action_values)
 
@@ -54,11 +55,10 @@ class DQN_Agent(Base_Agent):
             return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
-    def learn(self):
-        if self.time_to_learn():
-            states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
-            loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
-            self.take_optimisation_step(loss) #Take an optimisation step            
+    def critic_learn(self):
+        states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+        loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
+        self.take_critic_optimisation_step(loss) #Take an optimisation step
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
         Q_targets = self.compute_q_targets(next_states, rewards, dones)
@@ -72,7 +72,7 @@ class DQN_Agent(Base_Agent):
         return Q_targets
 
     def compute_q_values_for_next_states(self, next_states):
-        Q_targets_next = self.qnetwork_local(next_states).detach().max(1)[0].unsqueeze(1)
+        Q_targets_next = self.critic_local(next_states).detach().max(1)[0].unsqueeze(1)
         return Q_targets_next
 
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
@@ -80,39 +80,41 @@ class DQN_Agent(Base_Agent):
         return Q_targets_current
 
     def compute_expected_q_values(self, states, actions):
-        Q_expected = self.qnetwork_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
+        Q_expected = self.critic_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
         return Q_expected.to(self.device)
 
-    def take_optimisation_step(self, loss):
-        self.update_learning_rate()
+    def take_critic_optimisation_step(self, loss):
+
+        if self.done: #we only update the learning rate at end of each episode
+            self.update_learning_rate(self.hyperparameters["learning_rate"], self.critic_optimizer)
 
         loss = loss.to(self.device)
 
-        self.optimizer.zero_grad() #reset gradients to 0
+        self.critic_optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(self.qnetwork_local.parameters(), 5)
-        self.optimizer.step() #this applies the gradients
+        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 5) #clip gradients to help stabilise training
+        self.critic_optimizer.step() #this applies the gradients
 
-    def update_learning_rate(self):
+    def update_learning_rate(self, starting_lr,  optimizer):
 
-        starting_lr = self.hyperparameters["learning_rate"]
+        if len(self.rolling_results) > 0:
 
-        last_rolling_score = self.rolling_results[-1]
+            last_rolling_score = self.rolling_results[-1]
 
-        if last_rolling_score > 0.75 * self.average_score_required_to_win:
-            new_lr = starting_lr / 100.0
+            if last_rolling_score > 0.75 * self.average_score_required_to_win:
+                new_lr = starting_lr / 100.0
 
-        elif last_rolling_score > 0.5 * self.average_score_required_to_win:
-            new_lr = starting_lr / 10.0
+            elif last_rolling_score > 0.5 * self.average_score_required_to_win:
+                new_lr = starting_lr / 10.0
 
-        elif last_rolling_score > 0.25 * self.average_score_required_to_win:
-            new_lr = starting_lr / 2.0
+            elif last_rolling_score > 0.25 * self.average_score_required_to_win:
+                new_lr = starting_lr / 2.0
 
-        else:
-            new_lr = starting_lr
+            else:
+                new_lr = starting_lr
 
-        for g in self.optimizer.param_groups:
-            g['lr'] = new_lr
+            for g in optimizer.param_groups:
+                g['lr'] = new_lr
 
     def save_experience(self):
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
@@ -121,7 +123,7 @@ class DQN_Agent(Base_Agent):
         pass
         # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
 
-    def time_to_learn(self):
+    def time_for_critic_to_learn(self):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
     def right_amount_of_steps_taken(self):
