@@ -11,11 +11,11 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
         self.qnetwork_target = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
     def learn(self):
-        if self.time_to_learn():
-            states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences                        
-            loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
-            self.take_optimisation_step(loss) #Take an optimisation step            
-            self.soft_update_of_target_network() #Update the target network
+        # if self.time_to_learn():
+        states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+        loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
+        self.take_optimisation_step(loss) #Take an optimisation step
+        self.soft_update_of_target_network() #Update the target network
             
     def compute_q_values_for_next_states(self, next_states):
 

@@ -1,3 +1,4 @@
+from Open_AI_Gym_Environments.Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from Utilities.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
@@ -12,8 +13,7 @@ from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
 config.seed = 100
-config.environment = Cart_Pole_Environment()
-config.requirements_to_solve_game = {"average_score_required": 195, "rolling_score_window": 100}
+config.environment = Mountain_Car_Continuous_Environment()
 config.max_episodes_to_run = 5000
 config.file_to_save_data_results = "Results_Data51.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
@@ -65,7 +65,7 @@ AGENTS = [Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent,
           DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
           REINFORCE_Agent, PPO_Agent]
 
-AGENTS = [DQN_Agent]
+AGENTS = [DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
 
 
 run_games_for_agents(config, AGENTS)

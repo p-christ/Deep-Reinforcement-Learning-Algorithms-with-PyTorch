@@ -19,8 +19,9 @@ class Base_Agent(object):
         self.state_size = self.environment.get_state_size()
         self.hyperparameters = config.hyperparameters
 
-        self.rolling_score_window = config.requirements_to_solve_game["rolling_score_window"]
-        self.average_score_required = config.requirements_to_solve_game["average_score_required"]
+        self.average_score_required_to_win = self.environment.get_score_to_win()
+        self.rolling_score_window = self.environment.get_rolling_period_to_calculate_score_over()
+
 
 
         self.total_episode_score_so_far = 0
@@ -49,6 +50,7 @@ class Base_Agent(object):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
 
         start = time.time()
+        print("ACTION SIZE: {}".format(self.action_size))
 
         for episode in range(num_episodes_to_run):
             self.reset_game()
@@ -56,7 +58,7 @@ class Base_Agent(object):
             self.run_episode()
             self.save_and_print_result()          
 
-            if self.max_rolling_score_seen > self.average_score_required: #stop once we achieve required score
+            if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
                 break
 
         time_taken = time.time() - start
@@ -140,7 +142,7 @@ class Base_Agent(object):
     def achieved_required_score_at_index(self):
         """Returns the episode at which agent achieved goal or -1 if it never achieved it"""
         for ix, score in enumerate(self.rolling_results):
-            if score > self.average_score_required:
+            if score > self.average_score_required_to_win:
                 return ix
         return -1
 

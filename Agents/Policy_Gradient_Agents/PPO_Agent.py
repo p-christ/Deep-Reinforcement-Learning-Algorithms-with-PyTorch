@@ -23,7 +23,7 @@ class PPO_Agent(Base_Agent):
         self.policy_new = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.policy_old = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
-        self.max_steps_per_episode = config.environment.give_max_steps_per_episode()
+        self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
 
         self.optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
 
@@ -55,6 +55,11 @@ class PPO_Agent(Base_Agent):
                 old_param.data.copy_(new_param.data)
 
         self.state = self.next_state #this is to set the state for the next iteration
+
+
+# do u not have an explicit older policy and instead just use the prob values from current policy before u changed it with iterations 2 > ?/???
+# just use total reward from episode as advantage functino to get it working first...
+
 
     def pick_and_conduct_action_and_save_ratio_of_policy_probabilities(self):
         action, ratio_of_policy_probabilities = self.pick_action_and_get_ratio_of_policy_probabilities()

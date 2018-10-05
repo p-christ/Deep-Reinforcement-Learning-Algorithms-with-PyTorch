@@ -1,7 +1,7 @@
 from Environments.Base_Environment import Base_Environment
 from unityagents import UnityEnvironment
 
-class Unity_Banana_Environment(Base_Environment):    
+class Banana_Environment(Base_Environment):
     
     def __init__(self, unity_environment_file_name):
         self.game_environment = UnityEnvironment(file_name=unity_environment_file_name)

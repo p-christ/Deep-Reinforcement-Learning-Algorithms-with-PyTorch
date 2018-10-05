@@ -10,7 +10,7 @@ PROJECT_PATH = os.path.split(nb_dir)[0]
 if PROJECT_PATH not in sys.path:
     sys.path.append(PROJECT_PATH)
 
-from Environments.Unity_Environments.Unity_Banana_Environment import Unity_Banana_Environment
+from Environments.Unity_Environments.Banana_Environment import Banana_Environment
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
@@ -26,7 +26,7 @@ FILE_TO_SAVE_DATA_RESULTS = "Episode_results_by_agent.npy"
 UNITY_FILE_NAME = "Banana.app"
 
 if ENVIRONMENT is None:
-    ENVIRONMENT = Unity_Banana_Environment(UNITY_FILE_NAME)
+    ENVIRONMENT = Banana_Environment(UNITY_FILE_NAME)
 
 hyperparameters = {
     "learning_rate": 5e-4,

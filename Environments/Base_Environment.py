@@ -56,6 +56,22 @@ class Base_Environment(ABC):
         pass
 
     @abstractmethod
-    def give_max_steps_per_episode(self):
+    def get_max_steps_per_episode(self):
         """Must return the max number of steps per episode"""
+        pass
+
+    @abstractmethod
+    def get_action_types(self):
+        """Must return 'DISCRETE' if actions are discrete and 'CONTINUOUS' if they are continuous"""
+        pass
+
+    @abstractmethod
+    def get_score_to_win(self):
+        """Must return the numerical score required to 'win' the game"""
+        pass
+
+    @abstractmethod
+    def get_rolling_period_to_calculate_score_over(self):
+        """Must return the period of episodes over which the average score needs to be above the score to win in
+        order to win"""
         pass

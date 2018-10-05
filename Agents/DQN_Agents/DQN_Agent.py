@@ -15,8 +15,7 @@ class DQN_Agent(Base_Agent):
         print(self.device)
 
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.qnetwork_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters)
-        self.qnetwork_local = self.qnetwork_local.to(self.device)
+        self.qnetwork_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.qnetwork_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):
@@ -100,13 +99,13 @@ class DQN_Agent(Base_Agent):
 
         last_rolling_score = self.rolling_results[-1]
 
-        if last_rolling_score > 0.75 * self.average_score_required:
+        if last_rolling_score > 0.75 * self.average_score_required_to_win:
             new_lr = starting_lr / 100.0
 
-        elif last_rolling_score > 0.5 * self.average_score_required:
+        elif last_rolling_score > 0.5 * self.average_score_required_to_win:
             new_lr = starting_lr / 10.0
 
-        elif last_rolling_score > 0.25 * self.average_score_required:
+        elif last_rolling_score > 0.25 * self.average_score_required_to_win:
             new_lr = starting_lr / 2.0
 
         else:
