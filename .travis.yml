@@ -11,6 +11,7 @@ install:
 
 
 script:
+  - export PYTHONPATH="$PYTHONPATH:$PWD"
   - pytest Tests/*.py
 
 
