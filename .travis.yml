@@ -5,7 +5,6 @@ python: 3.7
 dist: xenial
 sudo: true
 
-
 install:
   pip install requirements.txt
 
@@ -13,3 +12,5 @@ script:
   PWD = 'pwd'
   export PYTHONPATH="$PYTHONPATH:$PWD"
   pytest Tests/*.py
+
+
