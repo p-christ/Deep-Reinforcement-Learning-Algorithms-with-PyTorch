@@ -6,7 +6,6 @@ dist: xenial
 sudo: true
 
 install:
-  pip3 install torch torchvision
   pip install numpy
   pip install torch
 
