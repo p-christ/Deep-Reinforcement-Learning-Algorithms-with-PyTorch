@@ -15,6 +15,8 @@ class DQN_Agent(Base_Agent):
         Base_Agent.__init__(self, config, agent_name)
         print(self.device)
 
+        print(self.hyperparameters)
+
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
         self.critic_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
@@ -55,8 +57,14 @@ class DQN_Agent(Base_Agent):
             return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
-    def critic_learn(self):
-        states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+    def critic_learn(self, experiences_given=False, experiences=None):
+
+        if not experiences_given:
+            states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+
+        else:
+            states, actions, rewards, next_states, dones = experiences
+
         loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
         self.take_critic_optimisation_step(loss) #Take an optimisation step
 
@@ -81,14 +89,14 @@ class DQN_Agent(Base_Agent):
 
     def compute_expected_q_values(self, states, actions):
         Q_expected = self.critic_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
-        return Q_expected.to(self.device)
+        return Q_expected
 
     def take_critic_optimisation_step(self, loss):
 
         if self.done: #we only update the learning rate at end of each episode
             self.update_learning_rate(self.hyperparameters["learning_rate"], self.critic_optimizer)
 
-        loss = loss.to(self.device)
+        loss = loss
 
         self.critic_optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients

@@ -1,6 +1,6 @@
 import numpy as np
 
-from Data_Structures.Node import Node
+from Utilities.Data_Structures.Node import Node
 
 
 class Deque(object):

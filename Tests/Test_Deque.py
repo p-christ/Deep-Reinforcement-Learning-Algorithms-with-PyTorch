@@ -1,5 +1,5 @@
-from Data_Structures.Deque import Deque
-from Data_Structures.Node import Node
+from Utilities.Data_Structures.Deque import Deque
+from Utilities.Data_Structures.Node import Node
 
 
 def test_Deque_initialisation():

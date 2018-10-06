@@ -41,8 +41,11 @@ class Model(nn.Module):
 
         self.add_linear_layer(input_dim, output_dim, model_layers)
 
-        if hyperparameters["softmax_final_layer"]:
+        if hyperparameters["final_layer_activation"] == "SOFTMAX":
             self.add_softmax_layer(model_layers)
+
+        if hyperparameters["final_layer_activation"] == "TANH":
+            self.add_tanh_layer(model_layers)
 
         return model_layers
 
@@ -59,6 +62,9 @@ class Model(nn.Module):
 
     def add_softmax_layer(self, model_layers):
         model_layers.append(torch.nn.Softmax())
+
+    def add_tanh_layer(self, model_layers):
+        model_layers.append(torch.nn.Tanh())
 
     def linear_layer_weights_xavier_initialisation(self, layer):
         if isinstance(layer, nn.Linear):

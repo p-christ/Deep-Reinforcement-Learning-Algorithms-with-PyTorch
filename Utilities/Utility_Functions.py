@@ -65,7 +65,7 @@ def run_games_for_agents(config, agents):
         save_obj(results, file_to_save_data_results)
 
     if visualise_overall_results:
-        visualise_results_by_agent(results, requirements_to_solve_game["average_score_required"], file_to_save_data_results_graph)
+        visualise_results_by_agent(results, config.environment.get_score_to_win(), file_to_save_data_results_graph)
 
 
 
@@ -130,8 +130,8 @@ def visualise_results_by_agent(results, target_score, file_to_save_results_graph
 
     min_score_achieved_by_any_agent = min([min(rolling_scores) for rolling_scores in [results[agent_name][1] for agent_name in agents]])
 
-    draw_horizontal_line_with_label(axes[0], y_value=target_score, x_min=0, x_max=max_episodes_seen_by_any_agent, label="Target \n score")
-    draw_horizontal_line_with_label(axes[1], y_value=target_score, x_min=0, x_max=max_time_taken_by_any_agent, label="Target \n score")
+    draw_horizontal_line_with_label(axes[0], y_value=target_score, x_min=0, x_max=max_episodes_seen_by_any_agent*1.02, label="Target \n score")
+    draw_horizontal_line_with_label(axes[1], y_value=target_score, x_min=0, x_max=max_time_taken_by_any_agent*1.02, label="Target \n score")
 
     hide_spines(axes[0], ['right', 'top'])
     hide_spines(axes[1], ['right', 'top'])

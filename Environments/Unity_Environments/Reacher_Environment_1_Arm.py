@@ -46,7 +46,7 @@ class Reacher_Environment_1_Arm(Base_Environment):
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
 
     def get_max_steps_per_episode(self):
-        pass
+        1000
 
     def get_action_types(self):
         return "CONTINUOUS"

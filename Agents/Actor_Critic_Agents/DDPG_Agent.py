@@ -2,10 +2,10 @@ import copy
 import torch
 from torch import optim
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Data_Structures.Replay_Buffer import Replay_Buffer
+from DQN_Agents.DQN_Agent import DQN_Agent
 from Model import Model
 from Utilities.OU_Noise import OU_Noise
-
+import numpy as np
 
 # should use batch normalisation
 
@@ -25,7 +25,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
         config_for_dqn = copy.copy(config)
 
-        for key in config_for_dqn.hyperparameters["Critic"]:
+        for key in config_for_dqn.hyperparameters["Critic"].keys():
             config_for_dqn.hyperparameters[key] = config_for_dqn.hyperparameters["Critic"][key]
 
         DQN_Agent_With_Fixed_Q_Targets.__init__(self, config_for_dqn, agent_name)
@@ -33,16 +33,15 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.ddpg_hyperparameters = config.hyperparameters
 
         self.critic_local = Model(self.state_size + self.action_size, 1, config.seed, self.ddpg_hyperparameters["Critic"]).to(self.device)
-        self.critic_target = Model(self.state_size + self.action_size, 1, config.seed, self.ddpg_hyperparameters["Critic"]).to(self.device)
+        self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),lr=self.ddpg_hyperparameters["Critic"]["learning_rate"])
 
         self.actor_local = Model(self.state_size, self.action_size, config.seed, self.ddpg_hyperparameters["Actor"]).to(self.device)
-        self.actor_target = Model(self.state_size, self.action_size, config.seed,self.ddpg_hyperparameters["Actor"]).to(self.device)
+        self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),lr=self.ddpg_hyperparameters["Actor"]["learning_rate"])
 
-        self.memory = Replay_Buffer(self.ddpg_hyperparameters["Critic"]["buffer_size"], self.ddpg_hyperparameters["batch_size"], config.seed)
-
-        self.noise = OU_Noise(self.action_size, config.seed)
+        self.noise = OU_Noise(self.action_size, config.seed, self.ddpg_hyperparameters["mu"],
+                              self.ddpg_hyperparameters["theta"], self.ddpg_hyperparameters["sigma"])
 
 
     def reset_game(self):
@@ -62,11 +61,10 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.pick_and_conduct_action()
         self.update_next_state_reward_done_and_score()
 
-        if self.time_for_critic_to_learn():
-            self.critic_learn()
-
-        if self.time_for_actor_to_learn():
-            self.actor_learn()
+        if self.time_for_critic_and_actor_to_learn():
+            states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
+            self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
+            self.actor_learn(states)
 
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
@@ -82,6 +80,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
         action += self.noise.sample()
 
+
         return action
 
     def compute_q_values_for_next_states(self, next_states):
@@ -93,11 +92,10 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         Q_expected = self.critic_local(torch.cat((states, actions), 1))
         return Q_expected
 
-    def time_for_actor_to_learn(self):
-        return  self.enough_experiences_to_learn_from() and self.episode_step_number % self.ddpg_hyperparameters["Actor"]["update_every_n_steps"] == 0
+    def time_for_critic_and_actor_to_learn(self):
+        return  self.enough_experiences_to_learn_from() and self.episode_step_number % self.ddpg_hyperparameters["update_every_n_steps"] == 0
 
-    def actor_learn(self):
-        states, _, _, _, _ = self.sample_experiences()  # Sample experiences
+    def actor_learn(self, states):
         actor_loss = self.calculate_actor_loss(states)
         self.take_actor_optimisation_step(actor_loss)
 

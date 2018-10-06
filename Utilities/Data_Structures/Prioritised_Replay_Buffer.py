@@ -1,7 +1,7 @@
 import numpy as np
 import torch
-from Data_Structures.Deque import Deque
-from Data_Structures.Max_Heap import Max_Heap
+from Utilities.Data_Structures.Deque import Deque
+from Utilities.Data_Structures.Max_Heap import Max_Heap
 
 
 class Prioritised_Replay_Buffer(Max_Heap, Deque):
@@ -54,6 +54,7 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         return np.zeros(self.max_size)
 
     def add_experience(self, raw_td_error, state, action, reward, next_state, done):
+        """Save an experience in the replay buffer"""
         td_error = (abs(raw_td_error) + self.incremental_td_error) ** self.alpha
         self.update_overall_sum(td_error, self.deque[self.deque_index_to_overwrite_next].key)
         self.update_deque_and_deque_td_errors(td_error, state, action, reward, next_state, done)
@@ -87,8 +88,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         heap_index_change = self.deque[self.deque_index_to_overwrite_next].heap_index
         self.reorganise_heap(heap_index_change)
 
-
-
     def update_heap_index_to_overwrite_next(self):
         """This updates the heap index to write over next. Once the buffer gets full we stop calling this function because
         the nodes the heap points to start being changed directly rather than the pointers on the heap changing"""
@@ -119,6 +118,7 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         return experiences, deque_sample_indexes
 
     def separate_out_data_types(self, experiences):
+        """Separates out experiences into their different parts and makes them tensors ready to be used in a pytorch model"""
         states = torch.from_numpy(np.vstack([e.value[self.indexes_in_node_value_tuple["state"]] for e in experiences])).float().to(self.device)
         actions = torch.from_numpy(np.vstack([e.value[self.indexes_in_node_value_tuple["action"]] for e in experiences])).float().to(self.device)
         rewards = torch.from_numpy(np.vstack([e.value[self.indexes_in_node_value_tuple["reward"]] for e in experiences])).float().to(self.device)
@@ -158,5 +158,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         return self.adapted_overall_sum_of_td_errors
 
     def __len__(self):
+        """Tells us how many experiences there are in the replay buffer. This number will never exceed self.max_size"""
         return self.number_experiences_in_deque
 
