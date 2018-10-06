@@ -6,8 +6,8 @@ dist: xenial
 sudo: true
 
 install:
-  pip install numpy
-  pip install torch
+  - pip install numpy
+  - pip install torch
 
 
 script:
