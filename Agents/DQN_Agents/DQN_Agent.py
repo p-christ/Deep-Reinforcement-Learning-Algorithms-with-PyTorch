@@ -109,8 +109,14 @@ class DQN_Agent(Base_Agent):
 
             last_rolling_score = self.rolling_results[-1]
 
+            if last_rolling_score > 0.9 * self.average_score_required_to_win:
+                new_lr = starting_lr / 300.0
+
             if last_rolling_score > 0.75 * self.average_score_required_to_win:
                 new_lr = starting_lr / 100.0
+
+            elif last_rolling_score > 0.6 * self.average_score_required_to_win:
+                new_lr = starting_lr / 20.0
 
             elif last_rolling_score > 0.5 * self.average_score_required_to_win:
                 new_lr = starting_lr / 10.0
