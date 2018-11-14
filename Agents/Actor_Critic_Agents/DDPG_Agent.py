@@ -7,7 +7,6 @@ from Model import Model
 from Utilities.OU_Noise import OU_Noise
 import numpy as np
 
-""" WIP NOT FINISHED"""
 
 # TODO the noise should act as a multiplier not an addition. otherwise the scale of the actions matter a lot
 # TODO use batch normalisation
