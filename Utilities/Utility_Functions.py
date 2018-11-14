@@ -26,7 +26,7 @@ def run_games_for_agents(config, agents):
         "DQN with Fixed Q Targets": "DQN_Agents",
         "PPO": "Policy_Gradient_Agents",
         "REINFORCE": "Policy_Gradient_Agents",
-        "Genetic": "Stochastic_Policy_Search_Agents",
+        "Genetic_Agent": "Stochastic_Policy_Search_Agents",
         "Hill Climbing": "Stochastic_Policy_Search_Agents",
         "DDPG": "Actor_Critic_Agents"
     }

@@ -18,16 +18,18 @@ This (WIP) repository contains:
 7. Genetic Evolution
 
 
-### **Environments Tested**
-
-1. Cart Pole
-
 
 ### **Results**
 
 Because results can vary greatly each run, each agent plays the game 10 times and we show the *median* result. 
 We show the results in terms of number of episodes taken to reach the required score
-and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). 
+and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used).
+
+#### **1. Cart Pole**
+
+
+
+Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole:   
  
  ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
   

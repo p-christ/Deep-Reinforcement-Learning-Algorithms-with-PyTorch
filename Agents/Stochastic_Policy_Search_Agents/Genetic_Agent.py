@@ -7,6 +7,7 @@ from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
 
 class Genetic_Agent(Base_Agent):
+    agent_name = "Genetic_Agent"
 
     def __init__(self, config):
 

@@ -90,7 +90,7 @@ config.hyperparameters = {
             "update_every_n_steps": 10
         },
 
-        "batch_size": 64,
+        "batch_size": 128,
         "discount_rate": 0.99,
         "mu": 0.0,
         "theta": 0.15,
@@ -101,6 +101,7 @@ config.hyperparameters = {
 }
 
 
-AGENTS = [DDQN_With_Prioritised_Experience_Replay]  #[] .. ,DQN_Agent, DDPG_Agent , , DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent
+AGENTS = [Genetic_Agent]  #[] ..DDQN_With_Prioritised_Experience_Replay ,DQN_Agent, DDPG_Agent , , DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent
 
 run_games_for_agents(config, AGENTS)
+
