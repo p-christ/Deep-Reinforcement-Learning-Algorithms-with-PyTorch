@@ -10,7 +10,7 @@ from Utilities.Utility_Functions import abstract
 @abstract
 class Base_Agent(object):    
     
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
 
         torch.manual_seed(config.seed)
         np.random.seed(config.seed)
@@ -27,7 +27,6 @@ class Base_Agent(object):
         self.rolling_results = []
         self.max_rolling_score_seen = float("-inf")
 
-        self.agent_name = agent_name
         self.episode_number = 0
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -89,6 +88,7 @@ class Base_Agent(object):
 
     def save_result(self):
         self.game_full_episode_scores.append(self.total_episode_score_so_far)
+
         self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]))
         self.save_max_result_seen()
 

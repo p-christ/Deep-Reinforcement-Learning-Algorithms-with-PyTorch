@@ -7,8 +7,12 @@ class Reacher_Environment_1_Arm(Base_Environment):
 # env = UnityEnvironment(file_name="/Users/petroschristodoulou/Documents/Deep_RL_Implementations/deep-reinforcement-learning/p2_continuous-control/Reacher.app",
 
 
-    def __init__(self, unity_environment_file_name):
-        self.game_environment = UnityEnvironment(file_name=unity_environment_file_name)
+
+    def __init__(self):
+        # self.game_environment = UnityEnvironment(file_name="/Users/petroschristodoulou/Documents/Deep_RL_Implementations/deep-reinforcement-learning/p2_continuous-control/Reacher.app")
+
+        self.game_environment = UnityEnvironment("/Users/petroschristodoulou/Documents/Deep_RL_Implementations/deep-reinforcement-learning/p2_continuous-control/Reacher_Linux_NoVis/Reacher.x86_64")
+
         self.brain_name = self.game_environment.brain_names[0]
         self.brain = self.game_environment.brains[self.brain_name]
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
@@ -46,7 +50,13 @@ class Reacher_Environment_1_Arm(Base_Environment):
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
 
     def get_max_steps_per_episode(self):
-        1000
+        return 1000
 
     def get_action_types(self):
         return "CONTINUOUS"
+
+    def get_rolling_period_to_calculate_score_over(self):
+        return 100
+
+    def get_score_to_win(self):
+        return 30

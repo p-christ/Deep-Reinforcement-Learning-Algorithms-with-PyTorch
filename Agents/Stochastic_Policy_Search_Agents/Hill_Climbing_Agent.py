@@ -4,11 +4,10 @@ from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
 
 class Hill_Climbing_Agent(Base_Agent):
-    agent_name = "Hill Climbing"
 
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
 
-        Base_Agent.__init__(self, config, agent_name)
+        Base_Agent.__init__(self, config)
 
         if self.hyperparameters["policy_network_type"] == "Linear":
             self.policy = Linear_Model(self.state_size, self.action_size)

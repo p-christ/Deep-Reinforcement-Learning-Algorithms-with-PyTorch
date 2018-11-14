@@ -1,5 +1,6 @@
 from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
 from Open_AI_Gym_Environments.Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
+from Unity_Environments.Reacher_Environment_1_Arm import Reacher_Environment_1_Arm
 from Utilities.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
@@ -18,18 +19,19 @@ config.seed = 100
 #
 config.environment = Cart_Pole_Environment()
 
-config.max_episodes_to_run = 5000
+
+config.max_episodes_to_run = 1000
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 10
+config.runs_per_agent = 1
 
 config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
         "batch_size": 64,
-        "buffer_size": 10000,
+        "buffer_size": 20000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
         "tau": 0.1, # got good results with 0.1 and 0.05
@@ -70,10 +72,10 @@ config.hyperparameters = {
             "nn_layers": 2,
             "nn_start_units": 100,
             "nn_unit_decay": 1.0,
-            "final_layer_activation": "TANH",
+            "final_layer_activation": None,
             "batch_norm": False,
             "tau": 0.001,
-            "update_every_n_steps": 1
+            "update_every_n_steps": 10
         },
 
         "Critic": {
@@ -85,7 +87,7 @@ config.hyperparameters = {
             "batch_norm": True,
             "buffer_size": 10000,
             "tau": 0.001,
-            "update_every_n_steps": 1
+            "update_every_n_steps": 10
         },
 
         "batch_size": 64,
@@ -98,27 +100,7 @@ config.hyperparameters = {
 
 }
 
-AGENTS = [Genetic_Agent, Hill_Climbing_Agent] \
 
-    # ,
-    #       DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,
-    #       REINFORCE_Agent]
+AGENTS = [DQN_Agent]  #[DDPG_Agent] .. , DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay
 
-# PPO_Agent
-
-# AGENTS = [DDPG_Agent, DDQN_With_Prioritised_Experience_Replay, DDQN_With_Prioritised_Experience_Replay, DDQN_Agent]
-
-AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
-
-AGENTS = [DDQN_With_Prioritised_Experience_Replay]
-#
 run_games_for_agents(config, AGENTS)
-
-
-# results = load_obj(config.file_to_save_data_results)
-#
-# new_results = {k: v for k, v in results.items() if k in ['Genetic_Agent', 'Hill_Climbing_Agent']}
-#
-# save_obj(new_results, config.file_to_save_data_results)
-#
-# visualise_results_by_agent(new_results, config.environment.get_score_to_win(), config.file_to_save_data_results_graph)

@@ -7,28 +7,24 @@ from Model import Model
 from Utilities.OU_Noise import OU_Noise
 import numpy as np
 
-# should use batch normalisation
+""" WIP NOT FINISHED"""
 
-# Should add noise to the process...
-
-# actor_loss = -self.critic_local(states, actions_pred).mean()
-
-# actor loss is just minus the  Q value for state and actions
-# currently the actor and critic learn from DIFFERNET SAMPLEs of experiences, but maybe should be same?
-# the critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
-
+# TODO the noise should act as a multiplier not an addition. otherwise the scale of the actions matter a lot
+# TODO use batch normalisation
+# TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
 
 class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
     agent_name = "DDPG"
+    print("INITIALIASING DDPG AGENT")
 
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
 
         config_for_dqn = copy.copy(config)
 
         for key in config_for_dqn.hyperparameters["Critic"].keys():
             config_for_dqn.hyperparameters[key] = config_for_dqn.hyperparameters["Critic"][key]
 
-        DQN_Agent_With_Fixed_Q_Targets.__init__(self, config_for_dqn, agent_name)
+        DQN_Agent_With_Fixed_Q_Targets.__init__(self, config_for_dqn)
 
         self.ddpg_hyperparameters = config.hyperparameters
 

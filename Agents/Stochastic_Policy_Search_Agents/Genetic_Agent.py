@@ -7,11 +7,10 @@ from Base_Agent import Base_Agent
 from Linear_Model import Linear_Model
 
 class Genetic_Agent(Base_Agent):
-    agent_name = "Genetic"
 
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
 
-        Base_Agent.__init__(self, config, agent_name)
+        Base_Agent.__init__(self, config)
 
         self.num_policies = self.hyperparameters["num_policies"]
 

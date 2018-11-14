@@ -47,7 +47,7 @@ def run_games_for_agents(config, agents):
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             config.hyperparameters = all_hyperparameters[hyperparameter_finder[agent_name]]
 
-            agent = agent_class(config, agent_name)
+            agent = agent_class(config)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
             print("Time taken: {}".format(time_taken), flush=True)
             print_two_empty_lines()
@@ -101,7 +101,6 @@ def save_score_results(file_path, results):
     
     
 def visualise_results_by_agent(results, target_score, file_to_save_results_graph):
-
 
     agents = results.keys()
 

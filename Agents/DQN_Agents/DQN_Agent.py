@@ -11,8 +11,8 @@ import numpy as np
 class DQN_Agent(Base_Agent):
     agent_name = "DQN"
 
-    def __init__(self, config, agent_name):
-        Base_Agent.__init__(self, config, agent_name)
+    def __init__(self, config):
+        Base_Agent.__init__(self, config)
         print(self.device)
 
         print(self.hyperparameters)
@@ -104,25 +104,26 @@ class DQN_Agent(Base_Agent):
         self.critic_optimizer.step() #this applies the gradients
 
     def update_learning_rate(self, starting_lr,  optimizer):
+        pass
 
-        if len(self.rolling_results) > 0:
-
-            last_rolling_score = self.rolling_results[-1]
-
-            if last_rolling_score > 0.75 * self.average_score_required_to_win:
-                new_lr = starting_lr / 100.0
-
-            elif last_rolling_score > 0.5 * self.average_score_required_to_win:
-                new_lr = starting_lr / 10.0
-
-            elif last_rolling_score > 0.25 * self.average_score_required_to_win:
-                new_lr = starting_lr / 2.0
-
-            else:
-                new_lr = starting_lr
-
-            for g in optimizer.param_groups:
-                g['lr'] = new_lr
+        # if len(self.rolling_results) > 0:
+        #
+        #     last_rolling_score = self.rolling_results[-1]
+        #
+        #     if last_rolling_score > 0.75 * self.average_score_required_to_win:
+        #         new_lr = starting_lr / 100.0
+        #
+        #     elif last_rolling_score > 0.5 * self.average_score_required_to_win:
+        #         new_lr = starting_lr / 10.0
+        #
+        #     elif last_rolling_score > 0.25 * self.average_score_required_to_win:
+        #         new_lr = starting_lr / 2.0
+        #
+        #     else:
+        #         new_lr = starting_lr
+        #
+        #     for g in optimizer.param_groups:
+        #         g['lr'] = new_lr
 
     def save_experience(self):
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)

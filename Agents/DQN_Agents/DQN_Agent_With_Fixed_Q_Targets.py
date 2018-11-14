@@ -6,9 +6,9 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
     agent_name = "DQN with Fixed Q Targets"
 
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
-        DQN_Agent.__init__(self, config, agent_name)
+        DQN_Agent.__init__(self, config)
         self.critic_target = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
     def critic_learn(self, experiences_given=False, experiences=None):

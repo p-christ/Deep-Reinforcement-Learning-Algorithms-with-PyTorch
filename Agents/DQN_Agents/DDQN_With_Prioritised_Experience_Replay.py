@@ -7,8 +7,8 @@ from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Repl
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
     agent_name = "DDQN with Prioritised Replay"
 
-    def __init__(self, config, agent_name):
-        DDQN_Agent.__init__(self, config, agent_name)
+    def __init__(self, config):
+        DDQN_Agent.__init__(self, config)
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
 
     def critic_learn(self):
