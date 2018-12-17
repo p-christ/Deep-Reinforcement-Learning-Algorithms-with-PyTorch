@@ -15,8 +15,8 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. Hill Climbing
 7. Genetic Evolution
 
-
-I plan to add PPO and A2C soon.
+All implementations are able to solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) in a 
+reasonable amount of time. I plan to add PPO and A2C soon.
 
 ### Usage ###
 
@@ -45,14 +45,16 @@ it compatible with all the agents.
 2. Create a config object with the hyperparameters and game you want to use. See `Results/Cart_Pole/Results.py` for an example of this.
 3. Use function `run_games_for_agents` to have the different agents play the game. Again see `Results/Cart_Pole/Results.py` for an example of this.
 
-### **Cart Pole Results**
+### **Algorithm Performance**
 
 Because results can vary greatly each run, each agent plays the game 10 times and we show the *median* result. 
 We show the results in terms of number of episodes taken to reach the required score
 and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used).
 
-Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. The hyperparameters used are shown in the file Results/Cart_Pole/Results.py.   
+Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. The hyperparameters used are shown in the file `Results/Cart_Pole/Results.py`.   
  
- ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
+![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
   
+Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
+![Mountain Car Results](Results/Mountain_Car_Continuous/My_Results_Graph.png)
