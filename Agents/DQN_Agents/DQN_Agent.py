@@ -13,10 +13,6 @@ class DQN_Agent(Base_Agent):
 
     def __init__(self, config):
         Base_Agent.__init__(self, config)
-        print(self.device)
-
-        print(self.hyperparameters)
-
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
         self.critic_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
@@ -65,8 +61,8 @@ class DQN_Agent(Base_Agent):
         else:
             states, actions, rewards, next_states, dones = experiences
 
-        loss = self.compute_loss(states, next_states, rewards, actions, dones) #Compute the loss
-        self.take_critic_optimisation_step(loss) #Take an optimisation step
+        loss = self.compute_loss(states, next_states, rewards, actions, dones)
+        self.take_critic_optimisation_step(loss)
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
         Q_targets = self.compute_q_targets(next_states, rewards, dones)
@@ -104,13 +100,11 @@ class DQN_Agent(Base_Agent):
         self.critic_optimizer.step() #this applies the gradients
 
     def update_learning_rate(self, starting_lr,  optimizer):
+        """Lowers the learning rate according to how close we are to the solution"""
 
         if len(self.rolling_results) > 0:
 
             last_rolling_score = self.rolling_results[-1]
-
-            if last_rolling_score > 0.9 * self.average_score_required_to_win:
-                new_lr = starting_lr / 300.0
 
             if last_rolling_score > 0.75 * self.average_score_required_to_win:
                 new_lr = starting_lr / 100.0

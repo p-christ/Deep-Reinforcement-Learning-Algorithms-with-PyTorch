@@ -4,7 +4,6 @@ from torch.distributions import Categorical
 import torch.optim as optim
 from Base_Agent import Base_Agent
 from Model import Model
-from NN_Creators import create_vanilla_NN
 
 
 class REINFORCE_Agent(Base_Agent):

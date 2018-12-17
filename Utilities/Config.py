@@ -1,6 +1,7 @@
 
 
 class Config(object):
+    """Object to hold the config requirements for an agent/game"""
 
     def __init__(self):
         self.seed = None

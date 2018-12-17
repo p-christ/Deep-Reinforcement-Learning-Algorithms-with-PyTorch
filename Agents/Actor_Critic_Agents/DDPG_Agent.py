@@ -7,7 +7,7 @@ from Model import Model
 from Utilities.OU_Noise import OU_Noise
 import numpy as np
 
-
+""" WIP, Not Finished Yet """
 # TODO the noise should act as a multiplier not an addition. otherwise the scale of the actions matter a lot
 # TODO use batch normalisation
 # TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network

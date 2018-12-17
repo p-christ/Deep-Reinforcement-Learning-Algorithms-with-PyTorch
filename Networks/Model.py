@@ -3,7 +3,10 @@ import torch.nn as nn
 from torch.nn.init import xavier_normal_
 
 
+""" WIP - not complete """
+
 class Model(nn.Module):
+    """Creates the neural network described by the hyperparameters you provide"""
 
     def __init__(self, state_size, action_size, seed, hyperparameters):
         nn.Module.__init__(self)
@@ -13,14 +16,15 @@ class Model(nn.Module):
         return self.model(input)
 
     def create_vanilla_NN(self, state_size, action_size, seed, hyperparameters):
+        """Creates a neural network model"""
         torch.manual_seed(seed)
         model_layers = self.create_model_layers(state_size, action_size, hyperparameters)
         model = torch.nn.Sequential(*model_layers)
         model.apply(self.linear_layer_weights_xavier_initialisation)
-
         return model
 
     def create_model_layers(self, state_size, action_size, hyperparameters):
+        """Creates the different layers of a vanilla neural network"""
         model_layers = []
 
         input_dim = state_size

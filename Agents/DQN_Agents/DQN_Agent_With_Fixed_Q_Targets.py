@@ -1,5 +1,4 @@
 from Model import Model
-from Networks.NN_Creators import create_vanilla_NN
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 

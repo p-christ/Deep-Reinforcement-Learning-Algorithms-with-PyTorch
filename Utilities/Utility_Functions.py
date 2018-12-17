@@ -7,10 +7,9 @@ import os
 
 
 def run_games_for_agents(config, agents):
-
+    """Plays the game for the set of given agents, saves and visualises results"""
 
     runs_per_agent = config.runs_per_agent
-    requirements_to_solve_game = config.requirements_to_solve_game
     max_episodes_to_run = config.max_episodes_to_run
     visualise_overall_results = config.visualise_overall_results
 
@@ -67,9 +66,6 @@ def run_games_for_agents(config, agents):
     if visualise_overall_results:
         visualise_results_by_agent(results, config.environment.get_score_to_win(), file_to_save_data_results_graph)
 
-
-
-
 def save_obj(obj, name):
     if name[-4:] != ".pkl":
         name += ".pkl"
@@ -81,10 +77,9 @@ def load_obj(name):
         return pickle.load(f)
 
 def produce_median_results(agent_results):
-
+    """Finds the median result for an agent"""
     agent_results = sorted(agent_results, key=operator.itemgetter(2, 3))
     median = agent_results[int(len(agent_results) / 2)]
-
     return median
 
 def abstract(cls):
@@ -97,10 +92,10 @@ def print_two_empty_lines():
     
     
 def save_score_results(file_path, results):
-    np.save(file_path, results) 
-    
+    np.save(file_path, results)
     
 def visualise_results_by_agent(results, target_score, file_to_save_results_graph):
+    """Visualises the results of an agent playing"""
 
     agents = results.keys()
 
@@ -160,7 +155,6 @@ def hide_spines(ax, spines_to_hide):
     for spine in spines_to_hide:
         ax.spines[spine].set_visible(False)
 
-
 def set_graph_axis_limits(ax, xmin, xmax, ymin, ymax):
     ax.set_xlim([xmin, xmax])
     ax.set_ylim([ymin, ymax])
@@ -168,6 +162,3 @@ def set_graph_axis_limits(ax, xmin, xmax, ymin, ymax):
 def set_graph_labels(ax, xlabel, ylabel):
     ax.set_ylabel(xlabel)
     ax.set_xlabel(ylabel)
-# #
-# results = load_obj("/Users/petroschristodoulou/Documents/Deep_RL_Implementations/Results/Cart_Pole/Results_Data.pkl")
-# visualise_results_by_agent(results, 195.0, "hello.png")

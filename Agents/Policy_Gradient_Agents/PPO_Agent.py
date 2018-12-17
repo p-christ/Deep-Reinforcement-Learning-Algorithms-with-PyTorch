@@ -5,7 +5,6 @@ from torch.distributions import Categorical
 
 from Base_Agent import Base_Agent
 from Model import Model
-from NN_Creators import create_vanilla_NN
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 
 
@@ -58,11 +57,6 @@ class PPO_Agent(Base_Agent):
 
         self.state = self.next_state #this is to set the state for the next iteration
 
-
-# do u not have an explicit older policy and instead just use the prob values from current policy before u changed it with iterations 2 > ?/???
-# just use total reward from episode as advantage functino to get it working first...
-
-
     def pick_and_conduct_action_and_save_ratio_of_policy_probabilities(self):
         action, ratio_of_policy_probabilities = self.pick_action_and_get_ratio_of_policy_probabilities()
         self.store_ratio_of_policy_probabilities(ratio_of_policy_probabilities)
@@ -96,7 +90,6 @@ class PPO_Agent(Base_Agent):
     def policy_learn(self):
         # future_episode_discounted_rewards = self.calculate_future_episode_discounted_rewards()
         # policy_loss = self.calculate_policy_loss_on_episode(future_episode_discounted_rewards)
-
 
         self.optimizer.zero_grad()
         policy_loss.backward()

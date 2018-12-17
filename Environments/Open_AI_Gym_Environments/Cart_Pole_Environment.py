@@ -51,17 +51,13 @@ class Cart_Pole_Environment(Base_Environment):
         state = env.reset()
         img = plt.imshow(env.render(mode='rgb_array'))
         for t in range(1000):
-            # action, _ = policy.act(state)
             agent.step()
-
             img.set_data(env.render(mode='rgb_array'))
             plt.axis('off')
             display.display(env.gcf())
             display.clear_output(wait=True)
-            # state, reward, done, _ = env.step(action)
             if agent.done:
                 break
-
         env.close()
 
     def get_max_steps_per_episode(self):

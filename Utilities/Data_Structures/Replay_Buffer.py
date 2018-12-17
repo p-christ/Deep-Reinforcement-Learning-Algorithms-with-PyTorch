@@ -6,6 +6,7 @@ import numpy as np
 
 
 class Replay_Buffer(object):
+    """Replay buffer to store past experiences that the agent can then use for training data"""
     
     def __init__(self, buffer_size, batch_size, seed):
 
@@ -17,17 +18,18 @@ class Replay_Buffer(object):
 
 
     def add_experience(self, state, action, reward, next_state, done):
-        
+        """Adds experience into the replay buffer"""
         experience = self.experience(state, action, reward, next_state, done)
         self.memory.append(experience)
    
-    def sample(self):        
+    def sample(self):
+        """Draws a random sample of experience from the replay buffer"""
         experiences = self.pick_experiences()
         states, actions, rewards, next_states, dones = self.separate_out_data_types(experiences)        
         return states, actions, rewards, next_states, dones
             
     def separate_out_data_types(self, experiences):
-        
+        """Puts the sampled experience into the correct format for a PyTorch neural network"""
         states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(self.device)
         actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).float().to(self.device)
         rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float().to(self.device)
@@ -40,5 +42,4 @@ class Replay_Buffer(object):
         return random.sample(self.memory, k=self.batch_size)        
 
     def __len__(self):
-        
         return len(self.memory)

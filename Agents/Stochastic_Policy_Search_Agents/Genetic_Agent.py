@@ -107,7 +107,6 @@ class Genetic_Agent(Base_Agent):
     def reset_round_policy_scores(self):
         self.policy_scores_this_round = [0] * self.num_policies
 
-
     def crossover(self, policy1, policy2):
         """Mixes together the two policies. Each policy weight has a 50:50 chance of coming from
          policy1 or policy2"""

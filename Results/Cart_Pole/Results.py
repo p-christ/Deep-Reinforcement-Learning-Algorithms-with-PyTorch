@@ -15,22 +15,18 @@ from Utilities.Utility_Functions import run_games_for_agents, load_obj, visualis
 
 config = Config()
 config.seed = 100
-# config.environment = Mountain_Car_Continuous_Environment()
-#
 config.environment = Cart_Pole_Environment()
-
-
 config.max_episodes_to_run = 1000
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.runs_per_agent = 10
 
 config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
-        "batch_size": 128,
+        "batch_size": 256,
         "buffer_size": 20000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
@@ -95,13 +91,10 @@ config.hyperparameters = {
         "mu": 0.0,
         "theta": 0.15,
         "sigma": 0.25
-
     }
-
 }
 
-
-AGENTS = [Genetic_Agent]  #[] ..DDQN_With_Prioritised_Experience_Replay ,DQN_Agent, DDPG_Agent , , DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent
+AGENTS = [DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
 
 run_games_for_agents(config, AGENTS)
 
