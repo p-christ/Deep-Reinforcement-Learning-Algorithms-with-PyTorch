@@ -1,6 +1,6 @@
 import torch
 import torch.nn.functional as F
-from DQN_Agents.DDQN_Agent import DDQN_Agent
+from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 
 
