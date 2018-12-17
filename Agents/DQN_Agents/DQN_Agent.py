@@ -1,5 +1,5 @@
 from Agents.Base_Agent import Base_Agent
-from Model import Model
+from Networks.Model import Model
 from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
 import torch.optim as optim
