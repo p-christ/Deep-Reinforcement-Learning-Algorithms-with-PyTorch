@@ -11,11 +11,12 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. Double Deep Q Learning
 1. Double Deep Q Learning with Prioritised Experience Replay
 1. REINFORCE
+1. DDPG
 1. Hill Climbing
 7. Genetic Evolution
-1. DDPG
 
-I plan to also include PPO and A2C soon.
+
+I plan to add PPO and A2C soon.
 
 ### Usage ###
 
@@ -38,11 +39,11 @@ python Results/Cart_Pole/Results.py
 
 To use the algorithms with your own particular game instead you follow these steps:
  
-1. Create an Environment class to represent your game - the environment class you create should extend the Base_Environment class found in the Environments folder to make 
+1. Create an Environment class to represent your game - the environment class you create should extend the `Base_Environment` class found in the `Environments` folder to make 
 it compatible with all the agents.  
 
-2. Create a config object with the hyperparameters and game you want to use. See Results/Cart_Pole/Results.py for an example of this.
-3. Use function run_games_for_agents to have the different agents play the game. Again see Results/Cart_Pole/Results.py for an example of this.
+2. Create a config object with the hyperparameters and game you want to use. See `Results/Cart_Pole/Results.py` for an example of this.
+3. Use function `run_games_for_agents` to have the different agents play the game. Again see `Results/Cart_Pole/Results.py` for an example of this.
 
 ### **Cart Pole Results**
 
