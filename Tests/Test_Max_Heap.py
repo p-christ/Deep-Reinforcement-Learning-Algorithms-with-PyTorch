@@ -17,4 +17,3 @@ def test_heap_always_keeps_max_element_at_top():
         max_key = np.max(elements_added)
         assert round(heap.give_max_key(), 8) == round(max_key, 8), "{}".format(elements_added)
 
-        assert True == False

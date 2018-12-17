@@ -18,8 +18,7 @@ I plan to include PPO, DDPG and A2C soon.
 
 ### Usage ###
 
-The algorithms are found in the Agent folder. To use the algorithms with a particular game you first create an Environment class 
-to represent your game. The environment class you create should extend the Base_Environment class found in the Environments folder.  
+The algorithms are found in the Agent folder. 
 
 To watch all the different agents learn cartpole follow these steps:
 
@@ -34,18 +33,21 @@ conda activate myenvname
 pip3 install -r requirements.txt
 export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
 python Results/Cart_Pole/Results.py
-
 ``` 
 
-### **Results**
+To use the algorithms with your own particular game instead you follow these steps:
+ 
+1. Create an Environment class to represent your game - the environment class you create should extend the Base_Environment class found in the Environments folder to make 
+it compatible with all the agents.  
+
+2. Create a config object with the hyperparameters and game you want to use. See Results/Cart_Pole/Results.py for an example of this.
+3. Use function run_games_for_agents to have the different agents play the game. Again see Results/Cart_Pole/Results.py for an example of this.
+
+### **Cart Pole Results**
 
 Because results can vary greatly each run, each agent plays the game 10 times and we show the *median* result. 
 We show the results in terms of number of episodes taken to reach the required score
 and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used).
-
-#### **1. Cart Pole**
-
-
 
 Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. The hyperparameters used are shown in the file Results/Cart_Pole/Results.py.   
  
