@@ -12,10 +12,10 @@ from Utilities.Utility_Functions import run_games_for_agents, load_obj, visualis
 config = Config()
 config.seed = 100
 config.environment = Cart_Pole_Environment()
-config.max_episodes_to_run = 1000
-config.file_to_save_data_results = "Results_Data.pkl"
-config.file_to_save_data_results_graph = "Results_Graph.png"
-config.visualise_individual_results = False
+config.max_episodes_to_run = 2000
+config.file_to_save_data_results = "My_Results_Data.pkl"
+config.file_to_save_data_results_graph = "My_Results_Graph.png"
+config.visualise_individual_results = True
 config.visualise_overall_results = True
 config.runs_per_agent = 10
 
@@ -56,37 +56,6 @@ config.hyperparameters = {
         "softmax_final_layer": True,
         "discount_rate": 0.99,
         "batch_norm": False
-    },
-
-    "Actor_Critic_Agents": {
-        "Actor": {
-            "learning_rate": 0.001,
-            "nn_layers": 2,
-            "nn_start_units": 100,
-            "nn_unit_decay": 1.0,
-            "final_layer_activation": None,
-            "batch_norm": False,
-            "tau": 0.001,
-            "update_every_n_steps": 10
-        },
-
-        "Critic": {
-            "learning_rate": 0.01,
-            "nn_layers": 3,
-            "nn_start_units": 100,
-            "nn_unit_decay": 1.0,
-            "final_layer_activation": None,
-            "batch_norm": True,
-            "buffer_size": 10000,
-            "tau": 0.001,
-            "update_every_n_steps": 10
-        },
-
-        "batch_size": 128,
-        "discount_rate": 0.99,
-        "mu": 0.0,
-        "theta": 0.15,
-        "sigma": 0.25
     }
 }
 

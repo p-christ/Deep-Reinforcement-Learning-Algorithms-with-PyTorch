@@ -18,12 +18,12 @@ I plan to include PPO, DDPG and A2C soon.
 
 ### Usage ###
 
-The algorithms are found in the Agent folder. To use the algorithms directly you first create an Environment class that extends the Base_Environment class found in the Environments folder.  
+The algorithms are found in the Agent folder. To use the algorithms with a particular game you first create an Environment class 
+to represent your game. The environment class you create should extend the Base_Environment class found in the Environments folder.  
 
 To watch all the different agents learn cartpole follow these steps:
 
 ```commandline
-
 git clone https://github.com/p-christ/Deep_RL_Implementations.git
 cd Deep_RL_Implementations
 
@@ -32,9 +32,8 @@ y
 conda activate myenvname
 
 pip3 install -r requirements.txt
-cd Results/Cart_Pole
 export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
-python Results.py
+python Results/Cart_Pole/Results.py
 
 ``` 
 
