@@ -1,6 +1,3 @@
-from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
-from Open_AI_Gym_Environments.Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
-from Unity_Environments.Reacher_Environment_1_Arm import Reacher_Environment_1_Arm
 from Utilities.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
@@ -30,7 +27,7 @@ config.hyperparameters = {
         "buffer_size": 20000,
         "epsilon": 0.1,
         "discount_rate": 0.99,
-        "tau": 0.1, # got good results with 0.1 and 0.05
+        "tau": 0.1,
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.4,
         "incremental_td_error": 1e-8,
@@ -94,7 +91,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
+AGENTS = [Hill_Climbing_Agent, Genetic_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
 
 run_games_for_agents(config, AGENTS)
 

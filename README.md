@@ -1,13 +1,10 @@
 
 # Implementations of Deep Reinforcement Learning Algorithms
 
-This (WIP) repository contains:
-
-* PyTorch implementations of deep reinforcement learning algorithms
-* Analysis of algorithm performance in different game environments
+This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
 
 
-### **Algorithms Implemented** 
+### **Algorithms Implemented (so far)** 
 
 1. Deep Q Learning
 1. Deep Q Learning with Fixed Q Targets
@@ -17,7 +14,28 @@ This (WIP) repository contains:
 1. Hill Climbing
 7. Genetic Evolution
 
+I plan to include PPO, DDPG and A2C soon.
 
+### Usage ###
+
+The algorithms are found in the Agent folder. To use the algorithms directly you first create an Environment class that extends the Base_Environment class found in the Environments folder.  
+
+To watch all the different agents learn cartpole follow these steps:
+
+```commandline
+
+git clone https://github.com/p-christ/Deep_RL_Implementations.git
+cd Deep_RL_Implementations
+
+conda create --name myenv
+y
+conda activate myenv
+
+pip3 install -r requirements.txt
+cd Results/Cart_Pole
+python Results.py
+
+``` 
 
 ### **Results**
 
@@ -29,7 +47,7 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
 
 
 
-Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole:   
+Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. The hyperparameters used are shown in the file Results/Cart_Pole/Results.py.   
  
  ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
   

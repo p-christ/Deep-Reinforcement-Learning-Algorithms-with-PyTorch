@@ -25,7 +25,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         Deque.__init__(self, hyperparameters["buffer_size"], dimension_of_value_attribute=5)
         np.random.seed(seed)
 
-        # self.deque = self.initialise_deque()
         self.deques_td_errors = self.initialise_td_errors_array()
 
         self.heap_index_to_overwrite_next = 1
