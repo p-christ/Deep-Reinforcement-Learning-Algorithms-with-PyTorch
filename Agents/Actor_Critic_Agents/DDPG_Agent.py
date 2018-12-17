@@ -2,14 +2,11 @@ import copy
 import torch
 from torch import optim
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from DQN_Agents.DQN_Agent import DQN_Agent
 from Model import Model
 from Utilities.OU_Noise import OU_Noise
-import numpy as np
 
-""" WIP, Not Finished Yet """
 # TODO the noise should act as a multiplier not an addition. otherwise the scale of the actions matter a lot
-# TODO use batch normalisation
+# TODO add batch normalisation
 # TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
 
 class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
@@ -65,7 +62,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.state = self.next_state #this is to set the state for the next iteration
 
     def pick_action(self):
-
+        """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
         state = torch.from_numpy(self.state).float().to(self.device)
 
         self.actor_local.eval()
@@ -74,7 +71,6 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.actor_local.train()
 
         action += self.noise.sample()
-
 
         return action
 

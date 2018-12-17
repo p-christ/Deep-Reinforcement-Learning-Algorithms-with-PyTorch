@@ -13,8 +13,9 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. REINFORCE
 1. Hill Climbing
 7. Genetic Evolution
+1. DDPG
 
-I plan to include PPO, DDPG and A2C soon.
+I plan to also include PPO and A2C soon.
 
 ### Usage ###
 
