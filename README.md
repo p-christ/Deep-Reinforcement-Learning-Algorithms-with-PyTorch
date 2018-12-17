@@ -27,9 +27,9 @@ To watch all the different agents learn cartpole follow these steps:
 git clone https://github.com/p-christ/Deep_RL_Implementations.git
 cd Deep_RL_Implementations
 
-conda create --name myenv
+conda create --name myenvname
 y
-conda activate myenv
+conda activate myenvname
 
 pip3 install -r requirements.txt
 cd Results/Cart_Pole
