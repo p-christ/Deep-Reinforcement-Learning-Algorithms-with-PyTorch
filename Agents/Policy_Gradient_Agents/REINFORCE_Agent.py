@@ -2,8 +2,8 @@ import numpy as np
 import torch
 from torch.distributions import Categorical
 import torch.optim as optim
-from Base_Agent import Base_Agent
-from Model import Model
+from Agents.Base_Agent import Base_Agent
+from Networks.Model import Model
 
 
 class REINFORCE_Agent(Base_Agent):

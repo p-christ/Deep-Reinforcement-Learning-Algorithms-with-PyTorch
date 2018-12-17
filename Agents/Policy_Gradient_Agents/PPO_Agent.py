@@ -3,7 +3,7 @@ import numpy as np
 from torch import optim
 from torch.distributions import Categorical
 
-from Base_Agent import Base_Agent
+from Agents.Base_Agent import Base_Agent
 from Model import Model
 from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 

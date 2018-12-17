@@ -4,7 +4,6 @@ from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
-from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
 from Agents.Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 from Agents.Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Agents.Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
@@ -91,7 +90,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [Hill_Climbing_Agent, Genetic_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay]
+AGENTS = [Hill_Climbing_Agent, Genetic_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay, REINFORCE_Agent]
 
 run_games_for_agents(config, AGENTS)
 
