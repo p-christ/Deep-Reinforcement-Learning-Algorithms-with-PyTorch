@@ -57,4 +57,5 @@ Below shows the number of episodes taken and also time taken for each algorithm 
   
 Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
-![Mountain Car Results](Results/Mountain_Car_Continuous/My_Results_Graph.png)
+![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/My_Results_Graph.png)
+
