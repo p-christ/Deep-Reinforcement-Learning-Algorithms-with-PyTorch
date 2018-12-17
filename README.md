@@ -33,6 +33,7 @@ conda activate myenvname
 
 pip3 install -r requirements.txt
 cd Results/Cart_Pole
+export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
 python Results.py
 
 ``` 

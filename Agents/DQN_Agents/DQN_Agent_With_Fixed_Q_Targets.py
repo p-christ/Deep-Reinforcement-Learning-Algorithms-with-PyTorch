@@ -1,4 +1,4 @@
-from Model import Model
+from Networks.Model import Model
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 
