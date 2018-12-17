@@ -4,6 +4,7 @@ from Agents.Base_Agent import Base_Agent
 from Networks.Linear_Model import Linear_Model
 
 class Hill_Climbing_Agent(Base_Agent):
+    agent_name = "Hill Climbing"
 
     def __init__(self, config):
 
