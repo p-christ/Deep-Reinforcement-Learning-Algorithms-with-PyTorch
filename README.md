@@ -51,9 +51,13 @@ Because results can vary greatly each run, each agent plays the game 10 times an
 We show the results in terms of number of episodes taken to reach the required score
 and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used).
 
+#### a) Discrete Action Games
+
 Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. The hyperparameters used are shown in the file `Results/Cart_Pole/Results.py`.   
  
 ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
+
+#### b) Continuous Action Games
   
 Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
