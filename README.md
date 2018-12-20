@@ -66,12 +66,19 @@ pip3 install -r requirements.txt
 export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
 ``` 
 
-And then to watch them learn Cart Pole run:
+And then to watch them learn **Cart Pole** run:
 `python Results/Cart_Pole/Results.py`
 
-To watch them learn Mountain Car run: `python Results/Mountain_Car_Continuous/Results.py`
+To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous/Results.py`
 
-To watch them learn Tennis run: `python Results/Tennis/Results.py`
+To watch them learn **Tennis** you will need to download the environment:
+
+1. Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
+1. Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
+1. Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
+1. Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
+
+and then run: `python Results/Tennis/Results.py`
 
 #### ii) To Train the Agents on your Own Game  
 
