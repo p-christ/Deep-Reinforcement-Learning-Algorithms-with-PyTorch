@@ -32,7 +32,7 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
   
 Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
-![Mountain Car Continuous Results](Mountain_Car_Continuous/Results_Graph.png)
+![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
 
 #### c) Tennis (Continuous Action Game)
 
@@ -41,7 +41,7 @@ Below shows the results of a DDPG agent solving a [Tennis](https://github.com/Un
 
 DDPG results (using a GPU):
 
-![Tennos Results](Tennis/Results_Graph.png)
+![Tennos Results](Results/Tennis/Results_Graph.png)
 
 
 ### Usage ###
