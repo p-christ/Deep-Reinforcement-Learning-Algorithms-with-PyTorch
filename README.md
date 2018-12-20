@@ -26,7 +26,7 @@ Below shows the number of episodes taken and also time taken for each algorithm 
 We show the results in terms of number of episodes taken to reach the required score
 and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Cart_Pole/Results.py`.   
  
-![Cart Pole Results](Results/Cart_Pole/Results_Graph2.png)
+![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
 
 
 #### b) Mountain Car (Continuous Action Game)
