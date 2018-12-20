@@ -54,9 +54,10 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.update_next_state_reward_done_and_score()
 
         if self.time_for_critic_and_actor_to_learn():
-            states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
-            self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
-            self.actor_learn(states)
+            for _ in range(self.ddpg_hyperparameters["learning_updates_per_learning_session"]):
+                states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
+                self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
+                self.actor_learn(states)
 
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
