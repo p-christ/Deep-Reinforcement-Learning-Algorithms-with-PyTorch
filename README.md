@@ -40,7 +40,7 @@ Here are the results for DDPG with respect to the Mountain Car (Continuous) game
 Below shows the results of a DDPG agent solving a [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment, where two agents control rackets to bounce a ball over a net. 
 <p align="center"><img src="https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif" alt="Example" width="50%" style="middle"></p>
 
-DDPG results (using a GPU):
+DDPG results using a GPU with the hyperparameters found in `Results/Tennis/Results.py` :
 
 
 ![Tennis Results](Results/Tennis/Results_Graph.png)
