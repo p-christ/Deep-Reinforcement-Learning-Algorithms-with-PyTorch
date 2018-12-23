@@ -55,10 +55,11 @@ config.hyperparameters = {
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
         "final_layer_activation": "SOFTMAX",
-        "learning_iterations_per_round": 2,
+        "learning_iterations_per_round": 10,
         "discount_rate": 0.99,
         "batch_norm": False,
-        "clip_epsilon": 0.1
+        "clip_epsilon": 0.1,
+        "episodes_per_learning_round": 3
     }
 }
 
