@@ -5,13 +5,13 @@ from torch.distributions import Categorical
 
 from Agents.Base_Agent import Base_Agent
 from Model import Model
-from Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 
 
 """ WIP NOT FINISHED YET"""
 
 # TODO implement parallelism
 # TODO calculate advantages rather than just discounted return
+# TODO remove numerous for loops
 
 
 class PPO_Agent(Base_Agent):

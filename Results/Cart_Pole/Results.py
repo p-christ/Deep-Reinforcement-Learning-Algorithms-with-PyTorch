@@ -14,8 +14,8 @@ config = Config()
 config.seed = 100
 config.environment = Cart_Pole_Environment()
 config.max_episodes_to_run = 2000
-config.file_to_save_data_results = "Results_Data_2.pkl"
-config.file_to_save_data_results_graph = "Results_Graph_2.png"
+config.file_to_save_data_results = "Results_Data.pkl"
+config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
 config.runs_per_agent = 10
@@ -63,7 +63,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [PPO_Agent, DQN_Agent, Hill_Climbing_Agent, Genetic_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay, REINFORCE_Agent]
+AGENTS = [PPO_Agent]
 
 run_games_for_agents(config, AGENTS)
 
