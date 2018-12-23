@@ -9,9 +9,9 @@ from Networks.Model import Model
 class REINFORCE_Agent(Base_Agent):
     agent_name = "REINFORCE"
 
-    def __init__(self, config, agent_name):
+    def __init__(self, config):
 
-        Base_Agent.__init__(self, config, agent_name)
+        Base_Agent.__init__(self, config)
 
         self.policy = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
@@ -40,7 +40,7 @@ class REINFORCE_Agent(Base_Agent):
         self.store_reward()
 
         if self.time_to_learn():
-            self.critic_learn()
+            self.actor_learn()
 
         self.state = self.next_state #this is to set the state for the next iteration
 
@@ -72,7 +72,7 @@ class REINFORCE_Agent(Base_Agent):
         self.episode_rewards.append(self.reward)
 
 
-    def policy_learn(self):
+    def actor_learn(self):
         total_discounted_reward = self.calculate_episode_discounted_reward()
         policy_loss = self.calculate_policy_loss_on_episode(total_discounted_reward)
         self.optimizer.zero_grad()
