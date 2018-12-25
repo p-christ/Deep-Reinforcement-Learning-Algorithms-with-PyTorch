@@ -43,7 +43,6 @@ class PPO_Agent(Base_Agent):
         self.one_episode_states = []
         self.one_episode_actions = []
         self.one_episode_rewards = []
-        self.episode_policy_probability_ratios = []
         self.episode_step_number = 0
 
     def step(self):

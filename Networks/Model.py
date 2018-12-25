@@ -65,10 +65,10 @@ class Model(nn.Module):
         model_layers.append(torch.nn.ReLU())
 
     def add_softmax_layer(self, model_layers):
-        model_layers.append(torch.nn.Softmax())
+        model_layers.append(torch.nn.Softmax(dim=1))
 
     def add_tanh_layer(self, model_layers):
-        model_layers.append(torch.nn.Tanh())
+        model_layers.append(torch.nn.Tanh(dim=1))
 
     def linear_layer_weights_xavier_initialisation(self, layer):
         if isinstance(layer, nn.Linear):
