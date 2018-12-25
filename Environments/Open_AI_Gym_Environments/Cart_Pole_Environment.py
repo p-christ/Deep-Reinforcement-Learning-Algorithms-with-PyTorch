@@ -71,6 +71,3 @@ class Cart_Pole_Environment(Base_Environment):
 
     def get_rolling_period_to_calculate_score_over(self):
         return 100
-
-    def __dict__(self):
-        pass
