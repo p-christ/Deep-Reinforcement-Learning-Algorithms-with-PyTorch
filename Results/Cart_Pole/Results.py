@@ -59,12 +59,13 @@ config.hyperparameters = {
         "discount_rate": 0.99,
         "batch_norm": False,
         "clip_epsilon": 0.1,
-        "episodes_per_learning_round": 3
+        "episodes_per_learning_round": 5
     }
 }
 
 AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay,
           Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent]
+
 
 run_games_for_agents(config, AGENTS)
 

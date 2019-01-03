@@ -37,6 +37,8 @@ def run_games_for_agents(config, agents):
     else:
         results = {}
 
+
+
     for agent_class in agents:
         agent_results = []
         agent_round = 1

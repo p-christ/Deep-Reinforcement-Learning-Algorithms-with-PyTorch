@@ -1,18 +1,19 @@
-from Environments.Base_Environment import Base_Environment
 import gym
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
+
+from Base_Environment import Base_Environment
+
 
 class Cart_Pole_Environment(Base_Environment):
 
     def __init__(self):
         self.game_environment = gym.make("CartPole-v0")
-
-
         self.state = self.game_environment.reset()
         self.next_state = None
         self.reward = None
         self.done = False
+        gym.logger.set_level(40) #stops it from printing an unnecessary warning
 
     def conduct_action(self, action):
         self.next_state, self.reward, self.done, _ = self.game_environment.step(action)
@@ -71,3 +72,4 @@ class Cart_Pole_Environment(Base_Environment):
 
     def get_rolling_period_to_calculate_score_over(self):
         return 100
+

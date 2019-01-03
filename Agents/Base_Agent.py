@@ -47,13 +47,12 @@ class Base_Agent(object):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
 
         start = time.time()
-        print("ACTION SIZE: {}".format(self.action_size))
 
         for episode in range(num_episodes_to_run):
             self.reset_game()
             self.episode_number += 1
             self.run_episode()
-            self.save_and_print_result()          
+            self.save_and_print_result()
 
             if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
                 break
@@ -63,7 +62,6 @@ class Base_Agent(object):
         self.summarise_results()
         if save_model:
             self.locally_save_policy()
-
 
         return self.game_full_episode_scores, self.rolling_results, time_taken
 

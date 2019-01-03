@@ -5,7 +5,7 @@ from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Tar
 from Model import Model
 from Utilities.OU_Noise import OU_Noise
 
-# TODO the noise should act as a multiplier not an addition. otherwise the scale of the actions matter a lot
+# TODO try HER and hierarchical RL using DDPG
 # TODO add batch normalisation
 # TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
 
