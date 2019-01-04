@@ -59,7 +59,8 @@ config.hyperparameters = {
         "discount_rate": 0.99,
         "batch_norm": False,
         "clip_epsilon": 0.1,
-        "episodes_per_learning_round": 5
+        "episodes_per_learning_round": 5,
+        "normalise_rewards": True
     }
 }
 

@@ -7,8 +7,7 @@ import time
 from abc import abstractmethod
 from Utilities.Utility_Functions import abstract
 
-@abstract
-class Base_Agent(object):    
+class Base_Agent(object):
     
     def __init__(self, config):
 

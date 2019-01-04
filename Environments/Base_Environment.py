@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from Utilities.Utility_Functions import abstract
 
 """An abstract base environment which enforces what methods an environment needs in order to work with the base agent
  and therefore all the agents in the Agents folder. 
@@ -7,7 +6,6 @@ from Utilities.Utility_Functions import abstract
 i.e. for any game, if you create an environment class to represent it that extends this class and implements the below
 abstract methods then ALL the agents will be able to play the game"""
 
-@abstract
 class Base_Environment(ABC):
             
     @abstractmethod
