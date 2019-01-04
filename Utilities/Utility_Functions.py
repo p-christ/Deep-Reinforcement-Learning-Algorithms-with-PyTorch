@@ -164,3 +164,8 @@ def set_graph_axis_limits(ax, xmin, xmax, ymin, ymax):
 def set_graph_labels(ax, xlabel, ylabel):
     ax.set_ylabel(xlabel)
     ax.set_xlabel(ylabel)
+
+def normalise_rewards(rewards):
+    mean_reward = np.mean(rewards)
+    std_reward = np.std(rewards)
+    return (rewards - mean_reward) / std_reward

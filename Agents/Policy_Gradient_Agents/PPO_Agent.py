@@ -5,6 +5,7 @@ from torch import optim
 from Agents.Base_Agent import Base_Agent
 from Model import Model
 from Parallel_Experience_Generator import Parallel_Experience_Generator
+from Utility_Functions import normalise_rewards
 
 """ WIP NOT FINISHED YET"""
 
@@ -74,7 +75,7 @@ class PPO_Agent(Base_Agent):
                 all_ratio_of_policy_probabilities.append(ratio_of_policy_probabilities)
 
         if self.hyperparameters["normalise_rewards"]:
-            all_discounted_returns = self.normalise_rewards(all_discounted_returns)
+            all_discounted_returns = normalise_rewards(all_discounted_returns)
 
 
         loss = self.calculate_loss(all_ratio_of_policy_probabilities, all_discounted_returns)
@@ -116,12 +117,6 @@ class PPO_Agent(Base_Agent):
         self.policy_new.zero_grad()  # reset gradients to 0
         loss.backward()  # this calculates the gradients
         self.policy_new_optimizer.step()  # this applies the gradients
-
-    def normalise_rewards(self, rewards):
-        mean_reward = np.mean(rewards)
-        std_reward = np.std(rewards)
-
-        return (rewards - mean_reward) / std_reward
 
     def equalise_policies(self):
         for old_param, new_param in zip(self.policy_old.parameters(), self.policy_new.parameters()):
