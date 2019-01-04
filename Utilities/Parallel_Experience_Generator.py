@@ -1,4 +1,3 @@
-import copy
 import torch
 from contextlib import closing
 from torch.distributions import Categorical
@@ -10,10 +9,10 @@ from random import randint
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent"""
 
-    def __init__(self, environment, model):
+    def __init__(self, environment, policy):
 
         self.environment =  environment
-        self.model = model
+        self.policy = policy
 
     def play_n_episodes(self, n):
         """Plays n episodes in parallel using the fixed policy and returns the data"""
@@ -33,7 +32,7 @@ class Parallel_Experience_Generator(object):
 
     def play_1_episode(self):
         """Plays 1 episode using the fixed policy and returns the data"""
-        env, policy, state = self.reset_game()
+        state = self.reset_game()
         done = False
 
         episode_states = []
@@ -41,11 +40,11 @@ class Parallel_Experience_Generator(object):
         episode_rewards = []
 
         while not done:
-            action = self.pick_action(policy, state)
-            env.conduct_action(action)
-            next_state = env.get_next_state()
-            reward = env.get_reward()
-            done = env.get_done()
+            action = self.pick_action(self.policy, state)
+            self.environment.conduct_action(action)
+            next_state = self.environment.get_next_state()
+            reward = self.environment.get_reward()
+            done = self.environment.get_done()
 
             episode_states.append(state)
             episode_actions.append(action)
@@ -57,18 +56,16 @@ class Parallel_Experience_Generator(object):
 
     def reset_game(self):
         """Resets the game environment so it is ready to play a new episode"""
-        seed = randint(10, 500)
+        seed = randint(0, 10000)
         torch.manual_seed(seed) # Need to do this otherwise each worker generates same experience
-        env = copy.deepcopy(self.environment)
-        policy = copy.deepcopy(self.model)
-        env.reset_environment()
-        state = env.get_state()
-        return env, policy, state
+        self.environment.reset_environment()
+        state = self.environment.get_state()
+        return state
 
     def pick_action(self, policy, state):
         """Picks an action using the policy"""
         state = torch.from_numpy(state).float().unsqueeze(0)
-        new_policy_action_probabilities = policy.forward(state).cpu()
+        new_policy_action_probabilities = policy.forward(state)
         action_distribution = Categorical(new_policy_action_probabilities)  # this creates a distribution to sample from
         action = action_distribution.sample().numpy()[0]
         return action

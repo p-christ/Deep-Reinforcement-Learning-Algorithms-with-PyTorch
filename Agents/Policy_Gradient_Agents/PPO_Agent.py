@@ -1,3 +1,4 @@
+import copy
 import time
 import torch
 import numpy as np
@@ -6,11 +7,6 @@ from Agents.Base_Agent import Base_Agent
 from Model import Model
 from Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utility_Functions import normalise_rewards
-
-""" WIP NOT FINISHED YET"""
-
-# TODO calculate advantages rather than just discounted return
-
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
@@ -37,6 +33,7 @@ class PPO_Agent(Base_Agent):
         while self.episode_number < num_episodes_to_run:
 
             states_for_all_episodes, actions_for_all_episodes, rewards_for_all_episodes = obj.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
+
             self.many_episode_states = states_for_all_episodes
             self.many_episode_actions = actions_for_all_episodes
             self.many_episode_rewards = rewards_for_all_episodes
@@ -53,7 +50,6 @@ class PPO_Agent(Base_Agent):
             self.equalise_policies()
 
         time_taken = time.time() - start
-
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def policy_learn(self):
@@ -119,8 +115,10 @@ class PPO_Agent(Base_Agent):
         self.policy_new_optimizer.step()  # this applies the gradients
 
     def equalise_policies(self):
+
         for old_param, new_param in zip(self.policy_old.parameters(), self.policy_new.parameters()):
             old_param.data.copy_(new_param.data)
+
 
     def save_result(self):
         for ep in range(len(self.many_episode_rewards)):

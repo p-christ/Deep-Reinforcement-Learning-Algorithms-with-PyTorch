@@ -13,7 +13,7 @@ from Utilities.Utility_Functions import run_games_for_agents, load_obj, visualis
 config = Config()
 config.seed = 100
 config.environment = Cart_Pole_Environment()
-config.max_episodes_to_run = 2000
+config.max_episodes_to_run = 500
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
