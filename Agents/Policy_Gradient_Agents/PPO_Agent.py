@@ -47,6 +47,8 @@ class PPO_Agent(Base_Agent):
             for _ in range(self.hyperparameters["learning_iterations_per_round"]):
                 self.policy_learn()
 
+            self.update_learning_rate(self.hyperparameters["learning_rate"], self.policy_new_optimizer)
+
             self.equalise_policies()
 
         time_taken = time.time() - start
@@ -58,21 +60,15 @@ class PPO_Agent(Base_Agent):
         all_discounted_returns = []
 
         for episode in range(len(self.many_episode_states)):
-
-            states = self.many_episode_states[episode]
-            actions = self.many_episode_actions[episode]
-            rewards = self.many_episode_rewards[episode]
-
-            for ix in range(len(states)):
-                discounted_return = self.calculate_discounted_reward(rewards[ix:])
+            for ix in range(len(self.many_episode_states[episode])):
+                discounted_return = self.calculate_discounted_reward(self.many_episode_rewards[episode][ix:])
                 all_discounted_returns.append(discounted_return)
 
-                ratio_of_policy_probabilities = self.calculate_policy_action_probability_ratio(states, actions, ix)
+                ratio_of_policy_probabilities = self.calculate_policy_action_probability_ratio(self.many_episode_states[episode][ix], self.many_episode_actions[episode][ix])
                 all_ratio_of_policy_probabilities.append(ratio_of_policy_probabilities)
 
         if self.hyperparameters["normalise_rewards"]:
             all_discounted_returns = normalise_rewards(all_discounted_returns)
-
 
         loss = self.calculate_loss(all_ratio_of_policy_probabilities, all_discounted_returns)
         self.take_policy_new_optimisation_step(loss)
@@ -82,18 +78,15 @@ class PPO_Agent(Base_Agent):
         total_discounted_reward = np.dot(discounts, rewards)
         return total_discounted_reward
 
-    def calculate_policy_action_probability_ratio(self, states, actions, ix):
+    def calculate_policy_action_probability_ratio(self, state, action):
 
-        state = states[ix]
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
 
         new_policy_action_probabilities = self.policy_new.forward(state).cpu()[0]
         old_policy_action_probabilities = self.policy_old.forward(state).cpu()[0]
 
-        action_chosen = actions[ix]
-
-        ratio_of_policy_probabilities = new_policy_action_probabilities[action_chosen] / \
-                                        old_policy_action_probabilities[action_chosen]
+        ratio_of_policy_probabilities = new_policy_action_probabilities[action] / \
+                                        old_policy_action_probabilities[action]
         return ratio_of_policy_probabilities
 
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):
