@@ -47,7 +47,7 @@ class DQN_Agent(Base_Agent):
         return action
 
     def make_epsilon_greedy_choice(self, action_values):
-        epsilon = self.hyperparameters["epsilon"] / (1.0 + (self.episode_number)**self.hyperparameters["epsilon_decay_rate"])
+        epsilon = self.hyperparameters["epsilon"] / (1.0 + (self.episode_number / self.hyperparameters["epsilon_decay_rate_denominator"]))
 
         if random.random() > epsilon:
             return np.argmax(action_values.data.cpu().numpy())

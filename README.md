@@ -6,16 +6,19 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 
 ### **Algorithms Implemented (so far)** 
 
-1. Deep Q Learning
-1. Deep Q Learning with Fixed Q Targets
-1. Double Deep Q Learning
-1. Double Deep Q Learning with Prioritised Experience Replay
-1. REINFORCE
-1. DDPG
+
+
+1. Deep Q Learning ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))  
+1. Deep Q Learning with Fixed Q Targets ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))
+1. Double Deep Q Learning ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
+1. Double Deep Q Learning with Prioritised Experience Replay ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
+1. REINFORCE ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
+1. PPO ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
+1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. Hill Climbing
 7. Genetic Evolution
 
-All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) and Unity's Tennis game. I plan to add PPO and A2C soon.
+All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) and Unity's Tennis game. I plan to add A2C and A3C soon.
 
 
 ### **Algorithm Performance**

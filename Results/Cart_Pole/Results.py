@@ -24,9 +24,9 @@ config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
         "batch_size": 256,
-        "buffer_size": 20000,
-        "epsilon": 1.0,
-        "epsilon_decay_rate": 0.5,
+        "buffer_size": 40000,
+        "epsilon": 0.1,
+        "epsilon_decay_rate_denominator": 200,
         "discount_rate": 0.99,
         "tau": 0.1,
         "alpha_prioritised_replay": 0.6,
