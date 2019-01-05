@@ -47,7 +47,7 @@ class DQN_Agent(Base_Agent):
         return action
 
     def make_epsilon_greedy_choice(self, action_values):
-        epsilon = self.hyperparameters["epsilon"] / (1.0 + self.episode_number / 200.0)
+        epsilon = self.hyperparameters["epsilon"] / (1.0 + (self.episode_number)**self.hyperparameters["epsilon_decay_rate"])
 
         if random.random() > epsilon:
             return np.argmax(action_values.data.cpu().numpy())
@@ -65,7 +65,9 @@ class DQN_Agent(Base_Agent):
         self.take_critic_optimisation_step(loss)
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
-        Q_targets = self.compute_q_targets(next_states, rewards, dones)
+
+        with torch.no_grad():
+            Q_targets = self.compute_q_targets(next_states, rewards, dones)
         Q_expected = self.compute_expected_q_values(states, actions)
         loss = F.mse_loss(Q_expected, Q_targets)
         return loss

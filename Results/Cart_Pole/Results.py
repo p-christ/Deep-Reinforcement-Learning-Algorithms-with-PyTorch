@@ -25,7 +25,8 @@ config.hyperparameters = {
         "learning_rate": 0.005,
         "batch_size": 256,
         "buffer_size": 20000,
-        "epsilon": 0.1,
+        "epsilon": 1.0,
+        "epsilon_decay_rate": 0.5,
         "discount_rate": 0.99,
         "tau": 0.1,
         "alpha_prioritised_replay": 0.6,
@@ -64,7 +65,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay,
+AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, PPO_Agent, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay,
           Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent]
 
 
