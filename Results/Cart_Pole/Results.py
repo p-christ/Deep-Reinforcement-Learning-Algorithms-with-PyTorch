@@ -1,5 +1,5 @@
 from PPO_Agent import PPO_Agent
-from Utilities.Config import Config
+from Data_Structures.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
@@ -8,7 +8,7 @@ from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pol
 from Agents.Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
 from Agents.Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
 from Agents.Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
-from Utilities.Utility_Functions import run_games_for_agents, load_obj, visualise_results_by_agent, save_obj
+from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
 config.seed = 100
@@ -59,7 +59,7 @@ config.hyperparameters = {
         "learning_iterations_per_round": 10,
         "discount_rate": 0.99,
         "batch_norm": False,
-        "clip_epsilon": 0.1,
+        "clip_epsilon": 0.2,
         "episodes_per_learning_round": 5,
         "normalise_rewards": True
     }

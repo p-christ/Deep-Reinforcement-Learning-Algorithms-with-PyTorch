@@ -1,7 +1,6 @@
 from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
-from Config import Config
+from Data_Structures.Config import Config
 from Fetch_Reach_Environment import Fetch_Reach_Environment
-from Open_AI_Gym_Environments.Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from Utility_Functions import run_games_for_agents
 
 config = Config()

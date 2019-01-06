@@ -1,4 +1,6 @@
 import sys
+
+import gym
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -30,6 +32,7 @@ class Base_Agent(object):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         self.visualise_results_boolean = config.visualise_individual_results
+        gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""

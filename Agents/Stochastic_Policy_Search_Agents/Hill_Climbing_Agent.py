@@ -1,7 +1,7 @@
 import numpy as np
 
 from Agents.Base_Agent import Base_Agent
-from Networks.Linear_Model import Linear_Model
+from Models.Linear_Model import Linear_Model
 
 class Hill_Climbing_Agent(Base_Agent):
     agent_name = "Hill Climbing"

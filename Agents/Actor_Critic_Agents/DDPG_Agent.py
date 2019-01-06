@@ -2,7 +2,7 @@ import copy
 import torch
 from torch import optim
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Model import Model
+from Neural_Network import Neural_Network
 from Utilities.OU_Noise import OU_Noise
 
 # TODO try HER and hierarchical RL using DDPG - create separate class
@@ -24,11 +24,11 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
         self.ddpg_hyperparameters = config.hyperparameters
 
-        self.critic_local = Model(self.state_size + self.action_size, 1, config.seed, self.ddpg_hyperparameters["Critic"]).to(self.device)
+        self.critic_local = Neural_Network(self.state_size + self.action_size, 1, config.seed, self.ddpg_hyperparameters["Critic"]).to(self.device)
         self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),lr=self.ddpg_hyperparameters["Critic"]["learning_rate"])
 
-        self.actor_local = Model(self.state_size, self.action_size, config.seed, self.ddpg_hyperparameters["Actor"]).to(self.device)
+        self.actor_local = Neural_Network(self.state_size, self.action_size, config.seed, self.ddpg_hyperparameters["Actor"]).to(self.device)
         self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),lr=self.ddpg_hyperparameters["Actor"]["learning_rate"])
 

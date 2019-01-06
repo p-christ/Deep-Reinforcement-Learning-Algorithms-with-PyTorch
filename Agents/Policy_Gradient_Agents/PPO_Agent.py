@@ -4,9 +4,10 @@ import torch
 import numpy as np
 from torch import optim
 from Agents.Base_Agent import Base_Agent
-from Model import Model
+from Neural_Network import Neural_Network
 from Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utility_Functions import normalise_rewards
+
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
@@ -15,8 +16,8 @@ class PPO_Agent(Base_Agent):
 
         Base_Agent.__init__(self, config)
 
-        self.policy_new = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
-        self.policy_old = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy_new = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy_old = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_number = 0
@@ -108,10 +109,9 @@ class PPO_Agent(Base_Agent):
         self.policy_new_optimizer.step()  # this applies the gradients
 
     def equalise_policies(self):
-
+        """Sets the old policy's parameters equal to the new policy's parameters"""
         for old_param, new_param in zip(self.policy_old.parameters(), self.policy_new.parameters()):
             old_param.data.copy_(new_param.data)
-
 
     def save_result(self):
         for ep in range(len(self.many_episode_rewards)):

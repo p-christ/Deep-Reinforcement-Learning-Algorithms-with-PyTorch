@@ -5,7 +5,6 @@ from multiprocessing import Pool
 from random import randint
 
 
-
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent"""
 

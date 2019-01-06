@@ -5,7 +5,7 @@ from torch.nn.init import xavier_normal_
 
 """ WIP - not complete """
 
-class Model(nn.Module):
+class Neural_Network(nn.Module):
     """Creates the neural network described by the hyperparameters you provide"""
 
     def __init__(self, state_size, action_size, seed, hyperparameters):

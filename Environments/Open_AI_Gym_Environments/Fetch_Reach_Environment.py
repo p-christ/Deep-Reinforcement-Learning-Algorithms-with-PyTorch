@@ -13,12 +13,10 @@ class Fetch_Reach_Environment(Base_Environment):
 
         self.state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
 
-
         self.next_state = None
         self.reward = None
         self.done = False
         self.info = None
-        gym.logger.set_level(40) #stops it from printing an unnecessary warning
 
     def conduct_action(self, action):
         self.state_information, self.reward, self.done, self.info = self.game_environment.step(action)

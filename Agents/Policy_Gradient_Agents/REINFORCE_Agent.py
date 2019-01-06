@@ -3,7 +3,7 @@ import torch
 from torch.distributions import Categorical
 import torch.optim as optim
 from Agents.Base_Agent import Base_Agent
-from Networks.Model import Model
+from Models.Neural_Network import Neural_Network
 
 
 class REINFORCE_Agent(Base_Agent):
@@ -13,7 +13,7 @@ class REINFORCE_Agent(Base_Agent):
 
         Base_Agent.__init__(self, config)
 
-        self.policy = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
 
         self.episode_rewards = []

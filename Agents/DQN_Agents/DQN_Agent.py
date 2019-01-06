@@ -1,5 +1,5 @@
 from Agents.Base_Agent import Base_Agent
-from Networks.Model import Model
+from Models.Neural_Network import Neural_Network
 from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
 import torch.optim as optim
@@ -14,7 +14,7 @@ class DQN_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.critic_local = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.critic_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):

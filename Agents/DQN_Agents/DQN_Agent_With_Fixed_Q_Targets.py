@@ -1,4 +1,4 @@
-from Networks.Model import Model
+from Models.Neural_Network import Neural_Network
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 
@@ -8,7 +8,7 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
     def __init__(self, config):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
         DQN_Agent.__init__(self, config)
-        self.critic_target = Model(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.critic_target = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
 
     def critic_learn(self, experiences_given=False, experiences=None):
         super(DQN_Agent_With_Fixed_Q_Targets, self).critic_learn(experiences_given=experiences_given, experiences=experiences)

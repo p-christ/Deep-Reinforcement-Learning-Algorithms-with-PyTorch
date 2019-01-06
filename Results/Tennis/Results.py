@@ -1,5 +1,5 @@
 from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
-from Config import Config
+from Data_Structures.Config import Config
 from Unity_Environments.Tennis_Environment import Tennis_Environment
 from Utility_Functions import run_games_for_agents
 
