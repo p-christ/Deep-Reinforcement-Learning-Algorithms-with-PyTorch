@@ -16,9 +16,9 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. PPO ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
 1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. Hill Climbing
-7. Genetic Evolution
+1. Genetic Evolution
 
-All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) and Unity's Tennis game. I plan to add A2C and A3C soon.
+All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) or Unity's Tennis game (multi-agent game with continuous actions). I plan to add A2C, A3C, and DDPG-HER soon.
 
 
 ### **Algorithm Performance**

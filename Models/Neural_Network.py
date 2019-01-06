@@ -5,6 +5,9 @@ from torch.nn.init import xavier_normal_
 
 """ WIP - not complete """
 
+# TODO add batch normalisation
+
+
 class Neural_Network(nn.Module):
     """Creates the neural network described by the hyperparameters you provide"""
 

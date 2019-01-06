@@ -6,12 +6,10 @@ from Neural_Network import Neural_Network
 from Utilities.OU_Noise import OU_Noise
 
 # TODO try HER and hierarchical RL using DDPG - create separate class
-# TODO add batch normalisation
 # TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
 
 class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
     agent_name = "DDPG"
-    print("INITIALIASING DDPG AGENT")
 
     def __init__(self, config):
 
