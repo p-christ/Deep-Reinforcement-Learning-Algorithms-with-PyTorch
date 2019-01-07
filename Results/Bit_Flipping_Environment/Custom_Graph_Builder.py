@@ -11,7 +11,7 @@ results = load_obj("Results_Data.pkl")
 
 agents = results.keys()
 
-fig, axes = plt.subplots(1, 1, sharex=False, figsize = (5, 4.5)) # plt.subplots()
+fig, axes = plt.subplots(1, 1, sharex=False, figsize = (9, 7)) # plt.subplots()
 
 lines = []
 
