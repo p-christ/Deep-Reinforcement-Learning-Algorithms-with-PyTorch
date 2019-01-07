@@ -1,7 +1,7 @@
 import copy
 import random
 import numpy as np
-from Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 
 class Bit_Flipping_Environment(Base_Environment):
 
@@ -75,7 +75,7 @@ class Bit_Flipping_Environment(Base_Environment):
     def get_reward_for_achieving_goal(self):
         return self.reward_for_achieving_goal
 
-    def step_reward_for_not_achieving_goal(self):
+    def get_step_reward_for_not_achieving_goal(self):
         return self.step_reward_for_not_achieving_goal
 
     def get_max_steps_per_episode(self):

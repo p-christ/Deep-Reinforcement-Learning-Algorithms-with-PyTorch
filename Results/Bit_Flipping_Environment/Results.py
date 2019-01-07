@@ -1,3 +1,4 @@
+from DQN_HER_Agent import DQN_HER_Agent
 from Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
 from PPO_Agent import PPO_Agent
 from Data_Structures.Config import Config
@@ -41,7 +42,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [DQN_Agent]
+AGENTS = [DQN_HER_Agent, DQN_Agent]
 
 
 run_games_for_agents(config, AGENTS)

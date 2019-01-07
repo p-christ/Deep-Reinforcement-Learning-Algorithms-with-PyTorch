@@ -23,9 +23,9 @@ class DDPG_HER_Agent(DDPG_Agent):
                 states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
                 self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
                 self.actor_learn(states)
-
-        self.save_experience()
         self.track_episodes_data()
+        self.save_experience()
+
 
         if self.done:
             self.save_alternative_experience()
@@ -55,7 +55,7 @@ class DDPG_HER_Agent(DDPG_Agent):
             if ix == num_observations - 1:
                 new_reward = self.environment.get_reward_for_achieving_goal()
             else:
-                new_reward = self.step_reward_for_not_achieving_goal()
+                new_reward = self.get_step_reward_for_not_achieving_goal()
 
             self.memory.add_experience(new_state, self.episode_actions[ix], new_reward, new_next_state, self.episode_dones[ix])
 

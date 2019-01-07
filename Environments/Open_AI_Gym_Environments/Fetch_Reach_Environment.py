@@ -67,7 +67,7 @@ class Fetch_Reach_Environment(Base_Environment):
     def get_reward_for_achieving_goal(self):
         return self.reward_for_achieving_goal
 
-    def step_reward_for_not_achieving_goal(self):
+    def get_step_reward_for_not_achieving_goal(self):
         return self.step_reward_for_not_achieving_goal
 
     def get_max_steps_per_episode(self):

@@ -20,6 +20,7 @@ def run_games_for_agents(config, agents):
 
     hyperparameter_finder = {
         "DQN": "DQN_Agents",
+        "DQN_HER": "DQN_Agents",
         "DDQN": "DQN_Agents",
         "DDQN with Prioritised Replay": "DQN_Agents",
         "DQN with Fixed Q Targets": "DQN_Agents",

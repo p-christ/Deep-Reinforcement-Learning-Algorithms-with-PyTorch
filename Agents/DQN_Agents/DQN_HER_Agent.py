@@ -1,7 +1,7 @@
 from DQN_Agent import DQN_Agent
 
 
-class DQN_HER(DQN_Agent):
+class DQN_HER_Agent(DQN_Agent):
 
     agent_name = "DQN_HER"
 
@@ -14,8 +14,9 @@ class DQN_HER(DQN_Agent):
         self.update_next_state_reward_done_and_score()
         if self.time_for_critic_to_learn():
             self.critic_learn()
-        self.save_experience()
         self.track_episodes_data()
+        self.save_experience()
+
 
         if self.done:
             self.save_alternative_experience()
@@ -35,6 +36,9 @@ class DQN_HER(DQN_Agent):
         new_goal = self.environment.get_achieved_goal()
         num_observations = len(self.episode_states)
 
+        reward_for_achieving_goal = self.environment.get_reward_for_achieving_goal()
+        step_reward_for_not_achieving_goal = self.environment.get_step_reward_for_not_achieving_goal()
+
         for ix in range(num_observations):
             new_state = self.episode_states[ix]
             new_state[-dimension_of_goal:] = new_goal
@@ -43,9 +47,9 @@ class DQN_HER(DQN_Agent):
             new_next_state[-dimension_of_goal:] = new_goal
 
             if ix == num_observations - 1:
-                new_reward = self.environment.get_reward_for_achieving_goal()
+                new_reward = reward_for_achieving_goal
             else:
-                new_reward = self.step_reward_for_not_achieving_goal()
+                new_reward = step_reward_for_not_achieving_goal
 
             self.memory.add_experience(new_state, self.episode_actions[ix], new_reward, new_next_state,
                                        self.episode_dones[ix])
