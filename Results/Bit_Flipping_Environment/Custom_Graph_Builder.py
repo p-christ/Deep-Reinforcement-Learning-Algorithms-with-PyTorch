@@ -6,11 +6,12 @@ from Utility_Functions import load_obj, draw_horizontal_line_with_label, hide_sp
 file_to_save_results_graph = "My_diagram"
 target_score = 0
 
+
 results = load_obj("Results_Data.pkl")
 
 agents = results.keys()
 
-fig, axes = plt.subplots(1, 1, sharex=False, figsize = (10, 9)) # plt.subplots()
+fig, axes = plt.subplots(1, 1, sharex=False, figsize = (5, 4.5)) # plt.subplots()
 
 lines = []
 
