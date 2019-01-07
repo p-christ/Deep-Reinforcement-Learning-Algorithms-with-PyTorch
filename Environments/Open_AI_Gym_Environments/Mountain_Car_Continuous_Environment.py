@@ -32,9 +32,6 @@ class Mountain_Car_Continuous_Environment(Base_Environment):
     def get_done(self):
         return self.done
 
-    def get_reward(self):
-        return self.reward
-
     def reset_environment(self):
         self.state = self.game_environment.reset()
 

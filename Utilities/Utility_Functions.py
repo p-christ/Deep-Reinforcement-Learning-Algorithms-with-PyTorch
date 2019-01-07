@@ -27,7 +27,8 @@ def run_games_for_agents(config, agents):
         "REINFORCE": "Policy_Gradient_Agents",
         "Genetic_Agent": "Stochastic_Policy_Search_Agents",
         "Hill Climbing": "Stochastic_Policy_Search_Agents",
-        "DDPG": "Actor_Critic_Agents"
+        "DDPG": "Actor_Critic_Agents",
+        "DDPG_HER": "Actor_Critic_Agents"
     }
 
 

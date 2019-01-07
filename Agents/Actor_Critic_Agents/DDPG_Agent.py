@@ -70,7 +70,6 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.actor_local.train()
 
         action += self.noise.sample()
-
         return action
 
     def compute_q_values_for_next_states(self, next_states):

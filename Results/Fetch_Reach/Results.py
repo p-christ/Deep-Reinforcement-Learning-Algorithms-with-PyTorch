@@ -1,4 +1,5 @@
 from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
+from DDPG_HER_Agent import DDPG_HER_Agent
 from Data_Structures.Config import Config
 from Fetch_Reach_Environment import Fetch_Reach_Environment
 from Utility_Functions import run_games_for_agents
@@ -39,7 +40,7 @@ config.hyperparameters = {
             "update_every_n_steps": 800
         },
 
-        "batch_size": 128,
+        "batch_size": 256,
         "discount_rate": 0.98,
         "mu": 0.0,
         "theta": 0.15,
@@ -48,6 +49,6 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [DDPG_Agent]
+AGENTS = [DDPG_HER_Agent, DDPG_Agent]
 
 run_games_for_agents(config, AGENTS)

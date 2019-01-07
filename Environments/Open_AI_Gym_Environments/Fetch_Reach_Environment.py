@@ -18,6 +18,9 @@ class Fetch_Reach_Environment(Base_Environment):
         self.done = False
         self.info = None
 
+        self.reward_for_achieving_goal = 0
+        self.step_reward_for_not_achieving_goal = -1
+
     def conduct_action(self, action):
         self.state_information, self.reward, self.done, self.info = self.game_environment.step(action)
 
@@ -44,9 +47,6 @@ class Fetch_Reach_Environment(Base_Environment):
     def get_done(self):
         return self.done
 
-    def get_reward(self):
-        return self.reward
-
     def get_current_reward_for_another_goal(self, goal):
         return self.game_environment.compute_reward(self.achieved_goal, goal, self.info)
 
@@ -63,6 +63,12 @@ class Fetch_Reach_Environment(Base_Environment):
         self.achieved_goal = self.state_information["achieved_goal"]
 
         self.state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
+
+    def get_reward_for_achieving_goal(self):
+        return self.reward_for_achieving_goal
+
+    def step_reward_for_not_achieving_goal(self):
+        return self.step_reward_for_not_achieving_goal
 
     def get_max_steps_per_episode(self):
         return 50
