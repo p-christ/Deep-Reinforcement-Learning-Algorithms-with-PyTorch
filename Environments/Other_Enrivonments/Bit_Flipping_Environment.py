@@ -25,11 +25,13 @@ class Bit_Flipping_Environment(Base_Environment):
 
     def conduct_action(self, action):
 
+        assert action <= self.environment_dimension + 1, "You picked an invalid action"
+
         self.step_count += 1
 
         if action != self.environment_dimension + 1: #otherwise no bits are flipping
             self.next_state = copy.copy(self.state)
-            self.next_state[action] = self.next_state[action] % 1
+            self.next_state[action] = (self.next_state[action] + 1) % 2
 
         if self.goal_achieved(self.next_state):
             self.reward = 1
