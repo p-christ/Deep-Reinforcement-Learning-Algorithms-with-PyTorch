@@ -1,4 +1,4 @@
-from DQN_Agent import DQN_Agent
+from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 
 class DQN_HER_Agent(DQN_Agent):
@@ -16,7 +16,6 @@ class DQN_HER_Agent(DQN_Agent):
             self.critic_learn()
         self.track_episodes_data()
         self.save_experience()
-
 
         if self.done:
             self.save_alternative_experience()

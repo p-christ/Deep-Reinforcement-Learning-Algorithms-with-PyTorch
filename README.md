@@ -17,8 +17,9 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. Hill Climbing
 1. Genetic Evolution
+1. Deep Q Learning w Hindsight Experience Replay (HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
-All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) or Unity's Tennis game (multi-agent game with continuous actions). I plan to add A2C, A3C, and DDPG-HER soon.
+All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
 
 
 ### **Algorithm Performance**
@@ -38,15 +39,15 @@ Here are the results for DDPG with respect to the Mountain Car (Continuous) game
 
 ![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
 
-#### c) Tennis (Continuous Action Multi-Agent Game)
 
-Below shows the results of a DDPG agent solving a [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment, where two agents control rackets to bounce a ball over a net. 
-<p align="center"><img src="https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif" alt="Example" width="50%" style="middle"></p>
+#### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
 
-DDPG results using a GPU with the hyperparameters found in `Results/Tennis/Results.py` :
+Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment described
+in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
+found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
+ to solve. The hyperparameters used were as in the paper and can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
 
-
-![Tennis Results](Results/Tennis/Results_Graph.png)
+![Bit Flipping Results](Results/Bit_Flipping_Environment/Results_Graph.png)
 
 
 ### Usage ###
@@ -74,14 +75,7 @@ And then to watch them learn **Cart Pole** run:
 
 To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous/Results.py`
 
-To watch them learn **Tennis** you will need to download the environment:
-
-1. Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
-1. Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
-1. Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
-1. Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
-
-and then run: `python Results/Tennis/Results.py`
+To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping_Environment/Results.py`
 
 #### ii) To Train the Agents on your Own Game  
 

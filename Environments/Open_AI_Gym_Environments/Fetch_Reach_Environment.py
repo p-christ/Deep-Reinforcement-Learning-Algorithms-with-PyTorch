@@ -29,6 +29,8 @@ class Fetch_Reach_Environment(Base_Environment):
 
         self.next_state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
 
+        self.state = self.next_state
+
     def get_action_size(self):
         return 4
 

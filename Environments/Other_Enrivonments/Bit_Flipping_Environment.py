@@ -5,11 +5,11 @@ from Environments.Base_Environment import Base_Environment
 
 class Bit_Flipping_Environment(Base_Environment):
 
-    def __init__(self, environment_dimension=50):
+    def __init__(self, environment_dimension=20):
         self.environment_dimension = environment_dimension
         self.reset_environment()
-        self.reward_for_achieving_goal = 1
-        self.step_reward_for_not_achieving_goal = 0
+        self.reward_for_achieving_goal = self.environment_dimension
+        self.step_reward_for_not_achieving_goal = -1
 
     def reset_environment(self):
         self.desired_goal = self.randomly_pick_state_or_goal()
@@ -32,11 +32,11 @@ class Bit_Flipping_Environment(Base_Environment):
             self.next_state[action] = (self.next_state[action] + 1) % 2
 
         if self.goal_achieved(self.next_state):
-            self.reward = 1
+            self.reward = self.reward_for_achieving_goal
             self.done = True
 
         else:
-            self.reward = 0
+            self.reward = self.step_reward_for_not_achieving_goal
 
             if self.step_count >= self.environment_dimension:
                 self.done = True
@@ -44,6 +44,8 @@ class Bit_Flipping_Environment(Base_Environment):
                 self.done = False
 
         self.achieved_goal = self.next_state[:self.environment_dimension]
+
+        self.state = self.next_state
 
     def goal_achieved(self, next_state):
         return next_state[:self.environment_dimension] == next_state[-self.environment_dimension:]
@@ -85,8 +87,8 @@ class Bit_Flipping_Environment(Base_Environment):
         return "CONTINUOUS"
 
     def get_score_to_win(self):
-        return 1
+        return 0
 
     def get_rolling_period_to_calculate_score_over(self):
-        return 20
+        return 50
 
