@@ -19,10 +19,11 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. Genetic Evolution
 1. Deep Q Learning w Hindsight Experience Replay (HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
-All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
+All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) 
+or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
 
 
-### **Algorithm Performance**
+### **Results**
 
 #### a) Cart Pole (Discrete Action Game)
 
