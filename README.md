@@ -45,7 +45,7 @@ Here are the results for DDPG with respect to the Mountain Car (Continuous) game
 Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
- to solve. The hyperparameters used were as in the paper and can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
+ to solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
 
 ![Bit Flipping Results](Results/Bit_Flipping_Environment/My_diagram.png)
 
