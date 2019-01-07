@@ -46,6 +46,11 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.episode_step_number = 0
         self.noise.reset()
 
+        self.episode_states = []
+        self.episode_actions = []
+        self.episode_next_states = []
+        self.episode_dones = []
+
     def step(self):
         """Runs a step within a game including a learning step if required"""
         self.pick_and_conduct_action()

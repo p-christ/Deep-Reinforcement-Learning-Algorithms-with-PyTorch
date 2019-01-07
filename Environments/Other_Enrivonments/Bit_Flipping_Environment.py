@@ -29,7 +29,7 @@ class Bit_Flipping_Environment(Base_Environment):
 
         self.step_count += 1
 
-        if action != self.environment_dimension + 1: #otherwise no bits are flipping
+        if action != self.environment_dimension + 1: #otherwise no bit is flipped
             self.next_state = copy.copy(self.state)
             self.next_state[action] = (self.next_state[action] + 1) % 2
 
