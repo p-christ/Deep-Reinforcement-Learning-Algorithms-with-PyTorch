@@ -47,7 +47,7 @@ in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
  to solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
 
-![Bit Flipping Results](Results/Bit_Flipping_Environment/My_diagram.png)
+![Bit Flipping Results](Results/Bit_Flipping_Environment/Results_Graph.png)
 
 
 ### Usage ###
