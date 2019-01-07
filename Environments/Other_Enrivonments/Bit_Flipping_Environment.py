@@ -1,7 +1,5 @@
 import copy
 import random
-
-import gym
 import numpy as np
 from Base_Environment import Base_Environment
 
