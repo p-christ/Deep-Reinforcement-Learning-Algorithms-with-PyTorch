@@ -135,7 +135,6 @@ pyasn1-modules==0.2.2
 pycodestyle==2.4.0
 pycosat==0.6.3
 pycparser==2.18
-pycrypto==2.6.1
 pycurl==7.43.0.2
 pyflakes==2.0.0
 pyglet==1.3.2
@@ -155,7 +154,7 @@ python-dateutil==2.7.3
 pytz==2018.5
 PyVirtualDisplay==0.2.1
 PyWavelets==1.0.0
-PyYAML==3.13
+PyYAML==4.2b1
 pyzmq==17.1.2
 QtAwesome==0.4.4
 qtconsole==4.4.1

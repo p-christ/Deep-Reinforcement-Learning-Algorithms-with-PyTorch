@@ -1,6 +1,5 @@
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
-
 class DQN_HER_Agent(DQN_Agent):
 
     agent_name = "DQN_HER"
@@ -30,7 +29,6 @@ class DQN_HER_Agent(DQN_Agent):
 
     def save_alternative_experience(self):
         """Saves the experiences as if the final state visited in the episode was the goal state"""
-
         dimension_of_goal = len(self.environment.desired_goal)
         new_goal = self.environment.get_achieved_goal()
         num_observations = len(self.episode_states)
