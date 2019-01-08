@@ -5,6 +5,8 @@ import operator
 import pickle
 import os
 
+from torch.distributions import Categorical, normal
+
 
 def run_games_for_agents(config, agents):
     """Plays the game for the set of given agents, saves and visualises results"""
@@ -171,3 +173,15 @@ def normalise_rewards(rewards):
     mean_reward = np.mean(rewards)
     std_reward = np.std(rewards)
     return (rewards - mean_reward) / std_reward
+
+def create_actor_distribution(action_types, actor_output, action_size):
+
+    if action_types == "DISCRETE":
+        assert actor_output.size()[1] == action_size, "Actor output the wrong size"
+        action_distribution = Categorical(actor_output)  # this creates a distribution to sample from
+
+    else:
+        assert actor_output.size()[1] == action_size * 2, "Actor output the wrong size"
+        action_distribution = normal.Normal(actor_output[0, : action_size], actor_output[0, action_size:])
+
+    return action_distribution

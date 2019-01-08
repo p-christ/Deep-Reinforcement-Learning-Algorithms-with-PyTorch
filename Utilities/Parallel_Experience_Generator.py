@@ -1,16 +1,19 @@
 import torch
 from contextlib import closing
-from torch.distributions import Categorical
 from multiprocessing import Pool
 from random import randint
 
+from Utility_Functions import create_actor_distribution
+
 
 class Parallel_Experience_Generator(object):
-    """ Plays n episode in parallel using a fixed agent"""
+    """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
 
     def __init__(self, environment, policy):
 
         self.environment =  environment
+        self.action_size = self.environment.get_action_size()
+        self.action_types = self.environment.get_action_types()
         self.policy = policy
 
     def play_n_episodes(self, n):
@@ -64,9 +67,9 @@ class Parallel_Experience_Generator(object):
     def pick_action(self, policy, state):
         """Picks an action using the policy"""
         state = torch.from_numpy(state).float().unsqueeze(0)
-        new_policy_action_probabilities = policy.forward(state)
-        action_distribution = Categorical(new_policy_action_probabilities)  # this creates a distribution to sample from
-        action = action_distribution.sample().numpy()[0]
+        actor_output = policy.forward(state)
+        action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
+        action = action_distribution.sample().numpy()
         return action
 
 

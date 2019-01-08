@@ -61,7 +61,6 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
                 states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
                 self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
                 self.actor_learn(states)
-
         self.save_experience()
         self.state = self.next_state #this is to set the state for the next iteration
 
@@ -74,7 +73,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
 
-        action += self.noise.sample()
+        action += self.noise.sample() / (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
         return action
 
     def compute_q_values_for_next_states(self, next_states):

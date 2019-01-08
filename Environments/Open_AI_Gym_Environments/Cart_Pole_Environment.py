@@ -1,4 +1,5 @@
 import gym
+import numpy as np
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
 
@@ -16,6 +17,8 @@ class Cart_Pole_Environment(Base_Environment):
         gym.logger.set_level(40) #stops it from printing an unnecessary warning
 
     def conduct_action(self, action):
+        if type(action) is np.ndarray:
+            action = action[0]
         self.next_state, self.reward, self.done, _ = self.game_environment.step(action)
 
     def get_action_size(self):

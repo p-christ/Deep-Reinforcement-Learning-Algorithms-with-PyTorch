@@ -4,10 +4,10 @@ from Utility_Functions import load_obj, draw_horizontal_line_with_label, hide_sp
     set_graph_labels
 
 file_to_save_results_graph = "My_diagram"
-target_score = 0
+target_score = 90
 
 
-results = load_obj("Results_Data.pkl")
+results = load_obj("Results_Data2.pkl")
 
 agents = results.keys()
 
@@ -18,7 +18,7 @@ lines = []
 for agent_name in agents:
 
     rolling_scores = results[agent_name][1]
-    rolling_scores = rolling_scores[:4502]
+    # rolling_scores = rolling_scores[:4502]
 
     lines.append(rolling_scores)
 
@@ -32,7 +32,7 @@ for agent_name in agents:
 
 
 
-max_episodes_seen_by_any_agent = 4502
+max_episodes_seen_by_any_agent = 280
 max_time_taken_by_any_agent =  max([results[agent_name][2] for agent_name in agents])
 
 min_score_achieved_by_any_agent = min([min(rolling_scores) for rolling_scores in [results[agent_name][1] for agent_name in agents]]) - 1.0
@@ -41,7 +41,7 @@ draw_horizontal_line_with_label(axes, y_value=target_score, x_min=0, x_max=max_e
 
 hide_spines(axes, ['right', 'top'])
 
-set_graph_axis_limits(axes, 0, 4502, min_score_achieved_by_any_agent, target_score)
+set_graph_axis_limits(axes, 0, max_episodes_seen_by_any_agent, min_score_achieved_by_any_agent, target_score)
 
 
 plt.figlegend(lines, labels=agents, loc='lower center', ncol=3, labelspacing=0.)

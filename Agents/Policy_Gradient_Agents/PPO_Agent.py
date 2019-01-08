@@ -6,24 +6,33 @@ from torch import optim
 from Agents.Base_Agent import Base_Agent
 from Neural_Network import Neural_Network
 from Parallel_Experience_Generator import Parallel_Experience_Generator
-from Utility_Functions import normalise_rewards
+from Utility_Functions import normalise_rewards, create_actor_distribution
 
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
 
     def __init__(self, config):
-
         Base_Agent.__init__(self, config)
-
-        self.policy_new = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
-        self.policy_old = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.initialise_policies()
         self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_number = 0
         self.many_episode_states = []
         self.many_episode_actions = []
         self.many_episode_rewards = []
+
+    def initialise_policies(self):
+        """Initialises the policies"""
+        if self.action_types == "DISCRETE":
+            policy_output_size = self.action_size
+        else:
+            policy_output_size = self.action_size * 2 #Because we need 1 parameter for mean and 1 for std of distribution
+
+        self.policy_new = Neural_Network(self.state_size, policy_output_size, self.random_seed, self.hyperparameters).to(
+            self.device)
+        self.policy_old = Neural_Network(self.state_size, policy_output_size, self.random_seed, self.hyperparameters).to(
+            self.device)
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
@@ -32,13 +41,7 @@ class PPO_Agent(Base_Agent):
         obj = Parallel_Experience_Generator(self.environment, self.policy_new)
 
         while self.episode_number < num_episodes_to_run:
-
-            states_for_all_episodes, actions_for_all_episodes, rewards_for_all_episodes = obj.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
-
-            self.many_episode_states = states_for_all_episodes
-            self.many_episode_actions = actions_for_all_episodes
-            self.many_episode_rewards = rewards_for_all_episodes
-
+            self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = obj.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
             self.episode_number += self.hyperparameters["episodes_per_learning_round"]
             self.save_and_print_result()
 
@@ -83,11 +86,17 @@ class PPO_Agent(Base_Agent):
 
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
 
-        new_policy_action_probabilities = self.policy_new.forward(state).cpu()[0]
-        old_policy_action_probabilities = self.policy_old.forward(state).cpu()[0]
+        new_policy_output = self.policy_new.forward(state).cpu()
+        old_policy_output = self.policy_old.forward(state).cpu()
 
-        ratio_of_policy_probabilities = new_policy_action_probabilities[action] / \
-                                        old_policy_action_probabilities[action]
+        new_policy_distribution = create_actor_distribution(self.action_types, new_policy_output, self.action_size)
+        old_policy_distribution = create_actor_distribution(self.action_types, old_policy_output, self.action_size)
+
+        new_policy_distribution_log_prob = new_policy_distribution.log_prob(torch.from_numpy(np.array(action)))
+        old_policy_distribution_log_prob = old_policy_distribution.log_prob(torch.from_numpy(np.array(action)))
+
+        ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / torch.exp(old_policy_distribution_log_prob)
+
         return ratio_of_policy_probabilities
 
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):

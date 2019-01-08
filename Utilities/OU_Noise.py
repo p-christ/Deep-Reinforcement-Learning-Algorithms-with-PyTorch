@@ -18,6 +18,6 @@ class OU_Noise(object):
 
     def sample(self):
         """Update internal state and return it as a noise sample."""
-        dx = self.theta * (self.mu - self.state) + self.sigma * np.array([random.random() for i in range(len(self.state))])
-        self.state += + dx
+        dx = self.theta * (self.mu - self.state) + self.sigma * np.array([np.random.normal() for i in range(len(self.state))])
+        self.state += dx
         return self.state
