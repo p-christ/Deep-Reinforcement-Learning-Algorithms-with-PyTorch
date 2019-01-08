@@ -56,7 +56,7 @@ cooperative environment where the goal of each agent is to hit the ball back to 
 
 A DDPG agent was used to solve the environment with the results below. The hyperparameters used can be found in `Results/Tennis/Results.py`:
 
-![Tennis Results](Results/Tennis/Results_Graph copy.png)
+![Tennis Results](Results/Tennis/Results_Graph.png)
 
 ### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
 
