@@ -38,6 +38,8 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
 
 #### b) Mountain Car (Continuous Action Game)
   
+![example](Environments/Animation_Gifs/Mountain_Car.gif)  
+  
 Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
 ![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
