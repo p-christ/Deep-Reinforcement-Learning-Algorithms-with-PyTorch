@@ -4,9 +4,7 @@
 This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
 
 
-## **Algorithms Implemented (so far)** 
-
-
+## **Algorithms Implemented** 
 
 1. Deep Q Learning ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))  
 1. Deep Q Learning with Fixed Q Targets ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))
@@ -27,7 +25,7 @@ or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, a
 
 ### a) Discrete Action Games 
 
-####      Cart Pole:
+#### Cart Pole:
 
 ![example](Environments/Animation_Gifs/Cart_Pole.gif)
 
