@@ -5,7 +5,8 @@ import operator
 import pickle
 import os
 
-from torch.distributions import Categorical, normal
+import torch
+from torch.distributions import Categorical, normal, MultivariateNormal
 
 
 def run_games_for_agents(config, agents):
@@ -182,6 +183,6 @@ def create_actor_distribution(action_types, actor_output, action_size):
 
     else:
         assert actor_output.size()[1] == action_size * 2, "Actor output the wrong size"
-        action_distribution = normal.Normal(actor_output[0, : action_size], actor_output[0, action_size:])
+        action_distribution = MultivariateNormal(actor_output[0, :action_size], torch.abs(torch.diag(actor_output[0, action_size:])))
 
     return action_distribution

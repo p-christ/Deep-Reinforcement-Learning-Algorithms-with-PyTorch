@@ -53,17 +53,17 @@ config.hyperparameters = {
             "update_every_n_steps": 10
         },
 
-        "batch_size": 256, #256 did well before
+        "batch_size": 512, #256 did well before
         "discount_rate": 0.99,
         "mu": 0.0,
         "theta": 0.15,
         "sigma": 0.25, #0.22 did well before
-        "noise_decay_denominator": 200,
+        "noise_decay_denominator": 25,
         "learning_updates_per_learning_session": 5,
 
     }
 }
 
-AGENTS = [PPO_Agent]
+AGENTS = [DDPG_Agent]
 
 run_games_for_agents(config, AGENTS)

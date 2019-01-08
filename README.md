@@ -4,7 +4,7 @@
 This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
 
 
-### **Algorithms Implemented (so far)** 
+## **Algorithms Implemented (so far)** 
 
 
 
@@ -23,9 +23,11 @@ All implementations are able to quickly solve either Cart Pole (discrete actions
 or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
 
 
-### **Results**
+## **Results**
 
-#### a) Cart Pole (Discrete Action Game)
+### a) Discrete Action Games 
+
+####      Cart Pole:
 
 ![example](Environments/Animation_Gifs/Cart_Pole.gif)
 
@@ -36,7 +38,10 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
 ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
 
 
-#### b) Mountain Car (Continuous Action Game)
+### b) Continuous Action Games 
+
+
+#### Mountain Car
   
 ![example](Environments/Animation_Gifs/Mountain_Car.gif)  
   
@@ -44,8 +49,18 @@ Here are the results for DDPG with respect to the Mountain Car (Continuous) game
 
 ![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
 
+#### Tennis
 
-#### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
+The [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment is a multi-agent
+cooperative environment where the goal of each agent is to hit the ball back to the other play as many times
+ as possible without the ball going out of play or hitting the ground.  
+<p align="center"><img src="https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif" alt="Example" width="50%" style="middle"></p>
+
+DDPG was used to solve the environment with the results below. The hyperparameters used can be found in `Results/Tennis/Results.py`:
+
+![Tennis Results](Results/Tennis/Results_Graph.png)
+
+### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
 
 Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
@@ -79,6 +94,15 @@ And then to watch them learn **Cart Pole** run:
 `python Results/Cart_Pole/Results.py`
 
 To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous/Results.py`
+
+To watch them learn **Tennis** you will need to download the environment:
+
+1. Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
+1. Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
+1. Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
+1. Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
+
+and then run: `python Results/Tennis/Results.py`
 
 To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping_Environment/Results.py`
 
