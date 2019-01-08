@@ -3,7 +3,7 @@ import torch
 from torch.distributions import Categorical
 import torch.optim as optim
 from Agents.Base_Agent import Base_Agent
-from Models.Neural_Network import Neural_Network
+from Neural_Network import Neural_Network
 
 
 class REINFORCE_Agent(Base_Agent):

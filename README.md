@@ -70,7 +70,28 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 
 ### Usage ###
 
-The algorithms are found in the Agent folder. 
+The repository's high-level structure is:
+ 
+    ├── Agents                    
+        ├── Actor_Critic_Agents   
+        ├── DQN_Agents         
+        ├── Policy_Gradient_Agents
+        └── Stochastic_Policy_Search_Agents 
+    ├── Environments
+        ├── Open_AI_Gym_Environments   
+        ├── Other_Environments         
+        └── Unity_Environments    
+    ├── Results
+        ├── Bit_Flipping_Environment   
+        ├── Cart_Pole
+        ├── Fetch_Reach
+        ├── Mountain_Car_Continuous             
+        └── Tennis        
+    ├── Tests
+    ├── Utilities
+        ├── Data_Structures             
+        └── Models            
+   
 
 #### i) To Watch the Agents Learn the Above Games  
 
