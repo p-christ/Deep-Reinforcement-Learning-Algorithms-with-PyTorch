@@ -27,6 +27,8 @@ or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, a
 
 #### a) Cart Pole (Discrete Action Game)
 
+![example](Environments/Animation_Gifs/Cart_Pole.gif)
+
 Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. Because results can vary greatly each run, each agent plays the game 10 times and we show the *median* result. 
 We show the results in terms of number of episodes taken to reach the required score
 and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Cart_Pole/Results.py`.   
@@ -43,7 +45,7 @@ Here are the results for DDPG with respect to the Mountain Car (Continuous) game
 
 #### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
 
-Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment described
+Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
  to solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
