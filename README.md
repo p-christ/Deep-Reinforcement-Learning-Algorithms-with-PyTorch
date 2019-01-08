@@ -54,7 +54,7 @@ cooperative environment where the goal of each agent is to hit the ball back to 
  as possible without the ball going out of play or hitting the ground.  
 <p align="center"><img src="https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif" alt="Example" width="50%" style="middle"></p>
 
-DDPG was used to solve the environment with the results below. The hyperparameters used can be found in `Results/Tennis/Results.py`:
+A DDPG agent was used to solve the environment with the results below. The hyperparameters used can be found in `Results/Tennis/Results.py`:
 
 ![Tennis Results](Results/Tennis/Results_Graph.png)
 
