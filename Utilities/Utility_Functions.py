@@ -173,7 +173,7 @@ def set_graph_labels(ax, xlabel, ylabel):
 def normalise_rewards(rewards):
     mean_reward = np.mean(rewards)
     std_reward = np.std(rewards)
-    return (rewards - mean_reward) / std_reward
+    return (rewards - mean_reward) / (std_reward + 1e-8)
 
 def create_actor_distribution(action_types, actor_output, action_size):
 

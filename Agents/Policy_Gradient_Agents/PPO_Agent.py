@@ -1,3 +1,4 @@
+import random
 import time
 import torch
 import numpy as np
@@ -83,11 +84,6 @@ class PPO_Agent(Base_Agent):
             all_discounted_returns.extend(discounted_returns[::-1])
         return all_discounted_returns
 
-    def calculate_discounted_reward(self, rewards):
-        discounts = self.hyperparameters["discount_rate"] ** np.arange(len(rewards))
-        total_discounted_reward = np.dot(discounts, rewards)
-        return total_discounted_reward
-
     def calculate_policy_action_probability_ratio(self, state, action):
         """Calculates the ratio of the probability/density of an action wrt the old and new policy"""
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
@@ -105,16 +101,20 @@ class PPO_Agent(Base_Agent):
 
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):
         """Calculates the PPO loss"""
-        observation_losses = [torch.min(policy_probability_ratio * discounted_return, self.clamp_probability_ratio(probability_ratio) * discounted_return)
-                              for policy_probability_ratio, discounted_return, probability_ratio
-                              in zip(all_ratio_of_policy_probabilities, all_discounted_returns, all_ratio_of_policy_probabilities) ]
-        loss = - torch.sum(torch.stack(observation_losses))
-        average_loss = loss / len(all_ratio_of_policy_probabilities)
-        return average_loss
+        all_ratio_of_policy_probabilities = torch.squeeze(torch.stack(all_ratio_of_policy_probabilities))
+        all_discounted_returns = torch.tensor(all_discounted_returns, dtype=torch.float)
+
+        value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
+        value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)
+
+        loss = torch.min(value_1, value_2)
+        loss = -torch.mean(loss)
+
+        return loss
 
     def clamp_probability_ratio(self, value):
         """Clamps a value between a certain range determined by hyperparameter clip epsilon"""
-        return torch.clamp(value, min=1.0 - self.hyperparameters["clip_epsilon"],
+        return torch.clamp(input=value, min=1.0 - self.hyperparameters["clip_epsilon"],
                                   max=1.0 + self.hyperparameters["clip_epsilon"])
 
     def take_policy_new_optimisation_step(self, loss):
