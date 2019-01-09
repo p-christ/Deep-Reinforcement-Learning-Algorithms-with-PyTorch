@@ -65,12 +65,8 @@ class PPO_Agent(Base_Agent):
             all_discounted_returns = normalise_rewards(all_discounted_returns)
 
         for _ in range(self.hyperparameters["learning_iterations_per_round"]):
-            all_ratio_of_policy_probabilities = []
-            for episode in range(len(self.many_episode_states)):
-                for ix in range(len(self.many_episode_states[episode])):
-                    ratio_of_policy_probabilities = self.calculate_policy_action_probability_ratio(self.many_episode_states[episode][ix], self.many_episode_actions[episode][ix])
-                    all_ratio_of_policy_probabilities.append(ratio_of_policy_probabilities)
-            loss = self.calculate_loss(all_ratio_of_policy_probabilities, all_discounted_returns)
+            all_ratio_of_policy_probabilities = self.calculate_all_ratio_of_policy_probabilities()
+            loss = self.calculate_loss([all_ratio_of_policy_probabilities], all_discounted_returns)
             self.take_policy_new_optimisation_step(loss)
 
     def calculate_all_discounted_returns(self):
@@ -84,6 +80,39 @@ class PPO_Agent(Base_Agent):
             all_discounted_returns.extend(discounted_returns[::-1])
         return all_discounted_returns
 
+    def calculate_all_ratio_of_policy_probabilities(self):
+
+        all_states = []
+        all_actions = []
+
+        for ix in range(len(self.many_episode_states)):
+            all_states.extend(self.many_episode_states[ix])
+            all_actions.extend(self.many_episode_actions[ix])
+
+        all_states = torch.stack([torch.Tensor(states).float().to(self.device) for states in all_states])
+
+        all_actions = torch.stack([torch.Tensor(actions).float().to(self.device) for actions in all_actions])
+        all_actions = all_actions.view(-1, len(all_states))
+
+
+        # all_actions =  torch.stack([torch.Tensor(action).float().to(self.device) for action in all_actions])
+        # all_actions = all_actions.unsqueeze(-1)
+
+        new_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_new, all_states, all_actions)
+
+        old_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_old, all_states, all_actions)
+        ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / torch.exp(old_policy_distribution_log_prob)
+        return ratio_of_policy_probabilities
+        #
+        # # print(all_actions.size())
+        # #
+        # print(new_policy_distribution_log_prob.size())
+        # print(new_policy_distribution_log_prob)
+        #
+        # assert True==False
+
+
+
     def calculate_policy_action_probability_ratio(self, state, action):
         """Calculates the ratio of the probability/density of an action wrt the old and new policy"""
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
@@ -96,7 +125,8 @@ class PPO_Agent(Base_Agent):
         """Calculates the log probability of an action occuring given a policy and starting state"""
         policy_output = policy.forward(state).cpu()
         policy_distribution = create_actor_distribution(self.action_types, policy_output, self.action_size)
-        policy_distribution_log_prob = policy_distribution.log_prob(torch.from_numpy(np.array(action)))
+        actions_tensor = torch.from_numpy(np.array(action))
+        policy_distribution_log_prob = policy_distribution.log_prob(actions_tensor)
         return policy_distribution_log_prob
 
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):
@@ -104,10 +134,10 @@ class PPO_Agent(Base_Agent):
         all_ratio_of_policy_probabilities = torch.squeeze(torch.stack(all_ratio_of_policy_probabilities))
         all_discounted_returns = torch.tensor(all_discounted_returns, dtype=torch.float)
 
-        value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
-        value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)
+        potential_loss_value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
+        potential_loss_value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)
 
-        loss = torch.min(value_1, value_2)
+        loss = torch.min(potential_loss_value_1, potential_loss_value_2)
         loss = -torch.mean(loss)
 
         return loss

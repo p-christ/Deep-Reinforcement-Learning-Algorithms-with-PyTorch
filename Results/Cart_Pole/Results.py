@@ -51,7 +51,7 @@ config.hyperparameters = {
         "num_policies_to_keep": 5
     },
     "Policy_Gradient_Agents": {
-        "learning_rate": 0.1, #0.001
+        "learning_rate": 0.01, #0.001
         "nn_layers": 2,
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
@@ -59,7 +59,7 @@ config.hyperparameters = {
         "learning_iterations_per_round": 10,
         "discount_rate": 0.99,
         "batch_norm": False,
-        "clip_epsilon": 0.000002, #0.2 clip epsilon
+        "clip_epsilon": 0.2, #0.2 clip epsilon
         "episodes_per_learning_round": 5,
         "normalise_rewards": True
     }
