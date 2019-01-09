@@ -60,7 +60,6 @@ class PPO_Agent(Base_Agent):
     def policy_learn(self):
 
         all_discounted_returns = self.calculate_all_discounted_returns()
-
         if self.hyperparameters["normalise_rewards"]:
             all_discounted_returns = normalise_rewards(all_discounted_returns)
 
@@ -76,9 +75,12 @@ class PPO_Agent(Base_Agent):
     def calculate_all_discounted_returns(self):
         all_discounted_returns = []
         for episode in range(len(self.many_episode_states)):
+            discounted_returns = [0]
             for ix in range(len(self.many_episode_states[episode])):
-                discounted_return = self.calculate_discounted_reward(self.many_episode_rewards[episode][ix:])
-                all_discounted_returns.append(discounted_return)
+                return_value = self.many_episode_rewards[episode][-(ix + 1)] + self.hyperparameters["discount_rate"]*discounted_returns[-1]
+                discounted_returns.append(return_value)
+            discounted_returns = discounted_returns[1:]
+            all_discounted_returns.extend(discounted_returns[::-1])
         return all_discounted_returns
 
     def calculate_discounted_reward(self, rewards):
