@@ -43,7 +43,7 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
   
 ![example](Environments/Animation_Gifs/Mountain_Car.gif)  
   
-Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
+Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
 ![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
 
@@ -63,7 +63,7 @@ A DDPG agent was used to solve the environment with the results below. The hyper
 Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
- to solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
+ to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
 
 ![Bit Flipping Results](Results/Bit_Flipping_Environment/Results_Graph.png)
 
