@@ -20,7 +20,7 @@ config.hyperparameters = {
             "nn_layers": 2,
             "nn_start_units": 20,
             "nn_unit_decay": 1.0,
-            "final_layer_activation": None,
+            "final_layer_activation": "TANH",
             "learning_iterations_per_round": 10,
             "discount_rate": 0.99,
             "batch_norm": False,
