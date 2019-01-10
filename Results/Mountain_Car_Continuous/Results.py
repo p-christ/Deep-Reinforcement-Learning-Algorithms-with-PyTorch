@@ -72,6 +72,6 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [PPO_Agent]
+AGENTS = [DDPG_Agent, PPO_Agent]
 
 run_games_for_agents(config, AGENTS)

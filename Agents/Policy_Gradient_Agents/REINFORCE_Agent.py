@@ -13,7 +13,7 @@ class REINFORCE_Agent(Base_Agent):
 
         Base_Agent.__init__(self, config)
 
-        self.policy = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.policy = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
 
         self.episode_rewards = []

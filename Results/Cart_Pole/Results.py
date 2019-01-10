@@ -18,7 +18,7 @@ config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.runs_per_agent = 10
 
 config.hyperparameters = {
     "DQN_Agents": {

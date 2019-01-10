@@ -14,7 +14,7 @@ class DQN_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.critic_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters).to(self.device)
+        self.critic_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):

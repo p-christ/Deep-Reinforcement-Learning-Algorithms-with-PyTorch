@@ -27,6 +27,7 @@ def run_games_for_agents(config, agents):
         "DDQN": "DQN_Agents",
         "DDQN with Prioritised Replay": "DQN_Agents",
         "DQN with Fixed Q Targets": "DQN_Agents",
+        "Duelling DQN": "DQN_Agents",
         "PPO": "Policy_Gradient_Agents",
         "REINFORCE": "Policy_Gradient_Agents",
         "Genetic_Agent": "Stochastic_Policy_Search_Agents",

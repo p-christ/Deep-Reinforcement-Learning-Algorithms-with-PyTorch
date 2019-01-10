@@ -28,10 +28,11 @@ class PPO_Agent(Base_Agent):
         else:
             policy_output_size = self.action_size * 2 #Because we need 1 parameter for mean and 1 for std of distribution
 
-        self.policy_new = Neural_Network(self.state_size, policy_output_size, self.random_seed, self.hyperparameters).to(
-            self.device)
-        self.policy_old = Neural_Network(self.state_size, policy_output_size, self.random_seed, self.hyperparameters).to(
-            self.device)
+        self.policy_new = Neural_Network(self.state_size, policy_output_size, self.random_seed,
+                                         self.hyperparameters, "VANILLA_NN").to(self.device)
+
+        self.policy_old = Neural_Network(self.state_size, policy_output_size, self.random_seed,
+                                         self.hyperparameters, "VANILLA_NN").to(self.device)
 
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
