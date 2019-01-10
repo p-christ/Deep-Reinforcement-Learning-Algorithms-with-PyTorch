@@ -1,4 +1,5 @@
 import random
+import sys
 import time
 import torch
 import numpy as np
@@ -8,8 +9,6 @@ from Neural_Network import Neural_Network
 from Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utility_Functions import normalise_rewards, create_actor_distribution
 
-# ***WIP NOT FINISHED***
-#TODO make more efficient by removing for loops
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
@@ -40,10 +39,11 @@ class PPO_Agent(Base_Agent):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
 
         start = time.time()
-        obj = Parallel_Experience_Generator(self.environment, self.policy_new)
+        obj = Parallel_Experience_Generator(self.environment, self.policy_new, self.random_seed, self.hyperparameters, self.episode_number)
 
         while self.episode_number < num_episodes_to_run:
             self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = obj.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
+
             self.episode_number += self.hyperparameters["episodes_per_learning_round"]
             self.save_and_print_result()
 
@@ -52,18 +52,16 @@ class PPO_Agent(Base_Agent):
 
             self.policy_learn()
             self.update_learning_rate(self.hyperparameters["learning_rate"], self.policy_new_optimizer)
-
             self.equalise_policies()
 
         time_taken = time.time() - start
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def policy_learn(self):
-
+        """A learning round for the policy"""
         all_discounted_returns = self.calculate_all_discounted_returns()
         if self.hyperparameters["normalise_rewards"]:
             all_discounted_returns = normalise_rewards(all_discounted_returns)
-
         for _ in range(self.hyperparameters["learning_iterations_per_round"]):
             all_ratio_of_policy_probabilities = self.calculate_all_ratio_of_policy_probabilities()
             loss = self.calculate_loss([all_ratio_of_policy_probabilities], all_discounted_returns)
@@ -82,48 +80,21 @@ class PPO_Agent(Base_Agent):
 
     def calculate_all_ratio_of_policy_probabilities(self):
 
-        all_states = []
-        all_actions = []
-
-        for ix in range(len(self.many_episode_states)):
-            all_states.extend(self.many_episode_states[ix])
-            all_actions.extend(self.many_episode_actions[ix])
+        all_states = [state for states in self.many_episode_states for state in states]
+        all_actions = [action for actions in self.many_episode_actions for action in actions]
 
         all_states = torch.stack([torch.Tensor(states).float().to(self.device) for states in all_states])
-
         all_actions = torch.stack([torch.Tensor(actions).float().to(self.device) for actions in all_actions])
         all_actions = all_actions.view(-1, len(all_states))
 
-
-        # all_actions =  torch.stack([torch.Tensor(action).float().to(self.device) for action in all_actions])
-        # all_actions = all_actions.unsqueeze(-1)
-
         new_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_new, all_states, all_actions)
-
         old_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_old, all_states, all_actions)
-        ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / torch.exp(old_policy_distribution_log_prob)
-        return ratio_of_policy_probabilities
-        #
-        # # print(all_actions.size())
-        # #
-        # print(new_policy_distribution_log_prob.size())
-        # print(new_policy_distribution_log_prob)
-        #
-        # assert True==False
-
-
-
-    def calculate_policy_action_probability_ratio(self, state, action):
-        """Calculates the ratio of the probability/density of an action wrt the old and new policy"""
-        state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
-        new_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_new, state, action)
-        old_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_old, state, action)
-        ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / torch.exp(old_policy_distribution_log_prob)
+        ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / (torch.exp(old_policy_distribution_log_prob) + 1e-8)
         return ratio_of_policy_probabilities
 
     def calculate_log_probability_of_action(self, policy, state, action):
         """Calculates the log probability of an action occuring given a policy and starting state"""
-        policy_output = policy.forward(state).cpu()
+        policy_output = policy.forward(state).cpu().to(self.device)
         policy_distribution = create_actor_distribution(self.action_types, policy_output, self.action_size)
         actions_tensor = torch.from_numpy(np.array(action))
         policy_distribution_log_prob = policy_distribution.log_prob(actions_tensor)
@@ -132,14 +103,14 @@ class PPO_Agent(Base_Agent):
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):
         """Calculates the PPO loss"""
         all_ratio_of_policy_probabilities = torch.squeeze(torch.stack(all_ratio_of_policy_probabilities))
+        all_ratio_of_policy_probabilities = torch.clamp(input=all_ratio_of_policy_probabilities,
+                                                        min = -sys.maxsize,
+                                                        max = sys.maxsize)
         all_discounted_returns = torch.tensor(all_discounted_returns, dtype=torch.float)
-
         potential_loss_value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
         potential_loss_value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)
-
         loss = torch.min(potential_loss_value_1, potential_loss_value_2)
         loss = -torch.mean(loss)
-
         return loss
 
     def clamp_probability_ratio(self, value):
@@ -148,8 +119,10 @@ class PPO_Agent(Base_Agent):
                                   max=1.0 + self.hyperparameters["clip_epsilon"])
 
     def take_policy_new_optimisation_step(self, loss):
-        self.policy_new.zero_grad()  # reset gradients to 0
+        self.policy_new_optimizer.zero_grad()  # reset gradients to 0
         loss.backward()  # this calculates the gradients
+        torch.nn.utils.clip_grad_norm_(self.policy_new.parameters(), self.hyperparameters[
+            "gradient_clipping_norm"])  # clip gradients to help stabilise training
         self.policy_new_optimizer.step()  # this applies the gradients
 
     def equalise_policies(self):

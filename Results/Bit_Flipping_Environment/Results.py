@@ -31,7 +31,8 @@ config.hyperparameters = {
         "nn_start_units": 256,
         "nn_unit_decay": 1.0,
         "final_layer_activation": None,
-        "batch_norm": False
+        "batch_norm": False,
+        "gradient_clipping_norm": 5
     }
 }
 

@@ -43,7 +43,6 @@ class DQN_Agent(Base_Agent):
         self.critic_local.train() #puts network back in training mode
 
         action = self.make_epsilon_greedy_choice(action_values)
-
         return action
 
     def make_epsilon_greedy_choice(self, action_values):
@@ -57,7 +56,6 @@ class DQN_Agent(Base_Agent):
 
         if not experiences_given:
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
-
         else:
             states, actions, rewards, next_states, dones = experiences
 
@@ -96,7 +94,7 @@ class DQN_Agent(Base_Agent):
 
         self.critic_optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), 5) #clip gradients to help stabilise training
+        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), self.hyperparameters["gradient_clipping_norm"]) #clip gradients to help stabilise training
         self.critic_optimizer.step() #this applies the gradients
 
     def save_experience(self):

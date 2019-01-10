@@ -3,18 +3,24 @@ from contextlib import closing
 from multiprocessing import Pool
 from random import randint
 
+from OU_Noise import OU_Noise
 from Utility_Functions import create_actor_distribution
 
 
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
 
-    def __init__(self, environment, policy):
+    def __init__(self, environment, policy, seed, hyperparameters, episode_number):
 
         self.environment =  environment
         self.action_size = self.environment.get_action_size()
         self.action_types = self.environment.get_action_types()
         self.policy = policy
+        self.hyperparameters = hyperparameters
+        self.episode_number = episode_number
+
+        self.noise = OU_Noise(self.action_size, seed, self.hyperparameters["mu"],
+                                self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
     def play_n_episodes(self, n):
         """Plays n episodes in parallel using the fixed policy and returns the data"""
@@ -70,6 +76,9 @@ class Parallel_Experience_Generator(object):
         actor_output = policy.forward(state)
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().numpy()
+
+        action += self.noise.sample() / (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
+
         return action
 
 

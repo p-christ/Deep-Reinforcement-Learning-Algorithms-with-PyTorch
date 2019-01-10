@@ -24,7 +24,8 @@ config.hyperparameters = {
             "final_layer_activation": "TANH",
             "batch_norm": False,
             "tau": 0.05,
-            "update_every_n_steps": 10
+            "update_every_n_steps": 10,
+            "gradient_clipping_norm": 5
         },
 
         "Critic": {
@@ -36,7 +37,8 @@ config.hyperparameters = {
             "batch_norm": False,
             "buffer_size": 100000,
             "tau": 0.05,
-            "update_every_n_steps": 10
+            "update_every_n_steps": 10,
+            "gradient_clipping_norm": 5
         },
 
         "batch_size": 256,

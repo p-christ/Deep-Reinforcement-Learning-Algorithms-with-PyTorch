@@ -13,12 +13,12 @@ from Utilities.Utility_Functions import run_games_for_agents
 config = Config()
 config.seed = 100
 config.environment = Cart_Pole_Environment()
-config.max_episodes_to_run = 500
+config.max_episodes_to_run = 2000
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
-config.runs_per_agent = 10
+config.runs_per_agent = 1
 
 config.hyperparameters = {
     "DQN_Agents": {
@@ -37,7 +37,8 @@ config.hyperparameters = {
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
         "final_layer_activation": None,
-        "batch_norm": False
+        "batch_norm": False,
+        "gradient_clipping_norm": 5
     },
     "Stochastic_Policy_Search_Agents": {
         "policy_network_type": "Linear",
@@ -51,7 +52,7 @@ config.hyperparameters = {
         "num_policies_to_keep": 5
     },
     "Policy_Gradient_Agents": {
-        "learning_rate": 0.01, #0.001
+        "learning_rate": 0.05,
         "nn_layers": 2,
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
@@ -59,15 +60,14 @@ config.hyperparameters = {
         "learning_iterations_per_round": 10,
         "discount_rate": 0.99,
         "batch_norm": False,
-        "clip_epsilon": 0.2, #0.2 clip epsilon
-        "episodes_per_learning_round": 5,
-        "normalise_rewards": True
+        "clip_epsilon": 0.1,
+        "episodes_per_learning_round": 7,
+        "normalise_rewards": True,
+        "gradient_clipping_norm": 5
     }
 }
 
 AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay,
           Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent]
 
-
 run_games_for_agents(config, AGENTS)
-

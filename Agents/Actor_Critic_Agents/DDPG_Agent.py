@@ -36,20 +36,21 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
-        self.environment.reset_environment()
-        self.state = self.environment.get_state()
-        self.next_state = None
-        self.action = None
-        self.reward = None
-        self.done = False
-        self.total_episode_score_so_far = 0
-        self.episode_step_number = 0
-        self.noise.reset()
+        # self.environment.reset_environment()
+        # self.state = self.environment.get_state()
+        # self.next_state = None
+        # self.action = None
+        # self.reward = None
+        # self.done = False
+        # self.total_episode_score_so_far = 0
+        # self.episode_step_number = 0
+        # self.episode_states = []
+        # self.episode_actions = []
+        # self.episode_next_states = []
+        # self.episode_dones = []
 
-        self.episode_states = []
-        self.episode_actions = []
-        self.episode_next_states = []
-        self.episode_dones = []
+        super(DQN_Agent_With_Fixed_Q_Targets, self).reset_game()
+        self.noise.reset()
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
@@ -100,9 +101,9 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
     def take_actor_optimisation_step(self, actor_loss):
         if self.done: #we only update the learning rate at end of each episode
             self.update_learning_rate(self.hyperparameters["Actor"]["learning_rate"], self.actor_optimizer)
-
         self.actor_optimizer.zero_grad()
         actor_loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.actor_local.parameters(), self.hyperparameters["Actor"]["gradient_clipping_norm"])  # clip gradients to help stabilise training
         self.actor_optimizer.step()
         self.soft_update_of_target_network(self.actor_local, self.actor_target, self.ddpg_hyperparameters["Actor"]["tau"])
 

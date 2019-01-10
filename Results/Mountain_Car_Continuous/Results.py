@@ -8,15 +8,15 @@ config = Config()
 config.seed = 100
 config.environment = Mountain_Car_Continuous_Environment()
 config.max_episodes_to_run = 3000
-config.file_to_save_data_results = "Results_Data2.pkl"
+config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph2.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.runs_per_agent = 10
 
 config.hyperparameters = {
     "Policy_Gradient_Agents": {
-            "learning_rate": 0.001,
+            "learning_rate": 0.02,
             "nn_layers": 2,
             "nn_start_units": 20,
             "nn_unit_decay": 1.0,
@@ -25,8 +25,13 @@ config.hyperparameters = {
             "discount_rate": 0.99,
             "batch_norm": False,
             "clip_epsilon": 0.2,
-            "episodes_per_learning_round": 5,
-            "normalise_rewards": True
+            "episodes_per_learning_round": 7,
+            "normalise_rewards": True,
+            "gradient_clipping_norm": 5,
+            "mu": 0.0,
+            "theta": 0.15,
+            "sigma": 0.25,
+            "noise_decay_denominator": 1
         },
 
     "Actor_Critic_Agents": {
@@ -38,7 +43,8 @@ config.hyperparameters = {
             "final_layer_activation": "TANH",
             "batch_norm": False,
             "tau": 0.001,
-            "update_every_n_steps": 10
+            "update_every_n_steps": 10,
+            "gradient_clipping_norm": 5
         },
 
         "Critic": {
@@ -50,20 +56,22 @@ config.hyperparameters = {
             "batch_norm": False,
             "buffer_size": 100000,
             "tau": 0.001,
-            "update_every_n_steps": 10
+            "update_every_n_steps": 10,
+            "gradient_clipping_norm": 5
         },
 
-        "batch_size": 512, #256 did well before
+        "batch_size": 256,
         "discount_rate": 0.99,
         "mu": 0.0,
         "theta": 0.15,
         "sigma": 0.25, #0.22 did well before
         "noise_decay_denominator": 25,
-        "learning_updates_per_learning_session": 5,
+        "learning_updates_per_learning_session": 5
+
 
     }
 }
 
-AGENTS = [DDPG_Agent]
+AGENTS = [PPO_Agent]
 
 run_games_for_agents(config, AGENTS)

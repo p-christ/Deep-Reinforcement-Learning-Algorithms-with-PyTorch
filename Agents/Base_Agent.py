@@ -45,7 +45,6 @@ class Base_Agent(object):
         self.done = False
         self.total_episode_score_so_far = 0
         self.episode_step_number = 0
-
         self.episode_states = []
         self.episode_actions = []
         self.episode_next_states = []
