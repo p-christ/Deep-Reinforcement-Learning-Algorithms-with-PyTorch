@@ -16,9 +16,7 @@ class PPO_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.initialise_policies()
-        self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
-        self.episode_number = 0
         self.many_episode_states = []
         self.many_episode_actions = []
         self.many_episode_rewards = []
@@ -103,9 +101,6 @@ class PPO_Agent(Base_Agent):
     def calculate_loss(self, all_ratio_of_policy_probabilities, all_discounted_returns):
         """Calculates the PPO loss"""
         all_ratio_of_policy_probabilities = torch.squeeze(torch.stack(all_ratio_of_policy_probabilities))
-        all_ratio_of_policy_probabilities = torch.clamp(input=all_ratio_of_policy_probabilities,
-                                                        min = -sys.maxsize,
-                                                        max = sys.maxsize)
         all_discounted_returns = torch.tensor(all_discounted_returns, dtype=torch.float)
         potential_loss_value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
         potential_loss_value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)

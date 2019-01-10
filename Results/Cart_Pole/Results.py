@@ -63,7 +63,11 @@ config.hyperparameters = {
         "clip_epsilon": 0.1,
         "episodes_per_learning_round": 7,
         "normalise_rewards": True,
-        "gradient_clipping_norm": 5
+        "gradient_clipping_norm": 5,
+        "mu": 0.0, #only required for continuous action games
+        "theta": 0.0, #only required for continuous action games
+        "sigma": 0.25, #only required for continuous action games
+        "noise_decay_denominator": 1 #only required for continuous action games
     }
 }
 

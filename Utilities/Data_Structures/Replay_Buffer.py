@@ -3,8 +3,6 @@ import random
 import torch
 import numpy as np
 
-
-
 class Replay_Buffer(object):
     """Replay buffer to store past experiences that the agent can then use for training data"""
     
@@ -16,11 +14,17 @@ class Replay_Buffer(object):
         self.seed = random.seed(seed)
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-
-    def add_experience(self, state, action, reward, next_state, done):
-        """Adds experience into the replay buffer"""
-        experience = self.experience(state, action, reward, next_state, done)
-        self.memory.append(experience)
+    def add_experience(self, states, actions, rewards, next_states, dones):
+        """Adds experience(s) into the replay buffer"""
+        if type(dones) == list:
+            assert type(dones[0]) != list, "A done shouldn't be a list"
+            experiences = [self.experience(state, action, reward, next_state, done)
+                           for state, action, reward, next_state, done in
+                           zip(states, actions, rewards, next_states, dones)]
+            self.memory.extend(experiences)
+        else:
+            experience = self.experience(states, actions, rewards, next_states, dones)
+            self.memory.append(experience)
    
     def sample(self):
         """Draws a random sample of experience from the replay buffer"""

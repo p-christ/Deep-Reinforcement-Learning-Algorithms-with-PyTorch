@@ -184,7 +184,6 @@ def create_actor_distribution(action_types, actor_output, action_size):
     else:
         assert actor_output.size()[1] == action_size * 2, "Actor output the wrong size"
 
-
         means = actor_output[:, :action_size]
         stds = actor_output[:,  action_size:]
 
@@ -197,22 +196,8 @@ def create_actor_distribution(action_types, actor_output, action_size):
         if len(stds.shape) == 2:
             stds = stds.squeeze(-1)
 
-        # print("Means size ", means.size())
-        # print("STDs size " , stds.size())
-
         if len(stds.shape) > 1 or len(means.shape) > 1:
             raise ValueError("Wrong mean and std shapes")
-
-        # covariance_matrix =  torch.diag(stds)
-
-        # if len(covariance_matrix.shape) == 2:
-        #     covariance_matrix = covariance_matrix.unsqueeze(0)
-        #
-        # print("MEANS are: ", means)
-        # print("COVARIANCE matrix is: ", covariance_matrix)
-
         action_distribution = normal.Normal(means.squeeze(0), torch.abs(stds))
-
-        # print(action_distribution.sample())
 
     return action_distribution

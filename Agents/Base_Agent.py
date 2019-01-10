@@ -20,6 +20,7 @@ class Base_Agent(object):
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.environment.get_score_to_win()
         self.rolling_score_window = self.environment.get_rolling_period_to_calculate_score_over()
+        self.max_steps_per_episode = self.environment.get_max_steps_per_episode()
         self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
@@ -153,7 +154,5 @@ class Base_Agent(object):
 
     def run_checks(self):
         assert self.action_types in ["DISCRETE", "CONTINUOUS"], "Environment needs to provide action types"
-
-
 
     

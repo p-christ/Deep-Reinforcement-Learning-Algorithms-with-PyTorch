@@ -19,7 +19,8 @@ class Parallel_Experience_Generator(object):
         self.hyperparameters = hyperparameters
         self.episode_number = episode_number
 
-        self.noise = OU_Noise(self.action_size, seed, self.hyperparameters["mu"],
+        if self.action_types == "CONTINUOUS":
+            self.noise = OU_Noise(self.action_size, seed, self.hyperparameters["mu"],
                                 self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
     def play_n_episodes(self, n):
@@ -77,7 +78,8 @@ class Parallel_Experience_Generator(object):
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().numpy()
 
-        action += self.noise.sample() / (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
+        if self.action_types == "CONTINUOUS":
+            action += self.noise.sample() / (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
 
         return action
 

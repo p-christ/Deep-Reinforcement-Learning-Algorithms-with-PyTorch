@@ -36,19 +36,6 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
-        # self.environment.reset_environment()
-        # self.state = self.environment.get_state()
-        # self.next_state = None
-        # self.action = None
-        # self.reward = None
-        # self.done = False
-        # self.total_episode_score_so_far = 0
-        # self.episode_step_number = 0
-        # self.episode_states = []
-        # self.episode_actions = []
-        # self.episode_next_states = []
-        # self.episode_dones = []
-
         super(DQN_Agent_With_Fixed_Q_Targets, self).reset_game()
         self.noise.reset()
 
@@ -74,7 +61,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
 
-        action += self.noise.sample() / (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
+        action += self.generate_noise_sample()
         return action
 
     def compute_q_values_for_next_states(self, next_states):
