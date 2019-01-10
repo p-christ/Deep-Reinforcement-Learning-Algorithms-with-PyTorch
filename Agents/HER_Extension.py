@@ -4,7 +4,7 @@ from Utility_Functions import abstract
 class HER_Extension(object):
     """Contains methods needed to turn an algorithm into a hindsight experience replay (HER) algorithm"""
     def __init__(self):
-        pass
+        raise ValueError("The HER_Extension is not to be instantiated, only to be inherited")
 
     def track_episodes_data(self):
         self.episode_states.append(self.state)

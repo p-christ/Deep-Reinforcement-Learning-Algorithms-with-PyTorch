@@ -1,5 +1,6 @@
 from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
 from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from HER_Extension import HER_Extension
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Utilities.Utility_Functions import run_games_for_agents
@@ -37,7 +38,6 @@ config.hyperparameters = {
 }
 
 AGENTS = [DQN_HER_Agent, DQN_Agent]
-
 
 run_games_for_agents(config, AGENTS)
 
