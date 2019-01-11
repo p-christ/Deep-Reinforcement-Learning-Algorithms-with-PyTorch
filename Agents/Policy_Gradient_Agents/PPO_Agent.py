@@ -38,10 +38,10 @@ class PPO_Agent(Base_Agent):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
 
         start = time.time()
-        obj = Parallel_Experience_Generator(self.environment, self.policy_new, self.random_seed, self.hyperparameters, self.episode_number)
+        experience_generator = Parallel_Experience_Generator(self.environment, self.policy_new, self.random_seed, self.hyperparameters, self.episode_number)
 
         while self.episode_number < num_episodes_to_run:
-            self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = obj.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
+            self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = experience_generator.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
 
             self.episode_number += self.hyperparameters["episodes_per_learning_round"]
             self.save_and_print_result()

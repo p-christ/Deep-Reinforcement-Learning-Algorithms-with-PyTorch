@@ -1,21 +1,21 @@
 
-# Implementations of Deep Reinforcement Learning Algorithms
+# Deep Reinforcement Learning Algorithms
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
 
 
 ## **Algorithms Implemented** 
 
-1. Deep Q Learning ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))  
-1. Deep Q Learning with Fixed Q Targets ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))
-1. Double Deep Q Learning ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
-1. Double Deep Q Learning with Prioritised Experience Replay ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
+1. Deep Q Learning (DQN) ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))  
+1. DQN with Fixed Q Targets ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))
+1. Double DQN ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
+1. Double DQN with Prioritised Experience Replay ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
 1. REINFORCE ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
 1. PPO ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
 1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. Hill Climbing
 1. Genetic Evolution
-1. Deep Q Learning w Hindsight Experience Replay (HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
+1. DQN with Hindsight Experience Replay (HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
 All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) 
 or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.

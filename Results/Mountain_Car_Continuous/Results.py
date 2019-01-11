@@ -5,7 +5,7 @@ from PPO_Agent import PPO_Agent
 from Utility_Functions import run_games_for_agents
 
 config = Config()
-config.seed = 100
+config.seed = 200
 config.environment = Mountain_Car_Continuous_Environment()
 config.max_episodes_to_run = 3000
 config.file_to_save_data_results = "Results_Data.pkl"
@@ -72,6 +72,6 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [DDPG_Agent, PPO_Agent]
+AGENTS = [PPO_Agent, DDPG_Agent]
 
 run_games_for_agents(config, AGENTS)
