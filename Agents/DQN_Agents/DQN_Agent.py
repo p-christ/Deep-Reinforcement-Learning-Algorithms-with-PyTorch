@@ -29,10 +29,6 @@ class DQN_Agent(Base_Agent):
             self.episode_step_number += 1
         self.episode_number += 1
 
-    def pick_and_conduct_action(self):
-        self.action = self.pick_action()
-        self.conduct_action()
-
     def pick_action(self):
         """Uses the local Q network and an epsilon greedy policy to pick an action"""
 
@@ -63,7 +59,9 @@ class DQN_Agent(Base_Agent):
             states, actions, rewards, next_states, dones = experiences
 
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
-        self.take_q_network_optimisation_step(loss)
+        if self.done: #we only update the learning rate at end of each episode
+            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
+        self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
         with torch.no_grad():
@@ -89,19 +87,6 @@ class DQN_Agent(Base_Agent):
         Q_expected = self.q_network_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
         return Q_expected
 
-    def take_q_network_optimisation_step(self, loss):
-
-        if self.done: #we only update the learning rate at end of each episode
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
-
-        self.q_network_optimizer.zero_grad() #reset gradients to 0
-        loss.backward() #this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(self.q_network_local.parameters(), self.hyperparameters["gradient_clipping_norm"]) #clip gradients to help stabilise training
-        self.q_network_optimizer.step() #this applies the gradients
-
-    def save_experience(self):
-        self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
-
     def locally_save_policy(self):
         pass
         # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
@@ -111,9 +96,6 @@ class DQN_Agent(Base_Agent):
 
     def right_amount_of_steps_taken(self):
         return self.episode_step_number % self.hyperparameters["update_every_n_steps"] == 0
-
-    def enough_experiences_to_learn_from(self):
-        return len(self.memory) > self.hyperparameters["batch_size"]
 
     def sample_experiences(self):
         experiences = self.memory.sample()

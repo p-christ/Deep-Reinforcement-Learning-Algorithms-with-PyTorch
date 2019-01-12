@@ -1,6 +1,4 @@
-import random
 import sys
-import time
 import torch
 import numpy as np
 from torch import optim

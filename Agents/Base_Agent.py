@@ -163,4 +163,24 @@ class Base_Agent(object):
     def run_checks(self):
         assert self.action_types in ["DISCRETE", "CONTINUOUS"], "Environment needs to provide action types"
 
+    def enough_experiences_to_learn_from(self):
+        return len(self.memory) > self.hyperparameters["batch_size"]
+
+    def pick_and_conduct_action(self):
+        self.action = self.pick_action()
+        self.conduct_action()
+
+    def save_experience(self):
+        self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
+
+    def take_optimisation_step(self, optimizer, network, loss, clipping_norm):
+        optimizer.zero_grad() #reset gradients to 0
+        loss.backward() #this calculates the gradients
+        torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
+        optimizer.step() #this applies the gradients
     
+    def soft_update_of_target_network(self, local_model, target_model, tau):
+        """Updates the target network in the direction of the local network but by taking a step size
+        less than one so the target network's parameter values trail the local networks. This helps stabilise training"""
+        for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
+            target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)

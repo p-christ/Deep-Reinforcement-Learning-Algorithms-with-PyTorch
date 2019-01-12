@@ -12,7 +12,7 @@ config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph2.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 10
+config.runs_per_agent = 1
 
 config.hyperparameters = {
     "Policy_Gradient_Agents": {
@@ -20,14 +20,14 @@ config.hyperparameters = {
             "nn_layers": 2,
             "nn_start_units": 20,
             "nn_unit_decay": 1.0,
-            "final_layer_activation": None,
+            "final_layer_activation": None, # SHOULD BE TANH?
             "learning_iterations_per_round": 10,
             "discount_rate": 0.99,
             "batch_norm": False,
             "clip_epsilon": 0.2,
             "episodes_per_learning_round": 7,
             "normalise_rewards": True,
-            "gradient_clipping_norm": 2,
+            "gradient_clipping_norm": 4,
             "mu": 0.0,
             "theta": 0.15,
             "sigma": 0.25
@@ -35,25 +35,25 @@ config.hyperparameters = {
 
     "Actor_Critic_Agents": {
         "Actor": {
-            "learning_rate": 0.0001,
+            "learning_rate": 0.001,
             "nn_layers": 5,
             "nn_start_units": 50,
             "nn_unit_decay": 1.0,
             "final_layer_activation": "TANH",
             "batch_norm": False,
-            "tau": 0.001,
+            "tau": 0.01,
             "gradient_clipping_norm": 5
         },
 
         "Critic": {
-            "learning_rate": 0.001,
+            "learning_rate": 0.01,
             "nn_layers": 6,
             "nn_start_units": 50,
             "nn_unit_decay": 1.0,
             "final_layer_activation": None,
             "batch_norm": False,
-            "buffer_size": 100000,
-            "tau": 0.001,
+            "buffer_size": 30000,
+            "tau": 0.01,
             "gradient_clipping_norm": 5
         },
 
@@ -65,11 +65,9 @@ config.hyperparameters = {
         "noise_decay_denominator": 100,
         "update_every_n_steps": 100,
         "learning_updates_per_learning_session": 10
-
-
     }
 }
 
-AGENTS = [PPO_Agent, DDPG_Agent]
+AGENTS = [DDPG_Agent]
 
 run_games_for_agents(config, AGENTS)
