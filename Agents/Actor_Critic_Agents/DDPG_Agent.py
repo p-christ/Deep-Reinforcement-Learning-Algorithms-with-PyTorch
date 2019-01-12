@@ -7,7 +7,7 @@ from Replay_Buffer import Replay_Buffer
 import torch.nn.functional as F
 from Utilities.OU_Noise import OU_Noise
 
-# TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
+# TODO currently critic takes state and action choice in at layer 1 but it should concatonate them later in the network
 
 class DDPG_Agent(Base_Agent):
     agent_name = "DDPG"
@@ -31,7 +31,6 @@ class DDPG_Agent(Base_Agent):
                                           self.hyperparameters["Actor"], "VANILLA_NN").to(self.device)
         self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(), lr=self.hyperparameters["Actor"]["learning_rate"])
-
         self.noise = OU_Noise(self.action_size, self.random_seed, self.hyperparameters["mu"],
                               self.hyperparameters["theta"], self.hyperparameters["sigma"])
 

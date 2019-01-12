@@ -15,10 +15,11 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. Hill Climbing
 1. Genetic Evolution
-1. DQN with Hindsight Experience Replay (HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
+1. DQN with Hindsight Experience Replay (DQN-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf))
+1. DDPG with Hindsight Experience Replay (DDPG-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
-All implementations are able to quickly solve either Cart Pole (discrete actions) or Mountain Car Continuous (continuous actions) 
-or Bit Flipping (discrete actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
+All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
+Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C, and DDPG-HER soon.
 
 
 ## **Results**
@@ -57,14 +58,25 @@ A DDPG agent was used to solve the environment with the results below. The hyper
 
 ![Tennis Results](Results/Tennis/Results_Graph.png)
 
-### c) Bit Flipping Hindsight Experience Replay (HER) Experiment
+### c) Hindsight Experience Replay (HER) Experiments
+
+#### Bit Flipping 
 
 Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
  to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
 
-![Bit Flipping Results](Results/Bit_Flipping_Environment/Results_Graph.png)
+![Bit Flipping Results](Results/Bit_Flipping/Results_Graph.png)
+
+#### Fetch Reach
+
+Below shows the perforamnce of DDPG with and without Hindsight Experience Replay in the Fetch Reach environment
+which is introduced in this [Open AI blog post](https://blog.openai.com/ingredients-for-robotics-research/). The results
+mirror those seen in [Plapper 2018](https://arxiv.org/pdf/1802.09464.pdf) and show that adding Hindsight Experience Replay
+dramatically improved the ability of the agent to learn the task. 
+
+![Fetch Reach Results](Results/Fetch_Reach/Results_Graph.png)  
 
 
 ### Usage ###

@@ -62,7 +62,6 @@ config.hyperparameters = {
         "mu": 0.0,
         "theta": 0.15,
         "sigma": 0.25, #0.22 did well before
-        "noise_decay_denominator": 100,
         "update_every_n_steps": 10,
         "learning_updates_per_learning_session": 10
     }

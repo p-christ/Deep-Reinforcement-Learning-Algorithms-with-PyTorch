@@ -7,28 +7,21 @@ class Fetch_Reach_Environment(Base_Environment):
     def __init__(self):
         self.game_environment = gym.make("FetchReach-v1")
         self.state_information = self.game_environment.reset()
-
         self.desired_goal = self.state_information["desired_goal"]
         self.achieved_goal = self.state_information["achieved_goal"]
-
         self.state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
-
         self.next_state = None
         self.reward = None
         self.done = False
         self.info = None
-
         self.reward_for_achieving_goal = 0
         self.step_reward_for_not_achieving_goal = -1
 
     def conduct_action(self, action):
         self.state_information, self.reward, self.done, self.info = self.game_environment.step(action)
-
         self.desired_goal = self.state_information["desired_goal"]
         self.achieved_goal = self.state_information["achieved_goal"]
-
         self.next_state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
-
         self.state = self.next_state
 
     def get_action_size(self):
@@ -60,10 +53,8 @@ class Fetch_Reach_Environment(Base_Environment):
 
     def reset_environment(self):
         self.state_information = self.game_environment.reset()
-
         self.desired_goal = self.state_information["desired_goal"]
         self.achieved_goal = self.state_information["achieved_goal"]
-
         self.state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
 
     def get_reward_for_achieving_goal(self):
@@ -79,7 +70,7 @@ class Fetch_Reach_Environment(Base_Environment):
         return "CONTINUOUS"
 
     def get_score_to_win(self):
-        return 195
+        return -5
 
     def get_rolling_period_to_calculate_score_over(self):
         return 100
