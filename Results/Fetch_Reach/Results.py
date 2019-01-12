@@ -7,10 +7,10 @@ from Utility_Functions import run_games_for_agents
 config = Config()
 config.seed = 100
 config.environment = Fetch_Reach_Environment()
-config.max_episodes_to_run = 1253
+config.max_episodes_to_run = 2000
 config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
-config.visualise_individual_results = False
+config.visualise_individual_results = True
 config.visualise_overall_results = True
 config.runs_per_agent = 1
 

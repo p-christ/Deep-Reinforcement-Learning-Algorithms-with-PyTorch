@@ -135,7 +135,10 @@ To watch them learn **Tennis** you will need to download the environment:
 
 and then run: `python Results/Tennis/Results.py`
 
-To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping_Environment/Results.py`
+To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping/Results.py`
+
+To watch them learn **Fetch Reach** run: `python Results/Fetch_Reach/Results.py`
+
 
 #### ii) To Train the Agents on your Own Game  
 
