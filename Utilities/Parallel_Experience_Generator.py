@@ -10,21 +10,23 @@ from Utility_Functions import create_actor_distribution
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
 
-    def __init__(self, environment, policy, seed, hyperparameters, episode_number):
+    def __init__(self, environment, policy, seed, hyperparameters):
 
         self.environment =  environment
         self.action_size = self.environment.get_action_size()
         self.action_types = self.environment.get_action_types()
         self.policy = policy
         self.hyperparameters = hyperparameters
-        self.episode_number = episode_number
+        # self.episode_number = episode_number
 
         if self.action_types == "CONTINUOUS":
             self.noise = OU_Noise(self.action_size, seed, self.hyperparameters["mu"],
                                 self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
-    def play_n_episodes(self, n):
+    def play_n_episodes(self, n, episode_number):
         """Plays n episodes in parallel using the fixed policy and returns the data"""
+
+        self.episode_number = episode_number
 
         with closing(Pool(processes=n)) as pool:
             results = pool.map(self, range(n))

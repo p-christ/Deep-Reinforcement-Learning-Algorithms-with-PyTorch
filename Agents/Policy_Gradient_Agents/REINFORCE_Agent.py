@@ -34,15 +34,18 @@ class REINFORCE_Agent(Base_Agent):
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action_and_save_log_probabilities()
+        while not self.done:
+            self.pick_and_conduct_action_and_save_log_probabilities()
 
-        self.update_next_state_reward_done_and_score()
-        self.store_reward()
+            self.update_next_state_reward_done_and_score()
+            self.store_reward()
 
-        if self.time_to_learn():
-            self.actor_learn()
+            if self.time_to_learn():
+                self.actor_learn()
 
-        self.state = self.next_state #this is to set the state for the next iteration
+            self.state = self.next_state #this is to set the state for the next iteration
+            self.episode_step_number += 1
+        self.episode_number += 1
 
     def pick_and_conduct_action_and_save_log_probabilities(self):
         action, log_probabilities = self.pick_action_and_get_log_probabilities()

@@ -25,6 +25,7 @@ class Base_Agent(object):
         self.game_full_episode_scores = []
         self.rolling_results = []
         self.max_rolling_score_seen = float("-inf")
+        self.max_episode_score_seen = float("-inf")
         self.episode_number = 0
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.visualise_results_boolean = config.visualise_individual_results
@@ -51,15 +52,18 @@ class Base_Agent(object):
         self.episode_next_states = []
         self.episode_dones = []
 
+    def track_episodes_data(self):
+        self.episode_states.append(self.state)
+        self.episode_actions.append(self.action)
+        self.episode_next_states.append(self.next_state)
+        self.episode_dones.append(self.done)
+
     def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
-
         start = time.time()
-
-        for episode in range(num_episodes_to_run):
+        while self.episode_number < num_episodes_to_run:
             self.reset_game()
-            self.episode_number += 1
-            self.run_episode()
+            self.step()
             self.save_and_print_result()
             if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
                 break
@@ -69,11 +73,8 @@ class Base_Agent(object):
             self.locally_save_policy()
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
-    def run_episode(self):
-        """Runs a full episode"""
-        while not self.done:
-                self.step()
-                self.episode_step_number += 1
+    def step(self):
+        raise ValueError("Step needs to be implemented by the agent")
 
     def conduct_action(self):
         self.environment.conduct_action(self.action)
@@ -94,16 +95,23 @@ class Base_Agent(object):
         self.save_max_result_seen()
 
     def save_max_result_seen(self):
+        if self.game_full_episode_scores[-1] > self.max_episode_score_seen:
+            self.max_episode_score_seen = self.game_full_episode_scores[-1]
+
         if self.rolling_results[-1] > self.max_rolling_score_seen:
             if len(self.rolling_results) > self.rolling_score_window:
                 self.max_rolling_score_seen = self.rolling_results[-1]
 
     def print_rolling_result(self):
         sys.stdout.write(
-            "\r Episode {0}, Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}".format(len(self.game_full_episode_scores),
+            """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f},  Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}""".format(len(self.game_full_episode_scores),
                                                                                                self.rolling_results[-1],
-                                                                                               self.max_rolling_score_seen))
+                                                                                               self.max_rolling_score_seen,
+                                                                                               self.game_full_episode_scores[-1], self.max_episode_score_seen))
         sys.stdout.flush()
+
+    def generate_string_to_print(self):
+        return
 
     def summarise_results(self):
         self.show_whether_achieved_goal()

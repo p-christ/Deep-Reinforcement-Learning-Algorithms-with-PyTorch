@@ -14,17 +14,20 @@ class DQN_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.critic_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
-        self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.q_network_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
+        self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action()
-        self.update_next_state_reward_done_and_score()
-        if self.time_for_critic_to_learn():
-            self.critic_learn()
-        self.save_experience()
-        self.state = self.next_state #this is to set the state for the next iteration
+        while not self.done:
+            self.pick_and_conduct_action()
+            self.update_next_state_reward_done_and_score()
+            if self.time_for_q_network_to_learn():
+                self.q_network_learn()
+            self.save_experience()
+            self.state = self.next_state #this is to set the state for the next iteration
+            self.episode_step_number += 1
+        self.episode_number += 1
 
     def pick_and_conduct_action(self):
         self.action = self.pick_action()
@@ -37,10 +40,10 @@ class DQN_Agent(Base_Agent):
         # a "fake" dimension to make it a mini-batch rather than a single observation
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
 
-        self.critic_local.eval() #puts network in evaluation mode
+        self.q_network_local.eval() #puts network in evaluation mode
         with torch.no_grad():
-            action_values = self.critic_local(state)
-        self.critic_local.train() #puts network back in training mode
+            action_values = self.q_network_local(state)
+        self.q_network_local.train() #puts network back in training mode
 
         action = self.make_epsilon_greedy_choice(action_values)
         return action
@@ -52,7 +55,7 @@ class DQN_Agent(Base_Agent):
             return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
-    def critic_learn(self, experiences_given=False, experiences=None):
+    def q_network_learn(self, experiences_given=False, experiences=None):
 
         if not experiences_given:
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
@@ -60,10 +63,9 @@ class DQN_Agent(Base_Agent):
             states, actions, rewards, next_states, dones = experiences
 
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
-        self.take_critic_optimisation_step(loss)
+        self.take_q_network_optimisation_step(loss)
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
-
         with torch.no_grad():
             Q_targets = self.compute_q_targets(next_states, rewards, dones)
         Q_expected = self.compute_expected_q_values(states, actions)
@@ -76,7 +78,7 @@ class DQN_Agent(Base_Agent):
         return Q_targets
 
     def compute_q_values_for_next_states(self, next_states):
-        Q_targets_next = self.critic_local(next_states).detach().max(1)[0].unsqueeze(1)
+        Q_targets_next = self.q_network_local(next_states).detach().max(1)[0].unsqueeze(1)
         return Q_targets_next
 
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
@@ -84,18 +86,18 @@ class DQN_Agent(Base_Agent):
         return Q_targets_current
 
     def compute_expected_q_values(self, states, actions):
-        Q_expected = self.critic_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
+        Q_expected = self.q_network_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
         return Q_expected
 
-    def take_critic_optimisation_step(self, loss):
+    def take_q_network_optimisation_step(self, loss):
 
         if self.done: #we only update the learning rate at end of each episode
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.critic_optimizer)
+            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
 
-        self.critic_optimizer.zero_grad() #reset gradients to 0
+        self.q_network_optimizer.zero_grad() #reset gradients to 0
         loss.backward() #this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(self.critic_local.parameters(), self.hyperparameters["gradient_clipping_norm"]) #clip gradients to help stabilise training
-        self.critic_optimizer.step() #this applies the gradients
+        torch.nn.utils.clip_grad_norm_(self.q_network_local.parameters(), self.hyperparameters["gradient_clipping_norm"]) #clip gradients to help stabilise training
+        self.q_network_optimizer.step() #this applies the gradients
 
     def save_experience(self):
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
@@ -104,7 +106,7 @@ class DQN_Agent(Base_Agent):
         pass
         # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
 
-    def time_for_critic_to_learn(self):
+    def time_for_q_network_to_learn(self):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
     def right_amount_of_steps_taken(self):

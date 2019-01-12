@@ -25,15 +25,18 @@ class Hill_Climbing_Agent(Base_Agent):
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action()
+        while not self.done:
+            self.pick_and_conduct_action()
 
-        self.update_next_state_reward_done_and_score()
+            self.update_next_state_reward_done_and_score()
 
-        if self.time_to_learn():
-            self.critic_learn()
+            if self.time_to_learn():
+                self.critic_learn()
 
-        self.save_experience()
-        self.state = self.next_state #this is to set the state for the next iteration
+            self.save_experience()
+            self.state = self.next_state #this is to set the state for the next iteration
+            self.episode_step_number += 1
+        self.episode_number += 1
 
     def pick_and_conduct_action(self):
         self.action = self.pick_action()

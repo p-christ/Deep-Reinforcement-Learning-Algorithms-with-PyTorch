@@ -1,16 +1,10 @@
 from Utility_Functions import abstract
 
 @abstract
-class HER_Extension(object):
+class HER_Base(object):
     """Contains methods needed to turn an algorithm into a hindsight experience replay (HER) algorithm"""
     def __init__(self):
         raise ValueError("The HER_Extension is not to be instantiated, only to be inherited")
-
-    def track_episodes_data(self):
-        self.episode_states.append(self.state)
-        self.episode_actions.append(self.action)
-        self.episode_next_states.append(self.next_state)
-        self.episode_dones.append(self.done)
 
     def save_alternative_experience(self):
         """Saves the experiences as if the final state visited in the episode was the goal state"""

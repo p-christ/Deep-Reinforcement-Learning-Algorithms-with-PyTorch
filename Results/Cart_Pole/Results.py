@@ -18,7 +18,7 @@ config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
-config.runs_per_agent = 10
+config.runs_per_agent = 1
 
 config.hyperparameters = {
     "DQN_Agents": {
@@ -66,12 +66,12 @@ config.hyperparameters = {
         "gradient_clipping_norm": 5,
         "mu": 0.0, #only required for continuous action games
         "theta": 0.0, #only required for continuous action games
-        "sigma": 0.25, #only required for continuous action games
+        "sigma": 0.0, #only required for continuous action games
         "noise_decay_denominator": 1 #only required for continuous action games
     }
 }
 
-AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent, DDQN_With_Prioritised_Experience_Replay,
-          Genetic_Agent, Hill_Climbing_Agent, REINFORCE_Agent]
+AGENTS = [PPO_Agent, Genetic_Agent, Hill_Climbing_Agent, DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
+
 
 run_games_for_agents(config, AGENTS)

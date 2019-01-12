@@ -1,6 +1,5 @@
 from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
 from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
-from HER_Extension import HER_Extension
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Utilities.Utility_Functions import run_games_for_agents
@@ -13,7 +12,7 @@ config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.runs_per_agent = 10
 
 config.hyperparameters = {
     "DQN_Agents": {

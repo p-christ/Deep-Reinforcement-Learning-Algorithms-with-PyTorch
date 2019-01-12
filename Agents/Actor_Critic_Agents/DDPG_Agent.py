@@ -22,10 +22,10 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
         self.ddpg_hyperparameters = config.hyperparameters
 
-        self.critic_local = Neural_Network(self.state_size + self.action_size, 1, config.seed,
-                                           self.ddpg_hyperparameters["Critic"], "VANILLA_NN").to(self.device)
-        self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
-        self.critic_optimizer = optim.Adam(self.critic_local.parameters(),lr=self.ddpg_hyperparameters["Critic"]["learning_rate"])
+        self.q_network_local = Neural_Network(self.state_size + self.action_size, 1, config.seed,
+                                              self.ddpg_hyperparameters["Critic"], "VANILLA_NN").to(self.device)
+        self.q_network_target = copy.deepcopy(self.q_network_local).to(self.device)
+        self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.ddpg_hyperparameters["Critic"]["learning_rate"])
 
         self.actor_local = Neural_Network(self.state_size, self.action_size, config.seed,
                                           self.ddpg_hyperparameters["Actor"], "VANILLA_NN").to(self.device)
@@ -35,7 +35,6 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
         self.noise = OU_Noise(self.action_size, config.seed, self.ddpg_hyperparameters["mu"],
                               self.ddpg_hyperparameters["theta"], self.ddpg_hyperparameters["sigma"])
 
-
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
         super(DQN_Agent_With_Fixed_Q_Targets, self).reset_game()
@@ -43,16 +42,19 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action()
-        self.update_next_state_reward_done_and_score()
+        while not self.done:
+            self.pick_and_conduct_action()
+            self.update_next_state_reward_done_and_score()
 
-        if self.time_for_critic_and_actor_to_learn():
-            for _ in range(self.ddpg_hyperparameters["learning_updates_per_learning_session"]):
-                states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
-                self.critic_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
-                self.actor_learn(states)
-        self.save_experience()
-        self.state = self.next_state #this is to set the state for the next iteration
+            if self.time_for_critic_and_actor_to_learn():
+                for _ in range(self.ddpg_hyperparameters["learning_updates_per_learning_session"]):
+                    states, actions, rewards, next_states, dones = self.sample_experiences()  # Sample experiences
+                    self.q_network_learn(experiences_given=True, experiences=(states, actions, rewards, next_states, dones))
+                    self.actor_learn(states)
+            self.save_experience()
+            self.state = self.next_state #this is to set the state for the next iteration
+            self.episode_step_number += 1
+        self.episode_number += 1
 
     def pick_action(self):
         """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
@@ -69,16 +71,16 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
     def generate_noise_sample(self):
         """Generates a sample of noise that is decayed according to how many episodes have passed"""
         noise = self.noise.sample()
-        noise /= (1 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
+        noise /= (1.0 + (self.episode_number / self.hyperparameters["noise_decay_denominator"]))
         return noise
 
     def compute_q_values_for_next_states(self, next_states):
         actions_next = self.actor_target(next_states)
-        Q_targets_next = self.critic_target(torch.cat((next_states, actions_next), 1))
+        Q_targets_next = self.q_network_target(torch.cat((next_states, actions_next), 1))
         return Q_targets_next
 
     def compute_expected_q_values(self, states, actions):
-        Q_expected = self.critic_local(torch.cat((states, actions), 1))
+        Q_expected = self.q_network_local(torch.cat((states, actions), 1))
         return Q_expected
 
     def time_for_critic_and_actor_to_learn(self):
@@ -90,7 +92,7 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
 
     def calculate_actor_loss(self, states):
         actions_pred = self.actor_local(states)
-        actor_loss = -self.critic_local(torch.cat((states, actions_pred), 1)).mean()
+        actor_loss = -self.q_network_local(torch.cat((states, actions_pred), 1)).mean()
         return actor_loss
 
     def take_actor_optimisation_step(self, actor_loss):

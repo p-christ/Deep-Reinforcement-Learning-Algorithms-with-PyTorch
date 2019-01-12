@@ -1,60 +1,36 @@
-import random
-import sys
-import time
 import torch
 import numpy as np
-from torch import optim
+from Actor import Actor
 from Agents.Base_Agent import Base_Agent
-from Neural_Network import Neural_Network
-from Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utility_Functions import normalise_rewards, create_actor_distribution
-
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
 
     def __init__(self, config):
         Base_Agent.__init__(self, config)
-        self.initialise_policies()
-        self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.policy_output_size = self.calculate_policy_output_size()
+        self.actor_new = Actor(config, self.state_size, self.policy_output_size)
+        self.actor_old = Actor(config, self.state_size, self.policy_output_size)
         self.many_episode_states = []
         self.many_episode_actions = []
         self.many_episode_rewards = []
 
-    def initialise_policies(self):
+    def calculate_policy_output_size(self):
         """Initialises the policies"""
         if self.action_types == "DISCRETE":
             policy_output_size = self.action_size
         else:
             policy_output_size = self.action_size * 2 #Because we need 1 parameter for mean and 1 for std of distribution
+        return policy_output_size
 
-        self.policy_new = Neural_Network(self.state_size, policy_output_size, self.random_seed,
-                                         self.hyperparameters, "VANILLA_NN").to(self.device)
-
-        self.policy_old = Neural_Network(self.state_size, policy_output_size, self.random_seed,
-                                         self.hyperparameters, "VANILLA_NN").to(self.device)
-
-    def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
-        """Runs game to completion n times and then summarises results and saves model (if asked to)"""
-
-        start = time.time()
-        experience_generator = Parallel_Experience_Generator(self.environment, self.policy_new, self.random_seed, self.hyperparameters, self.episode_number)
-
-        while self.episode_number < num_episodes_to_run:
-            self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = experience_generator.play_n_episodes(self.hyperparameters["episodes_per_learning_round"])
-
-            self.episode_number += self.hyperparameters["episodes_per_learning_round"]
-            self.save_and_print_result()
-
-            if self.max_rolling_score_seen > self.average_score_required_to_win:  # stop once we achieve required score
-                break
-
-            self.policy_learn()
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.policy_new_optimizer)
-            self.equalise_policies()
-
-        time_taken = time.time() - start
-        return self.game_full_episode_scores, self.rolling_results, time_taken
+    def step(self):
+        self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = self.actor_new.play_n_episodes(
+            self.hyperparameters["episodes_per_learning_round"], self.episode_number)
+        self.episode_number += self.hyperparameters["episodes_per_learning_round"]
+        self.policy_learn()
+        self.update_learning_rate(self.hyperparameters["learning_rate"], self.actor_new.policy_optimizer)
+        self.equalise_policies()
 
     def policy_learn(self):
         """A learning round for the policy"""
@@ -64,7 +40,7 @@ class PPO_Agent(Base_Agent):
         for _ in range(self.hyperparameters["learning_iterations_per_round"]):
             all_ratio_of_policy_probabilities = self.calculate_all_ratio_of_policy_probabilities()
             loss = self.calculate_loss([all_ratio_of_policy_probabilities], all_discounted_returns)
-            self.take_policy_new_optimisation_step(loss)
+            self.actor_new.take_optimisation_step(loss)
 
     def calculate_all_discounted_returns(self):
         all_discounted_returns = []
@@ -86,8 +62,8 @@ class PPO_Agent(Base_Agent):
         all_actions = torch.stack([torch.Tensor(actions).float().to(self.device) for actions in all_actions])
         all_actions = all_actions.view(-1, len(all_states))
 
-        new_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_new, all_states, all_actions)
-        old_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.policy_old, all_states, all_actions)
+        new_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.actor_new.policy, all_states, all_actions)
+        old_policy_distribution_log_prob = self.calculate_log_probability_of_action(self.actor_old.policy, all_states, all_actions)
         ratio_of_policy_probabilities = torch.exp(new_policy_distribution_log_prob) / (torch.exp(old_policy_distribution_log_prob) + 1e-8)
         return ratio_of_policy_probabilities
 
@@ -114,16 +90,9 @@ class PPO_Agent(Base_Agent):
         return torch.clamp(input=value, min=1.0 - self.hyperparameters["clip_epsilon"],
                                   max=1.0 + self.hyperparameters["clip_epsilon"])
 
-    def take_policy_new_optimisation_step(self, loss):
-        self.policy_new_optimizer.zero_grad()  # reset gradients to 0
-        loss.backward()  # this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(self.policy_new.parameters(), self.hyperparameters[
-            "gradient_clipping_norm"])  # clip gradients to help stabilise training
-        self.policy_new_optimizer.step()  # this applies the gradients
-
     def equalise_policies(self):
         """Sets the old policy's parameters equal to the new policy's parameters"""
-        for old_param, new_param in zip(self.policy_old.parameters(), self.policy_new.parameters()):
+        for old_param, new_param in zip(self.actor_old.policy.parameters(), self.actor_new.policy.parameters()):
             old_param.data.copy_(new_param.data)
 
     def save_result(self):

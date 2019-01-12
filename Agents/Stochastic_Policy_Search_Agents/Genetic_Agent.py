@@ -28,22 +28,20 @@ class Genetic_Agent(Base_Agent):
         self.policy_to_use_this_episode = 0
         self.policy_scores_this_round = [0] * self.num_policies
 
-
-
     def step(self):
         """Runs a step within a game including a learning step if required"""
-        self.pick_and_conduct_action()
+        self.episode_number += 1
+        while not self.done:
+            self.pick_and_conduct_action()
+            self.update_next_state_reward_done_and_score()
+            if self.time_to_learn():
+                self.critic_learn()
+            self.state = self.next_state #this is to set the state for the next iteration
 
-        self.update_next_state_reward_done_and_score()
-
-        if self.time_to_learn():
-            self.critic_learn()
-
-        self.state = self.next_state #this is to set the state for the next iteration
-
-        if self.done:
-            self.policy_scores_this_round[self.policy_to_use_this_episode] += self.total_episode_score_so_far
-            self.update_policy_to_use_this_episode()
+            if self.done:
+                self.policy_scores_this_round[self.policy_to_use_this_episode] += self.total_episode_score_so_far
+                self.update_policy_to_use_this_episode()
+            self.episode_step_number += 1
 
     def pick_and_conduct_action(self):
         self.action = self.pick_action()
@@ -51,12 +49,10 @@ class Genetic_Agent(Base_Agent):
 
     def pick_action(self):
         policy_values = self.policies[self.policy_to_use_this_episode].forward(self.state)
-
         if self.stochastic_action_decision:
             action = np.random.choice(self.action_size, p=policy_values) # option 1: stochastic policy
         else:
             action = np.argmax(policy_values)  # option 2: deterministic policy
-
         return action
 
     def update_policy_to_use_this_episode(self):
@@ -70,10 +66,6 @@ class Genetic_Agent(Base_Agent):
         """Tells us if it is time to learn"""
         return self.done and self.episode_number % (self.num_policies * self.episodes_per_policy) == 0
 
-    def save_experience(self):
-        """We don't save past experiences for this algorithm"""
-        pass
-
     def critic_learn(self):
         """Creates a new set of policies by evolving the previous policies and resets scores"""
         self.policies = self.create_new_set_of_policies()
@@ -85,14 +77,11 @@ class Genetic_Agent(Base_Agent):
 
         elite_set_of_policies = [self.policies[policy_index] for policy_index in policies_in_score_order[-1 * self.num_policies_to_keep:]]
         self.policy_scores_this_round = [x / self.episodes_per_policy for x in self.policy_scores_this_round]
-
         policy_selection_probabilities = np.array(self.policy_scores_this_round) / np.sum(self.policy_scores_this_round)
-
         child_policy_set = self.create_child_policies(policy_selection_probabilities)
         mutated_policies = [self.mutation(policy) for policy in child_policy_set]
 
         return elite_set_of_policies + mutated_policies
-
 
     def create_child_policies(self, policy_selection_probabilities):
         """Creates a set of policies that are a crossover of the previous policies. Each policy is chosen
@@ -101,7 +90,6 @@ class Genetic_Agent(Base_Agent):
             self.policies[np.random.choice(range(self.num_policies), p=policy_selection_probabilities)],
             self.policies[np.random.choice(range(self.num_policies), p=policy_selection_probabilities)])
             for _ in range(self.num_policies - self.num_policies_to_keep)]
-
         return child_policy_set
 
     def reset_round_policy_scores(self):
@@ -129,6 +117,3 @@ class Genetic_Agent(Base_Agent):
                 if rand < p:
                     new_policy.weights[row][col] = 2.0 * (random.random() - 0.5)
         return new_policy
-
-    def locally_save_policy(self):
-        pass

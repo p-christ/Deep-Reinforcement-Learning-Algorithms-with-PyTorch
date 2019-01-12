@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABCMeta
@@ -202,3 +204,13 @@ def create_actor_distribution(action_types, actor_output, action_size):
         action_distribution = normal.Normal(means.squeeze(0), torch.abs(stds))
 
     return action_distribution
+
+
+def turn_general_config_into_critic_config(config):
+    config_for_dqn = copy.copy(config)
+
+    for key in config_for_dqn.hyperparameters["Critic"].keys():
+        config_for_dqn.hyperparameters[key] = config_for_dqn.hyperparameters["Critic"][key]
+
+    return config_for_dqn
+
