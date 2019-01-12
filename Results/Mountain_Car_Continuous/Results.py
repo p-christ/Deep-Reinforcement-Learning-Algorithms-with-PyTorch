@@ -5,10 +5,10 @@ from PPO_Agent import PPO_Agent
 from Utility_Functions import run_games_for_agents
 
 config = Config()
-config.seed = 100
+config.seed = 200
 config.environment = Mountain_Car_Continuous_Environment()
 config.max_episodes_to_run = 3000
-config.file_to_save_data_results = "Results_Data2.pkl"
+config.file_to_save_data_results = "Results_Data.pkl"
 config.file_to_save_data_results_graph = "Results_Graph2.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
@@ -20,18 +20,17 @@ config.hyperparameters = {
             "nn_layers": 2,
             "nn_start_units": 20,
             "nn_unit_decay": 1.0,
-            "final_layer_activation": "TANH",
+            "final_layer_activation": None,
             "learning_iterations_per_round": 10,
             "discount_rate": 0.99,
             "batch_norm": False,
             "clip_epsilon": 0.2,
             "episodes_per_learning_round": 7,
             "normalise_rewards": True,
-            "gradient_clipping_norm": 5,
+            "gradient_clipping_norm": 2,
             "mu": 0.0,
             "theta": 0.15,
-            "sigma": 0.25,
-            "noise_decay_denominator": 1
+            "sigma": 0.25
         },
 
     "Actor_Critic_Agents": {

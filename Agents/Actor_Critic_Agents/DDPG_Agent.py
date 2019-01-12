@@ -1,6 +1,8 @@
 import copy
 import torch
 from torch import optim
+
+from Random_Junkyard.Actor import Actor
 from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Neural_Network import Neural_Network
 from Utilities.OU_Noise import OU_Noise
@@ -26,6 +28,8 @@ class DDPG_Agent(DQN_Agent_With_Fixed_Q_Targets):
                                               self.ddpg_hyperparameters["Critic"], "VANILLA_NN").to(self.device)
         self.q_network_target = copy.deepcopy(self.q_network_local).to(self.device)
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.ddpg_hyperparameters["Critic"]["learning_rate"])
+
+        self.actor_local = Actor(config, "DDPG")
 
         self.actor_local = Neural_Network(self.state_size, self.action_size, config.seed,
                                           self.ddpg_hyperparameters["Actor"], "VANILLA_NN").to(self.device)
