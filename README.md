@@ -65,7 +65,7 @@ A DDPG agent was used to solve the environment with the results below. The hyper
 Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
 in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
- to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping_Environment/Results.py`    
+ to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping/Results.py`    
 
 ![Bit Flipping Results](Results/Bit_Flipping/Results_Graph.png)
 
@@ -73,8 +73,9 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 
 Below shows the perforamnce of DDPG with and without Hindsight Experience Replay in the Fetch Reach environment
 which is introduced in this [Open AI blog post](https://blog.openai.com/ingredients-for-robotics-research/). The results
-mirror those seen in [Plapper 2018](https://arxiv.org/pdf/1802.09464.pdf) and show that adding Hindsight Experience Replay
-dramatically improved the ability of the agent to learn the task. 
+mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/pdf/1802.09464.pdf) and show that adding Hindsight Experience Replay
+dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
+in the file: `Results/Fetch_Reach/Results.py`
 
 ![Fetch Reach Results](Results/Fetch_Reach/Results_Graph.png)  
 
