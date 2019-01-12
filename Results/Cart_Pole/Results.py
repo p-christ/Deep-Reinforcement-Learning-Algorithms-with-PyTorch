@@ -71,7 +71,8 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [PPO_Agent, Genetic_Agent, Hill_Climbing_Agent, DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent]
+AGENTS = [DQN_Agent, DDQN_With_Prioritised_Experience_Replay, DQN_Agent_With_Fixed_Q_Targets, DDQN_Agent,\
+         PPO_Agent, Genetic_Agent, Hill_Climbing_Agent]
 
 
 run_games_for_agents(config, AGENTS)

@@ -1,16 +1,12 @@
 import copy
 import torch
 from torch import optim
-
 from Base_Agent import Base_Agent
-from Random_Junkyard.Actor import Actor
-from DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Neural_Network import Neural_Network
 from Replay_Buffer import Replay_Buffer
 import torch.nn.functional as F
 from Utilities.OU_Noise import OU_Noise
 
-# TODO try HER and hierarchical RL using DDPG - create separate class
 # TODO currently critic takes state and action choice in at layer 1 rather than  concatonating them later in the network
 
 class DDPG_Agent(Base_Agent):
@@ -45,7 +41,7 @@ class DDPG_Agent(Base_Agent):
         self.noise.reset()
 
     def step(self):
-        """Runs a step within a game including a learning step if required"""
+        """Runs a step in the game"""
         while not self.done:
             self.pick_and_conduct_action()
             self.update_next_state_reward_done_and_score()
@@ -115,5 +111,3 @@ class DDPG_Agent(Base_Agent):
         actions_pred = self.actor_local(states)
         actor_loss = -self.critic_local(torch.cat((states, actions_pred), 1)).mean()
         return actor_loss
-
-

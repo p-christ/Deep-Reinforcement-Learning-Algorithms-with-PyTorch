@@ -20,14 +20,14 @@ config.hyperparameters = {
             "nn_layers": 2,
             "nn_start_units": 20,
             "nn_unit_decay": 1.0,
-            "final_layer_activation": None, # SHOULD BE TANH?
+            "final_layer_activation": None,
             "learning_iterations_per_round": 10,
             "discount_rate": 0.99,
             "batch_norm": False,
             "clip_epsilon": 0.2,
             "episodes_per_learning_round": 7,
             "normalise_rewards": True,
-            "gradient_clipping_norm": 4,
+            "gradient_clipping_norm": 5,
             "mu": 0.0,
             "theta": 0.15,
             "sigma": 0.25
@@ -63,11 +63,11 @@ config.hyperparameters = {
         "theta": 0.15,
         "sigma": 0.25, #0.22 did well before
         "noise_decay_denominator": 100,
-        "update_every_n_steps": 100,
+        "update_every_n_steps": 10,
         "learning_updates_per_learning_session": 10
     }
 }
 
-AGENTS = [DDPG_Agent]
+AGENTS = [PPO_Agent, DDPG_Agent]
 
 run_games_for_agents(config, AGENTS)
