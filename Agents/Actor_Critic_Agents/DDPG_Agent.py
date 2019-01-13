@@ -4,7 +4,7 @@ from torch import optim
 from Base_Agent import Base_Agent
 from Neural_Network import Neural_Network
 from Replay_Buffer import Replay_Buffer
-import torch.nn.functional as F
+import torch.nn.functional as functional
 from Utilities.OU_Noise import OU_Noise
 
 # TODO currently critic takes state and action choice in at layer 1 but it should concatonate them later in the network
@@ -15,22 +15,18 @@ class DDPG_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.hyperparameters = config.hyperparameters
-        self.initialise_critic_objects()
-        self.initialise_actor_objects()
-
-    def initialise_critic_objects(self):
         self.critic_local = Neural_Network(self.state_size + self.action_size, 1, self.random_seed,
                                            self.hyperparameters["Critic"], "VANILLA_NN").to(self.device)
         self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
-        self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=self.hyperparameters["Critic"]["learning_rate"])
+        self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
+                                           lr=self.hyperparameters["Critic"]["learning_rate"])
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
-                                           self.random_seed)
-
-    def initialise_actor_objects(self):
+                                    self.random_seed)
         self.actor_local = Neural_Network(self.state_size, self.action_size, self.random_seed,
                                           self.hyperparameters["Actor"], "VANILLA_NN").to(self.device)
         self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
-        self.actor_optimizer = optim.Adam(self.actor_local.parameters(), lr=self.hyperparameters["Actor"]["learning_rate"])
+        self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
+                                          lr=self.hyperparameters["Actor"]["learning_rate"])
         self.noise = OU_Noise(self.action_size, self.random_seed, self.hyperparameters["mu"],
                               self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
@@ -73,7 +69,7 @@ class DDPG_Agent(Base_Agent):
         with torch.no_grad():
             critic_targets = self.compute_critic_targets(next_states, rewards, dones)
         critic_expected = self.compute_expected_critic_values(states, actions)
-        loss = F.mse_loss(critic_expected, critic_targets)
+        loss = functional.mse_loss(critic_expected, critic_targets)
         return loss
 
     def compute_critic_targets(self, next_states, rewards, dones):

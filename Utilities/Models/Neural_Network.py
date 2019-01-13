@@ -20,6 +20,11 @@ class Neural_Network(nn.Module):
         self.random_seed = random_seed
         self.vanilla_model = self.create_vanilla_NN()
 
+        self.action_head = nn.Linear(64, self.action_size)
+        self.value_head = nn.Linear(64, 1)
+
+
+
 
     def forward(self, input):
 
@@ -28,6 +33,19 @@ class Neural_Network(nn.Module):
 
         if self.model_type == "DUELLING_NN":
             return self.duelling_model(input)
+
+        if self.model_type == "A2C":
+
+            intemediary_output = self.vanilla_model(input)
+            action_scores = self.action_head(intemediary_output)
+            xavier_normal_(action_scores.weight.data)
+
+            state_values = self.value_head(intemediary_output)
+            xavier_normal_(state_values.weight.data)
+
+            return action_scores, state_values
+
+
 
     def create_vanilla_NN(self):
         """Creates a neural network model"""

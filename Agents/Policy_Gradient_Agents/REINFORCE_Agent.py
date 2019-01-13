@@ -10,12 +10,9 @@ class REINFORCE_Agent(Base_Agent):
     agent_name = "REINFORCE"
 
     def __init__(self, config):
-
         Base_Agent.__init__(self, config)
-
         self.policy = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
-
         self.episode_rewards = []
         self.episode_log_probabilities = []
 
@@ -36,13 +33,10 @@ class REINFORCE_Agent(Base_Agent):
         """Runs a step within a game including a learning step if required"""
         while not self.done:
             self.pick_and_conduct_action_and_save_log_probabilities()
-
             self.update_next_state_reward_done_and_score()
             self.store_reward()
-
             if self.time_to_learn():
                 self.actor_learn()
-
             self.state = self.next_state #this is to set the state for the next iteration
             self.episode_step_number += 1
         self.episode_number += 1
@@ -58,11 +52,9 @@ class REINFORCE_Agent(Base_Agent):
         # PyTorch only accepts mini-batches and not individual observations so we have to add
         # a "fake" dimension to our observation using unsqueeze
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
-
         action_probabilities = self.policy.forward(state).cpu()
         action_distribution = Categorical(action_probabilities) # this creates a distribution to sample from
         action = action_distribution.sample()
-
         return action.item(), action_distribution.log_prob(action)
 
     def store_log_probabilities(self, log_probabilities):
@@ -74,7 +66,6 @@ class REINFORCE_Agent(Base_Agent):
     def store_reward(self):
         self.episode_rewards.append(self.reward)
 
-
     def actor_learn(self):
         total_discounted_reward = self.calculate_episode_discounted_reward()
         policy_loss = self.calculate_policy_loss_on_episode(total_discounted_reward)
@@ -85,7 +76,6 @@ class REINFORCE_Agent(Base_Agent):
     def calculate_episode_discounted_reward(self):
         discounts = self.hyperparameters["discount_rate"] ** np.arange(len(self.episode_rewards))
         total_discounted_reward = np.dot(discounts, self.episode_rewards)
-
         return total_discounted_reward
 
     def calculate_policy_loss_on_episode(self, total_discounted_reward):
