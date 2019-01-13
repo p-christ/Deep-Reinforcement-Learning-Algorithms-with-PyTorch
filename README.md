@@ -1,8 +1,9 @@
 
+![RL](Environments/Animation_Gifs/RL_image.png)
+
 # Deep Reinforcement Learning Algorithms
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
-
 
 ## **Algorithms Implemented** 
 
@@ -45,7 +46,9 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
   
 Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
 
+
 ![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
+
 
 #### Tennis
 
