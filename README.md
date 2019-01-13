@@ -1,4 +1,4 @@
-# Deep Reinforcement Learning PyTorch Algorithms
+# Deep Reinforcement Learning Algorithms with PyTorch
 
 ![RL](Environments/Animation_Gifs/RL_image.jpeg)   ![PyTorch](Environments/Animation_Gifs/PyTorch-logo-2.jpg)
 
