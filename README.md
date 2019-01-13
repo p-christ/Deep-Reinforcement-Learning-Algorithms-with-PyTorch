@@ -1,7 +1,7 @@
+# Deep Reinforcement Learning Algorithms
 
 ![RL](Environments/Animation_Gifs/RL_image.png)
 
-# Deep Reinforcement Learning Algorithms
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms. 
 
