@@ -73,7 +73,7 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 
 #### Fetch Reach
 
-Below shows the perforamnce of DDPG with and without Hindsight Experience Replay in the Fetch Reach environment
+Below shows the performance of DDPG with and without Hindsight Experience Replay in the Fetch Reach environment
 which is introduced in this [Open AI blog post](https://blog.openai.com/ingredients-for-robotics-research/). The results
 mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/pdf/1802.09464.pdf) and show that adding Hindsight Experience Replay
 dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
