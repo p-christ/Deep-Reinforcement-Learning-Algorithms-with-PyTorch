@@ -6,8 +6,8 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 
 ## **Algorithms Implemented** 
 
-1. Deep Q Learning (DQN) ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))  
-1. DQN with Fixed Q Targets ([Minh 2013](https://arxiv.org/pdf/1312.5602.pdf))
+1. Deep Q Learning (DQN) ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))  
+1. DQN with Fixed Q Targets ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))
 1. Double DQN ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
 1. Double DQN with Prioritised Experience Replay ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
 1. REINFORCE ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
