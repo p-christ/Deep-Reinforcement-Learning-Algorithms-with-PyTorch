@@ -8,8 +8,9 @@ from torch.nn.init import xavier_normal_
 class Neural_Network(nn.Module):
     """Creates the neural network described by the hyperparameters you provide"""
 
-    def __init__(self, state_size, action_size, random_seed, hyperparameters, model_type):
+    def __init__(self, state_size, action_size, random_seed, hyperparameters, model_type, use_GPU=False):
         nn.Module.__init__(self)
+        self.use_GPU = use_GPU
         self.hyperparameters = hyperparameters
         self.model_type = model_type
         self.state_size = state_size
@@ -18,7 +19,7 @@ class Neural_Network(nn.Module):
         self.vanilla_model = self.create_vanilla_NN()
 
     def forward(self, input):
-        if torch.cuda.is_available():
+        if self.use_GPU:
             input=input.cuda()
         if self.model_type == "VANILLA_NN":
             return self.vanilla_model(input)
@@ -33,7 +34,7 @@ class Neural_Network(nn.Module):
         model_layers.extend(final_layer)
         model = torch.nn.Sequential(*model_layers)
         model.apply(self.linear_layer_weights_xavier_initialisation)
-        if torch.cuda.is_available():
+        if self.use_GPU:
             model=model.cuda()
         return model
 

@@ -1,21 +1,20 @@
 import torch
 from contextlib import closing
-if torch.cuda.is_available():
-    print("GPU identified. Note that, depending on your usage, it may be faster to only use a CPU instead though")
-    from torch.multiprocessing import Pool
-    try:
-         torch.multiprocessing.set_start_method('spawn')
-    except RuntimeError:
-        pass
-else:
-    from multiprocessing import Pool
+from multiprocessing import Pool
 from random import randint
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
 
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
-    def __init__(self, environment, policy, seed, hyperparameters):
+    def __init__(self, environment, policy, seed, hyperparameters, use_GPU=False):
+        if use_GPU:
+            print("GPU identified. Note that, depending on your usage, it may be faster to only use a CPU instead though")
+            from torch.multiprocessing import Pool
+            try:
+                torch.multiprocessing.set_start_method('spawn')
+            except RuntimeError:
+                pass
         self.environment =  environment
         self.action_size = self.environment.get_action_size()
         self.action_types = self.environment.get_action_types()

@@ -19,6 +19,7 @@ config.file_to_save_data_results_graph = "Results_Graph.png"
 config.visualise_individual_results = True
 config.visualise_overall_results = True
 config.runs_per_agent = 1
+config.use_GPU = False
 
 config.hyperparameters = {
     "DQN_Agents": {

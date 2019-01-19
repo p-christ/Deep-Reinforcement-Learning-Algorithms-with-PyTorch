@@ -1,13 +1,9 @@
 import sys
-
 import gym
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import time
-
-from abc import abstractmethod
-from Utilities.Utility_Functions import abstract
 
 class Base_Agent(object):
     
@@ -27,7 +23,10 @@ class Base_Agent(object):
         self.max_rolling_score_seen = float("-inf")
         self.max_episode_score_seen = float("-inf")
         self.episode_number = 0
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        if config.use_GPU:
+            self.device = "cuda:0"
+        else:
+            self.device = "cpu"
         self.visualise_results_boolean = config.visualise_individual_results
         self.run_checks()
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning

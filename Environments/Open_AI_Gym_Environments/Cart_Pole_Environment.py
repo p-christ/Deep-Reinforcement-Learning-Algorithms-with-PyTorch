@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 from Environments.Base_Environment import Base_Environment
 
-
 class Cart_Pole_Environment(Base_Environment):
 
     def __init__(self):

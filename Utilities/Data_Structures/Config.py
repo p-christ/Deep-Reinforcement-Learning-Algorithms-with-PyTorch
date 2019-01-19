@@ -14,5 +14,6 @@ class Config(object):
         self.visualise_overall_results = None
         self.visualise_individual_results = None
         self.hyperparameters = None
+        self.use_GPU = None
 
 
