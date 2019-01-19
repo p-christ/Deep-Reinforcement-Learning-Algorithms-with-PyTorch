@@ -12,9 +12,8 @@ if torch.cuda.is_available():
 from random import randint
 
 from multiprocessing import Pool
-
-from OU_Noise import OU_Noise
-from Utility_Functions import create_actor_distribution
+from Utilities.OU_Noise import OU_Noise
+from Utilities.Utility_Functions import create_actor_distribution
 
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
