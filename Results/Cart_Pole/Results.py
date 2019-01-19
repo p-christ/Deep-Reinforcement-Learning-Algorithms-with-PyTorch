@@ -1,5 +1,5 @@
-from PPO_Agent import PPO_Agent
-from Data_Structures.Config import Config
+from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
+from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
