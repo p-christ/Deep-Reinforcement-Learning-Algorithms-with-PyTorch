@@ -1,5 +1,5 @@
 from Agents.Base_Agent import Base_Agent
-from Neural_Network import Neural_Network
+from Utilities.Models.Neural_Network import Neural_Network
 from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
 import torch.optim as optim

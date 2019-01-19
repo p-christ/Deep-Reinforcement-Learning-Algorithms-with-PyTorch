@@ -1,4 +1,4 @@
-from Neural_Network import Neural_Network
+from Utilities.Models.Neural_Network import Neural_Network
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 

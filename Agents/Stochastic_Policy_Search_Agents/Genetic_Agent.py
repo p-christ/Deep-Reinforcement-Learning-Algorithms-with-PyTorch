@@ -4,7 +4,7 @@ import random
 import numpy as np
 
 from Agents.Base_Agent import Base_Agent
-from Linear_Model import Linear_Model
+from Utilities.Models.Linear_Model import Linear_Model
 
 class Genetic_Agent(Base_Agent):
     agent_name = "Genetic_Agent"
