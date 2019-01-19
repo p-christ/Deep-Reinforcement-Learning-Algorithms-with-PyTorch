@@ -13,6 +13,7 @@ config.file_to_save_data_results_graph = "Results_Graph2.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
 config.runs_per_agent = 1
+config.use_GPU = False
 
 config.hyperparameters = {
     "Policy_Gradient_Agents": {
