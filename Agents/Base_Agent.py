@@ -23,10 +23,7 @@ class Base_Agent(object):
         self.max_rolling_score_seen = float("-inf")
         self.max_episode_score_seen = float("-inf")
         self.episode_number = 0
-        if config.use_GPU:
-            self.device = "cuda:0"
-        else:
-            self.device = "cpu"
+        self.device = "cuda:0" if config.use_GPU else "cpu"
         self.visualise_results_boolean = config.visualise_individual_results
         self.run_checks()
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning

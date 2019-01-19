@@ -1,6 +1,12 @@
 import torch
 from contextlib import closing
 from multiprocessing import Pool
+from torch.multiprocessing import Pool as GPU_POOL
+try:
+    torch.multiprocessing.set_start_method('spawn')
+except RuntimeError:
+    pass
+
 from random import randint
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
@@ -8,13 +14,7 @@ from Utilities.Utility_Functions import create_actor_distribution
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
     def __init__(self, environment, policy, seed, hyperparameters, use_GPU=False):
-        if use_GPU:
-            print("GPU identified. Note that, depending on your usage, it may be faster to only use a CPU instead though")
-            from torch.multiprocessing import Pool
-            try:
-                torch.multiprocessing.set_start_method('spawn')
-            except RuntimeError:
-                pass
+        self.use_GPU = use_GPU
         self.environment =  environment
         self.action_size = self.environment.get_action_size()
         self.action_types = self.environment.get_action_types()
@@ -25,9 +25,14 @@ class Parallel_Experience_Generator(object):
 
     def play_n_episodes(self, n):
         """Plays n episodes in parallel using the fixed policy and returns the data"""
-        with closing(Pool(processes=n)) as pool:
-            results = pool.map(self, range(n))
-            pool.terminate()
+        if self.use_GPU:
+            with closing(GPU_POOL(processes=n)) as pool:
+                results = pool.map(self, range(n))
+                pool.terminate()
+        else:
+            with closing(Pool(processes=n)) as pool:
+                results = pool.map(self, range(n))
+                pool.terminate()
         states_for_all_episodes = [episode[0] for episode in results]
         actions_for_all_episodes = [episode[1] for episode in results]
         rewards_for_all_episodes = [episode[2] for episode in results]
