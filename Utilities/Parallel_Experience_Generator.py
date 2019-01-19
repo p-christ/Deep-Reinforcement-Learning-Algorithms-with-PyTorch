@@ -2,11 +2,6 @@ import torch
 from contextlib import closing
 from multiprocessing import Pool
 from torch.multiprocessing import Pool as GPU_POOL
-try:
-    torch.multiprocessing.set_start_method('spawn')
-except RuntimeError:
-    pass
-
 from random import randint
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
