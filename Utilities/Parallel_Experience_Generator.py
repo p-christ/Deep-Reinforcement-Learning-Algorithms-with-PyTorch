@@ -2,11 +2,16 @@
 import torch
 from contextlib import closing
 from torch.multiprocessing import Pool
-try:
-     torch.multiprocessing.set_start_method('spawn')
-except RuntimeError:
-    pass
+
+if torch.cuda.is_available():
+    print("GPU identified")
+    try:
+         torch.multiprocessing.set_start_method('spawn')
+    except RuntimeError:
+        pass
 from random import randint
+
+from multiprocessing import Pool
 
 from OU_Noise import OU_Noise
 from Utility_Functions import create_actor_distribution

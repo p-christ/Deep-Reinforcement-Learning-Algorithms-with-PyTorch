@@ -79,7 +79,8 @@ mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxi
 dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
 in the file: `Results/Fetch_Reach/Results.py`
 
-![Fetch Reach Results](Results/Fetch_Reach/Results_Graph.png)  
+![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png)
+
 
 
 ### Usage ###

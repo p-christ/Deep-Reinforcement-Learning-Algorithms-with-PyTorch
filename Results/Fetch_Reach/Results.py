@@ -50,6 +50,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [DDPG_HER_Agent, DDPG_Agent]
 
-run_games_for_agents(config, AGENTS)
+if __name__== '__main__':
+    AGENTS = [DDPG_HER_Agent, DDPG_Agent]
+    run_games_for_agents(config, AGENTS)
