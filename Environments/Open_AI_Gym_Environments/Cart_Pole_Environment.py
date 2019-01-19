@@ -3,7 +3,7 @@ import numpy as np
 from pyvirtualdisplay import Display
 import matplotlib.pyplot as plt
 
-from Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 
 
 class Cart_Pole_Environment(Base_Environment):
