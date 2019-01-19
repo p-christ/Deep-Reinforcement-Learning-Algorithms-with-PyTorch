@@ -4,7 +4,7 @@ from contextlib import closing
 from torch.multiprocessing import Pool
 
 if torch.cuda.is_available():
-    print("GPU identified")
+    print("GPU identified. Note that, depending on your usage, it may be faster to only use a CPU instead though")
     try:
          torch.multiprocessing.set_start_method('spawn')
     except RuntimeError:
