@@ -1,7 +1,11 @@
 
 import torch
 from contextlib import closing
-from multiprocessing import Pool
+from torch.multiprocessing import Pool
+try:
+     torch.multiprocessing.set_start_method('spawn')
+except RuntimeError:
+    pass
 from random import randint
 
 from OU_Noise import OU_Noise
@@ -64,7 +68,7 @@ class Parallel_Experience_Generator(object):
         state = torch.from_numpy(state).float().unsqueeze(0)
         actor_output = policy.forward(state)
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
-        action = action_distribution.sample().numpy()
+        action = action_distribution.sample().cpu().numpy()
         if self.action_types == "CONTINUOUS":
             action += self.noise.sample()
         return action

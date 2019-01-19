@@ -27,7 +27,8 @@ class Neural_Network(nn.Module):
 
 
     def forward(self, input):
-
+        if torch.cuda.is_available():
+            input=input.cuda()
         if self.model_type == "VANILLA_NN":
             return self.vanilla_model(input)
 
@@ -35,7 +36,7 @@ class Neural_Network(nn.Module):
             return self.duelling_model(input)
 
         if self.model_type == "A2C":
-
+            
             intemediary_output = self.vanilla_model(input)
             action_scores = self.action_head(intemediary_output)
             xavier_normal_(action_scores.weight.data)
@@ -55,6 +56,8 @@ class Neural_Network(nn.Module):
         model_layers.extend(final_layer)
         model = torch.nn.Sequential(*model_layers)
         model.apply(self.linear_layer_weights_xavier_initialisation)
+        if torch.cuda.is_available():
+            model=model.cuda()
         return model
 
     def create_intemediary_model_layers(self):

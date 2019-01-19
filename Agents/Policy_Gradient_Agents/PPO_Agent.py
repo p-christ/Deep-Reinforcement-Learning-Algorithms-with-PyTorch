@@ -81,7 +81,7 @@ class PPO_Agent(Base_Agent):
         """Calculates the log probability of an action occuring given a policy and starting state"""
         policy_output = policy.forward(states).cpu().to(self.device)
         policy_distribution = create_actor_distribution(self.action_types, policy_output, self.action_size)
-        actions_tensor = torch.from_numpy(np.array(actions))
+        actions_tensor = actions
         policy_distribution_log_prob = policy_distribution.log_prob(actions_tensor)
         return policy_distribution_log_prob
 
@@ -91,7 +91,7 @@ class PPO_Agent(Base_Agent):
         all_ratio_of_policy_probabilities = torch.clamp(input=all_ratio_of_policy_probabilities,
                                                         min = -sys.maxsize,
                                                         max = sys.maxsize)
-        all_discounted_returns = torch.tensor(all_discounted_returns, dtype=torch.float)
+        all_discounted_returns = torch.tensor(all_discounted_returns).to(all_ratio_of_policy_probabilities)
         potential_loss_value_1 = all_discounted_returns * all_ratio_of_policy_probabilities
         potential_loss_value_2 = all_discounted_returns * self.clamp_probability_ratio(all_ratio_of_policy_probabilities)
         loss = torch.min(potential_loss_value_1, potential_loss_value_2)

@@ -67,6 +67,7 @@ config.hyperparameters = {
     }
 }
 
-AGENTS = [PPO_Agent, DDPG_Agent]
+if __name__=='__main__':
+    AGENTS = [PPO_Agent, DDPG_Agent]
 
-run_games_for_agents(config, AGENTS)
+    run_games_for_agents(config, AGENTS)
