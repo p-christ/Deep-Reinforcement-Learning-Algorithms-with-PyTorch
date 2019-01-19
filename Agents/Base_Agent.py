@@ -30,7 +30,7 @@ class Base_Agent(object):
 
     def set_random_seeds(self, seed):
         self.random_seed = seed
-        # torch.manual_seed(seed)
+        torch.manual_seed(seed)
         np.random.seed(seed)
 
     def reset_game(self):

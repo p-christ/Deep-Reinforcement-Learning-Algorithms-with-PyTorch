@@ -14,11 +14,11 @@ from torch.distributions import Categorical, normal, MultivariateNormal
 def run_games_for_agents(config, agents):
     """Plays the game for the set of given agents, saves and visualises results"""
 
-    # if config.use_GPU:
-    #     try:
-    #         torch.multiprocessing.set_start_method('spawn')
-    #     except RuntimeError:
-    #         pass
+    if config.use_GPU:
+        try:
+            torch.multiprocessing.set_start_method('spawn')
+        except RuntimeError:
+            pass
 
     runs_per_agent = config.runs_per_agent
     max_episodes_to_run = config.max_episodes_to_run
