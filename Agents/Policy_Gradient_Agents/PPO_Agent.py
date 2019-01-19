@@ -15,7 +15,6 @@ class PPO_Agent(Base_Agent):
         self.policy_output_size = self.calculate_policy_output_size()
         self.policy_new = Neural_Network(self.state_size, self.policy_output_size, self.random_seed, self.hyperparameters,
                                          "VANILLA_NN").to(self.device)
-
         self.policy_old = Neural_Network(self.state_size, self.policy_output_size, self.random_seed, self.hyperparameters,
                                          "VANILLA_NN").to(self.device)
         self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
@@ -78,7 +77,7 @@ class PPO_Agent(Base_Agent):
 
     def calculate_log_probability_of_actions(self, policy, states, actions):
         """Calculates the log probability of an action occuring given a policy and starting state"""
-        policy_output = policy.forward(states).cpu().to(self.device)
+        policy_output = policy.forward(states).to(self.device)
         policy_distribution = create_actor_distribution(self.action_types, policy_output, self.action_size)
         actions_tensor = actions
         policy_distribution_log_prob = policy_distribution.log_prob(actions_tensor)

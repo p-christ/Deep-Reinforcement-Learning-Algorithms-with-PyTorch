@@ -1,17 +1,15 @@
-
 import torch
 from contextlib import closing
-from torch.multiprocessing import Pool
-
 if torch.cuda.is_available():
     print("GPU identified. Note that, depending on your usage, it may be faster to only use a CPU instead though")
+    from torch.multiprocessing import Pool
     try:
          torch.multiprocessing.set_start_method('spawn')
     except RuntimeError:
         pass
+else:
+    from multiprocessing import Pool
 from random import randint
-
-from multiprocessing import Pool
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
 
