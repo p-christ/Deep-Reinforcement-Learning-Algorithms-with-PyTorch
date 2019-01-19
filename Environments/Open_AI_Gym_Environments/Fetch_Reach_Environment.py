@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-from Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 
 class Fetch_Reach_Environment(Base_Environment):
 
