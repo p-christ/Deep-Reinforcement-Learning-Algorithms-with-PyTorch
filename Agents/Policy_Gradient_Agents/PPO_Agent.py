@@ -3,10 +3,9 @@ import torch
 import numpy as np
 from torch import optim
 from Agents.Base_Agent import Base_Agent
-from Neural_Network import Neural_Network
-from Parallel_Experience_Generator import Parallel_Experience_Generator
-from Utility_Functions import normalise_rewards, create_actor_distribution
-
+from Utilities.Models.Neural_Network import Neural_Network
+from Utilities.Parallel_Experience_Generator import Parallel_Experience_Generator
+from Utilities.Utility_Functions import normalise_rewards, create_actor_distribution
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
