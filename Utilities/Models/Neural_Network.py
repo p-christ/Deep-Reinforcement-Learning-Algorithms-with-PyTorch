@@ -4,6 +4,7 @@ from torch.nn.init import xavier_normal_
 
 """ WIP - not complete """
 # TODO add batch normalisation
+# TODO change it so it is input.to(device) instead of cuda  https://github.com/pytorch/pytorch/issues/1668
 
 class Neural_Network(nn.Module):
     """Creates the neural network described by the hyperparameters you provide"""
@@ -11,6 +12,7 @@ class Neural_Network(nn.Module):
     def __init__(self, state_size, action_size, random_seed, hyperparameters, model_type, use_GPU=False):
         nn.Module.__init__(self)
         self.use_GPU = use_GPU
+        self.device = "cuda:0" if use_GPU else "cpu"
         self.hyperparameters = hyperparameters
         self.model_type = model_type
         self.state_size = state_size
@@ -19,8 +21,7 @@ class Neural_Network(nn.Module):
         self.vanilla_model = self.create_vanilla_NN()
 
     def forward(self, input):
-        if self.use_GPU:
-            input=input.cuda()
+        input.to(self.device)
         if self.model_type == "VANILLA_NN":
             return self.vanilla_model(input)
         if self.model_type == "DUELLING_NN":
@@ -34,8 +35,7 @@ class Neural_Network(nn.Module):
         model_layers.extend(final_layer)
         model = torch.nn.Sequential(*model_layers)
         model.apply(self.linear_layer_weights_xavier_initialisation)
-        if self.use_GPU:
-            model=model.cuda()
+        model.to(self.device)
         return model
 
     def create_intemediary_model_layers(self):
