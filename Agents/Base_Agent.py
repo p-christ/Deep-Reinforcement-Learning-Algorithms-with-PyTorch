@@ -1,5 +1,6 @@
 import sys
 import gym
+import random
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
@@ -30,7 +31,8 @@ class Base_Agent(object):
 
     def set_random_seeds(self, seed):
         self.random_seed = seed
-        # torch.manual_seed(seed)
+        random.seed(seed)
+        torch.manual_seed(seed)
         np.random.seed(seed)
 
     def reset_game(self):

@@ -8,11 +8,11 @@ config = Config()
 config.seed = 100
 config.environment = Mountain_Car_Continuous_Environment()
 config.max_episodes_to_run = 3000
-config.file_to_save_data_results = "Results_Data.pkl"
+config.file_to_save_data_results = "Results_Data3.pkl"
 config.file_to_save_data_results_graph = "Results_Graph2.png"
 config.visualise_individual_results = False
 config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.runs_per_agent = 2
 config.use_GPU = False
 
 config.hyperparameters = {

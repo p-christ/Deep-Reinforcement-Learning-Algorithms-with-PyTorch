@@ -11,7 +11,7 @@ from Agents.Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Clim
 from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
-config.seed = 100
+config.seed = 1
 config.environment = Cart_Pole_Environment()
 config.max_episodes_to_run = 2000
 config.file_to_save_data_results = "Results_Data.pkl"
