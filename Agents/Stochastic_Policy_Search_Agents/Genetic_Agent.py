@@ -77,7 +77,7 @@ class Genetic_Agent(Base_Agent):
 
         elite_set_of_policies = [self.policies[policy_index] for policy_index in policies_in_score_order[-1 * self.num_policies_to_keep:]]
         self.policy_scores_this_round = [x / self.episodes_per_policy for x in self.policy_scores_this_round]
-        policy_selection_probabilities = np.array(self.policy_scores_this_round) / np.sum(self.policy_scores_this_round)
+        policy_selection_probabilities =   np.exp(np.array(self.policy_scores_this_round)) / np.sum(np.exp(np.array(self.policy_scores_this_round)))
         child_policy_set = self.create_child_policies(policy_selection_probabilities)
         mutated_policies = [self.mutation(policy) for policy in child_policy_set]
 

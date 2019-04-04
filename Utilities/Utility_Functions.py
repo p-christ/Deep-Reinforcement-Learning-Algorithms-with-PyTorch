@@ -10,10 +10,8 @@ import os
 import torch
 from torch.distributions import Categorical, normal, MultivariateNormal
 
-
 def run_games_for_agents(config, agents):
     """Plays the game for the set of given agents, saves and visualises results"""
-
     if config.use_GPU:
         try:
             torch.multiprocessing.set_start_method('spawn')
@@ -46,12 +44,10 @@ def run_games_for_agents(config, agents):
 
 
     agent_number = 1
-    if os.path.isfile(file_to_save_data_results):
+    if file_to_save_data_results and os.path.isfile(file_to_save_data_results):
         results = load_obj(file_to_save_data_results)
     else:
         results = {}
-
-
 
     for agent_class in agents:
         agent_results = []
@@ -61,7 +57,6 @@ def run_games_for_agents(config, agents):
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             config.hyperparameters = all_hyperparameters[hyperparameter_finder[agent_name]]
-
             agent = agent_class(config)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes(num_episodes_to_run=max_episodes_to_run, save_model=False)
             print("Time taken: {}".format(time_taken), flush=True)
@@ -81,6 +76,8 @@ def run_games_for_agents(config, agents):
 
     if visualise_overall_results:
         visualise_results_by_agent(results, config.environment.get_score_to_win(), file_to_save_data_results_graph)
+
+    return results
 
 def save_obj(obj, name):
     if name[-4:] != ".pkl":
@@ -189,28 +186,20 @@ def create_actor_distribution(action_types, actor_output, action_size):
     if action_types == "DISCRETE":
         assert actor_output.size()[1] == action_size, "Actor output the wrong size"
         action_distribution = Categorical(actor_output)  # this creates a distribution to sample from
-
     else:
         assert actor_output.size()[1] == action_size * 2, "Actor output the wrong size"
-
         means = actor_output[:, :action_size]
         stds = actor_output[:,  action_size:]
-
         means = means.squeeze(0)
         stds = stds.squeeze(0)
-
         if len(means.shape) == 2:
             means = means.squeeze(-1)
-
         if len(stds.shape) == 2:
             stds = stds.squeeze(-1)
-
         if len(stds.shape) > 1 or len(means.shape) > 1:
             raise ValueError("Wrong mean and std shapes")
         action_distribution = normal.Normal(means.squeeze(0), torch.abs(stds))
-
     return action_distribution
-
 
 def turn_general_config_into_critic_config(config):
     config_for_dqn = copy.copy(config)

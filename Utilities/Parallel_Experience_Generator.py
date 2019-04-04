@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from contextlib import closing
 from multiprocessing import Pool
 from torch.multiprocessing import Pool as GPU_POOL
@@ -70,6 +71,5 @@ class Parallel_Experience_Generator(object):
         actor_output = policy.forward(state)
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().cpu().numpy()
-        if self.action_types == "CONTINUOUS":
-            action += self.noise.sample()
+        if self.action_types == "CONTINUOUS": action += self.noise.sample()
         return action

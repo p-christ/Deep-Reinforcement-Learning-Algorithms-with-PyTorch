@@ -22,29 +22,24 @@ class Bit_Flipping_Environment(Base_Environment):
         return [random.randint(0, 1) for _ in range(self.environment_dimension)]
 
     def conduct_action(self, action):
-
+        """Conducts the discrete action chosen and updated next_state, reward and done"""
+        if type(action) is np.ndarray:
+            action = action[0]
         assert action <= self.environment_dimension + 1, "You picked an invalid action"
-
         self.step_count += 1
-
         if action != self.environment_dimension + 1: #otherwise no bit is flipped
             self.next_state = copy.copy(self.state)
             self.next_state[action] = (self.next_state[action] + 1) % 2
-
         if self.goal_achieved(self.next_state):
             self.reward = self.reward_for_achieving_goal
             self.done = True
-
         else:
             self.reward = self.step_reward_for_not_achieving_goal
-
             if self.step_count >= self.environment_dimension:
                 self.done = True
             else:
                 self.done = False
-
         self.achieved_goal = self.next_state[:self.environment_dimension]
-
         self.state = self.next_state
 
     def goal_achieved(self, next_state):
@@ -84,7 +79,7 @@ class Bit_Flipping_Environment(Base_Environment):
         return self.environment_dimension
 
     def get_action_types(self):
-        return "CONTINUOUS"
+        return "DISCRETE"
 
     def get_score_to_win(self):
         return 0
