@@ -6,9 +6,7 @@ dist: xenial
 sudo: true
 
 install:
-  - pip install numpy -q
-  - pip install torch -q
-  - pip install gym -q
+  - pip install -r requirements.txt
 
 
 script:
