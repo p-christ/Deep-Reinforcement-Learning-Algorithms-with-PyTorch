@@ -1,4 +1,4 @@
-torch==0.4.1
+torch==0.4.1.post2
 numpy==1.15.2
 PyVirtualDisplay==0.2.1
 matplotlib==3.0.0
