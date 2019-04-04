@@ -3,4 +3,4 @@ numpy==1.15.2
 PyVirtualDisplay==0.2.1
 matplotlib==3.0.0
 gym==0.10.9
-unityagents==0.4.0
+unityagents
