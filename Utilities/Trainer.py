@@ -46,7 +46,7 @@ class Trainer(object):
         if self.config.file_to_save_results_graph: plt.savefig(self.config.file_to_save_results_graph, bbox_inches="tight")
         if self.config.file_to_save_data_results: self.save_obj(self.results, self.config.file_to_save_data_results)
         plt.show()
-        # if self.config.visualise_overall_results:
+        return self.results
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False):
         """Visualises the results for one agent"""

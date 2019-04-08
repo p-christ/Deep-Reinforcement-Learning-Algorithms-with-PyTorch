@@ -5,6 +5,7 @@ from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
+from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Utilities.Utility_Functions import run_games_for_agents
@@ -80,7 +81,8 @@ def test_agent_solve_bit_flipping_game():
 
     AGENTS = [PPO_Agent, DDQN_Agent, DQN_HER_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
 
-    results = run_games_for_agents(config, AGENTS)
+    trainer = Trainer(config, AGENTS)
+    results = trainer.run_games_for_agents()
 
     for agent in AGENTS:
         agent_results = results[agent.agent_name]
