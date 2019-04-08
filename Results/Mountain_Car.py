@@ -75,11 +75,10 @@ config.hyperparameters = {
     }
 }
 
-
 if __name__ == "__main__":
     AGENTS = [DDPG_Agent, PPO_Agent]
     trainer = Trainer(config, AGENTS)
-    trainer.visualise_preexisting_results(config.file_to_save_results_graph)
+    trainer.run_games_for_agents()
 
 
 

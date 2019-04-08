@@ -4,7 +4,6 @@ import copy
 
 class OU_Noise(object):
     """Ornstein-Uhlenbeck process."""
-
     def __init__(self, size, seed, mu=0., theta=0.15, sigma=0.2):
         self.mu = mu * np.ones(size)
         self.theta = theta

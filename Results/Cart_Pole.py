@@ -6,10 +6,6 @@ from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
 from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
-from Agents.Policy_Gradient_Agents.REINFORCE_Agent import REINFORCE_Agent
-from Agents.Stochastic_Policy_Search_Agents.Genetic_Agent import Genetic_Agent
-from Agents.Stochastic_Policy_Search_Agents.Hill_Climbing_Agent import Hill_Climbing_Agent
-from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
 config.seed = 1
@@ -80,21 +76,10 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-
     AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
-             # Genetic_Agent, Hill_Climbing_Agent, DQN_Agent_With_Fixed_Q_Targets ]
-    import os
-    print(os.getcwd())
-    print(os.listdir(os.getcwd()))
-    import pickle
-
-    with open(config.file_to_save_data_results, 'rb') as f:
-        z = pickle.load(f)
-        print(z.keys())
-
     trainer = Trainer(config, AGENTS)
-    trainer.visualise_preexisting_results(config.file_to_save_results_graph)
-    # trainer.run_games_for_agents()
+    trainer.run_games_for_agents()
+
 
 
 
