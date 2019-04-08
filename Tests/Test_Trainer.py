@@ -1,8 +1,6 @@
-
 import numpy as np
-
-from Config import Config
-from Trainer import Trainer
+from Utilities.Data_Structures.Config import Config
+from Utilities.Trainer import Trainer
 
 
 def test_get_mean_and_standard_deviation_difference_results():
