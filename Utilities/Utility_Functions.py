@@ -1,5 +1,5 @@
 import copy
-
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 from abc import ABCMeta
@@ -9,6 +9,9 @@ import os
 
 import torch
 from torch.distributions import Categorical, normal, MultivariateNormal
+
+
+
 
 def run_games_for_agents(config, agents):
     """Plays the game for the set of given agents, saves and visualises results"""
@@ -79,15 +82,7 @@ def run_games_for_agents(config, agents):
 
     return results
 
-def save_obj(obj, name):
-    if name[-4:] != ".pkl":
-        name += ".pkl"
-    with open(name, 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
-def load_obj(name):
-    with open(name, 'rb') as f:
-        return pickle.load(f)
 
 def produce_median_results(agent_results):
     """Finds the median result for an agent"""
@@ -98,11 +93,7 @@ def produce_median_results(agent_results):
 def abstract(cls):
     return ABCMeta(cls.__name__, cls.__bases__, dict(cls.__dict__))
 
-def print_two_empty_lines():
-    print("-----------------------------------------------------------------------------------")
-    print("-----------------------------------------------------------------------------------") 
-    print(" ")
-    
+
     
 def save_score_results(file_path, results):
     np.save(file_path, results)

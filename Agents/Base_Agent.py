@@ -9,6 +9,7 @@ import time
 class Base_Agent(object):
     
     def __init__(self, config):
+        self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
         self.action_size = self.environment.get_action_size()
@@ -56,19 +57,16 @@ class Base_Agent(object):
         self.episode_next_states.append(self.next_state)
         self.episode_dones.append(self.done)
 
-    def run_n_episodes(self, num_episodes_to_run=1, save_model=False):
+    def run_n_episodes(self):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         start = time.time()
-        while self.episode_number < num_episodes_to_run:
+        while self.episode_number < self.config.num_episodes_to_run:
             self.reset_game()
             self.step()
             self.save_and_print_result()
-            if self.max_rolling_score_seen > self.average_score_required_to_win: #stop once we achieve required score
-                break
         time_taken = time.time() - start
-        self.summarise_results()
-        if save_model:
-            self.locally_save_policy()
+        self.show_whether_achieved_goal()
+        if self.config.save_model: self.locally_save_policy()
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def step(self):
@@ -108,13 +106,6 @@ class Base_Agent(object):
                                                                                                self.game_full_episode_scores[-1], self.max_episode_score_seen))
         sys.stdout.flush()
 
-    def generate_string_to_print(self):
-        return
-
-    def summarise_results(self):
-        self.show_whether_achieved_goal()
-        if self.visualise_results_boolean:
-            self.visualise_results()
 
     def show_whether_achieved_goal(self):
         index_achieved_goal = self.achieved_required_score_at_index()
@@ -134,12 +125,6 @@ class Base_Agent(object):
             if score > self.average_score_required_to_win:
                 return ix
         return -1
-
-    def visualise_results(self):
-        plt.plot(self.rolling_results)
-        plt.ylabel('Episode score')
-        plt.xlabel('Episode number')
-        plt.show()
 
     def update_learning_rate(self, starting_lr,  optimizer):
         """Lowers the learning rate according to how close we are to the solution"""

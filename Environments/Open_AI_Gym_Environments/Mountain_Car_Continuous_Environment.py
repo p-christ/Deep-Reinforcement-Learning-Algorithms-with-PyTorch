@@ -45,4 +45,4 @@ class Mountain_Car_Continuous_Environment(Base_Environment):
         return 90
 
     def get_rolling_period_to_calculate_score_over(self):
-        return 100
+        return 20

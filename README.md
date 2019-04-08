@@ -39,6 +39,9 @@ and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were
 ![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
 
 
+![Cart Pole Results2](Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
+
+
 ### b) Continuous Action Games 
 
 #### Mountain Car
