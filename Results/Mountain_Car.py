@@ -1,8 +1,8 @@
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
+from DDPG_Agent import DDPG_Agent
 from Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
-from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
 
 
 config = Config()
@@ -30,7 +30,7 @@ config.hyperparameters = {
             "nn_unit_decay": 0.5,
             "final_layer_activation": "TANH",
             "learning_iterations_per_round": 10,
-            "discount_rate": 0.99,
+            "discount_rate": 0.999,
             "batch_norm": False,
             "clip_epsilon": 0.2,
             "episodes_per_learning_round": 10,
@@ -38,7 +38,7 @@ config.hyperparameters = {
             "gradient_clipping_norm": 5,
             "mu": 0.0,
             "theta": 0.15,
-            "sigma": 0.35
+            "sigma": 0.2
         },
 
     "Actor_Critic_Agents": {
@@ -70,27 +70,16 @@ config.hyperparameters = {
         "mu": 0.0,
         "theta": 0.15,
         "sigma": 0.25, #0.22 did well before
-        "update_every_n_steps": 10,
-        "learning_updates_per_learning_session": 10
+        "update_every_n_steps": 20,
+        "learning_updates_per_learning_session": 3
     }
 }
 
 
 if __name__ == "__main__":
-
-    # import os
-    # print(os.getcwd())
-    # print(os.listdir(os.getcwd()))
-    # import pickle
-    #
-    # with open(config.file_to_save_data_results, 'rb') as f:
-    #     z = pickle.load(f)
-    #     print(z.keys())
-
-    AGENTS = [PPO_Agent] #, DDPG_Agent]
+    AGENTS = [DDPG_Agent, PPO_Agent]
     trainer = Trainer(config, AGENTS)
-    # trainer.visualise_preexisting_results(config.file_to_save_results_graph)
-    trainer.run_games_for_agents()
+    trainer.visualise_preexisting_results(config.file_to_save_results_graph)
 
 
 

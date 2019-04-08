@@ -2,6 +2,7 @@ from Environments.Base_Environment import Base_Environment
 import gym
 
 class Mountain_Car_Continuous_Environment(Base_Environment):
+    environment_name = "Mountain Car (Continuous)"
 
     def __init__(self):
         self.game_environment = gym.make("MountainCarContinuous-v0")

@@ -1,19 +1,26 @@
 from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
 from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
-config.seed = 100
+config.seed = 1
 config.environment = Bit_Flipping_Environment(14)
-config.max_episodes_to_run = 6000
-config.file_to_save_data_results = "Results_Data.pkl"
-config.file_to_save_data_results_graph = "Results_Graph.png"
-config.visualise_individual_results = True
-config.visualise_overall_results = True
+config.num_episodes_to_run = 4500
+config.file_to_save_data_results = "Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
+config.file_to_save_results_graph = "Data_and_Graphs/Bit_Flipping_Results_Graph.png"
+config.show_solution_score = False
+config.visualise_individual_results = False
+config.visualise_overall_agent_results = True
+config.standard_deviation_results = 1.0
 config.runs_per_agent = 3
 config.use_GPU = False
+config.overwrite_existing_results_file = False
+config.randomise_random_seed = True
+config.save_model = False
+
 
 config.hyperparameters = {
     "DQN_Agents": {
@@ -38,6 +45,9 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
-    AGENTS = [DQN_HER_Agent, DQN_Agent]
-    run_games_for_agents(config, AGENTS)
+    AGENTS = [DQN_HER_Agent] #, DQN_Agent]
+    trainer = Trainer(config, AGENTS)
+    trainer.run_games_for_agents()
+
+    # trainer.visualise_preexisting_results(config.file_to_save_results_graph)
 

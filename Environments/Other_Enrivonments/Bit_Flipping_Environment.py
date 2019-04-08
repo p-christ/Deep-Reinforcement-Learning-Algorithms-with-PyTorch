@@ -4,6 +4,7 @@ import numpy as np
 from Environments.Base_Environment import Base_Environment
 
 class Bit_Flipping_Environment(Base_Environment):
+    environment_name = "Bit Flipping Game"
 
     def __init__(self, environment_dimension=20):
         self.environment_dimension = environment_dimension
