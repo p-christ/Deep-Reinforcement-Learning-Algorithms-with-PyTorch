@@ -15,5 +15,6 @@ class Config(object):
         self.overwrite_existing_results_file = None
         self.save_model = False
         self.standard_deviation_results = 1.0
+        self.randomise_random_seed = True
 
 

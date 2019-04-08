@@ -3,7 +3,6 @@ from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flippin
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
-from Utilities.Utility_Functions import run_games_for_agents
 
 config = Config()
 config.seed = 1
@@ -48,6 +47,4 @@ if __name__== '__main__':
     AGENTS = [DQN_Agent] #DQN_HER_Agent] #,
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
-
-    # trainer.visualise_preexisting_results(config.file_to_save_results_graph)
 

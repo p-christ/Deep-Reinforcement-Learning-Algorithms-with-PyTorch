@@ -2,18 +2,24 @@ from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
 from DDPG_HER_Agent import DDPG_HER_Agent
 from Data_Structures.Config import Config
 from Fetch_Reach_Environment import Fetch_Reach_Environment
-from Utility_Functions import run_games_for_agents
+from Trainer import Trainer
+
 
 config = Config()
-config.seed = 100
+config.seed = 1
 config.environment = Fetch_Reach_Environment()
-config.max_episodes_to_run = 2000
-config.file_to_save_data_results = "Results_Data.pkl"
-config.file_to_save_data_results_graph = "Results_Graph.png"
-config.visualise_individual_results = True
-config.visualise_overall_results = True
-config.runs_per_agent = 1
+config.num_episodes_to_run = 2000
+config.file_to_save_data_results = "Data_and_Graphs/Fetch_Reach_Results_Data.pkl"
+config.file_to_save_results_graph = "Data_and_Graphs/Fetch_Reach_Results_Graph.png"
+config.show_solution_score = False
+config.visualise_individual_results = False
+config.visualise_overall_agent_results = True
+config.standard_deviation_results = 1.0
+config.runs_per_agent = 3
 config.use_GPU = False
+config.overwrite_existing_results_file = False
+config.randomise_random_seed = True
+config.save_model = False
 
 config.hyperparameters = {
 
@@ -53,5 +59,11 @@ config.hyperparameters = {
 
 
 if __name__== '__main__':
-    AGENTS = [DDPG_HER_Agent, DDPG_Agent]
-    run_games_for_agents(config, AGENTS)
+    AGENTS = [DDPG_HER_Agent]#, DDPG_Agent]
+
+    trainer = Trainer(config, AGENTS)
+    trainer.run_games_for_agents()
+    #
+    # trainer.visualise_preexisting_results(config.file_to_save_results_graph)
+
+
