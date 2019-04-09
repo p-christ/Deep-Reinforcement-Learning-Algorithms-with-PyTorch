@@ -1,6 +1,6 @@
 import torch
 
-from Replay_Buffer import Replay_Buffer
+from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 from Utilities.Utility_Functions import abstract
 
 @abstract
