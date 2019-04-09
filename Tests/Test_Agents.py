@@ -66,7 +66,7 @@ config.hyperparameters = {
         "discount_rate": 0.99,
         "batch_norm": False,
         "clip_epsilon": 0.1,
-        "episodes_per_learning_round": 20,
+        "episodes_per_learning_round": 5,
         "normalise_rewards": False,
         "gradient_clipping_norm": 5,
         "mu": 0.0, #only required for continuous action games
