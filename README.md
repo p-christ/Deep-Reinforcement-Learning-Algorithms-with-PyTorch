@@ -21,7 +21,7 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. DDPG with Hindsight Experience Replay (DDPG-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
-Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C and PPO-HER soon.
+Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C and hierarchical RL algorithms soon.
 
 
 ## **Results**
