@@ -33,7 +33,7 @@ Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritis
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Cart_Pole.py `. 
 
-![Cart Pole Results](Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
+![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
 
 #### 2. Mountain Car (Continuous Actions)
 
@@ -41,7 +41,7 @@ Below shows PPO and DDPG playing [Mountain Car](https://github.com/openai/gym/wi
 seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Mountain_Car.py `
 
-![Mountain Car Continuous Results](Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
+![Mountain Car Continuous Results](./Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
 
 
 ### 3. Hindsight Experience Replay (HER) Experiements
@@ -58,7 +58,7 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 ONLY DIFFERENCE IS HER added.. hyperparameters the same
 
 
-![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
+![Bit Flipping Results](./Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](./Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
 
 
 
