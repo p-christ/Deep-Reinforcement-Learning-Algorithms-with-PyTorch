@@ -19,7 +19,7 @@ class Trainer(object):
         """Creates a dictionary that maps an agent to their wider agent group"""
         create_agent_to_agent_group_dictionary = {
             "DQN": "DQN_Agents",
-            "DQN_HER": "DQN_Agents",
+            "DQN-HER": "DQN_Agents",
             "DDQN": "DQN_Agents",
             "DDQN with Prioritised Replay": "DQN_Agents",
             "DQN with Fixed Q Targets": "DQN_Agents",
@@ -29,7 +29,7 @@ class Trainer(object):
             "Genetic_Agent": "Stochastic_Policy_Search_Agents",
             "Hill Climbing": "Stochastic_Policy_Search_Agents",
             "DDPG": "Actor_Critic_Agents",
-            "DDPG_HER": "Actor_Critic_Agents"
+            "DDPG-HER": "Actor_Critic_Agents"
         }
         return create_agent_to_agent_group_dictionary
 

@@ -3,7 +3,7 @@ from Agents.HER_Base import HER_Base
 
 class DQN_HER_Agent(DQN_Agent, HER_Base):
     """DQN algorithm with hindsight experience replay"""
-    agent_name = "DQN_HER"
+    agent_name = "DQN-HER"
 
     def __init__(self, config):
         DQN_Agent.__init__(self, config)

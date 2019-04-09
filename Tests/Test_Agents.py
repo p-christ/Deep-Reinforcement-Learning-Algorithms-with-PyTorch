@@ -86,7 +86,7 @@ def test_agent_solve_bit_flipping_game():
 
     for agent in AGENTS:
         print(agent)
-        print(agent_results)
+        print(results)
         agent_results = results[agent.agent_name]
         print(agent_results)
         agent_results = np.max(agent_results[1][50:])

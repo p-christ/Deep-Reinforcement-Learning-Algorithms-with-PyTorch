@@ -55,6 +55,9 @@ found in the paper and show that adding HER allowed the agent to solve a problem
  to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping/Results.py`    
 
 
+ONLY DIFFERENCE IS HER added.. hyperparameters the same
+
+
 ![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png)
 
 #### Fetch Reach

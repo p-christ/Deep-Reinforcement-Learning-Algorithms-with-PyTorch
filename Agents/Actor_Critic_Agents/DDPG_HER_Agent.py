@@ -3,7 +3,7 @@ from HER_Base import HER_Base
 
 class DDPG_HER_Agent(DDPG_Agent, HER_Base):
     """DDPG algorithm with hindsight experience replay"""
-    agent_name = "DDPG_HER"
+    agent_name = "DDPG-HER"
 
     def __init__(self, config):
         DDPG_Agent.__init__(self, config)
