@@ -22,13 +22,13 @@ config.num_episodes_to_run = 1000
 config.file_to_save_data_results = None
 config.file_to_save_data_results_graph = None
 config.visualise_individual_results = False
-config.visualise_overall_results = False
+config.visualise_overall_agent_results = False
 config.runs_per_agent = 1
 config.use_GPU = False
 config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.005,
-        "batch_size": 256,
+        "batch_size": 64,
         "buffer_size": 40000,
         "epsilon": 0.1,
         "epsilon_decay_rate_denominator": 200,
@@ -37,7 +37,7 @@ config.hyperparameters = {
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.4,
         "incremental_td_error": 1e-8,
-        "update_every_n_steps": 1,
+        "update_every_n_steps": 3,
         "nn_layers": 3,
         "nn_start_units": 20,
         "nn_unit_decay": 1.0,
