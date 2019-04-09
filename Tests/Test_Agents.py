@@ -89,5 +89,6 @@ def test_agent_solve_bit_flipping_game():
         print(results)
         agent_results = results[agent.agent_name]
         print(agent_results)
-        agent_results = np.max(agent_results[1][50:])
+        agent_results = np.max(agent_results[0][1][50:])
+        print(agent_results)
         assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
