@@ -8,7 +8,7 @@ from Trainer import Trainer
 config = Config()
 config.seed = 1
 config.environment = Fetch_Reach_Environment()
-config.num_episodes_to_run = 2000
+config.num_episodes_to_run = 1500
 config.file_to_save_data_results = "Data_and_Graphs/Fetch_Reach_Results_Data.pkl"
 config.file_to_save_results_graph = "Data_and_Graphs/Fetch_Reach_Results_Graph.png"
 config.show_solution_score = False

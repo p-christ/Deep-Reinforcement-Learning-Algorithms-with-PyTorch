@@ -18,7 +18,7 @@ torch.manual_seed(100)
 config = Config()
 config.seed = 100
 config.environment = Bit_Flipping_Environment(4)
-config.max_episodes_to_run = 6000
+config.num_episodes_to_run = 1000
 config.file_to_save_data_results = None
 config.file_to_save_data_results_graph = None
 config.visualise_individual_results = False
