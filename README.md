@@ -33,7 +33,7 @@ Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritis
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Cart_Pole.py `. 
  
-![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
+![Cart Pole Results](Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
 
 #### 2. Mountain Car (Continuous Actions)
 
@@ -41,35 +41,20 @@ Below shows PPO and DDPG playing [Mountain Car](https://github.com/openai/gym/wi
 seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Mountain_Car.py `
 
-![Mountain Car Continuous Results](./Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
+![Mountain Car Continuous Results](Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
 
 
-### 3. Hindsight Experience Replay (HER) Experiements
+#### 3. Hindsight Experience Replay (HER) Experiements
 
-
-#### Bit Flipping 
-
-Below shows the performance of DQN with and without Hindsight Experience Replay (HER) in the Bit Flipping Environment (14 bits) described
-in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf). The results replicate the result 
+Below shows the performance of DQN and DDPG with and without Hindsight Experience Replay (HER) in the Bit Flipping (14 bits) 
+and Fetch Reach environments described in the papers [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf) 
+and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). The results replicate the results in 
+the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all.  
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
- to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping/Results.py`    
+to practically solve. Note that the same hyperparameters were used for each pair of agents and so the only difference 
+between them was whether hindsight was used or not. 
 
-
-ONLY DIFFERENCE IS HER added.. hyperparameters the same
-
-![Bit Flipping Results](./Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](./Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
-
-
-
-#### Fetch Reach
-
-Below shows the performance of DDPG with and without Hindsight Experience Replay in the Fetch Reach environment
-which is introduced in this [Open AI blog post](https://blog.openai.com/ingredients-for-robotics-research/). The results
-mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/pdf/1802.09464.pdf) and show that adding Hindsight Experience Replay
-dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
-in the file: `Results/Fetch_Reach/Results.py`
-
-![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png )
+![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
 
 
 
