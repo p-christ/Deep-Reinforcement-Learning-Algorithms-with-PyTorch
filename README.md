@@ -33,7 +33,7 @@ Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritis
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Cart_Pole.py `. 
  
-![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
+![Cart Pole Results](https://raw.githubusercontent.com/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch/master/Results/Data_and_Graphs/Cart_Pole_Results_Graph.png)
 
 #### 2. Mountain Car (Continuous Actions)
 
@@ -41,8 +41,7 @@ Below shows PPO and DDPG playing [Mountain Car](https://github.com/openai/gym/wi
 seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Mountain_Car.py `
 
-![Mountain Car Continuous Results](./Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
-
+![Mountain Car Continuous Results](https://raw.githubusercontent.com/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch/master/Results/Data_and_Graphs/Mountain_Car_Results_Graph.png)
 
 #### 3. Hindsight Experience Replay (HER) Experiements
 
