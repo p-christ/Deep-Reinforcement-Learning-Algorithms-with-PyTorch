@@ -33,7 +33,7 @@ Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritis
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Cart_Pole.py `. 
  
-![Cart Pole Results](Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
+![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
 
 #### 2. Mountain Car (Continuous Actions)
 
@@ -41,17 +41,16 @@ Below shows PPO and DDPG playing [Mountain Car](https://github.com/openai/gym/wi
 seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Mountain_Car.py `
 
-![Mountain Car Continuous Results](Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
+![Mountain Car Continuous Results](./Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
 
 
 #### 3. Hindsight Experience Replay (HER) Experiements
 
 Below shows the performance of DQN and DDPG with and without Hindsight Experience Replay (HER) in the Bit Flipping (14 bits) 
 and Fetch Reach environments described in the papers [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf) 
-and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). The results replicate the results in 
+and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). The results replicate the results found in 
 the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all.  
-found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
-to practically solve. Note that the same hyperparameters were used for each pair of agents and so the only difference 
+Note that the same hyperparameters were used for each pair of agents and so the only difference 
 between them was whether hindsight was used or not. 
 
 ![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
