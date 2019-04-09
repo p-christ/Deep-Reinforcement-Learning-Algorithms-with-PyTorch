@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from Environments.Base_Environment import Base_Environment
 
 class Cart_Pole_Environment(Base_Environment):
+    environment_name = "Cart Pole"
 
     def __init__(self):
         self.game_environment = gym.make("CartPole-v0")

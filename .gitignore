@@ -10,5 +10,6 @@ drlnd/
 *playground_test_runs.py
 Game_Files/
 mjpro150/
+mujoco200_macos/
 Random_Junkyard/
 *to_do_list

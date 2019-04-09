@@ -26,43 +26,26 @@ Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous ac
 
 ## **Results**
 
-### a) Discrete Action Games 
+#### 1. Cart Pole (Discrete Actions)
 
-#### Cart Pole:
+Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritised Experience Replay and PPO playing
+ [Cart Pole](https://github.com/openai/gym/wiki/CartPole-v0) for 450 episodes. The mean result from running the algorithms 
+ with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
+ used can be found in file `Results/Cart_Pole.py `. 
+ 
+![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
 
-![example](Environments/Animation_Gifs/Cart_Pole.gif)
+#### 2. Mountain Car (Continuous Actions)
 
-Below shows the number of episodes taken and also time taken for each algorithm to achieve the solution score for the game Cart Pole. Because results can vary greatly each run, each agent plays the game 10 times and we show the *median* result. 
-We show the results in terms of number of episodes taken to reach the required score
-and also time taken. The algorithms were run on a 2017 Macbook Pro (no GPUs were used). The hyperparameters used are shown in the file `Results/Cart_Pole/Results.py`.   
+Below shows PPO and DDPG playing [Mountain Car](https://github.com/openai/gym/wiki/MountainCarContinuous-v0) for 450 episodes. The mean result from running the algorithms with 3 random 
+seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
+ used can be found in file `Results/Mountain_Car.py `
 
-![Cart Pole Results](Results/Cart_Pole/Results_Graph.png)
-
-
-### b) Continuous Action Games 
-
-#### Mountain Car
-  
-![example](Environments/Animation_Gifs/Mountain_Car.gif)  
-  
-Here are the results for DDPG with respect to the Mountain Car (Continuous) game. The hyperparameters used are shown in the file `Results/Mountain_Car_Continuous/Results.py`.
+![Mountain Car Continuous Results](./Results/Data_And_Graphs/Mountain_Car_Results_Graph.png)
 
 
-![Mountain Car Continuous Results](Results/Mountain_Car_Continuous/Results_Graph.png)
+### 3. Hindsight Experience Replay (HER) Experiements
 
-
-#### Tennis
-
-The [Tennis](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Learning-Environment-Examples.md#tennis) environment is a multi-agent
-cooperative environment where the goal of each agent is to hit the ball back to the other play as many times
- as possible without the ball going out of play or hitting the ground.  
-<p align="center"><img src="https://user-images.githubusercontent.com/10624937/42135623-e770e354-7d12-11e8-998d-29fc74429ca2.gif" alt="Example" width="50%" style="middle"></p>
-
-A DDPG agent was used to solve the environment with the results below. The hyperparameters used can be found in `Results/Tennis/Results.py`:
-
-![Tennis Results](Results/Tennis/Results_Graph.png)
-
-### c) Hindsight Experience Replay (HER) Experiments
 
 #### Bit Flipping 
 
@@ -71,7 +54,12 @@ in the paper [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495
 found in the paper and show that adding HER allowed the agent to solve a problem that vanilla DQN was not able
  to practically solve. The hyperparameters used were the same for both agents and the same as in the paper, they can be found in the file: `Results/Bit_Flipping/Results.py`    
 
-![Bit Flipping Results](Results/Bit_Flipping/Results_Graph.png)
+
+ONLY DIFFERENCE IS HER added.. hyperparameters the same
+
+![Bit Flipping Results](./Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](./Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
+
+
 
 #### Fetch Reach
 
@@ -81,7 +69,8 @@ mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxi
 dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
 in the file: `Results/Fetch_Reach/Results.py`
 
-![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png)
+![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png )
+
 
 
 

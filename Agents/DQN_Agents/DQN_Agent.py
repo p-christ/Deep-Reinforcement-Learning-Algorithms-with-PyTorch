@@ -26,7 +26,7 @@ class DQN_Agent(Base_Agent):
                 self.q_network_learn()
             self.save_experience()
             self.state = self.next_state #this is to set the state for the next iteration
-            self.episode_step_number += 1
+            self.global_step_number += 1
         self.episode_number += 1
 
     def pick_action(self):
@@ -95,7 +95,7 @@ class DQN_Agent(Base_Agent):
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
     def right_amount_of_steps_taken(self):
-        return self.episode_step_number % self.hyperparameters["update_every_n_steps"] == 0
+        return self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
     def sample_experiences(self):
         experiences = self.memory.sample()
