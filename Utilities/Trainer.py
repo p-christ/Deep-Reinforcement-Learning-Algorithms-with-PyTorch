@@ -42,8 +42,7 @@ class Trainer(object):
             if self.config.visualise_overall_agent_results:
                 agent_rolling_score_results = [results[1] for results in  self.results[agent_name]]
                 self.visualise_overall_agent_results(agent_rolling_score_results, agent_name, show_mean_and_std_range=True)
-            if self.config.file_to_save_data_results: self.save_obj(self.results, self.config.file_to_save_data_results)
-
+        if self.config.file_to_save_data_results: self.save_obj(self.results, self.config.file_to_save_data_results)
         if self.config.file_to_save_results_graph: plt.savefig(self.config.file_to_save_results_graph, bbox_inches="tight")
         plt.show()
         return self.results
@@ -78,13 +77,14 @@ class Trainer(object):
             agent_round += 1
         self.results[agent_name] = agent_results
 
-    def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False):
+    def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
+                                        color=None):
         """Visualises the results for one agent"""
         assert isinstance(agent_results, list), "agent_results must be a list of lists, 1 set of results per list"
         assert isinstance(agent_results[0], list), "agent_results must be a list of lists, 1 set of results per list"
         assert bool(show_mean_and_std_range) ^ bool(show_each_run), "either show_mean_and_std_range or show_each_run must be true"
 
-        color = self.get_next_color()
+        if not color: color = self.get_next_color()
         if show_mean_and_std_range:
             mean_minus_x_std, mean_results, mean_plus_x_std = self.get_mean_and_standard_deviation_difference_results(agent_results)
             x_vals = list(range(len(mean_results)))
@@ -177,12 +177,15 @@ class Trainer(object):
         with open(name, 'rb') as f:
             return pickle.load(f)
 
-    def visualise_preexisting_results(self, save_image_path=None):
+    def visualise_preexisting_results(self, save_image_path=None, colors=None):
         """Visualises saved data results and then optionally saves the image"""
         preexisting_results = self.create_object_to_store_results()
-        for agent in preexisting_results.keys():
+        for ix, agent in enumerate(preexisting_results.keys()):
             agent_rolling_score_results = [results[1] for results in preexisting_results[agent]]
-            self.visualise_overall_agent_results(agent_rolling_score_results, agent, show_mean_and_std_range=True)
+            if colors: color = colors[ix]
+            else: color = None
+            self.visualise_overall_agent_results(agent_rolling_score_results, agent, show_mean_and_std_range=True, color=color)
+
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
         plt.show()
 

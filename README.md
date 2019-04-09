@@ -58,7 +58,11 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 ONLY DIFFERENCE IS HER added.. hyperparameters the same
 
 
-![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png)
+![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) 
+
+![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png){:height="2px" width="2px"}
+
+
 
 #### Fetch Reach
 
@@ -68,7 +72,8 @@ mirror those seen in paper [Multi-Goal Reinforcement Learning 2018](https://arxi
 dramatically improved the ability of the agent to learn the task. The hyperparameters used were the same for both agents and the same as in the paper, they can be found 
 in the file: `Results/Fetch_Reach/Results.py`
 
-![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png)
+![Bit Flipping Results](Results/Fetch_Reach/Results_Graph.png )
+
 
 
 
