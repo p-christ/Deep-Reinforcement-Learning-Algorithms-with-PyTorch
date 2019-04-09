@@ -26,7 +26,7 @@ config.hyperparameters = {
     "Actor_Critic_Agents": {
         "Actor": {
             "learning_rate": 0.001,
-            "nn_layers": 2,
+            "nn_layers": 5,
             "nn_start_units": 50,
             "nn_unit_decay": 1.0,
             "final_layer_activation": "TANH",
@@ -37,7 +37,7 @@ config.hyperparameters = {
 
         "Critic": {
             "learning_rate": 0.01,
-            "nn_layers": 2,
+            "nn_layers": 6,
             "nn_start_units": 50,
             "nn_unit_decay": 1.0,
             "final_layer_activation": None,
@@ -51,8 +51,8 @@ config.hyperparameters = {
         "discount_rate": 0.9,
         "mu": 0.0,
         "theta": 0.15,
-        "sigma": 0.28,  # 0.22 did well before
-        "update_every_n_steps": 20,
+        "sigma": 0.25,  # 0.22 did well before
+        "update_every_n_steps": 10,
         "learning_updates_per_learning_session": 10
     }
 }

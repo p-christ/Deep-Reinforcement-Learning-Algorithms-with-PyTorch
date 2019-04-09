@@ -18,11 +18,12 @@ torch.manual_seed(100)
 config = Config()
 config.seed = 100
 config.environment = Bit_Flipping_Environment(4)
-config.num_episodes_to_run = 1000
+config.num_episodes_to_run = 2000
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = False
+config.randomise_random_seed = False
 config.runs_per_agent = 1
 config.use_GPU = False
 config.hyperparameters = {
@@ -84,6 +85,9 @@ def test_agent_solve_bit_flipping_game():
     results = trainer.run_games_for_agents()
 
     for agent in AGENTS:
+        print(agent)
+        print(agent_results)
         agent_results = results[agent.agent_name]
+        print(agent_results)
         agent_results = np.max(agent_results[1][50:])
         assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
