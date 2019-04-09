@@ -48,5 +48,6 @@ if __name__== '__main__':
     AGENTS = [DQN_Agent, DQN_HER_Agent]
     trainer = Trainer(config, AGENTS)
     # trainer.run_games_for_agents()
+    trainer.visualise_preexisting_results(config.file_to_save_results_graph)
 
-    trainer.visualise_preexisting_results(config.file_to_save_results_graph, colors=["blue", "green"])
+

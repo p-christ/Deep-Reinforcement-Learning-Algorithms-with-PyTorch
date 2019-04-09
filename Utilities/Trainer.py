@@ -11,13 +11,14 @@ class Trainer(object):
         self.config = config
         self.agents = agents
         self.agent_to_agent_group = self.create_agent_to_agent_group_dictionary()
+        self.agent_to_color_group = self.create_agent_to_color_dictionary()
         self.results = None
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
 
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""
-        create_agent_to_agent_group_dictionary = {
+        agent_to_agent_group_dictionary = {
             "DQN": "DQN_Agents",
             "DQN-HER": "DQN_Agents",
             "DDQN": "DQN_Agents",
@@ -31,7 +32,22 @@ class Trainer(object):
             "DDPG": "Actor_Critic_Agents",
             "DDPG-HER": "Actor_Critic_Agents"
         }
-        return create_agent_to_agent_group_dictionary
+        return agent_to_agent_group_dictionary
+
+    def create_agent_to_color_dictionary(self):
+        """Creates a dictionary that maps an agent to a hex color (for plotting purposes)
+        See https://en.wikipedia.org/wiki/Web_colors for hex colors"""
+        agent_to_color_dictionary = {
+            "DQN": "#0000FF",
+            "DQN with Fixed Q Targets": "#008080",
+            "DDQN": "#00FFFF",
+            "DDQN with Prioritised Replay": "#000080",
+            "PPO": "#800080",
+            "DDPG": "#800000",
+            "DQN-HER": "#008000",
+            "DDPG-HER": "#008000"
+        }
+        return agent_to_color_dictionary
 
     def run_games_for_agents(self):
         """Run a set of games for each agent. Optionally visualising and/or saving the results"""
@@ -84,7 +100,7 @@ class Trainer(object):
         assert isinstance(agent_results[0], list), "agent_results must be a list of lists, 1 set of results per list"
         assert bool(show_mean_and_std_range) ^ bool(show_each_run), "either show_mean_and_std_range or show_each_run must be true"
 
-        if not color: color = self.get_next_color()
+        if not color: color =  self.agent_to_color_group[agent_name]
         if show_mean_and_std_range:
             mean_minus_x_std, mean_results, mean_plus_x_std = self.get_mean_and_standard_deviation_difference_results(agent_results)
             x_vals = list(range(len(mean_results)))
@@ -180,7 +196,7 @@ class Trainer(object):
     def visualise_preexisting_results(self, save_image_path=None, colors=None):
         """Visualises saved data results and then optionally saves the image"""
         preexisting_results = self.create_object_to_store_results()
-        for ix, agent in enumerate(list(preexisting_results.keys())[::-1]):
+        for ix, agent in enumerate(list(preexisting_results.keys())):
             agent_rolling_score_results = [results[1] for results in preexisting_results[agent]]
             if colors: color = colors[ix]
             else: color = None

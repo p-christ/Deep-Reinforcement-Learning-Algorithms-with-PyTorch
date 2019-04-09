@@ -32,7 +32,7 @@ Below shows DQN, DQN with Fixed Q targets, Double DQN, Double DQN with Prioritis
  [Cart Pole](https://github.com/openai/gym/wiki/CartPole-v0) for 450 episodes. The mean result from running the algorithms 
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in file `Results/Cart_Pole.py `. 
-
+ 
 ![Cart Pole Results](./Results/Data_And_Graphs/Cart_Pole_Results_Graph.png)
 
 #### 2. Mountain Car (Continuous Actions)
@@ -56,7 +56,6 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 
 
 ONLY DIFFERENCE IS HER added.. hyperparameters the same
-
 
 ![Bit Flipping Results](./Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](./Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
 
