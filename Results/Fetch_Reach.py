@@ -8,7 +8,7 @@ from Trainer import Trainer
 config = Config()
 config.seed = 1
 config.environment = Fetch_Reach_Environment()
-config.num_episodes_to_run = 1500
+config.num_episodes_to_run = 2500
 config.file_to_save_data_results = "Data_and_Graphs/Fetch_Reach_Results_Data.pkl"
 config.file_to_save_results_graph = "Data_and_Graphs/Fetch_Reach_Results_Graph.png"
 config.show_solution_score = False
@@ -51,7 +51,7 @@ config.hyperparameters = {
         "discount_rate": 0.9,
         "mu": 0.0,
         "theta": 0.15,
-        "sigma": 0.22,  # 0.22 did well before
+        "sigma": 0.28,  # 0.22 did well before
         "update_every_n_steps": 20,
         "learning_updates_per_learning_session": 10
     }
