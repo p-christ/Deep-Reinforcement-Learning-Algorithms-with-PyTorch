@@ -180,7 +180,7 @@ class Trainer(object):
     def visualise_preexisting_results(self, save_image_path=None, colors=None):
         """Visualises saved data results and then optionally saves the image"""
         preexisting_results = self.create_object_to_store_results()
-        for ix, agent in enumerate(preexisting_results.keys()):
+        for ix, agent in enumerate(list(preexisting_results.keys())[::-1]):
             agent_rolling_score_results = [results[1] for results in preexisting_results[agent]]
             if colors: color = colors[ix]
             else: color = None
@@ -188,3 +188,5 @@ class Trainer(object):
 
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
         plt.show()
+
+
