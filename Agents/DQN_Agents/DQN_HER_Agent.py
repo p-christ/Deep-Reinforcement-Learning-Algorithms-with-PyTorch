@@ -7,6 +7,8 @@ class DQN_HER_Agent(DQN_Agent, HER_Base):
 
     def __init__(self, config):
         DQN_Agent.__init__(self, config)
+        HER_Base.__init__(self, self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"],
+                          self.hyperparameters["HER_sample_proportion"])
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
@@ -14,7 +16,7 @@ class DQN_HER_Agent(DQN_Agent, HER_Base):
             self.pick_and_conduct_action()
             self.update_next_state_reward_done_and_score()
             if self.time_for_q_network_to_learn():
-                self.q_network_learn(experiences_given=self.sample_from_HER_and_Ordinary_Buffer())
+                self.q_network_learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
             self.track_episodes_data()
             self.save_experience()
             if self.done: self.save_alternative_experience()

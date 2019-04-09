@@ -7,7 +7,8 @@ class DDPG_HER_Agent(DDPG_Agent, HER_Base):
 
     def __init__(self, config):
         DDPG_Agent.__init__(self, config)
-        HER_Base.__init__(self, config)
+        HER_Base.__init__(self, self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
+                          self.hyperparameters["HER_sample_proportion"])
 
     def step(self):
         """Runs a step within a game including a learning step if required"""

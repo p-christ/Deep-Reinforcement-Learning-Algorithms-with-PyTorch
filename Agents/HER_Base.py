@@ -6,13 +6,12 @@ from Utilities.Utility_Functions import abstract
 @abstract
 class HER_Base(object):
     """Contains methods needed to turn an algorithm into a hindsight experience replay (HER) algorithm"""
-    def __init__(self, config):
-        self.hyperparameters = config.hyperparameters
-        self.HER_memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
+    def __init__(self, buffer_size, batch_size, HER_sample_proportion):
+        self.HER_memory = Replay_Buffer( buffer_size, batch_size,
                                     self.random_seed)
 
-        self.ordinary_buffer_batch_size = int(self.hyperparameters["batch_size"] * (1.0 - self.hyperparameters["HER_sample_proportion"]))
-        self.HER_buffer_batch_size = self.hyperparameters["batch_size"] - self.ordinary_buffer_batch_size
+        self.ordinary_buffer_batch_size = int(batch_size * (1.0 - HER_sample_proportion))
+        self.HER_buffer_batch_size = batch_size - self.ordinary_buffer_batch_size
 
     def save_alternative_experience(self):
         """Saves the experiences as if the final state visited in the episode was the goal state"""

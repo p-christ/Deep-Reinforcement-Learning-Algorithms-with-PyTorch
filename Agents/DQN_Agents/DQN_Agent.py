@@ -7,7 +7,6 @@ import torch.nn.functional as F
 import random
 import numpy as np
 
-
 class DQN_Agent(Base_Agent):
     agent_name = "DQN"
 
@@ -51,9 +50,9 @@ class DQN_Agent(Base_Agent):
             return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
-    def q_network_learn(self, experiences_given=False, experiences=None):
+    def q_network_learn(self, experiences=None):
 
-        if not experiences_given:
+        if not experiences:
             states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else:
             states, actions, rewards, next_states, dones = experiences
