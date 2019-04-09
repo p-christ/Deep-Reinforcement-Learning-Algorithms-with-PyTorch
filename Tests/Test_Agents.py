@@ -44,7 +44,8 @@ config.hyperparameters = {
         "nn_unit_decay": 1.0,
         "final_layer_activation": None,
         "batch_norm": False,
-        "gradient_clipping_norm": 5
+        "gradient_clipping_norm": 5,
+        "HER_sample_proportion": 0.8
     },
     "Stochastic_Policy_Search_Agents": {
         "policy_network_type": "Linear",
