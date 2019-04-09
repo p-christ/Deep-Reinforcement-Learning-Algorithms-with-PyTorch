@@ -47,7 +47,7 @@ class DDPG_Agent(Base_Agent):
                     self.actor_learn(states)
             self.save_experience()
             self.state = self.next_state #this is to set the state for the next iteration
-            self.episode_step_number += 1
+            self.global_step_number += 1
         self.episode_number += 1
 
     def pick_action(self):
@@ -92,7 +92,7 @@ class DDPG_Agent(Base_Agent):
         return critic_expected
 
     def time_for_critic_and_actor_to_learn(self):
-        return self.enough_experiences_to_learn_from() and self.episode_step_number % self.hyperparameters["update_every_n_steps"] == 0
+        return self.enough_experiences_to_learn_from() and self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
     def actor_learn(self, states):
         if self.done: #we only update the learning rate at end of each episode

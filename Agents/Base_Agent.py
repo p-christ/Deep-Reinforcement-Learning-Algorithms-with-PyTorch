@@ -28,6 +28,7 @@ class Base_Agent(object):
         self.device = "cuda:0" if config.use_GPU else "cpu"
         self.visualise_results_boolean = config.visualise_individual_results
         self.run_checks()
+        self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
     def set_random_seeds(self, seed):
@@ -45,7 +46,6 @@ class Base_Agent(object):
         self.reward = None
         self.done = False
         self.total_episode_score_so_far = 0
-        self.episode_step_number = 0
         self.episode_states = []
         self.episode_actions = []
         self.episode_next_states = []
@@ -105,7 +105,6 @@ class Base_Agent(object):
                                                                                                self.max_rolling_score_seen,
                                                                                                self.game_full_episode_scores[-1], self.max_episode_score_seen))
         sys.stdout.flush()
-
 
     def show_whether_achieved_goal(self):
         index_achieved_goal = self.achieved_required_score_at_index()

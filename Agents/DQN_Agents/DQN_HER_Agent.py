@@ -14,13 +14,13 @@ class DQN_HER_Agent(DQN_Agent, HER_Base):
             self.pick_and_conduct_action()
             self.update_next_state_reward_done_and_score()
             if self.time_for_q_network_to_learn():
-                self.q_network_learn()
+                self.q_network_learn(experiences_given=self.sample_from_HER_and_Ordinary_Buffer())
             self.track_episodes_data()
             self.save_experience()
-
-            if self.done:
-                self.save_alternative_experience()
-
+            if self.done: self.save_alternative_experience()
             self.state = self.next_state  # this is to set the state for the next iteration
-            self.episode_step_number += 1
+            self.global_step_number += 1
         self.episode_number += 1
+
+    def enough_experiences_to_learn_from(self):
+        return len(self.memory) > self.ordinary_buffer_batch_size and len(self.HER_memory) > self.HER_buffer_batch_size

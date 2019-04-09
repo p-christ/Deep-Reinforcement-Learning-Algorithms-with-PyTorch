@@ -3,6 +3,7 @@ import numpy as np
 from Environments.Base_Environment import Base_Environment
 
 class Fetch_Reach_Environment(Base_Environment):
+    environment_name = "Fetch Reach"
 
     def __init__(self):
         self.game_environment = gym.make("FetchReach-v1")
