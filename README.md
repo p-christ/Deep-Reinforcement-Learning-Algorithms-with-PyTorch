@@ -58,9 +58,7 @@ found in the paper and show that adding HER allowed the agent to solve a problem
 ONLY DIFFERENCE IS HER added.. hyperparameters the same
 
 
-![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) 
-
-![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png){:height="2px" width="2px"}
+![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
 
 
 

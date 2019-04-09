@@ -188,5 +188,3 @@ class Trainer(object):
 
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
         plt.show()
-
-
