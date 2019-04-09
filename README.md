@@ -57,8 +57,6 @@ between them was whether hindsight was used or not.
 ![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
 
 
-
-
 ### Usage ###
 
 The repository's high-level structure is:
@@ -72,12 +70,8 @@ The repository's high-level structure is:
         ├── Open_AI_Gym_Environments   
         ├── Other_Environments         
         └── Unity_Environments    
-    ├── Results
-        ├── Bit_Flipping_Environment   
-        ├── Cart_Pole
-        ├── Fetch_Reach
-        ├── Mountain_Car_Continuous             
-        └── Tennis        
+    ├── Results             
+        └── Data_and_Graphs        
     ├── Tests
     ├── Utilities
         ├── Data_Structures             
@@ -101,22 +95,13 @@ export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
 ``` 
 
 And then to watch them learn **Cart Pole** run:
-`python Results/Cart_Pole/Results.py`
+`python Results/Cart_Pole.py`
 
-To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous/Results.py`
+To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous.py`
 
-To watch them learn **Tennis** you will need to download the environment:
+To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping.py`
 
-1. Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Linux.zip)
-1. Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis.app.zip)
-1. Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86.zip)
-1. Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P3/Tennis/Tennis_Windows_x86_64.zip)
-
-and then run: `python Results/Tennis/Results.py`
-
-To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping/Results.py`
-
-To watch them learn **Fetch Reach** run: `python Results/Fetch_Reach/Results.py`
+To watch them learn **Fetch Reach** run: `python Results/Fetch_Reach.py`
 
 
 #### ii) To Train the Agents on your Own Game  
@@ -126,5 +111,5 @@ To use the algorithms with your own particular game instead you follow these ste
 1. Create an Environment class to represent your game - the environment class you create should extend the `Base_Environment` class found in the `Environments` folder to make 
 it compatible with all the agents.  
 
-2. Create a config object with the hyperparameters and game you want to use. See `Results/Cart_Pole/Results.py` for an example of this.
-3. Use function `run_games_for_agents` to have the different agents play the game. Again see `Results/Cart_Pole/Results.py` for an example of this.
+2. Create a config object with the hyperparameters and game you want to use. See `Results/Cart_Pole.py` for an example of this.
+3. Use class Trainer and function within it `run_games_for_agents` to have the different agents play the game. Again see `Results/Cart_Pole.py` for an example of this.
