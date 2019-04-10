@@ -3,8 +3,8 @@ import torch.nn.functional as F
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 
-
 class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
+    """A DQN agent with prioritised experience replay"""
     agent_name = "DDQN with Prioritised Replay"
 
     def __init__(self, config):
@@ -12,6 +12,7 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
 
     def q_network_learn(self):
+        """Runs a learning iteration for the Q network after sampling from the replay buffer in a prioritised way"""
         sampled_experiences, importance_sampling_weights = self.memory.sample()
         states, actions, rewards, next_states, dones = sampled_experiences
         loss, td_errors = self.compute_loss_and_td_errors(states, next_states, rewards, actions, dones, importance_sampling_weights)
@@ -34,7 +35,5 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
         loss = F.mse_loss(Q_expected, Q_targets)
         loss = loss * importance_sampling_weights
         loss = torch.mean(loss)
-
         td_errors = Q_targets.data.cpu().numpy() - Q_expected.data.cpu().numpy()
-
         return loss, td_errors

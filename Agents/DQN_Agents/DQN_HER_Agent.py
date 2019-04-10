@@ -25,4 +25,5 @@ class DQN_HER_Agent(DQN_Agent, HER_Base):
         self.episode_number += 1
 
     def enough_experiences_to_learn_from(self):
+        """Returns booleans indicating whether there are enough experiences in the two replay buffers to learn from"""
         return len(self.memory) > self.ordinary_buffer_batch_size and len(self.HER_memory) > self.HER_buffer_batch_size
