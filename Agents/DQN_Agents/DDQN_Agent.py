@@ -5,7 +5,6 @@ class DDQN_Agent(DQN_Agent_With_Fixed_Q_Targets):
     agent_name = "DDQN"
 
     def __init__(self, config):
-        print("Initialising DDQN Agent")
         DQN_Agent_With_Fixed_Q_Targets.__init__(self, config)
 
     def compute_q_values_for_next_states(self, next_states):

@@ -27,7 +27,7 @@ class PPO_Agent(Base_Agent):
         self.many_episode_states = []
         self.many_episode_actions = []
         self.many_episode_rewards = []
-        self.experience_generator = Parallel_Experience_Generator(self.environment, self.policy_new, self.random_seed, self.hyperparameters)
+        self.experience_generator = Parallel_Experience_Generator(self.environment, self.policy_new, self.config.seed, self.hyperparameters)
 
     def calculate_policy_output_size(self):
         """Initialises the policies"""

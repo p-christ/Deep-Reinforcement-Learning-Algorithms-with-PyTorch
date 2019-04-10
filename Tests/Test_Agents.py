@@ -39,10 +39,8 @@ config.hyperparameters = {
         "beta_prioritised_replay": 0.4,
         "incremental_td_error": 1e-8,
         "update_every_n_steps": 3,
-        "nn_layers": 3,
-        "nn_start_units": 20,
-        "nn_unit_decay": 1.0,
-        "final_layer_activation": None,
+        "linear_hidden_units": [20, 20, 20],
+        "final_layer_activation": "None",
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "HER_sample_proportion": 0.8
@@ -60,9 +58,7 @@ config.hyperparameters = {
     },
     "Policy_Gradient_Agents": {
         "learning_rate": 0.01,
-        "nn_layers": 2,
-        "nn_start_units": 20,
-        "nn_unit_decay": 1.0,
+        "linear_hidden_units": [20, 20],
         "final_layer_activation": "SOFTMAX",
         "learning_iterations_per_round": 7,
         "discount_rate": 0.99,
@@ -78,18 +74,18 @@ config.hyperparameters = {
     }
 }
 
-def test_agent_solve_bit_flipping_game():
+# def test_agent_solve_bit_flipping_game():
 
-    AGENTS = [DQN_HER_Agent, PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
+AGENTS = [DQN_HER_Agent, PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
 
-    trainer = Trainer(config, AGENTS)
-    results = trainer.run_games_for_agents()
+trainer = Trainer(config, AGENTS)
+results = trainer.run_games_for_agents()
 
-    for agent in AGENTS:
-        print(agent)
-        print(results)
-        agent_results = results[agent.agent_name]
-        print(agent_results)
-        agent_results = np.max(agent_results[0][1][50:])
-        print(agent_results)
-        assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
+for agent in AGENTS:
+    print(agent)
+    print(results)
+    agent_results = results[agent.agent_name]
+    print(agent_results)
+    agent_results = np.max(agent_results[0][1][50:])
+    print(agent_results)
+    assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
