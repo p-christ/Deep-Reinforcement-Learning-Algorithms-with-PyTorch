@@ -3,7 +3,7 @@ from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Bit_Flipping_Environment import Bit_Flipping_Environment
+from Environments.Bit_Flipping_Environment import Bit_Flipping_Environment
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
 from Utilities.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
@@ -78,18 +78,18 @@ config.hyperparameters = {
     }
 }
 
-# def test_agent_solve_bit_flipping_game():
+def test_agent_solve_bit_flipping_game():
 
-AGENTS = [DQN_HER_Agent, PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
+    AGENTS = [DQN_HER_Agent, PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
 
-trainer = Trainer(config, AGENTS)
-results = trainer.run_games_for_agents()
+    trainer = Trainer(config, AGENTS)
+    results = trainer.run_games_for_agents()
 
-for agent in AGENTS:
-    print(agent)
-    print(results)
-    agent_results = results[agent.agent_name]
-    print(agent_results)
-    agent_results = np.max(agent_results[0][1][50:])
-    print(agent_results)
-    assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
+    for agent in AGENTS:
+        print(agent)
+        print(results)
+        agent_results = results[agent.agent_name]
+        print(agent_results)
+        agent_results = np.max(agent_results[0][1][50:])
+        print(agent_results)
+        assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)
