@@ -1,5 +1,4 @@
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
-from Hill_Climbing_Agent import Hill_Climbing_Agent
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
@@ -73,7 +72,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [Hill_Climbing_Agent, PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
+    AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent, PPO_Agent]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
