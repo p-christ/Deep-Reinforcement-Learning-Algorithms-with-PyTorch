@@ -8,6 +8,7 @@ from Utilities.Utility_Functions import normalise_rewards, create_actor_distribu
 from nn_builder.pytorch.NN import NN
 
 class PPO_Agent(Base_Agent):
+    """Proximal Policy Optimization agent"""
     agent_name = "PPO"
 
     def __init__(self, config):
@@ -36,6 +37,7 @@ class PPO_Agent(Base_Agent):
             return self.action_size * 2 #Because we need 1 parameter for mean and 1 for std of distribution
 
     def step(self):
+        """Runs a step for the PPO agent"""
         self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = self.experience_generator.play_n_episodes(
             self.hyperparameters["episodes_per_learning_round"])
         self.episode_number += self.hyperparameters["episodes_per_learning_round"]
@@ -44,7 +46,7 @@ class PPO_Agent(Base_Agent):
         self.equalise_policies()
 
     def policy_learn(self):
-        """A learning round for the policy"""
+        """A learning iteration for the policy"""
         all_discounted_returns = self.calculate_all_discounted_returns()
         if self.hyperparameters["normalise_rewards"]:
             all_discounted_returns = normalise_rewards(all_discounted_returns)
@@ -54,6 +56,7 @@ class PPO_Agent(Base_Agent):
             self.take_policy_new_optimisation_step(loss)
 
     def calculate_all_discounted_returns(self):
+        """Calculates the cumulative discounted return for each episode which we will then use in a learning iteration"""
         all_discounted_returns = []
         for episode in range(len(self.many_episode_states)):
             discounted_returns = [0]
@@ -65,6 +68,8 @@ class PPO_Agent(Base_Agent):
         return all_discounted_returns
 
     def calculate_all_ratio_of_policy_probabilities(self):
+        """For each action calculates the ratio of the probability that the new policy would have picked the action vs.
+         the probability the old policy would have picked it. This will then be used to inform the loss"""
 
         all_states = [state for states in self.many_episode_states for state in states]
         all_actions = [action for actions in self.many_episode_actions for action in actions]
@@ -105,6 +110,7 @@ class PPO_Agent(Base_Agent):
                                   max=1.0 + self.hyperparameters["clip_epsilon"])
 
     def take_policy_new_optimisation_step(self, loss):
+        """Takes an optimisation step for the new policy"""
         self.policy_new_optimizer.zero_grad()  # reset gradients to 0
         loss.backward()  # this calculates the gradients
         torch.nn.utils.clip_grad_norm_(self.policy_new.parameters(), self.hyperparameters[
@@ -117,6 +123,7 @@ class PPO_Agent(Base_Agent):
             old_param.data.copy_(new_param.data)
 
     def save_result(self):
+        """Save the results seen by the agent in the most recent experiences"""
         for ep in range(len(self.many_episode_rewards)):
             total_reward = np.sum(self.many_episode_rewards[ep])
             self.game_full_episode_scores.append(total_reward)

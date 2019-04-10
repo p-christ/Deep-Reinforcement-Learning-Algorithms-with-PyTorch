@@ -1,10 +1,9 @@
 import numpy as np
 import torch
+import torch.optim as optim
 from nn_builder.pytorch.NN import NN
 from torch.distributions import Categorical
-import torch.optim as optim
 from Agents.Base_Agent import Base_Agent
-
 
 class REINFORCE_Agent(Base_Agent):
     agent_name = "REINFORCE"
@@ -46,13 +45,15 @@ class REINFORCE_Agent(Base_Agent):
         self.episode_number += 1
 
     def pick_and_conduct_action_and_save_log_probabilities(self):
+        """Picks and then conducts actions. Then saves the log probabilities of the actions it conducted to be used for
+        learning later"""
         action, log_probabilities = self.pick_action_and_get_log_probabilities()
         self.store_log_probabilities(log_probabilities)
         self.store_action(action)
         self.conduct_action()
 
     def pick_action_and_get_log_probabilities(self):
-
+        """Picks actions and then calculates the log probabilities of the actions it picked given the policy"""
         # PyTorch only accepts mini-batches and not individual observations so we have to add
         # a "fake" dimension to our observation using unsqueeze
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
@@ -62,15 +63,19 @@ class REINFORCE_Agent(Base_Agent):
         return action.item(), action_distribution.log_prob(action)
 
     def store_log_probabilities(self, log_probabilities):
+        """Stores the log probabilities of picked actions to be used for learning later"""
         self.episode_log_probabilities.append(log_probabilities)
 
     def store_action(self, action):
+        """Stores the action picked"""
         self.action = action
 
     def store_reward(self):
+        """Stores the reward picked"""
         self.episode_rewards.append(self.reward)
 
     def actor_learn(self):
+        """Runs a learning iteration for the policy"""
         total_discounted_reward = self.calculate_episode_discounted_reward()
         policy_loss = self.calculate_policy_loss_on_episode(total_discounted_reward)
         self.optimizer.zero_grad()
@@ -78,16 +83,17 @@ class REINFORCE_Agent(Base_Agent):
         self.optimizer.step()
 
     def calculate_episode_discounted_reward(self):
+        """Calculates the cumulative discounted return for the episode"""
         discounts = self.hyperparameters["discount_rate"] ** np.arange(len(self.episode_rewards))
         total_discounted_reward = np.dot(discounts, self.episode_rewards)
         return total_discounted_reward
 
     def calculate_policy_loss_on_episode(self, total_discounted_reward):
+        """Calculates the loss from an episode"""
         policy_loss = []
         for log_prob in self.episode_log_probabilities:
             policy_loss.append(-log_prob * total_discounted_reward)
         policy_loss = torch.cat(policy_loss).sum() # We need to add up the losses across the mini-batch to get 1 overall loss
-        # policy_loss = Variable(policy_loss, requires_grad = True)
         return policy_loss
 
     def time_to_learn(self):

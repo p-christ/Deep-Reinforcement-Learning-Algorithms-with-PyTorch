@@ -1,7 +1,6 @@
 import sys
 import gym
 import random
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import time
@@ -31,11 +30,13 @@ class Base_Agent(object):
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
-    def set_random_seeds(self, seed):
-        self.random_seed = seed
-        random.seed(seed)
-        torch.manual_seed(seed)
-        np.random.seed(seed)
+    def set_random_seeds(self, random_seed):
+        """Sets all possible random seeds so results can be reproduced"""
+        torch.backends.cudnn.deterministic = True
+        torch.manual_seed(random_seed)
+        random.seed(random_seed)
+        np.random.seed(random_seed)
+        if torch.cuda.is_available(): torch.cuda.manual_seed_all(random_seed)
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -52,6 +53,7 @@ class Base_Agent(object):
         self.episode_dones = []
 
     def track_episodes_data(self):
+        """Saves the data from the recent episodes"""
         self.episode_states.append(self.state)
         self.episode_actions.append(self.action)
         self.episode_next_states.append(self.next_state)
@@ -70,27 +72,33 @@ class Base_Agent(object):
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def step(self):
+        """Takes a step in the game. This method must be overriden by any agent"""
         raise ValueError("Step needs to be implemented by the agent")
 
     def conduct_action(self):
+        """Conducts an action in the environment"""
         self.environment.conduct_action(self.action)
 
-    def update_next_state_reward_done_and_score(self): 
+    def update_next_state_reward_done_and_score(self):
+        """Gets the next state, reward and done information from the environment"""
         self.next_state = self.environment.get_next_state()
         self.reward = self.environment.get_reward()
         self.done = self.environment.get_done()
         self.total_episode_score_so_far += self.environment.get_reward()
 
     def save_and_print_result(self):
+        """Saves and prints results of the game"""
         self.save_result()
         self.print_rolling_result()
 
     def save_result(self):
+        """Saves the result of an episode of the game"""
         self.game_full_episode_scores.append(self.total_episode_score_so_far)
         self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]))
         self.save_max_result_seen()
 
     def save_max_result_seen(self):
+        """Updates the best episode result seen so far"""
         if self.game_full_episode_scores[-1] > self.max_episode_score_seen:
             self.max_episode_score_seen = self.game_full_episode_scores[-1]
 
@@ -99,6 +107,7 @@ class Base_Agent(object):
                 self.max_rolling_score_seen = self.rolling_results[-1]
 
     def print_rolling_result(self):
+        """Prints out the latest episode results"""
         sys.stdout.write(
             """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f},  Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}""".format(len(self.game_full_episode_scores),
                                                                                                self.rolling_results[-1],
@@ -107,6 +116,7 @@ class Base_Agent(object):
         sys.stdout.flush()
 
     def show_whether_achieved_goal(self):
+        """Prints out whether the agent achieved the environment target goal"""
         index_achieved_goal = self.achieved_required_score_at_index()
         print(" ")
         if index_achieved_goal == -1: #this means agent never achieved goal
@@ -143,16 +153,20 @@ class Base_Agent(object):
                 g['lr'] = new_lr
 
     def run_checks(self):
+        """Makes sure the environment action_types are valid"""
         assert self.action_types in ["DISCRETE", "CONTINUOUS"], "Environment needs to provide action types"
 
     def enough_experiences_to_learn_from(self):
+        """Boolean indicated whether there are enough experiences in the memory buffer to learn from"""
         return len(self.memory) > self.hyperparameters["batch_size"]
 
     def pick_and_conduct_action(self):
+        """Picks and conducts an action"""
         self.action = self.pick_action()
         self.conduct_action()
 
     def save_experience(self):
+        """Saves the recent experience to the memory buffer"""
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm):
