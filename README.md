@@ -21,8 +21,13 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. DDPG with Hindsight Experience Replay (DDPG-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
-Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C and hierarchical RL algorithms soon.
+Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C, Soft Actor-Critic and hierarchical RL algorithms soon.
 
+
+## **Environments Implemented**
+
+Add environments implemented...
+Add code quality bar... test coverage 
 
 ## **Results**
 
@@ -48,8 +53,7 @@ seeds is shown with the shaded area representing plus and minus 1 standard devia
 Below shows the performance of DQN and DDPG with and without Hindsight Experience Replay (HER) in the Bit Flipping (14 bits) 
 and Fetch Reach environments described in the papers [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf) 
 and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). The results replicate the results found in 
-the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all.  
-Note that the same hyperparameters were used for each pair of agents and so the only difference 
+the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all. Note that the same hyperparameters were used for each pair of agents and so the only difference 
 between them was whether hindsight was used or not. 
 
 ![Bit Flipping Results](Results/Data_and_Graphs/Bit_Flipping_Results_Graph.png) ![Fetch Reach Results](Results/Data_and_Graphs/Fetch_Reach_Results_Graph.png)
@@ -64,10 +68,7 @@ The repository's high-level structure is:
         ├── DQN_Agents         
         ├── Policy_Gradient_Agents
         └── Stochastic_Policy_Search_Agents 
-    ├── Environments
-        ├── Open_AI_Gym_Environments   
-        ├── Other_Environments         
-        └── Unity_Environments    
+    ├── Environments   
     ├── Results             
         └── Data_and_Graphs        
     ├── Tests

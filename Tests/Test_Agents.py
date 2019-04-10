@@ -3,7 +3,7 @@ from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from Bit_Flipping_Environment import Bit_Flipping_Environment
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
 from Utilities.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config

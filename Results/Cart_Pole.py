@@ -5,7 +5,7 @@ from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
-from Environments.Open_AI_Gym_Environments.Cart_Pole_Environment import Cart_Pole_Environment
+from Cart_Pole_Environment import Cart_Pole_Environment
 
 config = Config()
 config.seed = 1
@@ -79,6 +79,7 @@ if __name__ == "__main__":
     AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
+
 
 
 

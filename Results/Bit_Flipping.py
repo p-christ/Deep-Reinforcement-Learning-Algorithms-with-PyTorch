@@ -1,5 +1,5 @@
 from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
-from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from Bit_Flipping_Environment import Bit_Flipping_Environment
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent

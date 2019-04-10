@@ -1,4 +1,4 @@
-from Environments.Other_Enrivonments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from Bit_Flipping_Environment import Bit_Flipping_Environment
 
 
 def test_environment_actions():

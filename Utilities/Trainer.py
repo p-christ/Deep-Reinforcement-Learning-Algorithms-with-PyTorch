@@ -36,13 +36,13 @@ class Trainer(object):
 
     def create_agent_to_color_dictionary(self):
         """Creates a dictionary that maps an agent to a hex color (for plotting purposes)
-        See https://en.wikipedia.org/wiki/Web_colors for hex colors"""
+        See https://en.wikipedia.org/wiki/Web_colors and https://htmlcolorcodes.com/ for hex colors"""
         agent_to_color_dictionary = {
             "DQN": "#0000FF",
-            "DQN with Fixed Q Targets": "#008080",
-            "DDQN": "#00FFFF",
-            "DDQN with Prioritised Replay": "#000080",
-            "PPO": "#800080",
+            "DQN with Fixed Q Targets": "#1F618D",
+            "DDQN": "#2980B9",
+            "DDQN with Prioritised Replay": "#7FB3D5",
+            "PPO": "#5B2C6F",
             "DDPG": "#800000",
             "DQN-HER": "#008000",
             "DDPG-HER": "#008000"
