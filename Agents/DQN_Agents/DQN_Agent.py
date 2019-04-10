@@ -1,25 +1,20 @@
-from nn_builder.pytorch.NN import NN
-
-from Agents.Base_Agent import Base_Agent
-from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
+import random
 import torch.optim as optim
 import torch.nn.functional as F
-import random
 import numpy as np
+from nn_builder.pytorch.NN import NN
+from Agents.Base_Agent import Base_Agent
+from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 
 class DQN_Agent(Base_Agent):
     agent_name = "DQN"
-
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        # self.q_network_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
-        #
         self.q_network_local = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["linear_hidden_units"],
                              output_dim=self.action_size, output_activation=self.hyperparameters["final_layer_activation"],
                              batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
-
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):
@@ -36,39 +31,33 @@ class DQN_Agent(Base_Agent):
 
     def pick_action(self):
         """Uses the local Q network and an epsilon greedy policy to pick an action"""
-
         # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
         # a "fake" dimension to make it a mini-batch rather than a single observation
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
-
         self.q_network_local.eval() #puts network in evaluation mode
         with torch.no_grad():
             action_values = self.q_network_local(state)
         self.q_network_local.train() #puts network back in training mode
-
         action = self.make_epsilon_greedy_choice(action_values)
         return action
 
     def make_epsilon_greedy_choice(self, action_values):
+        """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
         epsilon = self.hyperparameters["epsilon"] / (1.0 + (self.episode_number / self.hyperparameters["epsilon_decay_rate_denominator"]))
-
-        if random.random() > epsilon:
-            return np.argmax(action_values.data.cpu().numpy())
+        if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
     def q_network_learn(self, experiences=None):
-
-        if not experiences:
-            states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
-        else:
-            states, actions, rewards, next_states, dones = experiences
-
+        """Runs a learning iteration for the Q network"""
+        if not experiences: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+        else: states, actions, rewards, next_states, dones = experiences
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
         if self.done: #we only update the learning rate at end of each episode
             self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
+        """Computes the loss required to train the Q network"""
         with torch.no_grad():
             Q_targets = self.compute_q_targets(next_states, rewards, dones)
         Q_expected = self.compute_expected_q_values(states, actions)
@@ -76,33 +65,41 @@ class DQN_Agent(Base_Agent):
         return loss
 
     def compute_q_targets(self, next_states, rewards, dones):
+        """Computes the q_targets we will compare to predicted q values to create the loss to train the Q network"""
         Q_targets_next = self.compute_q_values_for_next_states(next_states)
         Q_targets = self.compute_q_values_for_current_states(rewards, Q_targets_next, dones)
         return Q_targets
 
     def compute_q_values_for_next_states(self, next_states):
+        """Computes the q_values for next state we will use to create the loss to train the Q network"""
         Q_targets_next = self.q_network_local(next_states).detach().max(1)[0].unsqueeze(1)
         return Q_targets_next
 
     def compute_q_values_for_current_states(self, rewards, Q_targets_next, dones):
+        """Computes the q_values for current state we will use to create the loss to train the Q network"""
         Q_targets_current = rewards + (self.hyperparameters["discount_rate"] * Q_targets_next * (1 - dones))
         return Q_targets_current
 
     def compute_expected_q_values(self, states, actions):
+        """Computes the expected q_values we will use to create the loss to train the Q network"""
         Q_expected = self.q_network_local(states).gather(1, actions.long()) #must convert actions to long so can be used as index
         return Q_expected
 
     def locally_save_policy(self):
-        pass
-        # torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
+        """Saves the policy"""
+        torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
 
     def time_for_q_network_to_learn(self):
+        """Returns boolean indicating whether enough steps have been taken for learning to begin and there are
+        enough experiences in the replay buffer to learn from"""
         return self.right_amount_of_steps_taken() and self.enough_experiences_to_learn_from()
 
     def right_amount_of_steps_taken(self):
+        """Returns boolean indicating whether enough steps have been taken for learning to begin"""
         return self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
     def sample_experiences(self):
+        """Draws a random sample of experience from the memory buffer"""
         experiences = self.memory.sample()
         states, actions, rewards, next_states, dones = experiences
         return states, actions, rewards, next_states, dones
