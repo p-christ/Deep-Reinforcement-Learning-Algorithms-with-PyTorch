@@ -3,9 +3,9 @@ import torch
 import numpy as np
 from torch import optim
 from Agents.Base_Agent import Base_Agent
-from Utilities.Models.Neural_Network import Neural_Network
 from Utilities.Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utilities.Utility_Functions import normalise_rewards, create_actor_distribution
+from nn_builder.pytorch.NN import NN
 
 class PPO_Agent(Base_Agent):
     agent_name = "PPO"
@@ -13,10 +13,13 @@ class PPO_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.policy_output_size = self.calculate_policy_output_size()
-        self.policy_new = Neural_Network(self.state_size, self.policy_output_size, self.random_seed, self.hyperparameters,
-                                         "VANILLA_NN").to(self.device)
-        self.policy_old = Neural_Network(self.state_size, self.policy_output_size, self.random_seed, self.hyperparameters,
-                                         "VANILLA_NN").to(self.device)
+        self.policy_new = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["linear_hidden_units"],
+                             output_dim=self.policy_output_size, output_activation=self.hyperparameters["final_layer_activation"],
+                             batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
+        self.policy_old = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["linear_hidden_units"],
+                             output_dim=self.policy_output_size,
+                             output_activation=self.hyperparameters["final_layer_activation"],
+                             batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
         self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_number = 0

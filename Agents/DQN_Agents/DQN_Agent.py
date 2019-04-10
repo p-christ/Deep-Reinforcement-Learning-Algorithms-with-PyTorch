@@ -1,5 +1,6 @@
+from nn_builder.pytorch.NN import NN
+
 from Agents.Base_Agent import Base_Agent
-from Utilities.Models.Neural_Network import Neural_Network
 from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 import torch
 import torch.optim as optim
@@ -13,7 +14,12 @@ class DQN_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.q_network_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
+        # self.q_network_local = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
+        #
+        self.q_network_local = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["linear_hidden_units"],
+                             output_dim=self.action_size, output_activation=self.hyperparameters["final_layer_activation"],
+                             batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
+
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.hyperparameters["learning_rate"])
 
     def step(self):

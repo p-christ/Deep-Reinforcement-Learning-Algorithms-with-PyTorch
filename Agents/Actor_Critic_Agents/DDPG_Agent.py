@@ -1,5 +1,6 @@
 import copy
 import torch
+from nn_builder.pytorch.NN import NN
 from torch import optim
 from Base_Agent import Base_Agent
 from Neural_Network import Neural_Network
@@ -15,15 +16,18 @@ class DDPG_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.hyperparameters = config.hyperparameters
-        self.critic_local = Neural_Network(self.state_size + self.action_size, 1, self.random_seed,
-                                           self.hyperparameters["Critic"], "VANILLA_NN").to(self.device)
+        self.critic_local = NN(input_dim=self.state_size + self.action_size, linear_hidden_units=self.hyperparameters["Critic"]["linear_hidden_units"],
+           output_dim=1, output_activation=self.hyperparameters["Critic"]["final_layer_activation"],
+           batch_norm=self.hyperparameters["Critic"]["batch_norm"]).to(self.device)
         self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                                     self.random_seed)
-        self.actor_local = Neural_Network(self.state_size, self.action_size, self.random_seed,
-                                          self.hyperparameters["Actor"], "VANILLA_NN").to(self.device)
+
+        self.actor_local = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["Actor"]["linear_hidden_units"],
+           output_dim=self.action_size, output_activation=self.hyperparameters["Actor"]["final_layer_activation"],
+           batch_norm=self.hyperparameters["Actor"]["batch_norm"]).to(self.device)
         self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])

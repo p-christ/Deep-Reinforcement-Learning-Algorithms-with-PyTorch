@@ -59,9 +59,8 @@ The repository's high-level structure is:
     ├── Results             
         └── Data_and_Graphs        
     ├── Tests
-    ├── Utilities
-        ├── Data_Structures             
-        └── Models            
+    ├── Utilities             
+        └── Data Structures            
    
 
 #### i) To Watch the Agents Learn the Above Games  

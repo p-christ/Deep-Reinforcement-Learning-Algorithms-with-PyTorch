@@ -1,9 +1,9 @@
 import numpy as np
 import torch
+from nn_builder.pytorch.NN import NN
 from torch.distributions import Categorical
 import torch.optim as optim
 from Agents.Base_Agent import Base_Agent
-from Utilities.Models.Neural_Network import Neural_Network
 
 
 class REINFORCE_Agent(Base_Agent):
@@ -11,7 +11,11 @@ class REINFORCE_Agent(Base_Agent):
 
     def __init__(self, config):
         Base_Agent.__init__(self, config)
-        self.policy = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
+        self.policy = NN(input_dim=self.state_size,
+                                          linear_hidden_units=self.hyperparameters["linear_hidden_units"],
+                                          output_dim=self.action_size,
+                                          output_activation=self.hyperparameters["final_layer_activation"],
+                                          batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_rewards = []
         self.episode_log_probabilities = []

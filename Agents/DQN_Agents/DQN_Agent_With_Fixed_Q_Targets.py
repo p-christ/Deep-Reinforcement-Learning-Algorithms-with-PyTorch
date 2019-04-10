@@ -1,4 +1,4 @@
-from Utilities.Models.Neural_Network import Neural_Network
+import copy
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 
@@ -8,7 +8,7 @@ class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
     def __init__(self, config):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
         DQN_Agent.__init__(self, config)
-        self.q_network_target = Neural_Network(self.state_size, self.action_size, config.seed, self.hyperparameters, "VANILLA_NN").to(self.device)
+        self.q_network_target = copy.deepcopy(self.q_network_local).to(self.device)
 
     def q_network_learn(self, experiences=None):
         super(DQN_Agent_With_Fixed_Q_Targets, self).q_network_learn(experiences=experiences)

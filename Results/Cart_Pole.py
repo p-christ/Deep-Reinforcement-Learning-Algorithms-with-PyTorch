@@ -1,4 +1,5 @@
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
+from Hill_Climbing_Agent import Hill_Climbing_Agent
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
@@ -11,8 +12,8 @@ config = Config()
 config.seed = 1
 config.environment = Cart_Pole_Environment()
 config.num_episodes_to_run = 450
-config.file_to_save_data_results = "Data_and_Graphs/Cart_Pole_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Cart_Pole_Results_Graph.png"
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -37,10 +38,8 @@ config.hyperparameters = {
         "beta_prioritised_replay": 0.1,
         "incremental_td_error": 1e-8,
         "update_every_n_steps": 3,
-        "nn_layers": 2,
-        "nn_start_units": 30,
-        "nn_unit_decay": 0.5,
-        "final_layer_activation": None,
+        "linear_hidden_units": [30, 15],
+        "final_layer_activation": "None",
         "batch_norm": False,
         "gradient_clipping_norm": 5
     },
@@ -57,9 +56,7 @@ config.hyperparameters = {
     },
     "Policy_Gradient_Agents": {
         "learning_rate": 0.05,
-        "nn_layers": 2,
-        "nn_start_units": 20,
-        "nn_unit_decay": 1.0,
+        "linear_hidden_units": [20, 20, 20],
         "final_layer_activation": "SOFTMAX",
         "learning_iterations_per_round": 10,
         "discount_rate": 0.99,
@@ -76,10 +73,9 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
+    AGENTS = [Hill_Climbing_Agent, PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
     trainer = Trainer(config, AGENTS)
-    # trainer.run_games_for_agents()
-    trainer.visualise_preexisting_results(config.file_to_save_results_graph)
+    trainer.run_games_for_agents()
 
 
 
