@@ -94,26 +94,28 @@ class Trainer(object):
         self.results[agent_name] = agent_results
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
-                                        color=None):
+                                        color=None, ax=None, title=None):
         """Visualises the results for one agent"""
         assert isinstance(agent_results, list), "agent_results must be a list of lists, 1 set of results per list"
         assert isinstance(agent_results[0], list), "agent_results must be a list of lists, 1 set of results per list"
         assert bool(show_mean_and_std_range) ^ bool(show_each_run), "either show_mean_and_std_range or show_each_run must be true"
 
+        if not ax: ax = plt.gca()
+
         if not color: color =  self.agent_to_color_group[agent_name]
         if show_mean_and_std_range:
             mean_minus_x_std, mean_results, mean_plus_x_std = self.get_mean_and_standard_deviation_difference_results(agent_results)
             x_vals = list(range(len(mean_results)))
-            plt.plot(x_vals, mean_results, label=agent_name, color=color)
-            plt.plot(x_vals, mean_plus_x_std, color=color, alpha=0.1)
-            plt.plot(x_vals, mean_minus_x_std, color=color, alpha=0.1)
-            plt.fill_between(x_vals, y1=mean_minus_x_std, y2=mean_plus_x_std, alpha=0.1, color=color)
+            ax.plot(x_vals, mean_results, label=agent_name, color=color)
+            ax.plot(x_vals, mean_plus_x_std, color=color, alpha=0.1)
+            ax.plot(x_vals, mean_minus_x_std, color=color, alpha=0.1)
+            ax.fill_between(x_vals, y1=mean_minus_x_std, y2=mean_plus_x_std, alpha=0.1, color=color)
         else:
             for ix, result in enumerate(agent_results):
                 x_vals = list(range(len(agent_results[0])))
                 plt.plot(x_vals, result, label=agent_name + "_{}".format(ix+1), color=color)
                 color = self.get_next_color()
-        ax = plt.gca()
+
         ax.set_facecolor('xkcd:white')
 
         # Shrink current axis's height by 10% on the bottom
@@ -125,11 +127,13 @@ class Trainer(object):
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
                   fancybox=True, shadow=True, ncol=3)
 
-        plt.title(self.config.environment.environment_name, fontsize=15, fontweight='bold')
-        plt.ylabel('Rolling Episode Scores')
-        plt.xlabel('Episode Number')
+        if not title: title = self.config.environment.environment_name
+
+        ax.set_title(title, fontsize=15, fontweight='bold')
+        ax.set_ylabel('Rolling Episode Scores')
+        ax.set_xlabel('Episode Number')
         self.hide_spines(ax, ['right', 'top'])
-        ax.set_xlim([0, self.config.num_episodes_to_run])
+        ax.set_xlim([0, x_vals[-1]])
 
         if self.config.show_solution_score:
             self.draw_horizontal_line_with_label(ax, y_value=self.config.environment.get_score_to_win(), x_min=0,
@@ -193,16 +197,49 @@ class Trainer(object):
         with open(name, 'rb') as f:
             return pickle.load(f)
 
-    def visualise_preexisting_results(self, save_image_path=None, colors=None):
+    def visualise_preexisting_results(self, save_image_path=None, data_path=None, colors=None, show_image=True, ax=None,
+                                      title=None):
         """Visualises saved data results and then optionally saves the image"""
-        preexisting_results = self.create_object_to_store_results()
+        if not data_path: preexisting_results = self.create_object_to_store_results()
+        else: preexisting_results = self.load_obj(data_path)
         for ix, agent in enumerate(list(preexisting_results.keys())):
             agent_rolling_score_results = [results[1] for results in preexisting_results[agent]]
             if colors: color = colors[ix]
             else: color = None
-            self.visualise_overall_agent_results(agent_rolling_score_results, agent, show_mean_and_std_range=True, color=color)
-
+            self.visualise_overall_agent_results(agent_rolling_score_results, agent, show_mean_and_std_range=True,
+                                                 color=color, ax=ax, title=title)
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
-        plt.show()
+        if show_image: plt.show()
+
+    def visualise_set_of_preexisting_results(self, results_data_paths, save_image_path=None, show_image=True, plot_titles=None):
+        """Visualises a set of preexisting results on 1 plot by making subplots"""
+        assert isinstance(results_data_paths, list), "all_results must be a list of data paths"
+
+        num_figures = len(results_data_paths)
+        col_width = 15
+        row_height = 6
+
+        if num_figures <= 2:
+            fig, axes = plt.subplots(1, num_figures, figsize=(col_width, row_height ))
+        elif num_figures <= 4:
+            fig, axes = plt.subplots(2, num_figures, figsize=(row_height, col_width))
+        else:
+            raise ValueError("Need to tell this method how to deal with more than 4 plots")
+        for ax_ix in range(len(results_data_paths)):
+            self.visualise_preexisting_results(show_image=False, data_path=results_data_paths[ax_ix], ax=axes[ax_ix],
+                                               title=plot_titles[ax_ix])
+        fig.tight_layout()
+        fig.subplots_adjust(bottom=0.25)
+
+        if save_image_path: plt.savefig(save_image_path) #, bbox_inches="tight")
+        if show_image: plt.show()
+
+        # ax.imshow(z, aspect="auto")
+
+
+
+
+
+
 
 
