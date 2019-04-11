@@ -72,7 +72,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent, PPO_Agent]
+    AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

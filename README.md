@@ -15,8 +15,6 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. REINFORCE ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
 1. PPO ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
 1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
-1. Hill Climbing
-1. Genetic Evolution
 1. DQN with Hindsight Experience Replay (DQN-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf))
 1. DDPG with Hindsight Experience Replay (DDPG-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
@@ -65,7 +63,7 @@ The repository's high-level structure is:
 
 #### i) To Watch the Agents Learn the Above Games  
 
-To watch all the different agents learn the above games follow these steps:
+To watch all the different agents learn Cart Pole follow these steps:
 
 ```commandline
 git clone https://github.com/p-christ/Deep_RL_Implementations.git
@@ -77,17 +75,11 @@ conda activate myenvname
 
 pip3 install -r requirements.txt
 export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
+
+python Results/Cart_Pole.py
 ``` 
 
-And then to watch them learn **Cart Pole** run:
-`python Results/Cart_Pole.py`
-
-To watch them learn **Mountain Car** run: `python Results/Mountain_Car_Continuous.py`
-
-To watch them learn **Bit Flipping** run: `python Results/Bit_Flipping.py`
-
-To watch them learn **Fetch Reach** run: `python Results/Fetch_Reach.py`
-
+For other games change the last line to one of the other files in the Results folder.
 
 #### ii) To Train the Agents on your Own Game  
 
