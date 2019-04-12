@@ -23,8 +23,9 @@ class Four_Rooms_Environment(Base_Environment):
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
         self.current_user_location = None
         self.current_goal_location = None
-        self.reward_for_completing_game = (self.grid_width + self.grid_height) * 1.2
-        self.reward_for_every_move_that_doesnt_complete_game = -1.0
+        self.reward_for_achieving_goal = (self.grid_width + self.grid_height) * 1.2
+        self.step_reward_for_not_achieving_goal = -1.0
+        self.state_only_dimension = 1
         self.reset_environment()
 
     def reset_environment(self):
@@ -35,6 +36,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.desired_goal = [self.location_to_state(self.current_goal_location)]
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
+        self.achieved_goal = self.state[:self.state_only_dimension]
         return np.array(self.state)
 
     def conduct_action(self, desired_action):
@@ -51,12 +53,13 @@ class Four_Rooms_Environment(Base_Environment):
         self.next_state = [self.location_to_state(self.current_user_location), self.desired_goal[0]]
 
         if self.user_at_goal_location():
-            self.reward = self.reward_for_completing_game
+            self.reward = self.reward_for_achieving_goal
             self.done = True
         else:
-            self.reward = self.reward_for_every_move_that_doesnt_complete_game
+            self.reward = self.step_reward_for_not_achieving_goal
             if self.step_count >= self.get_max_steps_per_episode(): self.done = True
             else: self.done = False
+        self.achieved_goal = self.next_state[:self.state_only_dimension]
         self.state = self.next_state
 
     def determine_which_action_will_actually_occur(self, desired_action):
@@ -183,6 +186,13 @@ class Four_Rooms_Environment(Base_Environment):
         print("Black = wall, White = empty, Blue = user, Red = goal")
         pyplot.show()
 
+    def get_reward_for_achieving_goal(self):
+        return self.reward_for_achieving_goal
+
+    def get_step_reward_for_not_achieving_goal(self):
+        return self.step_reward_for_not_achieving_goal
+
+
     def get_action_size(self):
         return 4
 
@@ -193,7 +203,7 @@ class Four_Rooms_Environment(Base_Environment):
         return self.done
 
     def get_max_steps_per_episode(self):
-        return self.reward_for_completing_game
+        return self.reward_for_achieving_goal
 
     def get_next_state(self):
         return np.array(self.next_state)
@@ -209,6 +219,9 @@ class Four_Rooms_Environment(Base_Environment):
 
     def get_state_size(self):
         return len(self.state)
+
+    def get_achieved_goal(self):
+        return self.achieved_goal
 
     def get_desired_goal(self):
         return self.desired_goal

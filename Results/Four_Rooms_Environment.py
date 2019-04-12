@@ -6,7 +6,7 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 config = Config()
 config.seed = 1
-config.environment = Four_Rooms_Environment(10, 10)
+config.environment = Four_Rooms_Environment(10, 10, stochastic_actions_probability=0.0)
 config.num_episodes_to_run = 4500
 config.file_to_save_data_results = "Data_and_Graphs/Four_Rooms_Environment_Results_Data.pkl"
 config.file_to_save_results_graph = "Data_and_Graphs/Four_Rooms_Environment_Results_Graph.png"

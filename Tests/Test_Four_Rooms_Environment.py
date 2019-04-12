@@ -67,11 +67,11 @@ def test_lands_on_goal_correctly():
     env.move_goal(env.current_goal_location, (2, 2))
 
     env.conduct_action(0)
-    assert env.get_reward() == env.reward_for_every_move_that_doesnt_complete_game
+    assert env.get_reward() == env.step_reward_for_not_achieving_goal
     assert not env.get_done()
 
     env.conduct_action(3)
-    assert env.get_reward() == env.reward_for_completing_game
+    assert env.get_reward() == env.reward_for_achieving_goal
     assert env.get_done()
 
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
@@ -80,10 +80,10 @@ def test_lands_on_goal_correctly():
     for move in [2, 1, 1, 1, 1, 1, 0]:
         env.conduct_action(move)
         if move != 0:
-            assert env.get_reward() == env.reward_for_every_move_that_doesnt_complete_game
+            assert env.get_reward() == env.step_reward_for_not_achieving_goal
             assert not env.get_done()
         else:
-            assert env.get_reward() == env.reward_for_completing_game
+            assert env.get_reward() == env.reward_for_achieving_goal
             assert env.get_done()
 
 def test_location_to_state_and_state_to_location_match():
