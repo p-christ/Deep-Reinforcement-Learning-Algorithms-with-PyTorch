@@ -1,6 +1,7 @@
 import numpy as np
 from abc import ABCMeta
 import torch
+from nn_builder.pytorch.NN import NN
 from torch.distributions import Categorical, normal, MultivariateNormal
 
 def abstract(cls):
@@ -30,4 +31,3 @@ def create_actor_distribution(action_types, actor_output, action_size):
         if len(stds.shape) > 1 or len(means.shape) > 1: raise ValueError("Wrong mean and std shapes")
         action_distribution = normal.Normal(means.squeeze(0), torch.abs(stds))
     return action_distribution
-

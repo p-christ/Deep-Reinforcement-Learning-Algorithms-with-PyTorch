@@ -9,12 +9,31 @@ class Trainer(object):
     """Runs games for given agents. Optionally will visualise and save the results"""
     def __init__(self, config, agents):
         self.config = config
+        self.add_default_hyperparameters_if_not_overriden()
         self.agents = agents
         self.agent_to_agent_group = self.create_agent_to_agent_group_dictionary()
         self.agent_to_color_group = self.create_agent_to_color_dictionary()
         self.results = None
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
+
+    def add_default_hyperparameters_if_not_overriden(self):
+        """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
+        default_hyperparameter_choices = {"output_activation": None, "hidden_activations": "relu", "dropout": 0.0,
+                                          "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
+                                          "embedding_dimensions": [], "y_range": (), "random_seed": 0}
+        for key in self.config.hyperparameters.keys():
+            had_nested_dictionary = False
+            for inside_key in self.config.hyperparameters[key].keys():
+                if isinstance(self.config.hyperparameters[key][inside_key], dict):
+                    for hyperparameter in default_hyperparameter_choices:
+                        if hyperparameter not in self.config.hyperparameters[key][inside_key].keys():
+                            self.config.hyperparameters[key][inside_key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
+                            had_nested_dictionary = True
+            if not had_nested_dictionary:
+                for hyperparameter in default_hyperparameter_choices:
+                    if hyperparameter not in self.config.hyperparameters[key].keys():
+                        self.config.hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
 
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""

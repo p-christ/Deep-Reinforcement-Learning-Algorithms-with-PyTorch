@@ -10,11 +10,7 @@ class REINFORCE_Agent(Base_Agent):
 
     def __init__(self, config):
         Base_Agent.__init__(self, config)
-        self.policy = NN(input_dim=self.state_size,
-                                          linear_hidden_units=self.hyperparameters["linear_hidden_units"],
-                                          output_dim=self.action_size,
-                                          output_activation=self.hyperparameters["final_layer_activation"],
-                                          batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
+        self.policy = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
         self.optimizer = optim.Adam(self.policy.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_rewards = []
         self.episode_log_probabilities = []

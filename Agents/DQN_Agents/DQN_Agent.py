@@ -13,10 +13,7 @@ class DQN_Agent(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.q_network_local = NN(input_dim=self.state_size, linear_hidden_units=self.hyperparameters["linear_hidden_units"],
-                             output_dim=self.action_size, output_activation=self.hyperparameters["final_layer_activation"],
-                             batch_norm=self.hyperparameters["batch_norm"]).to(self.device)
-        self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
 
     def step(self):
         """Runs a step within a game including a learning step if required"""

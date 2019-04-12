@@ -27,3 +27,32 @@ def test_get_mean_and_standard_deviation_difference_results():
     assert mean_minus_3_std == mean_minus_x_std_guess
     assert mean_plus_3_std == mean_plus_x_std_guess
 
+def test_add_default_hyperparameters_if_not_overriden():
+    """Tests that add_default_hyperparameters_if_not_overriden function works"""
+    config = Config()
+    default_hyperparameter_set = {'output_activation': None, 'hidden_activations': 'relu', 'dropout': 0.0, 'initialiser': 'default',
+     'batch_norm': False, 'columns_of_data_to_be_embedded': [], 'embedding_dimensions': [], 'y_range': (),
+     'random_seed': 0}
+    alternative_hyperparmater_set = {'output_activation': "YESSS!!", 'hidden_activations': 'relu', 'dropout': 0.0, 'initialiser': 'default',
+     'batch_norm': False, 'columns_of_data_to_be_embedded': [], 'embedding_dimensions': [], 'y_range': (),
+     'random_seed': 0, "helo": 20}
+
+    config.hyperparameters = {"DQN_Agents": {}}
+    Trainer(config, [])
+    assert config.hyperparameters == {"DQN_Agents": default_hyperparameter_set}
+
+    config.hyperparameters = {"DQN_Agents": {}, "Test": {}}
+    Trainer(config, [])
+    assert config.hyperparameters == {"DQN_Agents": default_hyperparameter_set, "Test": default_hyperparameter_set}
+
+    config.hyperparameters = {"DQN_Agents": {"helo": 20,  "output_activation": "YESSS!!"}}
+    Trainer(config, [])
+    assert config.hyperparameters == {"DQN_Agents": alternative_hyperparmater_set}
+
+    config.hyperparameters = {"A": {"B": {"helo": 20,  "output_activation": "YESSS!!"}, "C": 10, "D": {} } }
+    Trainer(config, [])
+    assert config.hyperparameters == {"A": {"C": 10, "D": default_hyperparameter_set, "B": alternative_hyperparmater_set}}
+
+
+
+

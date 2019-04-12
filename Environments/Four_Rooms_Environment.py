@@ -34,7 +34,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.place_goal()
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
-        return self.state
+        return np.array(self.state)
 
     def conduct_action(self, desired_action):
         if type(desired_action) is np.ndarray:
@@ -55,7 +55,7 @@ class Four_Rooms_Environment(Base_Environment):
         else:
             self.reward = self.reward_for_every_move_that_doesnt_complete_game
             if self.step_count >= self.get_max_steps_per_episode(): self.done = True
-            else: self.done = False                             
+            else: self.done = False
         self.state = self.next_state
 
     def determine_which_action_will_actually_occur(self, desired_action):
@@ -195,7 +195,7 @@ class Four_Rooms_Environment(Base_Environment):
         return self.reward_for_completing_game
 
     def get_next_state(self):
-        return self.next_state
+        return np.array(self.next_state)
 
     def get_reward(self):
         return self.reward
@@ -208,3 +208,7 @@ class Four_Rooms_Environment(Base_Environment):
 
     def get_state_size(self):
         return 1
+
+    def get_num_possible_states(self):
+        """Returns the number of possible states there are"""
+        return self.grid_height * self.grid_width
