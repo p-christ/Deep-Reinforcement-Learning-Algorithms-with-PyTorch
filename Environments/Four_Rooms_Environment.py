@@ -23,7 +23,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
         self.current_user_location = None
         self.current_goal_location = None
-        self.reward_for_completing_game = float(int((grid_width + grid_height)*10.0*stochastic_actions_probability))
+        self.reward_for_completing_game = (self.grid_width + self.grid_height) * 1.2
         self.reward_for_every_move_that_doesnt_complete_game = -1.0
         self.reset_environment()
 
