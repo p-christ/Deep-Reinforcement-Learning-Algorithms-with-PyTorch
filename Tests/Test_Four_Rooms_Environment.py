@@ -5,8 +5,8 @@ from collections import Counter
 
 def test_location_to_state():
     """Tests location_to_state maps each location to a unique integer"""
-    for num_rows in [6, 10]:
-        for num_cols in [6, 9]:
+    for num_rows in [12, 10]:
+        for num_cols in [15, 9]:
             env = Four_Rooms_Environment(grid_width=num_cols, grid_height=num_rows)
             observed_states = set()
             for row in range(num_rows):
@@ -57,8 +57,8 @@ def test_check_user_location_and_goal_location_match_state_and_next_state():
         for _ in range(50):
             move = randint(0, 3)
             env.conduct_action(move)
-            assert env.state == env.location_to_state(env.current_user_location)
-            assert env.next_state == env.location_to_state(env.current_user_location)
+            assert env.state == [env.location_to_state(env.current_user_location), env.location_to_state(env.current_goal_location)]
+            assert env.next_state == [env.location_to_state(env.current_user_location), env.location_to_state(env.current_goal_location)]
 
 def test_lands_on_goal_correctly():
     """Checks whether getting to goal state produces the correct response"""
