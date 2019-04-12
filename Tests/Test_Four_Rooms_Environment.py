@@ -1,5 +1,6 @@
 from Four_Rooms_Environment import Four_Rooms_Environment
 from random import randint
+from collections import Counter
 
 
 def test_location_to_state():
@@ -91,3 +92,33 @@ def test_location_to_state_and_state_to_location_match():
     for row in range(env.grid_height):
         for col in range(env.grid_width):
             assert env.location_to_state((row, col)) == env.location_to_state(env.state_to_location(env.location_to_state((row, col))))
+
+def test_randomness_of_moves():
+    """Test that determine_which_action_will_actually_occur correctly implements stochastic_actions_probability"""
+    env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    for _ in range(10):
+        for move in env.actions:
+            assert move == env.determine_which_action_will_actually_occur(move)
+
+    env = Four_Rooms_Environment(stochastic_actions_probability=1.0)
+    num_iterations = 10000
+    for move in env.actions:
+        moves = []
+        for _ in range(num_iterations):
+            moves.append(env.determine_which_action_will_actually_occur(move))
+        count = Counter(moves)
+        for move_test in env.actions:
+            if move != move_test: #We do this because stochastic probability 1.0 means the move will never be picked
+                assert abs((num_iterations / (len(env.actions)-1)) - count[move_test]) < num_iterations / 20.0,  "{}".format(count)
+
+    env = Four_Rooms_Environment(stochastic_actions_probability=0.75)
+    num_iterations = 10000
+    for move in env.actions:
+        moves = []
+        for _ in range(num_iterations):
+            moves.append(env.determine_which_action_will_actually_occur(move))
+        count = Counter(moves)
+        for move_test in env.actions:
+            assert abs((num_iterations / len(env.actions)) - count[move_test]) < num_iterations / 20.0, "{}".format(count)
+
+
