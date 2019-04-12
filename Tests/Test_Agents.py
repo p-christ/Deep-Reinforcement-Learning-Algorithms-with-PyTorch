@@ -11,12 +11,12 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 import numpy as np
 import torch
 
-random.seed(100)
-np.random.seed(100)
-torch.manual_seed(100)
+random.seed(1)
+np.random.seed(1)
+torch.manual_seed(1)
 
 config = Config()
-config.seed = 100
+config.seed = 1
 config.environment = Bit_Flipping_Environment(4)
 config.num_episodes_to_run = 2000
 config.file_to_save_data_results = None
@@ -58,13 +58,13 @@ config.hyperparameters = {
     },
     "Policy_Gradient_Agents": {
         "learning_rate": 0.01,
-        "linear_hidden_units": [20, 20],
+        "linear_hidden_units": [20],
         "final_layer_activation": "SOFTMAX",
         "learning_iterations_per_round": 7,
         "discount_rate": 0.99,
         "batch_norm": False,
         "clip_epsilon": 0.1,
-        "episodes_per_learning_round": 5,
+        "episodes_per_learning_round": 7,
         "normalise_rewards": False,
         "gradient_clipping_norm": 5,
         "mu": 0.0, #only required for continuous action games
@@ -74,18 +74,12 @@ config.hyperparameters = {
     }
 }
 
+
 def test_agent_solve_bit_flipping_game():
-
-    AGENTS = [DQN_HER_Agent, PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent]
-
+    AGENTS = [PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent, DQN_HER_Agent]
     trainer = Trainer(config, AGENTS)
     results = trainer.run_games_for_agents()
-
     for agent in AGENTS:
-        print(agent)
-        print(results)
         agent_results = results[agent.agent_name]
-        print(agent_results)
         agent_results = np.max(agent_results[0][1][50:])
-        print(agent_results)
         assert agent_results >= 0.0, "Failed for {} -- score {}".format(agent.agent_name, agent_results)

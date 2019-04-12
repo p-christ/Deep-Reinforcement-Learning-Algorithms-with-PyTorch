@@ -32,6 +32,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.grid = self.create_grid()
         self.place_agent()
         self.place_goal()
+        self.desired_goal = [self.location_to_state(self.current_goal_location)]
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
         return np.array(self.state)
@@ -47,7 +48,7 @@ class Four_Rooms_Environment(Base_Environment):
         desired_new_state = self.calculate_desired_new_state(action)
         if not self.is_a_wall(desired_new_state):
             self.move_user(self.current_user_location, desired_new_state)
-        self.next_state = self.location_to_state(self.current_user_location)
+        self.next_state = [self.location_to_state(self.current_user_location), self.desired_goal[0]]
 
         if self.user_at_goal_location():
             self.reward = self.reward_for_completing_game
@@ -207,7 +208,10 @@ class Four_Rooms_Environment(Base_Environment):
         return 0.0
 
     def get_state_size(self):
-        return 1
+        return len(self.state)
+
+    def get_desired_goal(self):
+        return self.desired_goal
 
     def get_num_possible_states(self):
         """Returns the number of possible states there are"""
