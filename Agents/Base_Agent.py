@@ -38,6 +38,7 @@ class Base_Agent(object):
         random.seed(random_seed)
         np.random.seed(random_seed)
         if torch.cuda.is_available(): torch.cuda.manual_seed_all(random_seed)
+        self.config.seed = random_seed
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -187,7 +188,7 @@ class Base_Agent(object):
         else: hyperparameters = self.hyperparameters
         return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
-                  batch_norm=hyperparameters["batch_norm"], dropout=self.hyperparameters["dropout"],
+                  batch_norm=hyperparameters["batch_norm"], dropout=hyperparameters["dropout"],
                   hidden_activations=hyperparameters["hidden_activations"], initialiser=hyperparameters["initialiser"],
                   columns_of_data_to_be_embedded=hyperparameters["columns_of_data_to_be_embedded"],
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],

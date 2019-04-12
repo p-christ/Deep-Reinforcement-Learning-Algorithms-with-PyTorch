@@ -19,13 +19,13 @@ class DDPG_Agent(Base_Agent):
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
-                                    self.random_seed)
+                                    self.config.seed)
 
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
         self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
-        self.noise = OU_Noise(self.action_size, self.random_seed, self.hyperparameters["mu"],
+        self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],
                               self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
     def reset_game(self):

@@ -6,7 +6,6 @@ class Mountain_Car_Continuous_Environment(Base_Environment):
 
     def __init__(self):
         self.game_environment = gym.make("MountainCarContinuous-v0")
-
         self.state = self.game_environment.reset()
         self.next_state = None
         self.reward = None

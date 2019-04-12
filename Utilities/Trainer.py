@@ -9,31 +9,12 @@ class Trainer(object):
     """Runs games for given agents. Optionally will visualise and save the results"""
     def __init__(self, config, agents):
         self.config = config
-        self.add_default_hyperparameters_if_not_overriden()
         self.agents = agents
         self.agent_to_agent_group = self.create_agent_to_agent_group_dictionary()
         self.agent_to_color_group = self.create_agent_to_color_dictionary()
         self.results = None
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
-
-    def add_default_hyperparameters_if_not_overriden(self):
-        """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
-        default_hyperparameter_choices = {"output_activation": None, "hidden_activations": "relu", "dropout": 0.0,
-                                          "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
-                                          "embedding_dimensions": [], "y_range": (), "random_seed": 0}
-        for key in self.config.hyperparameters.keys():
-            had_nested_dictionary = False
-            for inside_key in self.config.hyperparameters[key].keys():
-                if isinstance(self.config.hyperparameters[key][inside_key], dict):
-                    for hyperparameter in default_hyperparameter_choices:
-                        if hyperparameter not in self.config.hyperparameters[key][inside_key].keys():
-                            self.config.hyperparameters[key][inside_key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
-                            had_nested_dictionary = True
-            if not had_nested_dictionary:
-                for hyperparameter in default_hyperparameter_choices:
-                    if hyperparameter not in self.config.hyperparameters[key].keys():
-                        self.config.hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
 
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""
@@ -94,14 +75,17 @@ class Trainer(object):
         agent_results = []
         agent_name = agent_class.agent_name
         agent_group = self.agent_to_agent_group[agent_name]
-        agent_config = copy.deepcopy(self.config)
-        agent_config.hyperparameters = self.config.hyperparameters[agent_group]
         agent_round = 1
         for run in range(self.config.runs_per_agent):
+            agent_config = copy.deepcopy(self.config)
+            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 1000)
+            agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
+            agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
-            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 1000)
             agent = agent_class(agent_config)
+            print(agent.hyperparameters)
+            print("RANDOM SEED " , agent_config.seed)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes()
             print("Time taken: {}".format(time_taken), flush=True)
             self.print_two_empty_lines()
@@ -111,6 +95,26 @@ class Trainer(object):
                 plt.show()
             agent_round += 1
         self.results[agent_name] = agent_results
+
+    def add_default_hyperparameters_if_not_overriden(self, hyperparameters):
+        """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
+        default_hyperparameter_choices = {"output_activation": "None", "hidden_activations": "relu", "dropout": 0.0,
+                                          "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
+                                          "embedding_dimensions": [], "y_range": ()}
+        for key in hyperparameters.keys():
+            had_nested_dictionary = False
+            for inside_key in hyperparameters[key].keys():
+                if isinstance(hyperparameters[key][inside_key], dict):
+                    for hyperparameter in default_hyperparameter_choices:
+                        if hyperparameter not in hyperparameters[key][inside_key].keys():
+                            hyperparameters[key][inside_key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
+                            had_nested_dictionary = True
+            if not had_nested_dictionary:
+                for hyperparameter in default_hyperparameter_choices:
+                    if hyperparameter not in self.config.hyperparameters[key].keys():
+                        hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
+        return hyperparameters
+
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
                                         color=None, ax=None, title=None):

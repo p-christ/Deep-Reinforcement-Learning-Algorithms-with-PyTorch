@@ -14,6 +14,8 @@ class DQN_Agent(Base_Agent):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
         self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
+        self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
+                                              lr=self.hyperparameters["learning_rate"])
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
