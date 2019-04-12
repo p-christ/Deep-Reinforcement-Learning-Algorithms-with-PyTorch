@@ -13,34 +13,25 @@ class Four_Rooms_Environment(Base_Environment):
     def __init__(self, grid_width=13, grid_height=13, stochastic_actions_probability=1.0/3.0):
         self.grid_width = grid_width
         self.grid_height = grid_height
-
         self.blank_space_name = "    "
         self.wall_space_name = "WALL"
         self.user_space_name = "USER"
         self.goal_space_name = "GOAL"
-
         self.stochastic_actions_probability = stochastic_actions_probability
-
         self.actions = set(range(4))
-
         # Note that the indices of the grid are such that (0, 0) is the top left point
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
-
-
         self.current_user_location = None
         self.current_goal_location = None
-
         self.reward_for_completing_game = 100.0
         self.reward_for_every_move_that_doesnt_complete_game = -1.0
-
         self.reset_environment()
 
     def reset_environment(self):
-
+        """Resets the environment and returns the start state"""
         self.grid = self.create_grid()
         self.place_agent()
         self.place_goal()
-        self.print_current_grid()
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
         return self.state
@@ -96,6 +87,13 @@ class Four_Rooms_Environment(Base_Environment):
         self.grid[new_location[0]][new_location[1]] = self.user_space_name
         self.grid[current_location[0]][current_location[1]] = self.blank_space_name
         self.current_user_location = (new_location[0], new_location[1])
+
+    def move_goal(self, current_location, new_location):
+        """Moves the goal state from current location to new location"""
+        assert self.grid[current_location[0]][current_location[1]] == self.goal_space_name
+        self.grid[new_location[0]][new_location[1]] = self.goal_space_name
+        self.grid[current_location[0]][current_location[1]] = self.blank_space_name
+        self.current_goal_location = (new_location[0], new_location[1])
 
     def is_a_wall(self, location):
         """Returns boolean indicating whether provided location is a wall or not"""
@@ -155,37 +153,34 @@ class Four_Rooms_Environment(Base_Environment):
                 thing_placed = True
         return (random_row, random_col)
 
-    def print_current_grid(self, visualise_aswell=False):
-
+    def print_current_grid(self):
+        """Prints out the grid"""
         for row in range(len(self.grid)):
             print(self.grid[row])
 
-
-        if visualise_aswell:
-            copied_grid = copy.deepcopy(self.grid)
-
-            for row in range(self.grid_height):
-                for col in range(self.grid_width):
-                    if copied_grid[row][col] == self.wall_space_name:
-                        copied_grid[row][col] = -100
-                    elif copied_grid[row][col] == self.blank_space_name:
-                        copied_grid[row][col] = 0
-                    elif copied_grid[row][col] == self.user_space_name:
-                        copied_grid[row][col] = 10
-                    elif copied_grid[row][col] == self.goal_space_name:
-                        copied_grid[row][col] = 20
-                    else:
-                        raise ValueError("Invalid values on the grid")
-            copied_grid = np.array(copied_grid)
-
-            cmap = mpl.colors.ListedColormap(["black", "white", "blue", "red"])
-            bounds = [-101, -1, 1, 11, 21]
-            norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-
-            pyplot.imshow(copied_grid, interpolation='nearest',
-                                cmap=cmap, norm=norm)
-
-            pyplot.show()
+    def visualise_current_grid(self):
+        """Visualises the current grid"""
+        copied_grid = copy.deepcopy(self.grid)
+        for row in range(self.grid_height):
+            for col in range(self.grid_width):
+                if copied_grid[row][col] == self.wall_space_name:
+                    copied_grid[row][col] = -100
+                elif copied_grid[row][col] == self.blank_space_name:
+                    copied_grid[row][col] = 0
+                elif copied_grid[row][col] == self.user_space_name:
+                    copied_grid[row][col] = 10
+                elif copied_grid[row][col] == self.goal_space_name:
+                    copied_grid[row][col] = 20
+                else:
+                    raise ValueError("Invalid values on the grid")
+        copied_grid = np.array(copied_grid)
+        cmap = mpl.colors.ListedColormap(["black", "white", "blue", "red"])
+        bounds = [-101, -1, 1, 11, 21]
+        norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
+        pyplot.imshow(copied_grid, interpolation='nearest',
+                            cmap=cmap, norm=norm)
+        print("Black = wall, White = empty, Blue = user, Red = goal")
+        pyplot.show()
 
     def get_action_size(self):
         return 4
