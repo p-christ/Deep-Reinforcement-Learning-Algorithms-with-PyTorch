@@ -3,7 +3,7 @@ import random
 import numpy as np
 import matplotlib as mpl
 from matplotlib import pyplot
-from Base_Environment import Base_Environment
+from Environments.Base_Environment import Base_Environment
 from random import randint
 
 class Four_Rooms_Environment(Base_Environment):
