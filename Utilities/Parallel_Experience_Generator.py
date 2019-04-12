@@ -60,9 +60,8 @@ class Parallel_Experience_Generator(object):
         """Resets the game environment so it is ready to play a new episode"""
         seed = randint(0, 10000)
         torch.manual_seed(seed) # Need to do this otherwise each worker generates same experience
-        self.environment.reset_environment()
+        state = self.environment.reset_environment()
         self.noise.reset()
-        state = self.environment.get_state()
         return state
 
     def pick_action(self, policy, state):

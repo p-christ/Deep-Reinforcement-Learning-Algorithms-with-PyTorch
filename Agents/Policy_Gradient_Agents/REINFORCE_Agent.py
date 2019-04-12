@@ -21,8 +21,7 @@ class REINFORCE_Agent(Base_Agent):
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
-        self.environment.reset_environment()
-        self.state = self.environment.get_state()
+        self.state = self.environment.reset_environment()
         self.next_state = None
         self.action = None
         self.reward = None

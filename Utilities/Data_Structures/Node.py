@@ -1,6 +1,5 @@
 class Node(object):
     """Generic Node class. Used in the implementation of a prioritised replay buffer"""
-
     def __init__(self, key, value):
         self.key = key
         self.value = value

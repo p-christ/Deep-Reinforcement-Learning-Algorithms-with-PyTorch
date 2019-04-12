@@ -18,9 +18,6 @@ class Banana_Environment(Base_Environment):
     def get_state_size(self):
         return len(self.game_environment_info.vector_observations[0])        
 
-    def get_state(self):
-        return self.game_environment_info.vector_observations[0]
-    
     def get_next_state(self):
         return self.game_environment_info.vector_observations[0]              
 
@@ -31,5 +28,6 @@ class Banana_Environment(Base_Environment):
         return self.game_environment_info.local_done[0]
     
     def reset_environment(self):
-        self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]                
+        self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
+        return self.game_environment_info.vector_observations[0]
    

@@ -35,6 +35,7 @@ class Lunar_Lander_Continuous(object):
 
     def reset_environment(self):
         self.state = self.game_environment.reset()
+        return self.state
 
     def get_max_steps_per_episode(self):
         return float("inf")

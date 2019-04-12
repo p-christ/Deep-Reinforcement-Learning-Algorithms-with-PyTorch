@@ -27,9 +27,6 @@ class Cart_Pole_Environment(Base_Environment):
     def get_state_size(self):
         return len(self.state)
 
-    def get_state(self):
-        return self.state
-
     def get_next_state(self):
         return self.next_state
 
@@ -41,6 +38,7 @@ class Cart_Pole_Environment(Base_Environment):
 
     def reset_environment(self):
         self.state = self.game_environment.reset()
+        return self.state
 
     def visualise_agent(self, agent):
 

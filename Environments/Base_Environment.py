@@ -7,6 +7,11 @@ i.e. for any game, if you create an environment class to represent it that exten
 abstract methods then ALL the agents will be able to play the game"""
 
 class Base_Environment(ABC):
+
+    @abstractmethod
+    def reset_environment(self):
+        """Must reset the game and return the start state"""
+        pass
             
     @abstractmethod
     def conduct_action(self, action):

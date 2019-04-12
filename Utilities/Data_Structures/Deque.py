@@ -1,11 +1,8 @@
 import numpy as np
-
 from Utilities.Data_Structures.Node import Node
-
 
 class Deque(object):
     """Generic deque object"""
-
     def __init__(self, max_size, dimension_of_value_attribute):
 
         self.max_size = max_size

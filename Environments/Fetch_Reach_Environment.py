@@ -31,9 +31,6 @@ class Fetch_Reach_Environment(Base_Environment):
     def get_state_size(self):
         return len(self.state)
 
-    def get_state(self):
-        return self.state
-
     def get_next_state(self):
         return self.next_state
 
@@ -57,6 +54,7 @@ class Fetch_Reach_Environment(Base_Environment):
         self.desired_goal = self.state_information["desired_goal"]
         self.achieved_goal = self.state_information["achieved_goal"]
         self.state = np.concatenate((self.state_information["observation"], self.desired_goal), axis=None)
+        return self.state
 
     def get_reward_for_achieving_goal(self):
         return self.reward_for_achieving_goal

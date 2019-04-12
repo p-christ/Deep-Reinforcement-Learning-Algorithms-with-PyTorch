@@ -27,12 +27,10 @@ class Four_Rooms_Environment(Base_Environment):
         self.current_user_location = None
         self.current_goal_location = None
 
+        self.reward_for_completing_game = 100.0
+        self.reward_for_every_move_that_doesnt_complete_game = -1.0
+
         self.reset_environment()
-
-        state can just be a 1 hot vector saying where the agent is...
-
-
-    # stochastic_actions_probability means we go in one of the the three OTHER directions.. not the 4
 
     def reset_environment(self):
 
@@ -41,6 +39,76 @@ class Four_Rooms_Environment(Base_Environment):
         self.place_goal()
         self.print_current_grid()
         self.step_count = 0
+        self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
+        return self.state
+
+    def conduct_action(self, desired_action):
+        if type(desired_action) is np.ndarray:
+            assert desired_action.shape[0] == 1
+            assert len(desired_action.shape) == 1
+            desired_action = desired_action[0]
+
+        self.step_count += 1
+        action = self.determine_which_action_will_actually_occur(desired_action)
+        desired_new_state = self.calculate_desired_new_state(action)
+        if not self.is_a_wall(desired_new_state):
+            self.move_user(self.current_user_location, desired_new_state)
+        self.next_state = self.location_to_state(self.current_user_location)
+
+        if self.user_at_goal_location():
+            self.reward = self.reward_for_completing_game
+            self.done = True
+        else:
+            self.reward = self.reward_for_every_move_that_doesnt_complete_game
+            self.done = False
+
+        self.state = self.next_state
+
+    def determine_which_action_will_actually_occur(self, desired_action):
+        """Chooses what action will actually occur. Gives 1. - self.stochastic_actions_probability chance to the
+        desired action occuring and the rest of probability spread equally among the other actions"""
+        if random.random() < self.stochastic_actions_probability:
+            valid_actions = [action for action in self.actions if action != desired_action]
+            action = random.choice(valid_actions)
+        else: action = desired_action
+        return action
+
+    def calculate_desired_new_state(self, action):
+        """Calculates the desired new state on basis of action we are going to do"""
+        if action == 0:
+            desired_new_state = (self.current_user_location[0] - 1, self.current_user_location[1])
+        elif action == 1:
+            desired_new_state = (self.current_user_location[0], self.current_user_location[1] + 1)
+        elif action == 2:
+            desired_new_state = (self.current_user_location[0] + 1, self.current_user_location[1])
+        elif action == 3:
+            desired_new_state = (self.current_user_location[0], self.current_user_location[1] - 1)
+        else:
+            raise ValueError("Action must be 0, 1, 2, or 3")
+        return desired_new_state
+
+    def move_user(self, current_location, new_location):
+        """Moves a user from current location to new location"""
+        assert self.grid[current_location[0]][current_location[1]] == self.user_space_name
+        self.grid[new_location[0]][new_location[1]] = self.user_space_name
+        self.grid[current_location[0]][current_location[1]] = self.blank_space_name
+        self.current_user_location = (new_location[0], new_location[1])
+
+    def is_a_wall(self, location):
+        """Returns boolean indicating whether provided location is a wall or not"""
+        return self.grid[location[0]][location[1]] == "WALL"
+
+    def return_num_possible_states(self):
+        """Returns the number of possible states in this game"""
+        return self.grid_width * self.grid_height
+
+    def user_at_goal_location(self):
+        """Returns boolean indicating whether user at goal location"""
+        return self.current_user_location == self.current_goal_location
+
+    def location_to_state(self, location):
+        """Maps a (x, y) location to an integer that uniquely represents its position"""
+        return location[0] + location[1] * self.grid_height
 
 
     def create_grid(self):
@@ -111,57 +179,6 @@ class Four_Rooms_Environment(Base_Environment):
 
             pyplot.show()
 
-    def conduct_action(self, desired_action):
-        if type(desired_action) is np.ndarray:
-            assert desired_action.shape[0] == 1
-            assert len(desired_action.shape) == 1
-            desired_action = desired_action[0]
-
-        self.step_count += 1
-
-        action = self.decide_action(desired_action)
-        print(" ")
-        print("Action that will happen ", self.action_to_effect_dict[action])
-        print( " ")
-
-        if action == 0:
-            desired_new_state = (self.current_user_location[0] - 1, self.current_user_location[1])
-        elif action == 1:
-            desired_new_state = (self.current_user_location[0], self.current_user_location[1] + 1)
-        elif action == 2:
-            desired_new_state = (self.current_user_location[0] + 1, self.current_user_location[1])
-        elif action == 3:
-            desired_new_state = (self.current_user_location[0], self.current_user_location[1] - 1)
-        else:
-            raise ValueError("Action must be 0, 1, 2, or 3")
-
-        if not self.is_a_wall(desired_new_state):
-            self.move_user(self.current_user_location, desired_new_state)
-
-
-    def move_user(self, current_location, new_location):
-        """Moves a user from current location to new location"""
-        assert self.grid[current_location[0]][current_location[1]] == self.user_space_name
-        self.grid[new_location[0]][new_location[1]] = self.user_space_name
-        self.grid[current_location[0]][current_location[1]] = self.blank_space_name
-        self.current_user_location = (new_location[0], new_location[1])
-
-
-    def decide_action(self, desired_action):
-        """Chooses what action will actually occur. Gives 1. - self.stochastic_actions_probability chance to the
-        desired action occuring and the rest of probability spread equally among the other actions"""
-        if random.random() < self.stochastic_actions_probability:
-            valid_actions = [action for action in self.actions if action != desired_action]
-            action = random.choice(valid_actions)
-        else: action = desired_action
-        return action
-
-    def is_a_wall(self, location):
-        """Returns boolean indicating whether provided location is a wall or not"""
-        return self.grid[location[0]][location[1]] == "WALL"
-
-
-
     def get_action_size(self):
         return 4
 
@@ -169,24 +186,21 @@ class Four_Rooms_Environment(Base_Environment):
         return "DISCRETE"
 
     def get_done(self):
-        pass
+        return self.done
 
     def get_max_steps_per_episode(self):
         pass
 
     def get_next_state(self):
-        pass
+        return self.next_state
 
     def get_reward(self):
-        pass
+        return self.reward
 
     def get_rolling_period_to_calculate_score_over(self):
         pass
 
     def get_score_to_win(self):
-        pass
-
-    def get_state(self):
         pass
 
     def get_state_size(self):

@@ -3,7 +3,6 @@ import torch
 from Utilities.Data_Structures.Deque import Deque
 from Utilities.Data_Structures.Max_Heap import Max_Heap
 
-
 class Prioritised_Replay_Buffer(Max_Heap, Deque):
     """Data structure that maintains a deque, a heap and an array. The deque keeps track of which experiences are the oldest and so
      tells us which ones to delete once the buffer starts getting full. The heap lets us quickly retrieve the experience
@@ -60,7 +59,6 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
         self.update_heap_and_heap_index_to_overwrite()
         self.update_number_experiences_in_deque()
         self.update_deque_index_to_overwrite_next()
-
 
     def update_overall_sum(self, new_td_error, old_td_error):
         """Updates the overall sum of td_values present in the buffer"""

@@ -21,9 +21,6 @@ class Mountain_Car_Continuous_Environment(Base_Environment):
     def get_state_size(self):
         return len(self.state)
 
-    def get_state(self):
-        return self.state
-
     def get_next_state(self):
         return self.next_state
 
@@ -35,6 +32,7 @@ class Mountain_Car_Continuous_Environment(Base_Environment):
 
     def reset_environment(self):
         self.state = self.game_environment.reset()
+        return self.state
 
     def get_max_steps_per_episode(self):
         return 1000

@@ -19,9 +19,6 @@ class Reacher_Environment_1_Arm(Base_Environment):
     def get_state_size(self):
         return len(self.game_environment_info.vector_observations[0])
 
-    def get_state(self):
-        return self.game_environment_info.vector_observations[0]
-
     def get_next_state(self):
         return self.game_environment_info.vector_observations[0]
 
@@ -33,6 +30,7 @@ class Reacher_Environment_1_Arm(Base_Environment):
 
     def reset_environment(self):
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
+        return self.game_environment_info.vector_observations[0]
 
     def get_max_steps_per_episode(self):
         return 1000

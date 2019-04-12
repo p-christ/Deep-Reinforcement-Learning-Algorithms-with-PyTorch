@@ -38,7 +38,7 @@ Below shows various RL algorithms successfully learning discrete action game [Ca
 Below shows the performance of DQN and DDPG with and without Hindsight Experience Replay (HER) in the Bit Flipping (14 bits) 
 and Fetch Reach environments described in the papers [Hindsight Experience Replay 2018](https://arxiv.org/pdf/1707.01495.pdf) 
 and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). The results replicate the results found in 
-the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all. Note that the same hyperparameters were used for each pair of agents and so the only difference 
+the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all. Note that the same hyperparameters were used within each pair of agents and so the only difference 
 between them was whether hindsight was used or not. 
 
 ![HER Experiment Results](Results/Data_and_Graphs/HER_Experiments.png)

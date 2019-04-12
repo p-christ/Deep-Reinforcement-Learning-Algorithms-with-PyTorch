@@ -1,10 +1,8 @@
 import numpy as np
 from Utilities.Data_Structures.Node import Node
 
-
 class Max_Heap(object):
     """Generic max heap object"""
-
     def __init__(self, max_size, dimension_of_value_attribute, default_key_to_use):
 
         self.max_size = max_size

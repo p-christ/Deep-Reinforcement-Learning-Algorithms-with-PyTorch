@@ -17,9 +17,6 @@ class Tennis_Environment(object):
     def get_state_size(self):
         return len(self.game_environment_info.vector_observations[0])*2
 
-    def get_state(self):
-        return self.game_environment_info.vector_observations
-
     def get_next_state(self):
         return self.game_environment_info.vector_observations
 
@@ -31,6 +28,7 @@ class Tennis_Environment(object):
 
     def reset_environment(self):
         self.game_environment_info = self.game_environment.reset(train_mode=True)[self.brain_name]
+        return self.game_environment_info.vector_observations
 
     def get_max_steps_per_episode(self):
         return 1000
