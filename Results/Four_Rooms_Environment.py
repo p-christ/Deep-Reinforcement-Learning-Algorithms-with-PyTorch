@@ -6,7 +6,7 @@ from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 config = Config()
 config.seed = 1
-config.environment = Four_Rooms_Environment(10, 10, stochastic_actions_probability=0.0)
+config.environment = Four_Rooms_Environment(9, 9, stochastic_actions_probability=0.0, random_start_user_place=True, random_goal_place=True)
 config.num_episodes_to_run = 4500
 config.file_to_save_data_results = "Data_and_Graphs/Four_Rooms_Environment_Results_Data.pkl"
 config.file_to_save_results_graph = "Data_and_Graphs/Four_Rooms_Environment_Results_Graph.png"
@@ -26,7 +26,7 @@ config.hyperparameters = {
         "learning_rate": 0.001,
         "batch_size": 128,
         "buffer_size": 100000,
-        "epsilon": 0.1,
+        "epsilon": 1.0,
         "epsilon_decay_rate_denominator": 500,
         "discount_rate": 0.98,
         "tau": 0.1,
@@ -36,9 +36,9 @@ config.hyperparameters = {
         "update_every_n_steps": 1,
         "linear_hidden_units": [10, 10],
         "columns_of_data_to_be_embedded": [0, 1],
-        "embedding_dimensions": [[config.environment.get_num_possible_states(), max(2, int(config.environment.get_num_possible_states() / 10.0))],
+        "embedding_dimensions": [[config.environment.get_num_possible_states(), max(4, int(config.environment.get_num_possible_states() / 10.0))],
                                  [config.environment.get_num_possible_states(),
-                                  max(2, int(config.environment.get_num_possible_states() / 10.0))]],
+                                  max(4, int(config.environment.get_num_possible_states() / 10.0))]],
         "final_layer_activation": None,
         "batch_norm": False,
         "gradient_clipping_norm": 5,

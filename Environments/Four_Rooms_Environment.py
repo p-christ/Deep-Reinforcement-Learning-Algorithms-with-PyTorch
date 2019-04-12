@@ -10,9 +10,13 @@ class Four_Rooms_Environment(Base_Environment):
     """Four rooms game environment as described in paper http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf"""
     environment_name = "Four Rooms"
 
-    def __init__(self, grid_width=13, grid_height=13, stochastic_actions_probability=1.0/3.0):
+    def __init__(self, grid_width=13, grid_height=13, stochastic_actions_probability=1.0/3.0, random_start_user_place=True,
+                 random_goal_place=True):
+        assert grid_width >= 9 and grid_height >= 9, "Both grid height and width must be 9 or higher"
         self.grid_width = grid_width
         self.grid_height = grid_height
+        self.random_start_user_place = random_start_user_place
+        self.random_goal_place = random_goal_place
         self.blank_space_name = "    "
         self.wall_space_name = "WALL"
         self.user_space_name = "USER"
@@ -23,7 +27,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
         self.current_user_location = None
         self.current_goal_location = None
-        self.reward_for_achieving_goal = (self.grid_width + self.grid_height) * 1.2
+        self.reward_for_achieving_goal = (self.grid_width + self.grid_height) * 3.0
         self.step_reward_for_not_achieving_goal = -1.0
         self.state_only_dimension = 1
         self.reset_environment()
@@ -44,7 +48,6 @@ class Four_Rooms_Environment(Base_Environment):
             assert desired_action.shape[0] == 1
             assert len(desired_action.shape) == 1
             desired_action = desired_action[0]
-
         self.step_count += 1
         action = self.determine_which_action_will_actually_occur(desired_action)
         desired_new_state = self.calculate_desired_new_state(action)
@@ -140,11 +143,19 @@ class Four_Rooms_Environment(Base_Environment):
 
     def place_agent(self):
         """Places the agent on a random non-wall square"""
-        self.current_user_location = self.randomly_place_something(self.user_space_name, [self.wall_space_name])
+        if self.random_start_user_place:
+            self.current_user_location = self.randomly_place_something(self.user_space_name, [self.wall_space_name])
+        else:
+            self.current_user_location = (1, 1)
+            self.grid[1][1] = self.user_space_name
 
     def place_goal(self):
         """Places the goal on a random non-WALL and non-USER square"""
-        self.current_goal_location = self.randomly_place_something(self.goal_space_name, [self.wall_space_name, self.user_space_name])
+        if self.random_goal_place:
+            self.current_goal_location = self.randomly_place_something(self.goal_space_name, [self.wall_space_name, self.user_space_name])
+        else:
+            self.current_goal_location = (3, 3)
+            self.grid[3][3] = self.goal_space_name
 
     def randomly_place_something(self, thing_name, invalid_places):
         """Randomly places a thing called thing_name on any square that doesn't have an invalid item on it"""

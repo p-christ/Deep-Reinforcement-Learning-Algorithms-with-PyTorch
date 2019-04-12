@@ -8,18 +8,23 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 
 ## **Algorithms Implemented** 
 
-1. Deep Q Learning (DQN) ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))  
-1. DQN with Fixed Q Targets ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))
-1. Double DQN ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
-1. Double DQN with Prioritised Experience Replay ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
-1. REINFORCE ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
-1. PPO ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
-1. DDPG ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
-1. DQN with Hindsight Experience Replay (DQN-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf))
-1. DDPG with Hindsight Experience Replay (DDPG-HER) ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
+1. *Deep Q Learning (DQN)* ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))  
+1. *DQN with Fixed Q Targets* ([Mnih 2013](https://arxiv.org/pdf/1312.5602.pdf))
+1. *Double DQN* ([Hado van Hasselt 2015](https://arxiv.org/pdf/1509.06461.pdf))
+1. *Double DQN with Prioritised Experience Replay* ([Schaul 2016](https://arxiv.org/pdf/1511.05952.pdf))
+1. *REINFORCE* ([Williams 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
+1. *PPO* ([Schulman 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
+1. *DDPG* ([Lillicrap 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
+1. *DQN with Hindsight Experience Replay (DQN-HER)* ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf))
+1. *DDPG with Hindsight Experience Replay (DDPG-HER)* ([Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
 Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C, Soft Actor-Critic and hierarchical RL algorithms soon.
+
+## **Environments Implemented**
+
+1. *Bit Flipping Game* (as described in [Andrychowicz 2018](https://arxiv.org/pdf/1707.01495.pdf))
+1. *Four Rooms Game* (as described in [Sutton 1998](http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf))
 
 ## **Results**
 
