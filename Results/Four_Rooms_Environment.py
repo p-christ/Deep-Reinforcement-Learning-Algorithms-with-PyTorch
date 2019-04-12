@@ -1,15 +1,15 @@
 from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
-from Bit_Flipping_Environment import Bit_Flipping_Environment
+from Environments.Four_Rooms_Environment import Four_Rooms_Environment
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN_Agent import DQN_Agent
 
 config = Config()
 config.seed = 1
-config.environment = Bit_Flipping_Environment(14)
+config.environment = Four_Rooms_Environment()
 config.num_episodes_to_run = 4500
-config.file_to_save_data_results = "Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Bit_Flipping_Results_Graph.png"
+config.file_to_save_data_results = "Data_and_Graphs/Four_Rooms_Environment_Results_Data.pkl"
+config.file_to_save_results_graph = "Data_and_Graphs/Four_Rooms_Environment_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -34,7 +34,9 @@ config.hyperparameters = {
         "beta_prioritised_replay": 0.4,
         "incremental_td_error": 1e-8,
         "update_every_n_steps": 1,
-        "linear_hidden_units": [256, 256],
+        "nn_layers": 2,
+        "nn_start_units": 256,
+        "nn_unit_decay": 1.0,
         "final_layer_activation": None,
         "batch_norm": False,
         "gradient_clipping_norm": 5,

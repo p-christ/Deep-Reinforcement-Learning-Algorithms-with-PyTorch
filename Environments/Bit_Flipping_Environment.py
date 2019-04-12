@@ -18,7 +18,7 @@ class Bit_Flipping_Environment(Base_Environment):
         self.state.extend(self.desired_goal)
         self.achieved_goal = self.state[:self.environment_dimension]
         self.step_count = 0
-        return self.state
+        return np.array(self.state)
 
     def randomly_pick_state_or_goal(self):
         return [random.randint(0, 1) for _ in range(self.environment_dimension)]

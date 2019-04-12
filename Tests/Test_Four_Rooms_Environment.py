@@ -1,4 +1,4 @@
-from Four_Rooms_Environment import Four_Rooms_Environment
+from Environments.Four_Rooms_Environment import Four_Rooms_Environment
 from random import randint
 from collections import Counter
 
