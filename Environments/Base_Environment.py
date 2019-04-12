@@ -30,11 +30,6 @@ class Base_Environment(ABC):
     @abstractmethod
     def get_state_size(self):
         """Must return the number (integer) of state datapoints available to the agent in the game"""
-        pass    
-    
-    @abstractmethod
-    def get_state(self):
-        """Must return the current state of the game"""
         pass
     
     @abstractmethod

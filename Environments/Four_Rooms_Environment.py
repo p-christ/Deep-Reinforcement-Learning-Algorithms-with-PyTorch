@@ -22,7 +22,10 @@ class Four_Rooms_Environment(Base_Environment):
         self.stochastic_actions_probability = stochastic_actions_probability
 
         self.actions = set(range(4))
+
+        # Note that the indices of the grid are such that (0, 0) is the top left point
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
+
 
         self.current_user_location = None
         self.current_goal_location = None
@@ -110,6 +113,11 @@ class Four_Rooms_Environment(Base_Environment):
         """Maps a (x, y) location to an integer that uniquely represents its position"""
         return location[0] + location[1] * self.grid_height
 
+    def state_to_location(self, state):
+        """Maps a state integer to the (x, y) grid point it represents"""
+        col = int(state / self.grid_height)
+        row = state - col*self.grid_height
+        return (row, col)
 
     def create_grid(self):
         """Creates and returns the initial gridworld"""

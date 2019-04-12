@@ -65,12 +65,17 @@ def test_lands_on_goal_correctly():
     env.move_user(env.current_user_location, (3, 3))
     env.current_goal_location = (2, 2)
 
-    env.conduct_action(2)
+    env.conduct_action(0)
     assert env.get_reward() == -1.0
     assert not env.get_done()
 
     env.conduct_action(3)
     assert env.get_reward() == 100.0
-    assert not env.get_done()
+    assert env.get_done()
 
-
+def test_location_to_state_and_state_to_location_match():
+    """Test that location_to_state and state_to_location are inverses of each other"""
+    env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    for row in range(env.grid_height):
+        for col in range(env.grid_width):
+            assert env.location_to_state((row, col)) == env.location_to_state(env.state_to_location(env.location_to_state((row, col))))
