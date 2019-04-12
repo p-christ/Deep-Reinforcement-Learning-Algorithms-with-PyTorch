@@ -23,7 +23,7 @@ class Four_Rooms_Environment(Base_Environment):
         self.action_to_effect_dict = {0: "North", 1: "East", 2: "South", 3:"West"}
         self.current_user_location = None
         self.current_goal_location = None
-        self.reward_for_completing_game = 100.0
+        self.reward_for_completing_game = float(int((grid_width + grid_height)*10.0*stochastic_actions_probability))
         self.reward_for_every_move_that_doesnt_complete_game = -1.0
         self.reset_environment()
 
@@ -54,8 +54,8 @@ class Four_Rooms_Environment(Base_Environment):
             self.done = True
         else:
             self.reward = self.reward_for_every_move_that_doesnt_complete_game
-            self.done = False
-
+            if self.step_count >= self.get_max_steps_per_episode(): self.done = True
+            else: self.done = False                             
         self.state = self.next_state
 
     def determine_which_action_will_actually_occur(self, desired_action):
@@ -192,7 +192,7 @@ class Four_Rooms_Environment(Base_Environment):
         return self.done
 
     def get_max_steps_per_episode(self):
-        pass
+        return self.reward_for_completing_game
 
     def get_next_state(self):
         return self.next_state
@@ -201,16 +201,10 @@ class Four_Rooms_Environment(Base_Environment):
         return self.reward
 
     def get_rolling_period_to_calculate_score_over(self):
-        pass
+        return 100
 
     def get_score_to_win(self):
-        pass
+        return 0.0
 
     def get_state_size(self):
-        pass
-
-
-
-z = Four_Rooms_Environment()
-z.conduct_action(3)
-z.print_current_grid()
+        return 1
