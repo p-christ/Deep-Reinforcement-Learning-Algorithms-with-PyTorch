@@ -1,6 +1,7 @@
-from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
-from DDPG_Agent import DDPG
+from Agents.Policy_Gradient_Agents.PPO import PPO
+from Agents.Actor_Critic_Agents.DDPG import DDPG
 from Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
+from TD3 import TD3
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 
@@ -42,7 +43,7 @@ config.hyperparameters = {
     "Actor_Critic_Agents": {
         "Actor": {
             "learning_rate": 0.001,
-            "linear_hidden_units": [50, 50, 50, 50, 50],
+            "linear_hidden_units": [50, 50],
             "final_layer_activation": "TANH",
             "batch_norm": False,
             "tau": 0.01,
@@ -51,7 +52,7 @@ config.hyperparameters = {
 
         "Critic": {
             "learning_rate": 0.01,
-            "linear_hidden_units": [50, 50, 50, 50, 50, 50],
+            "linear_hidden_units": [50, 50],
             "final_layer_activation": "None",
             "batch_norm": False,
             "buffer_size": 30000,
@@ -61,16 +62,19 @@ config.hyperparameters = {
 
         "batch_size": 256,
         "discount_rate": 0.9,
-        "mu": 0.0,
-        "theta": 0.15,
-        "sigma": 0.25,
+        "mu": 0.0, #for O-H noise
+        "theta": 0.15, #for O-H noise
+        "sigma": 0.25, #for O-H noise
+        "action_noise_std": 0.2,  # for TD3
+        "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 20,
-        "learning_updates_per_learning_session": 3
+        "learning_updates_per_learning_session": 3,
+
     }
 }
 
 if __name__ == "__main__":
-    AGENTS = [DDPG, PPO_Agent]
+    AGENTS = [TD3]# , DDPG, PPO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

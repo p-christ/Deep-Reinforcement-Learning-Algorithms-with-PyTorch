@@ -15,14 +15,17 @@ class DDPG(Base_Agent):
         Base_Agent.__init__(self, config)
         self.hyperparameters = config.hyperparameters
         self.critic_local = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1, key_to_use="Critic")
-        self.critic_target = copy.deepcopy(self.critic_local).to(self.device)
+        self.critic_target = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1, key_to_use="Critic")
+        self.critic_target.load_state_dict(copy.deepcopy(self.critic_local.state_dict()))
+
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                                     self.config.seed)
-
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
-        self.actor_target = copy.deepcopy(self.actor_local).to(self.device)
+        self.actor_target = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
+        self.actor_target.load_state_dict(copy.deepcopy(self.actor_local.state_dict()))
+
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
         self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],

@@ -15,7 +15,8 @@ class PPO(Base_Agent):
         Base_Agent.__init__(self, config)
         self.policy_output_size = self.calculate_policy_output_size()
         self.policy_new = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
-        self.policy_old = copy.deepcopy(self.policy_new)
+        self.policy_old = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
+        self.policy_old.load_state_dict(copy.deepcopy(self.policy_new.state_dict()))
         self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_number = 0

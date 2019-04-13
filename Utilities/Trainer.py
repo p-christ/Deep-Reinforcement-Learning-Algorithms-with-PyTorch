@@ -4,6 +4,7 @@ import pickle
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 class Trainer(object):
     """Runs games for given agents. Optionally will visualise and save the results"""
@@ -30,7 +31,8 @@ class Trainer(object):
             "Genetic_Agent": "Stochastic_Policy_Search_Agents",
             "Hill Climbing": "Stochastic_Policy_Search_Agents",
             "DDPG": "Actor_Critic_Agents",
-            "DDPG-HER": "Actor_Critic_Agents"
+            "DDPG-HER": "Actor_Critic_Agents",
+            "TD3": "Actor_Critic_Agents"
         }
         return agent_to_agent_group_dictionary
 
@@ -78,7 +80,7 @@ class Trainer(object):
         agent_round = 1
         for run in range(self.config.runs_per_agent):
             agent_config = copy.deepcopy(self.config)
-            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 1000)
+            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
             agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))

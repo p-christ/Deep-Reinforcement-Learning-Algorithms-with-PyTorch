@@ -8,7 +8,8 @@ class DQN_With_Fixed_Q_Targets(DQN):
     def __init__(self, config):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
         DQN.__init__(self, config)
-        self.q_network_target = copy.deepcopy(self.q_network_local).to(self.device)
+        self.q_network_target = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
+        self.q_network_target.load_state_dict(copy.deepcopy(self.q_network_local.state_dict()))
 
     def q_network_learn(self, experiences=None):
         """Runs a learning iteration for the Q network"""

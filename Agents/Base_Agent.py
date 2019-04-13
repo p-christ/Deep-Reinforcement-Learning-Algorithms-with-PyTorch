@@ -182,17 +182,24 @@ class Base_Agent(object):
         for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
             target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
 
-    def create_NN(self, input_dim, output_dim, key_to_use=None):
+    def create_NN(self, input_dim, output_dim, key_to_use=None, override_seed=None):
         """Creates a neural network for the agents to use"""
-        if key_to_use: hyperparameters = self.hyperparameters[key_to_use]
-        else: hyperparameters = self.hyperparameters
+        if key_to_use:
+            hyperparameters = self.hyperparameters[key_to_use]
+        else:
+            hyperparameters = self.hyperparameters
+        if override_seed:
+            seed = override_seed
+        else:
+            seed = self.config.seed
+
         return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
                   batch_norm=hyperparameters["batch_norm"], dropout=hyperparameters["dropout"],
                   hidden_activations=hyperparameters["hidden_activations"], initialiser=hyperparameters["initialiser"],
                   columns_of_data_to_be_embedded=hyperparameters["columns_of_data_to_be_embedded"],
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],
-                  random_seed=self.config.seed).to(self.device)
+                  random_seed=seed).to(self.device)
 
 
 
