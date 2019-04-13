@@ -1,10 +1,10 @@
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from Agents.DQN_Agents.DDQN_Agent import DDQN
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
-from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
+from Agents.DQN_Agents.DQN_Agent import DQN
+from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 from Cart_Pole_Environment import Cart_Pole_Environment
 
 config = Config()
@@ -72,7 +72,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [PPO_Agent, DQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay,  DDQN_Agent]
+    AGENTS = [PPO_Agent, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

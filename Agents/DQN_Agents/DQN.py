@@ -3,11 +3,10 @@ import random
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-from nn_builder.pytorch.NN import NN
 from Agents.Base_Agent import Base_Agent
 from Utilities.Data_Structures.Replay_Buffer import Replay_Buffer
 
-class DQN_Agent(Base_Agent):
+class DQN(Base_Agent):
     """A deep Q learning agent"""
     agent_name = "DQN"
     def __init__(self, config):

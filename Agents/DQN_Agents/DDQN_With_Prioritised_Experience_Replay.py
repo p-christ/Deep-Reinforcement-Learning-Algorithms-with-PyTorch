@@ -1,14 +1,14 @@
 import torch
 import torch.nn.functional as F
-from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from Agents.DQN_Agents.DDQN import DDQN
 from Utilities.Data_Structures.Prioritised_Replay_Buffer import Prioritised_Replay_Buffer
 
-class DDQN_With_Prioritised_Experience_Replay(DDQN_Agent):
+class DDQN_With_Prioritised_Experience_Replay(DDQN):
     """A DQN agent with prioritised experience replay"""
     agent_name = "DDQN with Prioritised Replay"
 
     def __init__(self, config):
-        DDQN_Agent.__init__(self, config)
+        DDQN.__init__(self, config)
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
 
     def q_network_learn(self):

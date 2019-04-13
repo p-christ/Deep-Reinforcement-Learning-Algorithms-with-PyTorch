@@ -1,6 +1,8 @@
 from Base_Agent import Base_Agent
 
-initialise Q_U  --> Q values over option actions
+# TBC
+
+# initialise Q_U  --> Q values over option actions
 # initialise Q_omega --> Q values over options
 # initialise intra-option policy
 #

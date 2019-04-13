@@ -1,5 +1,5 @@
 from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
-from DDPG_Agent import DDPG_Agent
+from DDPG_Agent import DDPG
 from Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
@@ -70,7 +70,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [DDPG_Agent, PPO_Agent]
+    AGENTS = [DDPG, PPO_Agent]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

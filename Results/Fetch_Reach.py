@@ -1,5 +1,5 @@
-from Actor_Critic_Agents.DDPG_Agent import DDPG_Agent
-from DDPG_HER_Agent import DDPG_HER_Agent
+from Actor_Critic_Agents.DDPG_Agent import DDPG
+from DDPG_HER_Agent import DDPG_HER
 from Data_Structures.Config import Config
 from Fetch_Reach_Environment import Fetch_Reach_Environment
 from Trainer import Trainer
@@ -60,7 +60,7 @@ config.hyperparameters = {
 
 
 if __name__== '__main__':
-    AGENTS = [DDPG_HER_Agent,  DDPG_Agent]
+    AGENTS = [DDPG_HER, DDPG]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

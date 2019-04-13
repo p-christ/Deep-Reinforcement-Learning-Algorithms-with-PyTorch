@@ -1,8 +1,8 @@
-from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
+from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER
 from Environments.Four_Rooms_Environment import Four_Rooms_Environment
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from Agents.DQN_Agents.DQN_Agent import DQN
 
 config = Config()
 config.seed = 1
@@ -47,7 +47,7 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
-    AGENTS = [DQN_HER_Agent, DQN_Agent]
+    AGENTS = [DQN_HER, DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

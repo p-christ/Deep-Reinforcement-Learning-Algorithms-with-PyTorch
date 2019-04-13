@@ -1,11 +1,10 @@
 import numpy as np
 import torch
 import torch.optim as optim
-from nn_builder.pytorch.NN import NN
 from torch.distributions import Categorical
 from Agents.Base_Agent import Base_Agent
 
-class REINFORCE_Agent(Base_Agent):
+class REINFORCE(Base_Agent):
     agent_name = "REINFORCE"
 
     def __init__(self, config):

@@ -1,13 +1,13 @@
 import random
-from Agents.DQN_Agents.DQN_HER_Agent import DQN_HER_Agent
-from Agents.DQN_Agents.DDQN_Agent import DDQN_Agent
+from Agents.DQN_Agents.DQN_HER import DQN_HER
+from Agents.DQN_Agents.DDQN import DDQN
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
-from Agents.DQN_Agents.DQN_Agent_With_Fixed_Q_Targets import DQN_Agent_With_Fixed_Q_Targets
+from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 from Environments.Bit_Flipping_Environment import Bit_Flipping_Environment
-from Agents.Policy_Gradient_Agents.PPO_Agent import PPO_Agent
+from Agents.Policy_Gradient_Agents.PPO import PPO
 from Utilities.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from Agents.DQN_Agents.DQN import DQN
 import numpy as np
 import torch
 
@@ -76,7 +76,7 @@ config.hyperparameters = {
 
 
 def test_agent_solve_bit_flipping_game():
-    AGENTS = [PPO_Agent, DDQN_Agent, DQN_Agent_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN_Agent, DQN_HER_Agent]
+    AGENTS = [PPO, DDQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN, DQN_HER]
     trainer = Trainer(config, AGENTS)
     results = trainer.run_games_for_agents()
     for agent in AGENTS:

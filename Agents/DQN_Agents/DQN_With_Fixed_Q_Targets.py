@@ -1,18 +1,18 @@
 import copy
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from Agents.DQN_Agents.DQN import DQN
 
-class DQN_Agent_With_Fixed_Q_Targets(DQN_Agent):
+class DQN_With_Fixed_Q_Targets(DQN):
     """A DQN agent that uses an older version of the q_network as the target network"""
     agent_name = "DQN with Fixed Q Targets"
 
     def __init__(self, config):
         print("Initialising DQN_Agent_With_Fixed_Q_Targets Agent")
-        DQN_Agent.__init__(self, config)
+        DQN.__init__(self, config)
         self.q_network_target = copy.deepcopy(self.q_network_local).to(self.device)
 
     def q_network_learn(self, experiences=None):
         """Runs a learning iteration for the Q network"""
-        super(DQN_Agent_With_Fixed_Q_Targets, self).q_network_learn(experiences=experiences)
+        super(DQN_With_Fixed_Q_Targets, self).q_network_learn(experiences=experiences)
         self.soft_update_of_target_network(self.q_network_local, self.q_network_target,
                                            self.hyperparameters["tau"])  # Update the target network
 

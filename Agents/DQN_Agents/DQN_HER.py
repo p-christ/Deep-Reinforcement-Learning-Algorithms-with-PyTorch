@@ -1,12 +1,12 @@
-from Agents.DQN_Agents.DQN_Agent import DQN_Agent
+from Agents.DQN_Agents.DQN import DQN
 from Agents.HER_Base import HER_Base
 
-class DQN_HER_Agent(DQN_Agent, HER_Base):
+class DQN_HER(DQN, HER_Base):
     """DQN algorithm with hindsight experience replay"""
     agent_name = "DQN-HER"
 
     def __init__(self, config):
-        DQN_Agent.__init__(self, config)
+        DQN.__init__(self, config)
         HER_Base.__init__(self, self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"],
                           self.hyperparameters["HER_sample_proportion"])
 

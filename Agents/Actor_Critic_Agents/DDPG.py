@@ -7,7 +7,7 @@ from Base_Agent import Base_Agent
 from Replay_Buffer import Replay_Buffer
 from Utilities.OU_Noise import OU_Noise
 
-class DDPG_Agent(Base_Agent):
+class DDPG(Base_Agent):
     """A DDPG Agent"""
     agent_name = "DDPG"
 

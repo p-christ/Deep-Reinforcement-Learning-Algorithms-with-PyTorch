@@ -1,12 +1,12 @@
-from DDPG_Agent import DDPG_Agent
-from HER_Base import HER_Base
+from Agents.Actor_Critic_Agents.DDPG import DDPG
+from Agents.HER_Base import HER_Base
 
-class DDPG_HER_Agent(DDPG_Agent, HER_Base):
+class DDPG_HER(DDPG, HER_Base):
     """DDPG algorithm with hindsight experience replay"""
     agent_name = "DDPG-HER"
 
     def __init__(self, config):
-        DDPG_Agent.__init__(self, config)
+        DDPG.__init__(self, config)
         HER_Base.__init__(self, self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                           self.hyperparameters["HER_sample_proportion"])
 
