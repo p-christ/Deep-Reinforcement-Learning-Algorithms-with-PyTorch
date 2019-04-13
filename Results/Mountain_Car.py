@@ -68,7 +68,7 @@ config.hyperparameters = {
         "action_noise_std": 0.2,  # for TD3
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 20,
-        "learning_updates_per_learning_session": 3,
+        "learning_updates_per_learning_session": 10,
 
     }
 }
