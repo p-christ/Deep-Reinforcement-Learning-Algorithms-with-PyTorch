@@ -47,7 +47,8 @@ class Trainer(object):
             "PPO": "#5B2C6F",
             "DDPG": "#800000",
             "DQN-HER": "#008000",
-            "DDPG-HER": "#008000"
+            "DDPG-HER": "#008000",
+            "TD3": "#E74C3C"
         }
         return agent_to_color_dictionary
 

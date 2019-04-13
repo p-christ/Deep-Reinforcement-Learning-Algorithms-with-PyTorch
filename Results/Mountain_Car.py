@@ -60,7 +60,7 @@ config.hyperparameters = {
             "gradient_clipping_norm": 5
         },
 
-        "batch_size": 64,
+        "batch_size": 128,
         "discount_rate": 0.9,
         "mu": 0.0, #for O-H noise
         "theta": 0.15, #for O-H noise
