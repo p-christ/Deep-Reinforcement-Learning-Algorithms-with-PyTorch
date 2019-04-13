@@ -17,7 +17,7 @@ class TD3(DDPG):
                                            key_to_use="Critic", override_seed=self.config.seed + 1)
         self.critic_target_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                             key_to_use="Critic")
-        self.critic_target_2.load_state_dict(copy.deepcopy(self.critic_local.state_dict()))
+        self.critic_target_2.load_state_dict(copy.deepcopy(self.critic_local_2.state_dict()))
         self.critic_optimizer_2 = optim.Adam(self.critic_local_2.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
 
@@ -44,7 +44,9 @@ class TD3(DDPG):
 
     def critic_learn(self, states, actions, rewards, next_states, dones):
         """Runs a learning iteration for both the critics"""
-        critic_targets = self.compute_critic_values_for_next_states(next_states)
+        critic_targets_next =  self.compute_critic_values_for_next_states(next_states)
+        critic_targets = self.compute_critic_values_for_current_states(rewards, critic_targets_next, dones)
+
         critic_expected_1 = self.critic_local(torch.cat((states, actions), 1))
         critic_expected_2 = self.critic_local_2(torch.cat((states, actions), 1))
 

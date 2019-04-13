@@ -43,24 +43,24 @@ config.hyperparameters = {
     "Actor_Critic_Agents": {
         "Actor": {
             "learning_rate": 0.001,
-            "linear_hidden_units": [50, 50],
+            "linear_hidden_units": [20, 20],
             "final_layer_activation": "TANH",
             "batch_norm": False,
-            "tau": 0.01,
+            "tau": 0.005,
             "gradient_clipping_norm": 5
         },
 
         "Critic": {
             "learning_rate": 0.01,
-            "linear_hidden_units": [50, 50],
+            "linear_hidden_units": [20, 20],
             "final_layer_activation": "None",
             "batch_norm": False,
-            "buffer_size": 30000,
-            "tau": 0.01,
+            "buffer_size": 100000,
+            "tau": 0.005,
             "gradient_clipping_norm": 5
         },
 
-        "batch_size": 256,
+        "batch_size": 64,
         "discount_rate": 0.9,
         "mu": 0.0, #for O-H noise
         "theta": 0.15, #for O-H noise
