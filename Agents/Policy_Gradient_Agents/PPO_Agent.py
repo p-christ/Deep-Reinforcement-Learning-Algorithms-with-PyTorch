@@ -6,7 +6,6 @@ from torch import optim
 from Agents.Base_Agent import Base_Agent
 from Utilities.Parallel_Experience_Generator import Parallel_Experience_Generator
 from Utilities.Utility_Functions import normalise_rewards, create_actor_distribution
-from nn_builder.pytorch.NN import NN
 
 class PPO_Agent(Base_Agent):
     """Proximal Policy Optimization agent"""
