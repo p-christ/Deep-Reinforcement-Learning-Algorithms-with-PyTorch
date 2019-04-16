@@ -32,7 +32,8 @@ class Trainer(object):
             "Hill Climbing": "Stochastic_Policy_Search_Agents",
             "DDPG": "Actor_Critic_Agents",
             "DDPG-HER": "Actor_Critic_Agents",
-            "TD3": "Actor_Critic_Agents"
+            "TD3": "Actor_Critic_Agents",
+            "A2C": "Actor_Critic_Agents"
         }
         return agent_to_agent_group_dictionary
 

@@ -74,7 +74,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [TD3]# , DDPG, PPO]
+    AGENTS = [TD3, DDPG, PPO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

@@ -90,7 +90,7 @@ class DDPG(Base_Agent):
 
     def compute_critic_values_for_current_states(self, rewards, critic_targets_next, dones):
         """Computes the critic values for current states to be used in the loss for the critic"""
-        critic_targets_current = rewards + (self.hyperparameters["discount_rate"] * critic_targets_next * (1 - dones))
+        critic_targets_current = rewards + (self.hyperparameters["discount_rate"] * critic_targets_next * (1.0 - dones))
         return critic_targets_current
 
     def compute_expected_critic_values(self, states, actions):

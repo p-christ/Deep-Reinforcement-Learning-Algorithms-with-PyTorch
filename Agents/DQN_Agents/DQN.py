@@ -42,7 +42,7 @@ class DQN(Base_Agent):
 
     def make_epsilon_greedy_choice(self, action_values):
         """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
-        epsilon = self.hyperparameters["epsilon"] / (1.0 + (self.episode_number / self.hyperparameters["epsilon_decay_rate_denominator"]))
+        epsilon = self.get_updated_epsilon_exploration()
         if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 

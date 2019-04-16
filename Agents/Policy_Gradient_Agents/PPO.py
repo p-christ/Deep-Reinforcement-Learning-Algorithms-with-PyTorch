@@ -34,8 +34,9 @@ class PPO(Base_Agent):
 
     def step(self):
         """Runs a step for the PPO agent"""
-        self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = self.experience_generator.play_n_episodes(
-            self.hyperparameters["episodes_per_learning_round"])
+        exploration_epsilon = self.get_updated_epsilon_exploration()
+        self.many_episode_states, self.many_episode_actions, self.many_episode_rewards, _ = self.experience_generator.play_n_episodes(
+            self.hyperparameters["episodes_per_learning_round"], exploration_epsilon)
         self.episode_number += self.hyperparameters["episodes_per_learning_round"]
         self.policy_learn()
         self.update_learning_rate(self.hyperparameters["learning_rate"], self.policy_new_optimizer)

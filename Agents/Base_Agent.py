@@ -49,6 +49,7 @@ class Base_Agent(object):
         self.done = False
         self.total_episode_score_so_far = 0
         self.episode_states = []
+        self.episode_rewards = []
         self.episode_actions = []
         self.episode_next_states = []
         self.episode_dones = []
@@ -170,9 +171,19 @@ class Base_Agent(object):
         """Saves the recent experience to the memory buffer"""
         self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
 
-    def take_optimisation_step(self, optimizer, network, loss, clipping_norm):
+    def take_optimisation_step(self, optimizer, network, loss, clipping_norm, gradients_given=None):
         optimizer.zero_grad() #reset gradients to 0
-        loss.backward() #this calculates the gradients
+
+        if gradients_given is None:
+            loss.backward() #this calculates the gradients
+        else:
+            for ix, parameters in enumerate(network.parameters()):
+                for episode in range(len(gradients_given)):
+                    if episode == 0:
+                        parameters.grad = gradients_given[episode][ix]
+                    else:
+                        parameters.grad += gradients_given[episode][ix]
+
         torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
     
@@ -200,6 +211,11 @@ class Base_Agent(object):
                   columns_of_data_to_be_embedded=hyperparameters["columns_of_data_to_be_embedded"],
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],
                   random_seed=seed).to(self.device)
+
+    def get_updated_epsilon_exploration(self, epsilon=1.0):
+        """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""
+        epsilon = epsilon / (1.0 + (self.episode_number / self.hyperparameters["epsilon_decay_rate_denominator"]))
+        return epsilon
 
 
 

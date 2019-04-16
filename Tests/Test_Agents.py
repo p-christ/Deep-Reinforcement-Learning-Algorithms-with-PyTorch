@@ -5,7 +5,7 @@ from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_
 from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 from Environments.Bit_Flipping_Environment import Bit_Flipping_Environment
 from Agents.Policy_Gradient_Agents.PPO import PPO
-from Utilities.Trainer import Trainer
+from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 import numpy as np
