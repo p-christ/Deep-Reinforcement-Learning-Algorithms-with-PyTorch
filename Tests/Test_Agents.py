@@ -70,7 +70,7 @@ config.hyperparameters = {
         "mu": 0.0, #only required for continuous action games
         "theta": 0.0, #only required for continuous action games
         "sigma": 0.0, #only required for continuous action games
-        "noise_decay_denominator": 1 #only required for continuous action games
+        "epsilon_decay_rate_denominator": 1
     }
 }
 
