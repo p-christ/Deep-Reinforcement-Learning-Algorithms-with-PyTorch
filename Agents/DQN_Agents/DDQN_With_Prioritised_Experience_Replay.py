@@ -16,8 +16,6 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN):
         sampled_experiences, importance_sampling_weights = self.memory.sample()
         states, actions, rewards, next_states, dones = sampled_experiences
         loss, td_errors = self.compute_loss_and_td_errors(states, next_states, rewards, actions, dones, importance_sampling_weights)
-        if self.done: #we only update the learning rate at end of each episode
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
         self.soft_update_of_target_network(self.q_network_local, self.q_network_target, self.hyperparameters["tau"])
         self.memory.update_td_errors(td_errors.squeeze(1))

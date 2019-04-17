@@ -59,7 +59,8 @@ config.hyperparameters = {
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_denominator": 1
+            "epsilon_decay_denominator": 1000,
+            "discount_rate": 0.999
 
 
         },
@@ -77,7 +78,8 @@ config.hyperparameters = {
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_denominator": 1
+            "epsilon_decay_denominator": 1000,
+            "discount_rate": 0.999
 
         }
 

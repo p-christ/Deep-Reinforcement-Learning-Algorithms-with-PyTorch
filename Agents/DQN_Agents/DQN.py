@@ -16,6 +16,10 @@ class DQN(Base_Agent):
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
                                               lr=self.hyperparameters["learning_rate"])
 
+    def reset_game(self):
+        super(DQN, self).reset_game()
+        self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
+
     def step(self):
         """Runs a step within a game including a learning step if required"""
         while not self.done:
@@ -44,10 +48,7 @@ class DQN(Base_Agent):
         """Runs a learning iteration for the Q network"""
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences
-
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
-        if self.done: #we only update the learning rate at end of each episode
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
@@ -81,7 +82,7 @@ class DQN(Base_Agent):
 
     def locally_save_policy(self):
         """Saves the policy"""
-        torch.save(self.qnetwork_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
+        torch.save(self.q_network_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
 
     def time_for_q_network_to_learn(self):
         """Returns boolean indicating whether enough steps have been taken for learning to begin and there are

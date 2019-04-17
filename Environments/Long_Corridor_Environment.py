@@ -9,7 +9,7 @@ class Long_Corridor_Environment(Base_Environment):
     environment_name = "Long Corridor Environment"
 
     def __init__(self, num_states=6, stochasticity_of_action_right=0.5):
-        self.state = self.reset_environment()
+        self.reset_environment()
         self.next_state = None
         self.reward = None
         self.done = False
@@ -19,6 +19,14 @@ class Long_Corridor_Environment(Base_Environment):
         self.visited_final_state = False
         self.reward_if_visited_final_state = 1.0
         self.reward_if_havent_visited_final_state = 0.01
+
+    def reset_environment(self):
+        self.state = 1 #environment always starts in state 1
+        self.next_state = None
+        self.reward = None
+        self.done = False
+        self.visited_final_state = False
+        return np.array([self.state])
 
     def conduct_action(self, action):
         if type(action) is np.ndarray:
@@ -52,32 +60,25 @@ class Long_Corridor_Environment(Base_Environment):
             self.next_state = min(self.state + 1, self.num_states - 1)
 
     def get_state(self):
-        return np.array(self.state)
+        return np.array([self.state])
 
     def get_action_size(self):
         return 2
 
     def get_state_size(self):
-        return len(self.state)
+        return 1
 
     def get_num_possible_states(self):
         return self.num_states
 
     def get_next_state(self):
-        return np.array(self.next_state)
+        return np.array([self.next_state])
 
     def get_reward(self):
         return self.reward
 
     def get_done(self):
         return self.done
-
-    def reset_environment(self):
-        self.state = np.array([1]) #environment always starts in state 1
-        self.next_state = None
-        self.reward = None
-        self.done = False
-        return self.state
 
     def get_max_steps_per_episode(self):
         return 200

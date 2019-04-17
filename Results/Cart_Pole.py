@@ -33,7 +33,7 @@ config.hyperparameters = {
         "epsilon": 1.0,
         "epsilon_decay_rate_denominator": 3,
         "discount_rate": 0.99,
-        "tau": 0.1,
+        "tau": 0.01,
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.1,
         "incremental_td_error": 1e-8,

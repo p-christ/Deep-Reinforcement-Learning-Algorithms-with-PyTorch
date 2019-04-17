@@ -1,7 +1,10 @@
+import copy
+
 import torch
 import torch.optim as optim
 import numpy as np
 from Base_Agent import Base_Agent
+from DQN import DQN
 from Replay_Buffer import Replay_Buffer
 
 class h_DQN(Base_Agent):
@@ -16,18 +19,17 @@ class h_DQN(Base_Agent):
 
         print(self.hyperparameters)
 
-        self.controller_memory = Replay_Buffer(self.hyperparameters["CONTROLLER"]["buffer_size"],
-                                               self.hyperparameters["CONTROLLER"]["batch_size"], config.seed)
-        self.controller_q_network_local = self.create_NN(input_dim=self.state_size*2, output_dim=self.action_size, key_to_use="CONTROLLER")
-        self.controller_q_network_optimizer = optim.Adam(self.controller_q_network_local.parameters(),
-                                              lr=self.hyperparameters["CONTROLLER"]["learning_rate"])
+        self.controller_config = copy.deepcopy(config)
+        self.controller_config.hyperparameters = self.controller_config.hyperparameters["CONTROLLER"]
+        self.controller = DQN(self.controller_config)
+        self.controller.q_network_local = self.create_NN(input_dim=self.state_size*2, output_dim=self.action_size,
+                                                         key_to_use="CONTROLLER")
 
-        self.meta_controller_memory = Replay_Buffer(self.hyperparameters["META_CONTROLLER"]["buffer_size"],
-                                                    self.hyperparameters["META_CONTROLLER"]["batch_size"], config.seed)
-        self.meta_controller_q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.config.environment.get_num_possible_states(),
+        self.meta_controller_config = copy.deepcopy(config)
+        self.meta_controller_config.hyperparameters = self.meta_controller_config.hyperparameters["META_CONTROLLER"]
+        self.meta_controller = DQN(self.meta_controller_config)
+        self.meta_controller.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.environment.get_num_possible_states(),
                                                               key_to_use="META_CONTROLLER")
-        self.meta_controller_q_optimizer = optim.Adam(self.meta_controller_q_network_local.parameters(),
-                                              lr=self.hyperparameters["META_CONTROLLER"]["learning_rate"])
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -42,39 +44,33 @@ class h_DQN(Base_Agent):
         self.total_episode_score_so_far = 0
         self.meta_controller_steps = 0
 
+        self.update_learning_rate(self.controller_config.hyperparameters["learning_rate"], self.controller.q_network_optimizer)
+        self.update_learning_rate(self.meta_controller_config.hyperparameters["learning_rate"], self.meta_controller.q_network_optimizer)
+
+
     def step(self):
 
         while not self.episode_over:
             self.meta_controller_state = self.environment.get_state()
-            self.subgoal = self.pick_action(self.environment.get_state(), self.meta_controller_q_network_local, "META_CONTROLLER")
+            self.subgoal = self.pick_action(self.environment.get_state(), self.meta_controller.q_network_local, "META_CONTROLLER")
             self.subgoal_achieved = False
-            print("Meta controller goal ", self.subgoal)
-
             self.state = np.concatenate((self.environment.get_state(), np.array([self.subgoal])))
-            print("Self state ", self.state)
             self.cumulative_meta_controller_reward = 0
 
-            while not self.episode_over and not self.subgoal_achieved:
+            while not (self.episode_over or self.subgoal_achieved):
                 self.pick_and_conduct_controller_action()
                 self.update_data()
-
-                if self.time_to_learn(self.controller_memory, self.global_step_number, "CONTROLLER"): #means it is time to train controller
-                    self.q_network_learn(q_network=self.controller_q_network_local, optimizer=self.controller_q_network_optimizer,
-                                         replay_buffer=self.controller_memory, start_learning_rate=self.hyperparameters["CONTROLLER"]["learning_rate"])
-                self.save_experience(memory=self.controller_memory)
-                print("NEXT STATE ", self.environment.get_next_state())
+                if self.time_to_learn(self.controller.memory, self.global_step_number, "CONTROLLER"): #means it is time to train controller
+                    self.controller.q_network_learn()
+                self.save_experience(memory=self.controller.memory)
+                print("""Started in state {} did move {} to get new state {} -- goal {} -- inrinsic reward {} -- reward {}""".format(self.state, self.action,
+                                                                                                           self.next_state, self.subgoal,
+                                                                                                           self.reward, self.environment.get_reward()))
                 self.state = self.next_state #this is to set the state for the next iteration
                 self.global_step_number += 1
-
-            if self.time_to_learn(self.meta_controller_memory, self.meta_controller_steps, "META_CONTROLLER"):
-                self.q_network_learn(q_network=self.meta_controller_q_network_local,
-                                     optimizer=self.meta_controller_q_optimizer,
-                                     replay_buffer=self.meta_controller_memory,
-                                     start_learning_rate=self.hyperparameters["META_CONTROLLER"]["learning_rate"])
-            print("Final state ", self.environment.get_next_state())
-            print("Achieved goal or not ", self.reward)
-
-            self.save_experience(memory=self.meta_controller_memory,
+            if self.time_to_learn(self.meta_controller.memory, self.meta_controller_steps, "META_CONTROLLER"):
+                self.meta_controller.q_network_learn()
+            self.save_experience(memory=self.meta_controller.memory,
                                  experience=(self.meta_controller_state, self.subgoal, self.cumulative_meta_controller_reward,
                                              self.meta_controller_next_state, self.episode_over))
             self.meta_controller_steps += 1
@@ -94,22 +90,22 @@ class h_DQN(Base_Agent):
 
     def pick_and_conduct_controller_action(self):
         """Picks and conducts an action for controller"""
-        self.action = self.pick_action(state=self.state,q_network=self.controller_q_network_local, controller_name="CONTROLLER")
+        self.action = self.pick_action(state=self.state,q_network=self.controller.q_network_local, controller_name="CONTROLLER")
         self.conduct_action()
 
     def update_data(self):
         """Updates stored data for controller and meta-controller. It must occur in the order shown"""
         self.episode_over = self.environment.get_done()
-        print("EPISODE OVER ", self.episode_over)
         self.update_controller_data()
         self.update_meta_controller_data()
 
     def update_controller_data(self):
         """Gets the next state, reward and done information from the environment"""
-        self.next_state = np.concatenate((self.environment.get_next_state(), np.array([self.subgoal])))
-        self.reward = 1 if self.environment.get_next_state() == self.subgoal else 0
-        self.subgoal_achieved = self.environment.get_next_state() == self.subgoal
-        self.done = True if self.environment.get_next_state() == self.subgoal or self.episode_over else False
+        environment_next_state = self.environment.get_next_state()
+        self.next_state = np.concatenate((environment_next_state, np.array([self.subgoal])))
+        self.reward = 1 if environment_next_state[0] == self.subgoal else 0
+        self.subgoal_achieved = environment_next_state[0] == self.subgoal
+        self.done = True if environment_next_state[0] == self.subgoal or self.episode_over else False
 
     def update_meta_controller_data(self):
         """Updates data relating to meta controller"""
