@@ -164,7 +164,7 @@ class Base_Agent(object):
 
     def pick_and_conduct_action(self):
         """Picks and conducts an action"""
-        self.action = self.pick_action()
+1        self.action = self.pick_action()
         self.conduct_action()
 
     def save_experience(self):
