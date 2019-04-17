@@ -51,6 +51,9 @@ class Long_Corridor_Environment(Base_Environment):
         else:
             self.next_state = min(self.state + 1, self.num_states - 1)
 
+    def get_state(self):
+        return self.state
+
     def get_action_size(self):
         return 2
 
