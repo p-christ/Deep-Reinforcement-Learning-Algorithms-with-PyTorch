@@ -167,10 +167,11 @@ class Base_Agent(object):
         self.action = self.pick_action()
         self.conduct_action()
 
-    def save_experience(self, memory=None):
+    def save_experience(self, memory=None, experience=None):
         """Saves the recent experience to the memory buffer"""
         if memory is None: memory = self.memory
-        memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
+        if experience is None: experience = self.state, self.action, self.reward, self.next_state, self.done
+        memory.add_experience(*experience)
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm, gradients_given=None):
         optimizer.zero_grad() #reset gradients to 0
@@ -215,10 +216,16 @@ class Base_Agent(object):
 
     def get_updated_epsilon_exploration(self, epsilon=1.0, epsilon_decay_denominator=None):
         """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""
-        if epsilon_decay_denominator is None:
-            epsilon_decay_denominator = self.hyperparameters["epsilon_decay_rate_denominator"]
+        if epsilon_decay_denominator is None: epsilon_decay_denominator = self.hyperparameters["epsilon_decay_rate_denominator"]
         epsilon = epsilon / (1.0 + (self.episode_number / epsilon_decay_denominator))
         return epsilon
+
+    def make_epsilon_greedy_choice(self, action_values, action_size=None, epsilon_decay_denominator=None):
+        """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
+        if action_size is None: action_size = self.action_size
+        epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
+        if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
+        return random.choice(np.arange(action_size))
 
 
 

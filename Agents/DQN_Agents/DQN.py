@@ -40,12 +40,6 @@ class DQN(Base_Agent):
         action = self.make_epsilon_greedy_choice(action_values)
         return action
 
-    def make_epsilon_greedy_choice(self, action_values, epsilon_decay_denominator=None):
-        """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
-        epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
-        if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
-        return random.choice(np.arange(self.action_size))
-
     def q_network_learn(self, experiences=None):
         """Runs a learning iteration for the Q network"""
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
