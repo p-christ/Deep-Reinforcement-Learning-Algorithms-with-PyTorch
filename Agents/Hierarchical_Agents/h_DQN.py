@@ -1,11 +1,10 @@
 import torch
 import torch.optim as optim
 import numpy as np
-from Agents.DQN_Agents.DQN import DQN
 from Base_Agent import Base_Agent
 from Replay_Buffer import Replay_Buffer
 
-class h_DQN(DQN):
+class h_DQN(Base_Agent):
     """Implements hierarchical RL agent h-DQN from paper Kulkarni et al. (2016) https://arxiv.org/abs/1604.06057?context=stat
     Note that we inherit from DQN which predominantly takes care of handling the controller. For the meta-controller we write extra code.
     Note also that this algorithm only works when we have discrete states and discrete actions currently because otherwise
@@ -14,7 +13,6 @@ class h_DQN(DQN):
     agent_name = "h_DQN"
 
     def __init__(self, config):
-
         Base_Agent.__init__(self, config)
 
         print(self.hyperparameters)
