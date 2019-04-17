@@ -26,6 +26,7 @@ Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous ac
 
 1. *Bit Flipping Game* (as described in [Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf))
 1. *Four Rooms Game* (as described in [Sutton et al. 1998](http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf))
+1. *Long Corridor Game* (as described in [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf)
 
 ## **Results**
 

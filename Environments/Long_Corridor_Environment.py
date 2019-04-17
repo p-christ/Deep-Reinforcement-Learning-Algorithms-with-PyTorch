@@ -1,10 +1,5 @@
 import random
-
-import gym
 import numpy as np
-from pyvirtualdisplay import Display
-import matplotlib.pyplot as plt
-
 from Environments.Base_Environment import Base_Environment
 
 class Long_Corridor_Environment(Base_Environment):
@@ -33,16 +28,17 @@ class Long_Corridor_Environment(Base_Environment):
         if action == 0: self.move_left()
         else: self.move_right()
 
+        self.update_done_reward_and_visited_final_state()
+        self.state = self.next_state
+
+    def update_done_reward_and_visited_final_state(self):
         if self.next_state == 0:
             self.done = True
             if self.visited_final_state: self.reward = self.reward_if_visited_final_state
             else: self.reward = self.reward_if_havent_visited_final_state
         else:
             self.reward = 0
-
-        if self.next_state == self.num_states - 1:
-            self.visited_final_state = True
-        self.state = self.next_state
+        if self.next_state == self.num_states - 1: self.visited_final_state = True
 
     def move_left(self):
         """Moves left in environment"""

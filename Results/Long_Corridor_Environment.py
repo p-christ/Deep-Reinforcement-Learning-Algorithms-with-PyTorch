@@ -1,29 +1,6 @@
-# In
-# our
-# experiments, all  parameters
-# are
-# annealed
-# from
-# 1
-# to
-# 0.1
-# over
-# 50, 000
-# steps.The
-# learning
-# rate is set
-# to
-# 0.00025
-
-
-from A2C import A2C
-from Agents.Policy_Gradient_Agents.PPO import PPO
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DDQN import DDQN
-from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN import DQN
-from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 from Environments.Long_Corridor_Environment import Long_Corridor_Environment
 
 config = Config()
