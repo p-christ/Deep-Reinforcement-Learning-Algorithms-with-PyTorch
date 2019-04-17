@@ -52,7 +52,7 @@ class Long_Corridor_Environment(Base_Environment):
             self.next_state = min(self.state + 1, self.num_states - 1)
 
     def get_state(self):
-        return self.state
+        return np.array(self.state)
 
     def get_action_size(self):
         return 2
@@ -74,6 +74,9 @@ class Long_Corridor_Environment(Base_Environment):
 
     def reset_environment(self):
         self.state = np.array([1]) #environment always starts in state 1
+        self.next_state = None
+        self.reward = None
+        self.done = False
         return self.state
 
     def get_max_steps_per_episode(self):

@@ -40,6 +40,9 @@ class Four_Rooms_Environment(Base_Environment):
         self.desired_goal = [self.location_to_state(self.current_goal_location)]
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
+        self.next_state = None
+        self.reward = None
+        self.done = False
         self.achieved_goal = self.state[:self.state_only_dimension]
         return np.array(self.state)
 

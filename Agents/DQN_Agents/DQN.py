@@ -28,32 +28,38 @@ class DQN(Base_Agent):
             self.global_step_number += 1
         self.episode_number += 1
 
-    def pick_action(self):
+    def pick_action(self, q_network=None, epsilon_decay_denominator=None):
         """Uses the local Q network and an epsilon greedy policy to pick an action"""
         # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
         # a "fake" dimension to make it a mini-batch rather than a single observation
+        if q_network is None: q_network = self.q_network_local
         state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
-        self.q_network_local.eval() #puts network in evaluation mode
+        q_network.eval() #puts network in evaluation mode
+        print("STATE ", state)
         with torch.no_grad():
-            action_values = self.q_network_local(state)
-        self.q_network_local.train() #puts network back in training mode
-        action = self.make_epsilon_greedy_choice(action_values)
+            action_values = q_network(state)
+        q_network.train() #puts network back in training mode
+        action = self.make_epsilon_greedy_choice(action_values, epsilon_decay_denominator=epsilon_decay_denominator)
         return action
 
-    def make_epsilon_greedy_choice(self, action_values):
+    def make_epsilon_greedy_choice(self, action_values, epsilon_decay_denominator=None):
         """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
-        epsilon = self.get_updated_epsilon_exploration()
+        epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
         if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
         return random.choice(np.arange(self.action_size))
 
-    def q_network_learn(self, experiences=None):
+    def q_network_learn(self, experiences=None, q_network=None, optimizer=None, replay_buffer=None, start_learning_rate=None):
         """Runs a learning iteration for the Q network"""
-        if not experiences: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+        if start_learning_rate is None: start_learning_rate = self.hyperparameters["learning_rate"]
+        if q_network is None: q_network = self.q_network_local
+        if optimizer is None: optimizer = self.q_network_optimizer
+        if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences(replay_buffer=replay_buffer) #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences
+
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
         if self.done: #we only update the learning rate at end of each episode
-            self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
-        self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
+            self.update_learning_rate(start_learning_rate, optimizer)
+        self.take_optimisation_step(optimizer, q_network, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
         """Computes the loss required to train the Q network"""
@@ -97,8 +103,9 @@ class DQN(Base_Agent):
         """Returns boolean indicating whether enough steps have been taken for learning to begin"""
         return self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
-    def sample_experiences(self):
+    def sample_experiences(self, replay_buffer=None):
         """Draws a random sample of experience from the memory buffer"""
-        experiences = self.memory.sample()
+        if replay_buffer is None: replay_buffer = self.memory
+        experiences = replay_buffer.sample()
         states, actions, rewards, next_states, dones = experiences
         return states, actions, rewards, next_states, dones

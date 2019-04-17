@@ -33,7 +33,8 @@ class Trainer(object):
             "DDPG": "Actor_Critic_Agents",
             "DDPG-HER": "Actor_Critic_Agents",
             "TD3": "Actor_Critic_Agents",
-            "A2C": "Actor_Critic_Agents"
+            "A2C": "Actor_Critic_Agents",
+            "h_DQN": "h_DQN"
         }
         return agent_to_agent_group_dictionary
 

@@ -167,9 +167,10 @@ class Base_Agent(object):
         self.action = self.pick_action()
         self.conduct_action()
 
-    def save_experience(self):
+    def save_experience(self, memory=None):
         """Saves the recent experience to the memory buffer"""
-        self.memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
+        if memory is None: memory = self.memory
+        memory.add_experience(self.state, self.action, self.reward, self.next_state, self.done)
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm, gradients_given=None):
         optimizer.zero_grad() #reset gradients to 0
@@ -212,9 +213,11 @@ class Base_Agent(object):
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],
                   random_seed=seed).to(self.device)
 
-    def get_updated_epsilon_exploration(self, epsilon=1.0):
+    def get_updated_epsilon_exploration(self, epsilon=1.0, epsilon_decay_denominator=None):
         """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""
-        epsilon = epsilon / (1.0 + (self.episode_number / self.hyperparameters["epsilon_decay_rate_denominator"]))
+        if epsilon_decay_denominator is None:
+            epsilon_decay_denominator = self.hyperparameters["epsilon_decay_rate_denominator"]
+        epsilon = epsilon / (1.0 + (self.episode_number / epsilon_decay_denominator))
         return epsilon
 
 
