@@ -18,7 +18,7 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. *PPO* ([Schulman et al. 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
 1. *DQN with Hindsight Experience Replay (DQN-HER)* ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf))
 1. *DDPG with Hindsight Experience Replay (DDPG-HER)* ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
-1. *hierarchical-DQN (h-DQN)* ([Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf))
+1. *Hierarchical-DQN (h-DQN)* ([Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf))
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
 Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C, Soft Actor-Critic and hierarchical RL algorithms soon.

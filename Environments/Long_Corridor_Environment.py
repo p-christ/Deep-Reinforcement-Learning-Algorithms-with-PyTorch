@@ -90,5 +90,5 @@ class Long_Corridor_Environment(Base_Environment):
         return 1.0
 
     def get_rolling_period_to_calculate_score_over(self):
-        return 20
+        return 100
 

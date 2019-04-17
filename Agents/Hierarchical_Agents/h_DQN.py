@@ -85,7 +85,7 @@ class h_DQN(Base_Agent):
         with torch.no_grad():
             action_values = q_network(state)
         q_network.train() #puts network back in training mode
-        action = self.make_epsilon_greedy_choice(action_values, action_size, self.hyperparameters[controller_name]["epsilon_decay_denominator"])
+        action = self.make_epsilon_greedy_choice(action_values, action_size, self.hyperparameters[controller_name]["epsilon_decay_rate_denominator"])
         return action
 
     def pick_and_conduct_controller_action(self):

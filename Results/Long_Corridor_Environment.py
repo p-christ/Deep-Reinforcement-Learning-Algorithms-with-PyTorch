@@ -7,7 +7,7 @@ from Environments.Long_Corridor_Environment import Long_Corridor_Environment
 config = Config()
 config.seed = 1
 config.environment = Long_Corridor_Environment()
-config.num_episodes_to_run = 1500
+config.num_episodes_to_run = 5000
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
@@ -21,26 +21,6 @@ config.randomise_random_seed = True
 config.save_model = False
 
 config.hyperparameters = {
-    "DQN_Agents": {
-        "learning_rate": 0.00025,
-        "batch_size": 128,
-        "buffer_size": 40000,
-        "epsilon": 1.0,
-        "epsilon_decay_rate_denominator": 1000,
-        "discount_rate": 0.99,
-        "tau": 0.1,
-        "alpha_prioritised_replay": 0.6,
-        "beta_prioritised_replay": 0.1,
-        "incremental_td_error": 1e-8,
-        "update_every_n_steps": 3,
-        "linear_hidden_units": [10, 10],
-        "final_layer_activation": "None",
-        "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.get_num_possible_states(), max(4, int(config.environment.get_num_possible_states() / 10.0))]],
-        "batch_norm": False,
-        "gradient_clipping_norm": 5
-    },
-
 
     "h_DQN": {
 
@@ -54,19 +34,15 @@ config.hyperparameters = {
             "embedding_dimensions": [[config.environment.get_num_possible_states(),
                                       max(4, int(config.environment.get_num_possible_states() / 10.0))],
                                      [config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]
-                                     ],
+                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_denominator": 1000,
+            "epsilon_decay_rate_denominator": 1000,
             "discount_rate": 0.999
-
-
         },
 
         "META_CONTROLLER": {
-
             "batch_size": 128,
             "learning_rate": 0.00025,
             "buffer_size": 30000,
@@ -78,17 +54,16 @@ config.hyperparameters = {
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_denominator": 1000,
+            "epsilon_decay_rate_denominator": 1000,
             "discount_rate": 0.999
-
         }
-
     }
+                }
 
-}
+config.hyperparameters["DQN_Agents"] =  config.hyperparameters["h_DQN"]["META_CONTROLLER"]
 
 if __name__ == "__main__":
-    AGENTS = [h_DQN]
+    AGENTS = [DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
