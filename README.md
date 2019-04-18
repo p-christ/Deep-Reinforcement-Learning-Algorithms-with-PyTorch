@@ -57,7 +57,8 @@ Below shows the performance of DQN and the algorithm hierarchical-DQN from [Kulk
 on the Long Corridor environment also explained in [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf). The environment
 requires the agent to go to the end of a corridor before coming back in order to receive a larger reward. This delayed 
 gratification and the aliasing of states makes it a somewhat impossible game for DQN to learn but if we introduce a 
-meta-controller (as in h-DQN) which directs a lower-level controller how to behave we are able to make progress:
+meta-controller (as in h-DQN) which directs a lower-level controller how to behave we are able to make more progress. This 
+aligns with the results found in the paper. 
 
 ![h-DQN Long Corridor](Results/Data_and_Graphs/Long_Corridor_Graph.png)
  
