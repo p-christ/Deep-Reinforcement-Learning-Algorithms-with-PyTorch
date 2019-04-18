@@ -7,7 +7,14 @@ from PPO import PPO
 
 class SNNHRL(Base_Agent):
     """Implements the hierarchical RL agent that uses stochastic neural networks (SNN) from the paper Florensa et al. 2017
-    https://arxiv.org/pdf/1704.03012.pdf"""
+    https://arxiv.org/pdf/1704.03012.pdf
+
+    Works by:
+    1) Creating a pre-training environment within which the skill_agent can learn for some period of time
+    2) Then skill_agent is frozen
+    3) Then we train a manager agent that chooses which of the pre-trained skills to let act for it for some period of time
+
+    """
     agent_name = "SNNHRL"
 
     def __init__(self, config):
@@ -22,7 +29,10 @@ class SNNHRL(Base_Agent):
 
         self.skill = 10
 
-        self.env_parameters = config.env_parameters
+        if config.env_parameters is None: self.env_parameters = {}
+        else: self.env_parameters = config.env_parameters
+
+
 
 
         self.create_skill_learning_environment()
@@ -46,7 +56,7 @@ class SNNHRL(Base_Agent):
         class skills_env(environment_class):
 
             def __init__(self, meta_agent):
-                environment_class.__init__(self, **meta_agent.env_parameters)  #  need to change so accepts environment parameters like stochasticity...
+                environment_class.__init__(self, **meta_agent.env_parameters)
                 self.meta_agent = meta_agent
 
                 print(self.meta_agent.skill)

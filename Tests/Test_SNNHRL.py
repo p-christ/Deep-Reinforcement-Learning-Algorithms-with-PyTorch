@@ -1,10 +1,7 @@
 """Tests for the agent SNNHRL in the Agents folder"""
-from Bit_Flipping_Environment import Bit_Flipping_Environment
-from Hierarchical_Agents.SNNHRL import SNNHRL
-from Trainer import Trainer
+from Environments.Bit_Flipping_Environment import Bit_Flipping_Environment
+from Agents.Hierarchical_Agents.SNNHRL import SNNHRL
 from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DQN import DQN
-from Agents.Hierarchical_Agents.h_DQN import h_DQN
 from Environments.Long_Corridor_Environment import Long_Corridor_Environment
 import numpy as np
 
