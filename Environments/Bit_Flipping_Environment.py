@@ -54,7 +54,7 @@ class Bit_Flipping_Environment(Base_Environment):
         return len(self.state)
 
     def get_state(self):
-        return self.state
+        return np.array(self.state)
 
     def get_next_state(self):
         return np.array(self.next_state)

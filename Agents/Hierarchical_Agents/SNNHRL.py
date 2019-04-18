@@ -21,7 +21,13 @@ class SNNHRL(Base_Agent):
         # self.skill_agent = PPO(self.skill_agent_config)
 
         self.skill = 10
+
+        self.env_parameters = config.env_parameters
+
+
         self.create_skill_learning_environment()
+
+
 
 
 
@@ -31,29 +37,59 @@ class SNNHRL(Base_Agent):
 
     def create_skill_learning_environment(self):
 
-        environment = self.skill_agent_config.environment
-
-        print(environment.get_state_size())
-
+        meta_agent = self
+        environment_class = self.environment.__class__
 
 
-        # state size...
-        environment.get_state_size = lambda : self.environment.get_state_size() + 1
+        print("Environment class ", environment_class)
 
-        print(environment.get_state_size())
+        class skills_env(environment_class):
 
-        print(environment.get_state())
+            def __init__(self, meta_agent):
+                environment_class.__init__(self, **meta_agent.env_parameters)  #  need to change so accepts environment parameters like stochasticity...
+                self.meta_agent = meta_agent
+
+                print(self.meta_agent.skill)
+
+            def get_state_size(self):
+                return super().get_state_size() + 1
+
+            def get_state(self):
+                return np.concatenate((super().get_state(), np.array([self.meta_agent.skill])))
 
 
-        print(np.array(environment.state))
-        print(np.array([self.skill]))
 
-        environment.get_state = lambda : np.concatenate((np.array([environment.state]), np.array([self.skill])))
 
-        print(environment.get_state())
-
-        environment.get_next_state = lambda : np.concatenate((self.environment.get_next_state(), np.array([skill])))
-
+        self.skill_agent_config.environment = skills_env(meta_agent)
+        # agent.
+        #
+        # new_skills_env = skills_env()
+        #
+        #
+        #
+        # environment = self.skill_agent_config.environment
+        #
+        # print(environment.get_state_size())
+        #
+        #
+        #
+        # # state size...
+        # environment.get_state_size = lambda : self.environment.get_state_size() + 1
+        #
+        # print(environment.get_state_size())
+        #
+        # print(environment.get_state())
+        #
+        #
+        # print(np.array(environment.state))
+        # print(np.array([self.skill]))
+        #
+        # environment.get_state = lambda : np.concatenate((np.array([environment.state]), np.array([self.skill])))
+        #
+        # print(environment.get_state())
+        #
+        # environment.get_next_state = lambda : np.concatenate((self.environment.get_next_state(), np.array([skill])))
+        #
 
 
 
@@ -93,69 +129,69 @@ class SNNHRL(Base_Agent):
     #     # latent code sampled according to skill probabilities and fed into SNN which then acts in world for T steps
     #     # manager uses PPO to learn
 
-
-from Trainer import Trainer
-from Utilities.Data_Structures.Config import Config
-from Agents.DQN_Agents.DQN import DQN
-from Agents.Hierarchical_Agents.h_DQN import h_DQN
-from Environments.Long_Corridor_Environment import Long_Corridor_Environment
-config = Config()
-config.seed = 1
-config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.5)
-config.num_episodes_to_run = 10000
-config.file_to_save_data_results = None
-config.file_to_save_results_graph = None
-config.show_solution_score = False
-config.visualise_individual_results = False
-config.visualise_overall_agent_results = True
-config.standard_deviation_results = 1.0
-config.runs_per_agent = 3
-config.use_GPU = False
-config.overwrite_existing_results_file = False
-config.randomise_random_seed = True
-config.save_model = False
-
-config.hyperparameters = {
-
-    "SNNHRL": {
-        "SKILL_AGENT": {
-            "num_skills": 10,
-            "batch_size": 256,
-            "learning_rate": 0.01,
-            "buffer_size": 40000,
-            "linear_hidden_units": [20, 10],
-            "final_layer_activation": "None",
-            "columns_of_data_to_be_embedded": [0, 1],
-            "embedding_dimensions": [[config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))],
-                                     [config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
-            "batch_norm": False,
-            "gradient_clipping_norm": 5,
-            "update_every_n_steps": 1,
-            "epsilon_decay_rate_denominator": 1500,
-            "discount_rate": 0.999,
-            "learning_iterations": 1
-        },
-        "META_CONTROLLER": {
-            "batch_size": 256,
-            "learning_rate": 0.001,
-            "buffer_size": 40000,
-            "linear_hidden_units": [20, 10],
-            "final_layer_activation": "None",
-            "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
-            "batch_norm": False,
-            "gradient_clipping_norm": 5,
-            "update_every_n_steps": 1,
-            "epsilon_decay_rate_denominator": 2500,
-            "discount_rate": 0.999,
-            "learning_iterations": 1
-        }
-    }
-}
-
-config.hyperparameters = config.hyperparameters["SNNHRL"]
-
-agent = SNNHRL(config)
+#
+# from Trainer import Trainer
+# from Utilities.Data_Structures.Config import Config
+# from Agents.DQN_Agents.DQN import DQN
+# from Agents.Hierarchical_Agents.h_DQN import h_DQN
+# from Environments.Long_Corridor_Environment import Long_Corridor_Environment
+# config = Config()
+# config.seed = 1
+# config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.5)
+# config.num_episodes_to_run = 10000
+# config.file_to_save_data_results = None
+# config.file_to_save_results_graph = None
+# config.show_solution_score = False
+# config.visualise_individual_results = False
+# config.visualise_overall_agent_results = True
+# config.standard_deviation_results = 1.0
+# config.runs_per_agent = 3
+# config.use_GPU = False
+# config.overwrite_existing_results_file = False
+# config.randomise_random_seed = True
+# config.save_model = False
+#
+# config.hyperparameters = {
+#
+#     "SNNHRL": {
+#         "SKILL_AGENT": {
+#             "num_skills": 10,
+#             "batch_size": 256,
+#             "learning_rate": 0.01,
+#             "buffer_size": 40000,
+#             "linear_hidden_units": [20, 10],
+#             "final_layer_activation": "None",
+#             "columns_of_data_to_be_embedded": [0, 1],
+#             "embedding_dimensions": [[config.environment.get_num_possible_states(),
+#                                       max(4, int(config.environment.get_num_possible_states() / 10.0))],
+#                                      [config.environment.get_num_possible_states(),
+#                                       max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+#             "batch_norm": False,
+#             "gradient_clipping_norm": 5,
+#             "update_every_n_steps": 1,
+#             "epsilon_decay_rate_denominator": 1500,
+#             "discount_rate": 0.999,
+#             "learning_iterations": 1
+#         },
+#         "META_CONTROLLER": {
+#             "batch_size": 256,
+#             "learning_rate": 0.001,
+#             "buffer_size": 40000,
+#             "linear_hidden_units": [20, 10],
+#             "final_layer_activation": "None",
+#             "columns_of_data_to_be_embedded": [0],
+#             "embedding_dimensions": [[config.environment.get_num_possible_states(),
+#                                       max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+#             "batch_norm": False,
+#             "gradient_clipping_norm": 5,
+#             "update_every_n_steps": 1,
+#             "epsilon_decay_rate_denominator": 2500,
+#             "discount_rate": 0.999,
+#             "learning_iterations": 1
+#         }
+#     }
+# }
+#
+# config.hyperparameters = config.hyperparameters["SNNHRL"]
+#
+# agent = SNNHRL(config)

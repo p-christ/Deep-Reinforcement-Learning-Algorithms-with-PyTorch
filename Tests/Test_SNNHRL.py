@@ -18,7 +18,6 @@ config.hyperparameters = {
 }
 
 
-
 def test_skills_environment_state_size_change():
     """Tests whether the change to the state_size for the skill environment occurs correctly"""
     config.environment = Long_Corridor_Environment()
@@ -33,6 +32,8 @@ def test_skills_environment_state_size_change():
 def test_skills_environment_get_state_change():
     """Tests whether the change to the get_state for the skill environment occurs correctly"""
     config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.0)
+    config.env_parameters = {"stochasticity_of_action_right": 0.0}
+
     agent = SNNHRL(config)
     assert np.array_equal(agent.skill_agent_config.environment.get_state(), np.array([1, 10]))
 
@@ -42,12 +43,27 @@ def test_skills_environment_get_state_change():
     agent.skill_agent_config.environment.conduct_action(1)
     assert np.array_equal(agent.skill_agent_config.environment.get_state(), np.array([2, 12]))
 
+    agent.skill_agent_config.environment.conduct_action(1)
+    agent.skill_agent_config.environment.conduct_action(1)
+    agent.skill_agent_config.environment.conduct_action(1)
+    assert np.array_equal(agent.skill_agent_config.environment.get_state(), np.array([5, 12]))
+
     config.environment = Bit_Flipping_Environment()
+    config.env_parameters = {}
     agent = SNNHRL(config)
 
-    assert np.array_equal(agent.skill_agent_config.environment.get_state(), np.concatenate((agent.skill_agent_config.environment.get_state(), np.array([12]))))
+    for skill in [10, 251351, -2414]:
+        agent.skill = skill
+        state = agent.skill_agent_config.environment.get_state()
+        assert state[-1] == skill
+        for row in range(state.shape[0]):
+            if row != state.shape[0] - 1:
+                assert state[row] in [0, 1]
 
 
+
+    #
+    #
 
     # config.environment = Bit_Flipping_Environment()
     # agent = SNNHRL(config)
