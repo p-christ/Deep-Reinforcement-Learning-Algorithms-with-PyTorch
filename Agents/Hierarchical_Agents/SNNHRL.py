@@ -29,8 +29,7 @@ class SNNHRL(Base_Agent):
 
         self.skill = 10
 
-        if config.env_parameters is None: self.env_parameters = {}
-        else: self.env_parameters = config.env_parameters
+        self.env_parameters = config.env_parameters
 
 
 
@@ -67,6 +66,8 @@ class SNNHRL(Base_Agent):
             def get_state(self):
                 return np.concatenate((super().get_state(), np.array([self.meta_agent.skill])))
 
+            def get_next_state(self):
+                return np.concatenate((super().get_next_state(), np.array([self.meta_agent.skill])))
 
 
 
