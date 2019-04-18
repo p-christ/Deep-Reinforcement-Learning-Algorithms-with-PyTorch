@@ -26,17 +26,18 @@ class DQN(Base_Agent):
             self.pick_and_conduct_action()
             self.update_next_state_reward_done_and_score()
             if self.time_for_q_network_to_learn():
-                self.q_network_learn()
+                self.learn()
             self.save_experience()
             self.state = self.next_state #this is to set the state for the next iteration
             self.global_step_number += 1
         self.episode_number += 1
 
-    def pick_action(self):
+    def pick_action(self, state=None):
         """Uses the local Q network and an epsilon greedy policy to pick an action"""
         # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
         # a "fake" dimension to make it a mini-batch rather than a single observation
-        state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
+        if state is None: state = self.state
+        state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
         self.q_network_local.eval() #puts network in evaluation mode
         with torch.no_grad():
             action_values = self.q_network_local(state)
@@ -44,7 +45,7 @@ class DQN(Base_Agent):
         action = self.make_epsilon_greedy_choice(action_values)
         return action
 
-    def q_network_learn(self, experiences=None):
+    def learn(self, experiences=None):
         """Runs a learning iteration for the Q network"""
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences

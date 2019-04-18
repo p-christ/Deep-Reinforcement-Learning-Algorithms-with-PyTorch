@@ -19,6 +19,9 @@ class Fetch_Reach_Environment(Base_Environment):
         self.step_reward_for_not_achieving_goal = -1
 
     def conduct_action(self, action):
+        if len(action.shape) == 2:
+            assert action.shape[0] == 1
+            action = action[0]
         self.state_information, self.reward, self.done, self.info = self.game_environment.step(action)
         self.desired_goal = self.state_information["desired_goal"]
         self.achieved_goal = self.state_information["achieved_goal"]

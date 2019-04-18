@@ -220,12 +220,11 @@ class Base_Agent(object):
         epsilon = epsilon / (1.0 + (self.episode_number / epsilon_decay_denominator))
         return epsilon
 
-    def make_epsilon_greedy_choice(self, action_values, action_size=None, epsilon_decay_denominator=None):
+    def make_epsilon_greedy_choice(self, action_values, epsilon_decay_denominator=None):
         """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
-        if action_size is None: action_size = self.action_size
         epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
         if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
-        return random.choice(np.arange(action_size))
+        return random.choice(np.arange(action_values.shape[1]))
 
 
 

@@ -16,7 +16,7 @@ class DQN_HER(DQN, HER_Base):
             self.pick_and_conduct_action()
             self.update_next_state_reward_done_and_score()
             if self.time_for_q_network_to_learn():
-                self.q_network_learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
+                self.learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
             self.track_episodes_data()
             self.save_experience()
             if self.done: self.save_alternative_experience()

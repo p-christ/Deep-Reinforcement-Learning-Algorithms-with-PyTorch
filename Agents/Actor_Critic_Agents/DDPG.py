@@ -53,7 +53,7 @@ class DDPG(Base_Agent):
 
     def pick_action(self):
         """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
-        state = torch.from_numpy(self.state).float().to(self.device)
+        state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
         self.actor_local.eval()
         with torch.no_grad():
             action = self.actor_local(state).cpu().data.numpy()

@@ -38,8 +38,9 @@ config.hyperparameters = {
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_rate_denominator": 1000,
-            "discount_rate": 0.999
+            "epsilon_decay_rate_denominator": 200,
+            "discount_rate": 0.999,
+            "learning_iterations": 1
         },
 
         "META_CONTROLLER": {
@@ -54,8 +55,9 @@ config.hyperparameters = {
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
-            "epsilon_decay_rate_denominator": 1000,
-            "discount_rate": 0.999
+            "epsilon_decay_rate_denominator": 200,
+            "discount_rate": 0.999,
+            "learning_iterations": 5
         }
     }
                 }

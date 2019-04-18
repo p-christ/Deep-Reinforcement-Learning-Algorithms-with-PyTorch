@@ -11,9 +11,9 @@ class DQN_With_Fixed_Q_Targets(DQN):
         self.q_network_target = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
         self.q_network_target.load_state_dict(copy.deepcopy(self.q_network_local.state_dict()))
 
-    def q_network_learn(self, experiences=None):
+    def learn(self, experiences=None):
         """Runs a learning iteration for the Q network"""
-        super(DQN_With_Fixed_Q_Targets, self).q_network_learn(experiences=experiences)
+        super(DQN_With_Fixed_Q_Targets, self).learn(experiences=experiences)
         self.soft_update_of_target_network(self.q_network_local, self.q_network_target,
                                            self.hyperparameters["tau"])  # Update the target network
 

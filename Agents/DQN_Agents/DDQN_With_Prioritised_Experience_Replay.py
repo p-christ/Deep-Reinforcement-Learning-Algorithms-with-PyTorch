@@ -11,7 +11,7 @@ class DDQN_With_Prioritised_Experience_Replay(DDQN):
         DDQN.__init__(self, config)
         self.memory = Prioritised_Replay_Buffer(self.hyperparameters, config.seed)
 
-    def q_network_learn(self):
+    def learn(self):
         """Runs a learning iteration for the Q network after sampling from the replay buffer in a prioritised way"""
         sampled_experiences, importance_sampling_weights = self.memory.sample()
         states, actions, rewards, next_states, dones = sampled_experiences
