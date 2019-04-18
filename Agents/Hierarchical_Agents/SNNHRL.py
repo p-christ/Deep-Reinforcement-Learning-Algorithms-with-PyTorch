@@ -1,8 +1,8 @@
 import copy
 import random
 import numpy as np
-from Base_Agent import Base_Agent
-from PPO import PPO
+from Agents.Base_Agent import Base_Agent
+from Agents.Policy_Gradient_Agents.PPO import PPO
 
 
 class SNNHRL(Base_Agent):
