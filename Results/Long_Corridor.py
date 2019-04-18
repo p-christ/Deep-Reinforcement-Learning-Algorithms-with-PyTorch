@@ -3,7 +3,6 @@ from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 from Agents.Hierarchical_Agents.h_DQN import h_DQN
 from Environments.Long_Corridor_Environment import Long_Corridor_Environment
-
 config = Config()
 config.seed = 1
 config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.5)
@@ -66,7 +65,6 @@ if __name__ == "__main__":
     AGENTS = [h_DQN, DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
-
 
 
 

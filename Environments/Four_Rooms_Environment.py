@@ -206,8 +206,8 @@ class Four_Rooms_Environment(Base_Environment):
     def get_step_reward_for_not_achieving_goal(self):
         return self.step_reward_for_not_achieving_goal
 
-
     def get_action_size(self):
+        """In this discrete setting this equals the number of actions we can take"""
         return 4
 
     def get_action_types(self):
@@ -221,6 +221,9 @@ class Four_Rooms_Environment(Base_Environment):
 
     def get_next_state(self):
         return np.array(self.next_state)
+
+    def get_state(self):
+        return np.array(self.state)
 
     def get_reward(self):
         return self.reward

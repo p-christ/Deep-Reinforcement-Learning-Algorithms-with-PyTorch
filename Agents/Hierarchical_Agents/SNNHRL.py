@@ -1,4 +1,8 @@
+import copy
+import random
+import numpy as np
 from Base_Agent import Base_Agent
+from PPO import PPO
 
 
 class SNNHRL(Base_Agent):
@@ -6,39 +10,152 @@ class SNNHRL(Base_Agent):
     https://arxiv.org/pdf/1704.03012.pdf"""
     agent_name = "SNNHRL"
 
-    def __init__(self):
+    def __init__(self, config):
         Base_Agent.__init__(self, config)
+
+        self.num_skills = self.hyperparameters["SKILL_AGENT"]["num_skills"]
+
+        self.skill_agent_config = copy.deepcopy(config)
+        self.skill_agent_config.hyperparameters = self.skill_agent_config.hyperparameters["SKILL_AGENT"]
+        # self.skill_agent_config.state_size = self.state_size + 1
+        # self.skill_agent = PPO(self.skill_agent_config)
+
+        self.skill = 10
+        self.create_skill_learning_environment()
+
+
+
 
 
         self.episodes_for_pretraining = 100
 
+    def create_skill_learning_environment(self):
 
-    def step(self):
+        environment = self.skill_agent_config.environment
+
+        print(environment.get_state_size())
 
 
-        if self.episode_number <= self.episodes_for_pretraining:
-            self.skill_training_step()
 
-        else:
-            self.post_training_step()
+        # state size...
+        environment.get_state_size = lambda : self.environment.get_state_size() + 1
 
-    def skill_training_step(self):
-        """Runs a step of the game in skill training stage"""
+        print(environment.get_state_size())
 
-        # pick z randomly
+        print(environment.get_state())
 
-        # play episode with z fixed
 
-        # calculate rewards
-        # learn SNN through PPO learning
+        print(np.array(environment.state))
+        print(np.array([self.skill]))
 
-        self.pre_training()
+        environment.get_state = lambda : np.concatenate((np.array([environment.state]), np.array([self.skill])))
 
-        # then SNN learn... using PPO learning regime
+        print(environment.get_state())
 
-    def post_training_step(self):
-        """Runs a step of the game after we have frozen the SNN and are just training the manager"""
+        environment.get_next_state = lambda : np.concatenate((self.environment.get_next_state(), np.array([skill])))
 
-        # manager takes in state and selects skill probabilities
-        # latent code sampled according to skill probabilities and fed into SNN which then acts in world for T steps
-        # manager uses PPO to learn
+
+
+
+    # def step(self):
+    #
+    #
+    #     if self.episode_number <= self.episodes_for_pretraining:
+    #         self.skill_training_step()
+    #
+    #     else:
+    #         self.post_training_step()
+    #
+    # def skill_training_step(self):
+    #     """Runs a step of the game in skill training stage"""
+    #
+    #     randomly_chosen_skill = random.randint(0, self.num_skills - 1)
+    #
+    #     while not self.done:
+    #
+    #         # change the environment... keep agent the same...
+    #
+    #
+    #
+    #     # play episode with z fixed
+    #
+    #     # calculate rewards
+    #     # learn SNN through PPO learning
+    #
+    #     self.pre_training()
+    #
+    #     # then SNN learn... using PPO learning regime
+    #
+    # def post_training_step(self):
+    #     """Runs a step of the game after we have frozen the SNN and are just training the manager"""
+    #
+    #     # manager takes in state and selects skill probabilities
+    #     # latent code sampled according to skill probabilities and fed into SNN which then acts in world for T steps
+    #     # manager uses PPO to learn
+
+
+from Trainer import Trainer
+from Utilities.Data_Structures.Config import Config
+from Agents.DQN_Agents.DQN import DQN
+from Agents.Hierarchical_Agents.h_DQN import h_DQN
+from Environments.Long_Corridor_Environment import Long_Corridor_Environment
+config = Config()
+config.seed = 1
+config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.5)
+config.num_episodes_to_run = 10000
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
+config.show_solution_score = False
+config.visualise_individual_results = False
+config.visualise_overall_agent_results = True
+config.standard_deviation_results = 1.0
+config.runs_per_agent = 3
+config.use_GPU = False
+config.overwrite_existing_results_file = False
+config.randomise_random_seed = True
+config.save_model = False
+
+config.hyperparameters = {
+
+    "SNNHRL": {
+        "SKILL_AGENT": {
+            "num_skills": 10,
+            "batch_size": 256,
+            "learning_rate": 0.01,
+            "buffer_size": 40000,
+            "linear_hidden_units": [20, 10],
+            "final_layer_activation": "None",
+            "columns_of_data_to_be_embedded": [0, 1],
+            "embedding_dimensions": [[config.environment.get_num_possible_states(),
+                                      max(4, int(config.environment.get_num_possible_states() / 10.0))],
+                                     [config.environment.get_num_possible_states(),
+                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+            "batch_norm": False,
+            "gradient_clipping_norm": 5,
+            "update_every_n_steps": 1,
+            "epsilon_decay_rate_denominator": 1500,
+            "discount_rate": 0.999,
+            "learning_iterations": 1
+        },
+        "META_CONTROLLER": {
+            "batch_size": 256,
+            "learning_rate": 0.001,
+            "buffer_size": 40000,
+            "linear_hidden_units": [20, 10],
+            "final_layer_activation": "None",
+            "columns_of_data_to_be_embedded": [0],
+            "embedding_dimensions": [[config.environment.get_num_possible_states(),
+                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+            "batch_norm": False,
+            "gradient_clipping_norm": 5,
+            "update_every_n_steps": 1,
+            "epsilon_decay_rate_denominator": 2500,
+            "discount_rate": 0.999,
+            "learning_iterations": 1
+        }
+    }
+}
+
+config.hyperparameters = config.hyperparameters["SNNHRL"]
+
+agent = SNNHRL(config)

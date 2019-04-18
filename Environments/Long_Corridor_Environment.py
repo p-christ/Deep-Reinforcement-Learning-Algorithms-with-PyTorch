@@ -66,9 +66,11 @@ class Long_Corridor_Environment(Base_Environment):
         return np.array([self.state])
 
     def get_action_size(self):
+        """In this discrete setting this equals the number of actions we can take"""
         return 2
 
     def get_state_size(self):
+        """This is the dimension of the state vector"""
         return 1
 
     def get_num_possible_states(self):
