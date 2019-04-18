@@ -14,6 +14,7 @@ class SNNHRL(Base_Agent):
     2) Then skill_agent is frozen
     3) Then we train a manager agent that chooses which of the pre-trained skills to let act for it for some period of time
 
+    Note that it only works with discrete states at the moment.
     """
     agent_name = "SNNHRL"
 
@@ -36,6 +37,8 @@ class SNNHRL(Base_Agent):
 
         self.create_skill_learning_environment()
 
+        assert isinstance(self.environment.state, int), "only works for discrete states currently"
+
 
 
 
@@ -57,6 +60,8 @@ class SNNHRL(Base_Agent):
             def __init__(self, meta_agent):
                 environment_class.__init__(self, **meta_agent.env_parameters)
                 self.meta_agent = meta_agent
+                self.state_visitations = [[0 for _ in range(self.get_num_possible_states())] for _ in
+                                          range(self.meta_agent.num_skills)]
 
                 print(self.meta_agent.skill)
 
@@ -68,6 +73,17 @@ class SNNHRL(Base_Agent):
 
             def get_next_state(self):
                 return np.concatenate((super().get_next_state(), np.array([self.meta_agent.skill])))
+            #
+            # def conduct_action(self, action):
+            #     super().conduct_action(action)
+            #     self.update_state_visitations()
+            #     self.update_reward_with_mutual_information_criterion()
+            #
+            # def update_state_visitations(self):
+            #     self.state_visitations[self.meta_agent.skill][super().get_state()] += 1
+
+                # update visitations count...
+                # add to reward
 
 
 
