@@ -26,9 +26,11 @@ class Long_Corridor_Environment(Base_Environment):
         self.reward = None
         self.done = False
         self.visited_final_state = False
+        self.episode_steps = 0
         return np.array([self.state])
 
     def conduct_action(self, action):
+        self.episode_steps += 1
         if type(action) is np.ndarray:
             action = action[0]
         assert action in [0, 1], "Action must be a 0 or a 1"
@@ -47,6 +49,7 @@ class Long_Corridor_Environment(Base_Environment):
         else:
             self.reward = 0
         if self.next_state == self.num_states - 1: self.visited_final_state = True
+        if self.episode_steps >= self.get_max_steps_per_episode(): self.done = True
 
     def move_left(self):
         """Moves left in environment"""
@@ -81,7 +84,7 @@ class Long_Corridor_Environment(Base_Environment):
         return self.done
 
     def get_max_steps_per_episode(self):
-        return 200
+        return 100
 
     def get_action_types(self):
         return "DISCRETE"

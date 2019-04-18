@@ -34,7 +34,7 @@ class Trainer(object):
             "DDPG-HER": "Actor_Critic_Agents",
             "TD3": "Actor_Critic_Agents",
             "A2C": "Actor_Critic_Agents",
-            "h_DQN": "h_DQN"
+            "h-DQN": "h_DQN"
         }
         return agent_to_agent_group_dictionary
 
@@ -50,7 +50,8 @@ class Trainer(object):
             "DDPG": "#800000",
             "DQN-HER": "#008000",
             "DDPG-HER": "#008000",
-            "TD3": "#E74C3C"
+            "TD3": "#E74C3C",
+            "h-DQN": "#D35400"
         }
         return agent_to_color_dictionary
 
@@ -122,7 +123,7 @@ class Trainer(object):
 
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
-                                        color=None, ax=None, title=None):
+                                        color=None, ax=None, title=None, y_limits=None):
         """Visualises the results for one agent"""
         assert isinstance(agent_results, list), "agent_results must be a list of lists, 1 set of results per list"
         assert isinstance(agent_results[0], list), "agent_results must be a list of lists, 1 set of results per list"
@@ -163,9 +164,29 @@ class Trainer(object):
         self.hide_spines(ax, ['right', 'top'])
         ax.set_xlim([0, x_vals[-1]])
 
+        if y_limits is None: y_min, y_max = self.get_y_limits(agent_results)
+        else: y_min, y_max = y_limits
+
+        ax.set_ylim([y_min, y_max])
+
         if self.config.show_solution_score:
             self.draw_horizontal_line_with_label(ax, y_value=self.config.environment.get_score_to_win(), x_min=0,
                                         x_max=self.config.num_episodes_to_run * 1.02, label="Target \n score")
+
+    def get_y_limits(self, results):
+        """Extracts the minimum and maximum seen y_values from a set of results"""
+        min_result = float("inf")
+        max_result = float("-inf")
+        for result in results:
+            temp_max = np.max(result)
+            temp_min = np.min(result)
+            if temp_max > max_result:
+                max_result = temp_max
+            if temp_min < min_result:
+                min_result = temp_min
+        return min_result, max_result
+
+
 
     def get_next_color(self):
         """Gets the next color in list self.colors. If it gets to the end then it starts from beginning"""
@@ -226,7 +247,7 @@ class Trainer(object):
             return pickle.load(f)
 
     def visualise_preexisting_results(self, save_image_path=None, data_path=None, colors=None, show_image=True, ax=None,
-                                      title=None):
+                                      title=None, y_limits=None):
         """Visualises saved data results and then optionally saves the image"""
         if not data_path: preexisting_results = self.create_object_to_store_results()
         else: preexisting_results = self.load_obj(data_path)
@@ -235,7 +256,7 @@ class Trainer(object):
             if colors: color = colors[ix]
             else: color = None
             self.visualise_overall_agent_results(agent_rolling_score_results, agent, show_mean_and_std_range=True,
-                                                 color=color, ax=ax, title=title)
+                                                 color=color, ax=ax, title=title, y_limits=y_limits)
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
         if show_image: plt.show()
 

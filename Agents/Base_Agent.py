@@ -223,8 +223,8 @@ class Base_Agent(object):
     def make_epsilon_greedy_choice(self, action_values, epsilon_decay_denominator=None):
         """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
         epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
-        if random.random() > epsilon: return np.argmax(action_values.data.cpu().numpy())
-        return random.choice(np.arange(action_values.shape[1]))
+        if random.random() > epsilon: return torch.argmax(action_values).item()
+        return random.randint(0, action_values.shape[1] - 1)
 
 
 
