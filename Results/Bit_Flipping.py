@@ -1,3 +1,7 @@
+import gym
+
+from gym.wrappers import FlattenDictWrapper
+
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from Bit_Flipping_Environment import Bit_Flipping_Environment
 from Trainer import Trainer
@@ -43,6 +47,9 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
+    environment = FlattenDictWrapper(config.environment, dict_keys=["observation", "desired_goal"])
+
+
     AGENTS = [DQN, DQN_HER]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()

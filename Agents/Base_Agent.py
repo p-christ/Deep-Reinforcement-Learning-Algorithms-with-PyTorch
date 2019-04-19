@@ -38,10 +38,13 @@ class Base_Agent(object):
 
     def get_state_size(self):
         """Gets the state_size for the gym env into the correct shape for a neural network"""
+        print(self.environment.observation_space)
+        print(self.environment.observation_space.shape)
 
         if self.environment.observation_space.dtype == int: return 1
 
-        if len(self.environment.observation_space.shape) == 1: return self.environment.observation_space.shape[0]
+        if len(self.environment.observation_space.shape) == 1:
+            return self.environment.observation_space.shape[0]
         else: return self.environment.observation_space.n
 
     def get_action_or_state_size_into_correct_shape(self, environment):

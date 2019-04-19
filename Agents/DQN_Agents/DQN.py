@@ -16,7 +16,7 @@ class DQN(Base_Agent):
         print("STATE SIZE ", self.state_size)
         print("ACTION SIZE ", self.action_size)
 
-        self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
+        self.q_network_local = self.create_NN(input_dim=int(self.state_size), output_dim=self.action_size)
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
                                               lr=self.hyperparameters["learning_rate"])
 
@@ -44,6 +44,7 @@ class DQN(Base_Agent):
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
         if len(state.shape) < 2: state = state.unsqueeze(0)
         self.q_network_local.eval() #puts network in evaluation mode
+        print("STATE IS ", state.shape)
         with torch.no_grad():
             action_values = self.q_network_local(state)
         self.q_network_local.train() #puts network back in training mode

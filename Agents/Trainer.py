@@ -2,6 +2,8 @@ import copy
 import random
 import pickle
 import os
+
+import gym
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -84,7 +86,13 @@ class Trainer(object):
         agent_round = 1
         for run in range(self.config.runs_per_agent):
             agent_config = copy.deepcopy(self.config)
-            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
+
+            if self.environment_has_changeable_goals(agent_config.environment) and self.agent_cant_handle_changeable_goals_without_flattening(agent_name):
+                print("Flattening changeable-goal environment for agent {}".format(agent_name))
+                agent_config.environment = gym.wrappers.FlattenDictWrapper(agent_config.environment,
+                                                                           dict_keys=["observation", "desired_goal"])
+
+                if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
             agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
@@ -101,6 +109,13 @@ class Trainer(object):
                 plt.show()
             agent_round += 1
         self.results[agent_name] = agent_results
+
+    def environment_has_changeable_goals(self, env):
+        return isinstance(env.reset(), dict)
+
+    def agent_cant_handle_changeable_goals_without_flattening(self, agent_name):
+        return "HER" not in agent_name
+
 
     def add_default_hyperparameters_if_not_overriden(self, hyperparameters):
         """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
