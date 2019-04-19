@@ -12,9 +12,9 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
-        self.action_size = self.environment.action_space.n
+        self.action_size = self.get_action_or_state_size_into_correct_shape(self.environment.action_space.shape)
         self.action_types =  "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
-        self.state_size =  self.get_state_size_into_correct_shape(self.environment.observation_space.shape)
+        self.state_size =  self.get_action_or_state_size_into_correct_shape(self.environment.observation_space.shape)
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.environment.spec.reward_threshold
         self.rolling_score_window = self.environment.spec.trials
@@ -31,11 +31,11 @@ class Base_Agent(object):
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
-    def get_state_size_into_correct_shape(self, state_size):
-        """Gets the state size into the correct shape for a neural network"""
-        if len(state_size) == 1:
-            return state_size[0]
-
+    @staticmethod
+    def get_action_or_state_size_into_correct_shape(size):
+        """Gets the action_size or state_size from a gym env into the correct shape for a neural network"""
+        if len(size) == 1:
+            return size[0]
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""

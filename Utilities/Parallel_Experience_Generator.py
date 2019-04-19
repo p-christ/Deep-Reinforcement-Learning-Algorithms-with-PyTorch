@@ -6,6 +6,8 @@ from contextlib import closing
 from multiprocessing import Pool
 from torch.multiprocessing import Pool as GPU_POOL
 from random import randint
+
+from Base_Agent import Base_Agent
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
 
@@ -14,7 +16,7 @@ class Parallel_Experience_Generator(object):
     def __init__(self, environment, policy, seed, hyperparameters, use_GPU=False, action_choice_output_columns=None):
         self.use_GPU = use_GPU
         self.environment =  environment
-        self.action_size = self.environment.action_space.n
+        self.action_size = Base_Agent.get_action_or_state_size_into_correct_shape(self.environment.action_space.shape)
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
         self.policy = policy
         self.action_choice_output_columns = action_choice_output_columns
@@ -81,10 +83,7 @@ class Parallel_Experience_Generator(object):
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().cpu()
 
-        # print("SAMPLED ACTION ", action)
-        if self.action_types == "CONTINUOUS":
-            action += self.noise.sample()
-        else:
-            action = action.item()
+        if self.action_types == "CONTINUOUS": action += torch.Tensor(self.noise.sample())
+        else: action = action.item()
 
         return action

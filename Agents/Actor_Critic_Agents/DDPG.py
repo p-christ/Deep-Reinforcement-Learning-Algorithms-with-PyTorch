@@ -59,7 +59,7 @@ class DDPG(Base_Agent):
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
         action += self.noise.sample()
-        return action
+        return action.squeeze(0)
 
     def critic_learn(self, states, actions, rewards, next_states, dones):
         """Runs a learning iteration for the critic"""
