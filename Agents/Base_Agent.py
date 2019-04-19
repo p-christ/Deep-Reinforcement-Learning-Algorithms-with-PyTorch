@@ -12,9 +12,9 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
-        self.action_size = self.get_action_or_state_size_into_correct_shape(self.environment.action_space.shape)
-        self.action_types =  "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
-        self.state_size =  self.get_action_or_state_size_into_correct_shape(self.environment.observation_space.shape)
+        self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
+        self.action_size = self.get_action_size()
+        self.state_size =  self.get_state_size()
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.environment.spec.reward_threshold
         self.rolling_score_window = self.environment.spec.trials
@@ -31,9 +31,24 @@ class Base_Agent(object):
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
-    @staticmethod
-    def get_action_or_state_size_into_correct_shape(size):
+    def get_action_size(self):
+        """Gets the action_size for the gym env into the correct shape for a neural network"""
+        if self.action_types == "DISCRETE": return self.environment.action_space.n
+        else: return self.environment.action_space.shape[0]
+
+    def get_state_size(self):
+        """Gets the state_size for the gym env into the correct shape for a neural network"""
+
+        if self.environment.observation_space.dtype == int: return 1
+
+        if len(self.environment.observation_space.shape) == 1: return self.environment.observation_space.shape[0]
+        else: return self.environment.observation_space.n
+
+    def get_action_or_state_size_into_correct_shape(self, environment):
         """Gets the action_size or state_size from a gym env into the correct shape for a neural network"""
+        if self.action_types == "DISCRETE":
+            return environment.action_space.n
+
         if len(size) == 1:
             return size[0]
 
@@ -49,6 +64,7 @@ class Base_Agent(object):
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
         self.state = self.environment.reset()
+        print("FIRST STATE ", self.state)
         self.next_state = None
         self.action = None
         self.reward = None

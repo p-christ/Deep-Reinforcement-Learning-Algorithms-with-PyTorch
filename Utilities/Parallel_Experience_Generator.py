@@ -1,5 +1,4 @@
 import random
-import numpy as np
 import torch
 import sys
 from contextlib import closing
@@ -7,17 +6,16 @@ from multiprocessing import Pool
 from torch.multiprocessing import Pool as GPU_POOL
 from random import randint
 
-from Base_Agent import Base_Agent
 from Utilities.OU_Noise import OU_Noise
 from Utilities.Utility_Functions import create_actor_distribution
 
 class Parallel_Experience_Generator(object):
     """ Plays n episode in parallel using a fixed agent. Only works for PPO or DDPG type agents at the moment, not Q-learning agents"""
-    def __init__(self, environment, policy, seed, hyperparameters, use_GPU=False, action_choice_output_columns=None):
+    def __init__(self, environment, policy, seed, hyperparameters, action_size, use_GPU=False, action_choice_output_columns=None):
         self.use_GPU = use_GPU
         self.environment =  environment
-        self.action_size = Base_Agent.get_action_or_state_size_into_correct_shape(self.environment.action_space.shape)
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
+        self.action_size = action_size
         self.policy = policy
         self.action_choice_output_columns = action_choice_output_columns
         self.hyperparameters = hyperparameters

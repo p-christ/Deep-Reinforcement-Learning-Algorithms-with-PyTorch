@@ -29,10 +29,10 @@ config.hyperparameters = {
             "linear_hidden_units": [20, 10],
             "final_layer_activation": "None",
             "columns_of_data_to_be_embedded": [0, 1],
-            "embedding_dimensions": [[config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))],
-                                     [config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+            "embedding_dimensions": [[config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0))],
+                                     [config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0))]],
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
@@ -47,8 +47,8 @@ config.hyperparameters = {
             "linear_hidden_units": [20, 10],
             "final_layer_activation": "None",
             "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))]],
+            "embedding_dimensions": [[config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0))]],
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
@@ -62,7 +62,11 @@ config.hyperparameters = {
 config.hyperparameters["DQN_Agents"] =  config.hyperparameters["h_DQN"]["META_CONTROLLER"]
 
 if __name__ == "__main__":
-    AGENTS = [h_DQN, DQN]
+
+    print(config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0)))
+
+    AGENTS = [DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

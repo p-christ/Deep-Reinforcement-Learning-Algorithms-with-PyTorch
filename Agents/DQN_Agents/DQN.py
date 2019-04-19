@@ -12,6 +12,10 @@ class DQN(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
+
+        print("STATE SIZE ", self.state_size)
+        print("ACTION SIZE ", self.action_size)
+
         self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
                                               lr=self.hyperparameters["learning_rate"])
@@ -38,6 +42,7 @@ class DQN(Base_Agent):
         # a "fake" dimension to make it a mini-batch rather than a single observation
         if state is None: state = self.state
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
+        if len(state.shape) < 2: state = state.unsqueeze(0)
         self.q_network_local.eval() #puts network in evaluation mode
         with torch.no_grad():
             action_values = self.q_network_local(state)
