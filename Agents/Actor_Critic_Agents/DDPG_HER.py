@@ -13,8 +13,8 @@ class DDPG_HER(DDPG, HER_Base):
     def step(self):
         """Runs a step within a game including a learning step if required"""
         while not self.done:
-            self.pick_and_conduct_action()
-            self.update_next_state_reward_done_and_score()
+            self.action = self.pick_action()
+            self.conduct_action(self.action)
             if self.time_for_critic_and_actor_to_learn():
                 for _ in range(self.hyperparameters["learning_updates_per_learning_session"]):
                     states, actions, rewards, next_states, dones = self.sample_from_HER_and_Ordinary_Buffer()  # Samples experiences from buffer

@@ -22,6 +22,9 @@ def test_skills_environment_state_size_change():
     agent = SNNHRL(config)
     assert agent.skill_agent_config.environment.get_state_size() == 2
 
+
+    # ADD FOUR ROOMS ENVIRONMENT TO TESTS....
+
 def test_skills_environment_get_state_change():
     """Tests whether the change to the get_state for the skill environment occurs correctly"""
     config.environment = Long_Corridor_Environment(stochasticity_of_action_right=0.0)

@@ -12,13 +12,13 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
-        self.action_size = self.environment.get_action_size()
-        self.action_types = self.environment.get_action_types()
-        self.state_size = self.environment.get_state_size()
+        self.action_size = self.environment.action_space.n
+        self.action_types =  "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
+        self.state_size =  self.get_state_size_into_correct_shape(self.environment.observation_space.shape)
         self.hyperparameters = config.hyperparameters
-        self.average_score_required_to_win = self.environment.get_score_to_win()
-        self.rolling_score_window = self.environment.get_rolling_period_to_calculate_score_over()
-        self.max_steps_per_episode = self.environment.get_max_steps_per_episode()
+        self.average_score_required_to_win = self.environment.spec.reward_threshold
+        self.rolling_score_window = self.environment.spec.trials
+        self.max_steps_per_episode = self.environment.spec.max_episode_steps
         self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
@@ -31,6 +31,12 @@ class Base_Agent(object):
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
+    def get_state_size_into_correct_shape(self, state_size):
+        """Gets the state size into the correct shape for a neural network"""
+        if len(state_size) == 1:
+            return state_size[0]
+
+
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
         torch.backends.cudnn.deterministic = True
@@ -42,7 +48,7 @@ class Base_Agent(object):
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
-        self.state = self.environment.reset_environment()
+        self.state = self.environment.reset()
         self.next_state = None
         self.action = None
         self.reward = None
@@ -77,16 +83,10 @@ class Base_Agent(object):
         """Takes a step in the game. This method must be overriden by any agent"""
         raise ValueError("Step needs to be implemented by the agent")
 
-    def conduct_action(self):
+    def conduct_action(self, action):
         """Conducts an action in the environment"""
-        self.environment.conduct_action(self.action)
-
-    def update_next_state_reward_done_and_score(self):
-        """Gets the next state, reward and done information from the environment"""
-        self.next_state = self.environment.get_next_state()
-        self.reward = self.environment.get_reward()
-        self.done = self.environment.get_done()
-        self.total_episode_score_so_far += self.environment.get_reward()
+        self.next_state, self.reward, self.done, _ = self.environment.step(action)
+        self.total_episode_score_so_far += self.reward
 
     def save_and_print_result(self):
         """Saves and prints results of the game"""
@@ -164,6 +164,7 @@ class Base_Agent(object):
 
     def pick_and_conduct_action(self):
         """Picks and conducts an action"""
+        raise ValueError("CHANGE ME")
         self.action = self.pick_action()
         self.conduct_action()
 
