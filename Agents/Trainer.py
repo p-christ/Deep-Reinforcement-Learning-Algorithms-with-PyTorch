@@ -156,7 +156,7 @@ class Trainer(object):
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
                   fancybox=True, shadow=True, ncol=3)
 
-        if not title: title = self.config.environment.environment_name
+        if not title: title = self.config.environment.spec.id.split("-")[0]
 
         ax.set_title(title, fontsize=15, fontweight='bold')
         ax.set_ylabel('Rolling Episode Scores')

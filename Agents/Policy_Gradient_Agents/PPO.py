@@ -17,7 +17,6 @@ class PPO(Base_Agent):
         self.policy_new = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
         self.policy_old = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
         self.policy_old.load_state_dict(copy.deepcopy(self.policy_new.state_dict()))
-        self.max_steps_per_episode = config.environment.get_max_steps_per_episode()
         self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
         self.episode_number = 0
         self.many_episode_states = []
@@ -35,7 +34,7 @@ class PPO(Base_Agent):
     def step(self):
         """Runs a step for the PPO agent"""
         exploration_epsilon = self.get_updated_epsilon_exploration()
-        self.many_episode_states, self.many_episode_actions, self.many_episode_rewards, _ = self.experience_generator.play_n_episodes(
+        self.many_episode_states, self.many_episode_actions, self.many_episode_rewards = self.experience_generator.play_n_episodes(
             self.hyperparameters["episodes_per_learning_round"], exploration_epsilon)
         self.episode_number += self.hyperparameters["episodes_per_learning_round"]
         self.policy_learn()
@@ -69,9 +68,9 @@ class PPO(Base_Agent):
          the probability the old policy would have picked it. This will then be used to inform the loss"""
 
         all_states = [state for states in self.many_episode_states for state in states]
-        all_actions = [action for actions in self.many_episode_actions for action in actions]
-
+        all_actions = [[action] if self.action_types == "DISCRETE" else action for actions in self.many_episode_actions for action in actions ]
         all_states = torch.stack([torch.Tensor(states).float().to(self.device) for states in all_states])
+
         all_actions = torch.stack([torch.Tensor(actions).float().to(self.device) for actions in all_actions])
         all_actions = all_actions.view(-1, len(all_states))
 

@@ -12,7 +12,7 @@ from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 config = Config()
 config.seed = 1
 config.environment = gym.make("CartPole-v0")
-config.num_episodes_to_run = 1500
+config.num_episodes_to_run = 450
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
@@ -87,7 +87,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN, PPO]
+    AGENTS = [PPO, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
