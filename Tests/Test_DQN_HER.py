@@ -62,6 +62,11 @@ agent.reset_game()
 
 def test_initiation():
     """Tests whether DQN_HER initiates correctly"""
+    config.hyperparameters["batch_size"] = 64
+    agent = DQN_HER(config)
+    agent.reset_game()
+
+
     assert agent.ordinary_buffer_batch_size == int(0.2 * 64)
     assert agent.HER_buffer_batch_size == 64 - int(0.2 * 64)
 
@@ -78,6 +83,8 @@ def test_initiation():
     assert not agent.done
     assert agent.next_state is None
     assert agent.reward is None
+
+    config.hyperparameters["batch_size"] = 3
 
 def test_action():
     """Tests whether DQN_HER picks and conducts actions correctly"""
@@ -126,6 +133,10 @@ def test_tracks_changes_from_one_action():
 
 def test_tracks_changes_from_multiple_actions():
     """Tests that it tracks the changes as a result of actions correctly"""
+
+    agent = DQN_HER(config)
+    agent.reset_game()
+
     for ix in range(4):
         previous_obs = agent.observation
         previous_desired_goal = agent.desired_goal
@@ -153,8 +164,6 @@ def test_tracks_changes_from_multiple_actions():
     assert all(actions == torch.Tensor([[1.], [0.], [3.], [2.]]))
     assert all(rewards == torch.Tensor([[-1.], [-1.], [4.], [-1.]]))
     assert all(dones == torch.Tensor([[0.], [0.], [1.], [0.]]))
-
-    states, actions, rewards, next_states, dones = agent.memory.sample(4)
 
 
 

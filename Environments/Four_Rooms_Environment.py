@@ -7,6 +7,7 @@ from gym import wrappers
 import numpy as np
 import matplotlib as mpl
 from gym import spaces
+from gym.utils import seeding
 from matplotlib import pyplot
 from random import randint
 
@@ -51,6 +52,9 @@ class Four_Rooms_Environment(gym.Env):
         self.spec.max_episode_steps = self.reward_for_achieving_goal
         self.spec.id = "Four Rooms"
 
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        return [seed]
 
     def reset(self):
         """Resets the environment and returns the start state"""

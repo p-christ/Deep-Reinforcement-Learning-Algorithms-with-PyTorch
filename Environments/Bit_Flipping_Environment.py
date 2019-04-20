@@ -5,8 +5,8 @@ from collections import namedtuple
 import gym
 import numpy as np
 from gym import spaces
+from gym.utils import seeding
 
-from Environments.Base_Environment import Base_Environment
 
 class Bit_Flipping_Environment(gym.Env):
     environment_name = "Bit Flipping Game"
@@ -31,6 +31,10 @@ class Bit_Flipping_Environment(gym.Env):
         self.environment_dimension = environment_dimension
         self.reward_for_achieving_goal = self.environment_dimension
         self.step_reward_for_not_achieving_goal = -1
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        return [seed]
 
     def reset(self):
         self.desired_goal = self.randomly_pick_state_or_goal()
