@@ -1,3 +1,5 @@
+import gym
+
 from A2C import A2C
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Trainer import Trainer
@@ -6,12 +8,11 @@ from Agents.DQN_Agents.DDQN import DDQN
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
 from Agents.DQN_Agents.DQN import DQN
 from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
-from Cart_Pole_Environment import Cart_Pole_Environment
 
 config = Config()
 config.seed = 1
-config.environment = Cart_Pole_Environment()
-config.num_episodes_to_run = 1500
+config.environment = gym.make("CartPole-v0")
+config.num_episodes_to_run = 600
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False

@@ -1,6 +1,7 @@
+import gym
+
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Actor_Critic_Agents.DDPG import DDPG
-from Mountain_Car_Continuous_Environment import Mountain_Car_Continuous_Environment
 from TD3 import TD3
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
@@ -8,10 +9,10 @@ from Utilities.Data_Structures.Config import Config
 
 config = Config()
 config.seed = 1
-config.environment = Mountain_Car_Continuous_Environment()
-config.num_episodes_to_run = 450
-config.file_to_save_data_results = "Data_and_Graphs/Mountain_Car_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Mountain_Car_Results_Graph.png"
+config.environment = gym.make("MountainCarContinuous-v0")
+config.num_episodes_to_run = 3
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -37,7 +38,8 @@ config.hyperparameters = {
             "gradient_clipping_norm": 5,
             "mu": 0.0,
             "theta": 0.15,
-            "sigma": 0.2
+            "sigma": 0.2,
+            "epsilon_decay_rate_denominator": 1
         },
 
     "Actor_Critic_Agents": {
@@ -74,7 +76,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [TD3, DDPG, PPO]
+    AGENTS = [PPO, TD3, DDPG]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

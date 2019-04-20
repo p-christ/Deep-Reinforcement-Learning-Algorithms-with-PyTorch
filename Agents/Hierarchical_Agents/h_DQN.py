@@ -25,7 +25,7 @@ class h_DQN(Base_Agent):
         self.meta_controller_config = copy.deepcopy(config)
         self.meta_controller_config.hyperparameters = self.meta_controller_config.hyperparameters["META_CONTROLLER"]
         self.meta_controller = DQN(self.meta_controller_config)
-        self.meta_controller.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.environment.get_num_possible_states(),
+        self.meta_controller.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=config.environment.observation_space.n,
                                                               key_to_use="META_CONTROLLER")
 
         self.rolling_intrinsic_rewards = []
@@ -37,7 +37,7 @@ class h_DQN(Base_Agent):
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
-        self.state = self.environment.reset_environment()
+        self.state = self.environment.reset()
         self.next_state = None
         self.action = None
         self.reward = None
@@ -58,7 +58,7 @@ class h_DQN(Base_Agent):
 
             episode_intrinsic_rewards = []
 
-            self.meta_controller_state = self.environment.get_state()
+            self.meta_controller_state = self.environment.state
 
             self.subgoal = self.meta_controller.pick_action(state=self.meta_controller_state)
 
@@ -75,7 +75,7 @@ class h_DQN(Base_Agent):
             self.goals_seen.append(self.subgoal)
 
             self.subgoal_achieved = False
-            self.state = np.concatenate((self.environment.get_state(), np.array([self.subgoal])))
+            self.state = np.concatenate((self.environment.state, np.array([self.subgoal])))
             self.cumulative_meta_controller_reward = 0
 
             while not (self.episode_over or self.subgoal_achieved):

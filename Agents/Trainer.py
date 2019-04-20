@@ -2,9 +2,10 @@ import copy
 import random
 import pickle
 import os
+import gym
+from gym import wrappers
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 
 class Trainer(object):
     """Runs games for given agents. Optionally will visualise and save the results"""
@@ -16,6 +17,7 @@ class Trainer(object):
         self.results = None
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
+
 
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""
@@ -84,12 +86,19 @@ class Trainer(object):
         agent_round = 1
         for run in range(self.config.runs_per_agent):
             agent_config = copy.deepcopy(self.config)
+
+            if self.environment_has_changeable_goals(agent_config.environment) and self.agent_cant_handle_changeable_goals_without_flattening(agent_name):
+                print("Flattening changeable-goal environment for agent {}".format(agent_name))
+                agent_config.environment = gym.wrappers.FlattenDictWrapper(agent_config.environment,
+                                                                           dict_keys=["observation", "desired_goal"])
+
             if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
             agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             agent = agent_class(agent_config)
+            self.environment_name = agent.environment_title
             print(agent.hyperparameters)
             print("RANDOM SEED " , agent_config.seed)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes()
@@ -101,6 +110,13 @@ class Trainer(object):
                 plt.show()
             agent_round += 1
         self.results[agent_name] = agent_results
+
+    def environment_has_changeable_goals(self, env):
+        return isinstance(env.reset(), dict)
+
+    def agent_cant_handle_changeable_goals_without_flattening(self, agent_name):
+        return "HER" not in agent_name
+
 
     def add_default_hyperparameters_if_not_overriden(self, hyperparameters):
         """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
@@ -156,7 +172,7 @@ class Trainer(object):
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
                   fancybox=True, shadow=True, ncol=3)
 
-        if not title: title = self.config.environment.environment_name
+        if not title: title = self.environment_name
 
         ax.set_title(title, fontsize=15, fontweight='bold')
         ax.set_ylabel('Rolling Episode Scores')

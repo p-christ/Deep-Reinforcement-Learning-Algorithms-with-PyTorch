@@ -12,7 +12,7 @@ class DQN(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"], config.seed)
-        self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)
+        self.q_network_local = self.create_NN(input_dim=int(self.state_size), output_dim=self.action_size)
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
                                               lr=self.hyperparameters["learning_rate"])
 
@@ -23,8 +23,8 @@ class DQN(Base_Agent):
     def step(self):
         """Runs a step within a game including a learning step if required"""
         while not self.done:
-            self.pick_and_conduct_action()
-            self.update_next_state_reward_done_and_score()
+            self.action = self.pick_action()
+            self.conduct_action(self.action)
             if self.time_for_q_network_to_learn():
                 self.learn()
             self.save_experience()
@@ -38,6 +38,7 @@ class DQN(Base_Agent):
         # a "fake" dimension to make it a mini-batch rather than a single observation
         if state is None: state = self.state
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
+        if len(state.shape) < 2: state = state.unsqueeze(0)
         self.q_network_local.eval() #puts network in evaluation mode
         with torch.no_grad():
             action_values = self.q_network_local(state)
@@ -50,6 +51,7 @@ class DQN(Base_Agent):
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
+        # print("Loss ", loss)
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):

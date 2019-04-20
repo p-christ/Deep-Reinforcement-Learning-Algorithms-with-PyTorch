@@ -18,77 +18,82 @@ def test_location_to_state():
 def test_actions_execute_correctly():
     """Tests that actions execute correctly"""
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    env.reset()
     env.move_user(env.current_user_location, (3, 3))
 
-    env.conduct_action(0)
+    env.step(0)
     assert env.current_user_location == (2, 3)
 
-    env.conduct_action(1)
+    env.step(1)
     assert env.current_user_location == (2, 4)
 
-    env.conduct_action(2)
+    env.step(2)
     assert env.current_user_location == (3, 4)
 
-    env.conduct_action(3)
+    env.step(3)
     assert env.current_user_location == (3, 3)
 
-    env.conduct_action(0)
+    env.step(0)
     assert env.current_user_location == (2, 3)
 
-    env.conduct_action(0)
+    env.step(0)
     assert env.current_user_location == (1, 3)
 
-    env.conduct_action(0)
+    env.step(0)
     assert env.current_user_location == (1, 3)
 
-    env.conduct_action(1)
+    env.step(1)
     assert env.current_user_location == (1, 4)
 
-    env.conduct_action(1)
+    env.step(1)
     assert env.current_user_location == (1, 5)
 
-    env.conduct_action(1)
+    env.step(1)
     assert env.current_user_location == (1, 5)
 
 def test_check_user_location_and_goal_location_match_state_and_next_state():
     """Checks whether user location always matches state and next state correctly"""
     for _ in range(50):
         env = Four_Rooms_Environment()
+        env.reset()
         for _ in range(50):
             move = randint(0, 3)
-            env.conduct_action(move)
+            env.step(move)
             assert env.state == [env.location_to_state(env.current_user_location), env.location_to_state(env.current_goal_location)]
             assert env.next_state == [env.location_to_state(env.current_user_location), env.location_to_state(env.current_goal_location)]
 
 def test_lands_on_goal_correctly():
     """Checks whether getting to goal state produces the correct response"""
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    env.reset()
     env.move_user(env.current_user_location, (3, 3))
     env.move_goal(env.current_goal_location, (2, 2))
 
-    env.conduct_action(0)
-    assert env.get_reward() == env.step_reward_for_not_achieving_goal
-    assert not env.get_done()
+    env.step(0)
+    assert env.reward == env.step_reward_for_not_achieving_goal
+    assert not env.done
 
-    env.conduct_action(3)
-    assert env.get_reward() == env.reward_for_achieving_goal
-    assert env.get_done()
+    env.step(3)
+    assert env.reward == env.reward_for_achieving_goal
+    assert env.done
 
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    env.reset()
     env.move_user(env.current_user_location, (2, 3))
     env.move_goal(env.current_goal_location, (2, 8))
     for move in [2, 1, 1, 1, 1, 1, 0]:
-        env.conduct_action(move)
+        env.step(move)
         if move != 0:
-            assert env.get_reward() == env.step_reward_for_not_achieving_goal
-            assert not env.get_done()
+            assert env.reward == env.step_reward_for_not_achieving_goal
+            assert not env.done
         else:
-            assert env.get_reward() == env.reward_for_achieving_goal
-            assert env.get_done()
+            assert env.reward == env.reward_for_achieving_goal
+            assert env.done
 
 def test_location_to_state_and_state_to_location_match():
     """Test that location_to_state and state_to_location are inverses of each other"""
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    env.reset()
     for row in range(env.grid_height):
         for col in range(env.grid_width):
             assert env.location_to_state((row, col)) == env.location_to_state(env.state_to_location(env.location_to_state((row, col))))
@@ -96,6 +101,7 @@ def test_location_to_state_and_state_to_location_match():
 def test_randomness_of_moves():
     """Test that determine_which_action_will_actually_occur correctly implements stochastic_actions_probability"""
     env = Four_Rooms_Environment(stochastic_actions_probability=0.0)
+    env.reset()
     for _ in range(10):
         for move in env.actions:
             assert move == env.determine_which_action_will_actually_occur(move)
