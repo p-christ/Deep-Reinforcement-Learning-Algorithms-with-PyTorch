@@ -34,6 +34,10 @@ class Base_Agent(object):
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
+    def step(self):
+        """Takes a step in the game. This method must be overriden by any agent"""
+        raise ValueError("Step needs to be implemented by the agent")
+
     def get_environment_title(self):
         """Extracts name of environment from it"""
         try:
@@ -121,10 +125,6 @@ class Base_Agent(object):
         self.show_whether_achieved_goal()
         if self.config.save_model: self.locally_save_policy()
         return self.game_full_episode_scores, self.rolling_results, time_taken
-
-    def step(self):
-        """Takes a step in the game. This method must be overriden by any agent"""
-        raise ValueError("Step needs to be implemented by the agent")
 
     def conduct_action(self, action):
         """Conducts an action in the environment"""
