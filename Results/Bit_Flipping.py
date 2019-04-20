@@ -10,7 +10,7 @@ from Agents.DQN_Agents.DQN import DQN
 
 config = Config()
 config.seed = 1
-config.environment = Bit_Flipping_Environment(14)
+config.environment = Bit_Flipping_Environment(8)
 config.num_episodes_to_run = 4500
 config.file_to_save_data_results = None #"Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
 config.file_to_save_results_graph = None #"Data_and_Graphs/Bit_Flipping_Results_Graph.png"

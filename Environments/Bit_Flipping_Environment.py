@@ -72,14 +72,10 @@ class Bit_Flipping_Environment(gym.Env):
 
     def compute_reward(self, achieved_goal, desired_goal, info):
 
-
-
         if (achieved_goal == desired_goal).all():
             reward = self.reward_for_achieving_goal
         else:
             reward = self.step_reward_for_not_achieving_goal
-
-        print("Achieved goal {} -- desired goal {} -- reward {}".format(achieved_goal, desired_goal, reward))
         return reward
 
     # def get_action_size(self):
