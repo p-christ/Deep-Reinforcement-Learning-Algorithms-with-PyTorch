@@ -2,7 +2,7 @@
 
 ![Travis CI](https://travis-ci.org/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch.svg?branch=master)
 
-![RL](Environments/Animation_Gifs/RL_image.jpeg)   ![PyTorch](Environments/Animation_Gifs/PyTorch-logo-2.jpg)
+![RL](Utilities/RL_image.jpeg)   ![PyTorch](Utilities/PyTorch-logo-2.jpg)
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. 
 
