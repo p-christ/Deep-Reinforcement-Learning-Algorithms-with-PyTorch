@@ -3,6 +3,7 @@ import random
 import numpy as np
 from Agents.Base_Agent import Base_Agent
 from Agents.Policy_Gradient_Agents.PPO import PPO
+from DQN import DQN
 
 
 class SNN_HRL(Base_Agent):
@@ -26,52 +27,64 @@ class SNN_HRL(Base_Agent):
 
         self.skill_agent_config = copy.deepcopy(config)
         self.skill_agent_config.hyperparameters = self.skill_agent_config.hyperparameters["SKILL_AGENT"]
-        self.skill_agent_config.state_size = self.state_size + 1
+        # self.skill_agent_config.state_size = self.state_size + 1
 
         self.skill = 1
-        self.create_skill_learning_environment()
+        self.create_skill_learning_environment(self.num_skills, self.skill_agent_config.hyperparameters["regularisation_weight"],
+                                               self.skill_agent_config.hyperparameters["visitations_decay"], self.skill_agent_config.env_parameters,
+                                               self.environment.observation_space.n)
         self.skill_agent_config.environment = self.skills_env
 
-        self.skill_agent = PPO(self.skill_agent_config)
-        self.episodes_for_pretraining = 100
+        self.skill_agent = DQN(self.skill_agent_config)
+        self.episodes_for_pretraining = 10000
 
         self.pretraining_skills()
 
     def pretraining_skills(self):
         """Runs pretraining during which time skills are learnt by the skills agent"""
         self.skill_agent_config.num_episodes_to_run = self.episodes_for_pretraining
-        self.skills_agent.run_n_episodes()
+        self.skill_agent.run_n_episodes()
 
-    def create_skill_learning_environment(self):
+    def create_skill_learning_environment(self, num_skills, regularisation_weight, visitations_decay, env_parameters,
+                                          num_states):
         """Creates the environment that the skills agent will use to learn skills during pretraining"""
 
         meta_agent = self
         environment_class = self.environment.__class__
 
+        print("NUM SKILLS ", num_skills)
+        print("NUM STATES ", num_states)
+
+        # make it so it doesn't depend on meta class ....
+
         class skills_env(environment_class):
             """Creates an environment from within which to train skills"""
-            def __init__(self, meta_agent):
-                environment_class.__init__(self, **meta_agent.env_parameters)
-                self.meta_agent = meta_agent
-                self.state_visitations = [[0 for _ in range(meta_agent.environment.observation_space.n)] for _ in
-                                          range(self.meta_agent.num_skills)]
-                self.regularisation_weight = self.meta_agent.skill_agent_config.hyperparameters["regularisation_weight"]
-                self.visitations_decay = self.meta_agent.skill_agent_config.hyperparameters["visitations_decay"]
+            def __init__(self): #, meta_agent):
+                environment_class.__init__(self, **env_parameters)
+                # self.meta_agent = meta_agent
+                # self.state_visitations = [[0 for _ in range(meta_agent.environment.observation_space.n)] for _ in
+                #                           range(num_skills)]
+                self.state_visitations = [[0 for _ in range(num_states)] for _ in range(num_skills)]
+
+
+                self.regularisation_weight = regularisation_weight #
+                self.visitations_decay = visitations_decay #self.meta_agent.skill_agent_config.hyperparameters["visitations_decay"]
 
             def reset(self):
+                self.skill = random.randint(0, num_skills - 1) # random choice...
                 environment_class.reset(self)
-                return np.array([self.state, meta_agent.skill])
+                return np.array([self.state, self.skill])
 
             def step(self, action):
                 next_state, reward, done, _ = environment_class.step(self, action)
                 self.update_state_visitations(next_state)
                 probability_correct_skill = self.calculate_probability_correct_skill(next_state)
                 new_reward = reward + self.regularisation_weight * np.log(probability_correct_skill)
-                return np.array([next_state, meta_agent.skill]), new_reward, done, _
+                return np.array([next_state, self.skill]), new_reward, done, _
 
             def calculate_probability_correct_skill(self, next_state):
                 """Calculates the probability that a certain"""
-                visitations_correct_skill = self.state_visitations[self.meta_agent.skill][next_state]
+                visitations_correct_skill = self.state_visitations[self.skill][next_state]
                 visitations_any_skill = np.sum([visit[next_state] for visit in self.state_visitations])
                 probability = float(visitations_correct_skill) / float(visitations_any_skill)
                 return probability
@@ -79,6 +92,7 @@ class SNN_HRL(Base_Agent):
             def update_state_visitations(self, next_state):
                 self.state_visitations = [[val * self.visitations_decay for val in sublist] for sublist in
                                           self.state_visitations]
-                self.state_visitations[self.meta_agent.skill][next_state] += 1
+                self.state_visitations[self.skill][next_state] += 1
 
-        self.skills_env = skills_env(meta_agent)
+
+        self.skills_env = skills_env()

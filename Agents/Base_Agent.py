@@ -59,15 +59,29 @@ class Base_Agent(object):
 
         random_state = self.environment.reset()
 
+
+
+        print("RANDOM STATE ", random_state)
+        print("LENGHT RANDOM STATE ", random_state.size)
         if isinstance(random_state, dict):
+            print("leaving 1 ")
             state_size = random_state["observation"].shape[0] + random_state["desired_goal"].shape[0]
             return state_size
+        elif random_state.size == 2:
+            return 2
 
-        if self.environment.observation_space.dtype == int: return 1
-
-        if len(self.environment.observation_space.shape) == 1:
-            return self.environment.observation_space.shape[0]
-        else: return self.environment.observation_space.n
+        elif self.environment.observation_space.dtype == int:
+            print("leaving 2 ")
+            return 1
+        else:
+            s = random_state.shape[0]
+            print("S is ", s)
+            return random_state.shape[0]
+        #
+        #
+        # if len(self.environment.observation_space.shape) == 1:
+        #     return self.environment.observation_space.shape[0]
+        # else: return self.environment.observation_space.n
 
     def get_score_required_to_win(self):
         """Gets average score required to win game"""

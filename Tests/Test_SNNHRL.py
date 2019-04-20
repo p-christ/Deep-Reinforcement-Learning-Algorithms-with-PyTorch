@@ -1,6 +1,5 @@
 """Tests for the agent SNNHRL in the Agents folder"""
-from Environments.Bit_Flipping_Environment import Bit_Flipping_Environment
-from Agents.Hierarchical_Agents.SNNHRL import SNN_HRL
+from Agents.Hierarchical_Agents.SNN_HRL import SNN_HRL
 from Utilities.Data_Structures.Config import Config
 from Environments.Long_Corridor_Environment import Long_Corridor_Environment
 import numpy as np
@@ -116,12 +115,3 @@ def test_skills_environment_get_next_state_change():
     agent.skill_agent_config.environment.conduct_action(1)
     agent.skill_agent_config.environment.conduct_action(0)
     assert np.array_equal(agent.skill_agent_config.environment.get_next_state(), np.array([4, 12]))
-
-
-    #
-    #
-
-    # config.environment = Bit_Flipping_Environment()
-    # agent = SNNHRL(config)
-    # assert agent.skill_agent_config.environment.get_state() == 41
-    #
