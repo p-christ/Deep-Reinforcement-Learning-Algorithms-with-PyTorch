@@ -76,7 +76,7 @@ class HER_Base(object):
         new_states = [self.create_state_from_observation_and_desired_goal(observation, new_goal) for observation in self.episode_observations]
         new_next_states = [self.create_state_from_observation_and_desired_goal(observation, new_goal) for observation in
                       self.episode_next_observations]
-        new_rewards = [self.environment.compute_reward(next_observation, new_goal, None) for next_observation in  self.episode_next_observations]
+        new_rewards = [self.environment.compute_reward(next_achieved_goal, new_goal, None) for next_achieved_goal in  self.episode_next_achieved_goals]
         self.HER_memory.add_experience(new_states, self.episode_actions, new_rewards, new_next_states, self.episode_dones)
 
     def sample_from_HER_and_Ordinary_Buffer(self):

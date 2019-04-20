@@ -1,3 +1,5 @@
+import gym
+
 from Actor_Critic_Agents.DDPG import DDPG
 from Agents.Actor_Critic_Agents.DDPG_HER import DDPG_HER
 from Data_Structures.Config import Config
@@ -7,10 +9,10 @@ from Trainer import Trainer
 
 config = Config()
 config.seed = 1
-config.environment = Fetch_Reach_Environment()
+config.environment = gym.make("FetchReach-v1")
 config.num_episodes_to_run = 2000
-config.file_to_save_data_results = "Data_and_Graphs/Fetch_Reach_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Fetch_Reach_Results_Graph.png"
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -56,7 +58,7 @@ config.hyperparameters = {
 
 
 if __name__== '__main__':
-    AGENTS = [DDPG_HER, DDPG]
+    AGENTS = [DDPG, DDPG_HER]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

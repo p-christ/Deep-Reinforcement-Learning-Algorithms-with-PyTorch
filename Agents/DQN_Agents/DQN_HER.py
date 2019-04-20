@@ -14,7 +14,6 @@ class DQN_HER(HER_Base, DQN):
         while not self.done:
             self.action = self.pick_action()
             self.conduct_action_in_changeable_goal_envs(self.action)
-            # print("Action {} -- Old State {} -- New State {}".format(self.action, self.state, self.next_state))
             if self.time_for_q_network_to_learn():
                 self.learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
             self.track_changeable_goal_episodes_data()

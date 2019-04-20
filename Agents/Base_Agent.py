@@ -12,13 +12,16 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
+        self.environment_title = self.get_environment_title()
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
-        self.action_size = self.get_action_size()
-        self.state_size =  self.get_state_size()
+        self.action_size = int(self.get_action_size())
+        print("ACTION SIZE ", self.action_size)
+        self.state_size =  int(self.get_state_size())
+        print("STATE SIZE ", self.state_size)
         self.hyperparameters = config.hyperparameters
-        self.average_score_required_to_win = self.environment.spec.reward_threshold
-        self.rolling_score_window = self.environment.spec.trials
-        self.max_steps_per_episode = self.environment.spec.max_episode_steps
+        self.average_score_required_to_win = self.get_score_required_to_win()
+        self.rolling_score_window = self.get_trials()
+        # self.max_steps_per_episode = self.environment.spec.max_episode_steps
         self.total_episode_score_so_far = 0
         self.game_full_episode_scores = []
         self.rolling_results = []
@@ -30,6 +33,15 @@ class Base_Agent(object):
         self.run_checks()
         self.global_step_number = 0
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
+
+    def get_environment_title(self):
+        """Extracts name of environment from it"""
+        try:
+            title = self.environment.spec.id.split("-")[0]
+        except AttributeError:
+            if str(self.environment.unwrapped)[1:11] == "FetchReach":
+                title = "FetchReach"
+        return title
 
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
@@ -52,6 +64,18 @@ class Base_Agent(object):
         if len(self.environment.observation_space.shape) == 1:
             return self.environment.observation_space.shape[0]
         else: return self.environment.observation_space.n
+
+    def get_score_required_to_win(self):
+        """Gets average score required to win game"""
+        if self.environment_title == "FetchReach": return -5
+        if self.environment.spec.reward_threshold is not None:
+                return self.environment.spec.reward_threshold
+
+    def get_trials(self):
+        """Gets the number of trials to average a score over"""
+        if self.environment_title == "FetchReach": return 100
+        else: return self.environment.spec.trials
+
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
