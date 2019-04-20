@@ -41,19 +41,17 @@ class Base_Agent(object):
         print(self.environment.observation_space)
         print(self.environment.observation_space.shape)
 
+        random_state = self.environment.reset()
+
+        if isinstance(random_state, dict):
+            state_size = random_state["observation"].shape[0] + random_state["desired_goal"].shape[0]
+            return state_size
+
         if self.environment.observation_space.dtype == int: return 1
 
         if len(self.environment.observation_space.shape) == 1:
             return self.environment.observation_space.shape[0]
         else: return self.environment.observation_space.n
-
-    def get_action_or_state_size_into_correct_shape(self, environment):
-        """Gets the action_size or state_size from a gym env into the correct shape for a neural network"""
-        if self.action_types == "DISCRETE":
-            return environment.action_space.n
-
-        if len(size) == 1:
-            return size[0]
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
@@ -67,7 +65,6 @@ class Base_Agent(object):
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
         self.state = self.environment.reset()
-        print("FIRST STATE ", self.state)
         self.next_state = None
         self.action = None
         self.reward = None
@@ -78,6 +75,9 @@ class Base_Agent(object):
         self.episode_actions = []
         self.episode_next_states = []
         self.episode_dones = []
+        self.episode_desired_goals = []
+        self.episode_achieved_goals = []
+        self.episode_observations = []
 
     def track_episodes_data(self):
         """Saves the data from the recent episodes"""

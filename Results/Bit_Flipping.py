@@ -12,8 +12,8 @@ config = Config()
 config.seed = 1
 config.environment = Bit_Flipping_Environment(14)
 config.num_episodes_to_run = 4500
-config.file_to_save_data_results = "Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Bit_Flipping_Results_Graph.png"
+config.file_to_save_data_results = None #"Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
+config.file_to_save_results_graph = None #"Data_and_Graphs/Bit_Flipping_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -47,10 +47,14 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
+    state = config.environment.reset()
+    print("State before ", state)
     environment = FlattenDictWrapper(config.environment, dict_keys=["observation", "desired_goal"])
+    state = environment.reset()
+    print("State after ", state.shape)
 
 
-    AGENTS = [DQN, DQN_HER]
+    AGENTS = [DQN_HER, DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

@@ -14,12 +14,10 @@ class Bit_Flipping_Environment(gym.Env):
     def __init__(self, environment_dimension=20):
 
         self.action_space = spaces.Discrete(environment_dimension)
-        # self.observation_space = spaces.Discrete(2**environment_dimension)
-
         self.observation_space = spaces.Dict(dict(
             desired_goal=spaces.Box(0, 1, shape=(environment_dimension,), dtype='float32'),
             achieved_goal=spaces.Box(0, 1, shape=(environment_dimension,), dtype='float32'),
-            observation=spaces.Box(0, 1, shape=(environment_dimension*2,), dtype='float32'),
+            observation=spaces.Box(0, 1, shape=(environment_dimension,), dtype='float32'),
         ))
 
         self.seed()
@@ -39,12 +37,13 @@ class Bit_Flipping_Environment(gym.Env):
         self.state.extend(self.desired_goal)
         self.achieved_goal = self.state[:self.environment_dimension]
         self.step_count = 0
-        return {"observation": np.array(self.state[:self.environment_dimension]), "desired_goal": np.array(self.desired_goal)}
+        return {"observation": np.array(self.state[:self.environment_dimension]), "desired_goal": np.array(self.desired_goal),
+                "achieved_goal": np.array(self.achieved_goal)}
 
     def randomly_pick_state_or_goal(self):
         return [random.randint(0, 1) for _ in range(self.environment_dimension)]
 
-    def conduct_action(self, action):
+    def step(self, action):
         """Conducts the discrete action chosen and updated next_state, reward and done"""
         if type(action) is np.ndarray:
             action = action[0]
@@ -66,10 +65,22 @@ class Bit_Flipping_Environment(gym.Env):
         self.state = self.next_state
 
         return {"observation": np.array(self.next_state[:self.environment_dimension]),
-                "desired_goal": np.array(self.desired_goal)}, self.reward, self.done, {}
+                "desired_goal": np.array(self.desired_goal), "achieved_goal": np.array(self.achieved_goal)}, self.reward, self.done, {}
 
     def goal_achieved(self, next_state):
         return next_state[:self.environment_dimension] == next_state[-self.environment_dimension:]
+
+    def compute_reward(self, achieved_goal, desired_goal, info):
+
+
+
+        if (achieved_goal == desired_goal).all():
+            reward = self.reward_for_achieving_goal
+        else:
+            reward = self.step_reward_for_not_achieving_goal
+
+        print("Achieved goal {} -- desired goal {} -- reward {}".format(achieved_goal, desired_goal, reward))
+        return reward
 
     # def get_action_size(self):
     #     return self.environment_dimension + 1
