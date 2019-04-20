@@ -82,7 +82,7 @@ The repository's high-level structure is:
         └── Data Structures            
    
 
-#### i) To Watch the Agents Learn the Above Games  
+#### i) To watch the agents learn the above games  
 
 To watch all the different agents learn Cart Pole follow these steps:
 
@@ -102,12 +102,9 @@ python Results/Cart_Pole.py
 
 For other games change the last line to one of the other files in the Results folder.
 
-#### ii) To Train the Agents on your Own Game  
+#### ii) To train the agents on another game  
 
-To use the algorithms with your own particular game instead you follow these steps:
- 
-1. Create an Environment class to represent your game - the environment class you create should extend the `Base_Environment` class found in the `Environments` folder to make 
-it compatible with all the agents.  
+Most Open AI gym environments should work. All you would need to do is change the config.environment field (look at `Results/Cart_Pole.py`  for an example of this). 
 
-2. Create a config object with the hyperparameters and game you want to use. See `Results/Cart_Pole.py` for an example of this.
-3. Use class Trainer and function within it `run_games_for_agents` to have the different agents play the game. Again see `Results/Cart_Pole.py` for an example of this.
+You can also play with your own custom game if you create a separate class that inherits from gym.Env. See `Environments/Four_Rooms_Environment.py`
+for an example of a custom environment and then see the script `Results/Four_Rooms.py` to see how to have agents play the environment.

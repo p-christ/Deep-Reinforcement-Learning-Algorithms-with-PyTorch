@@ -1,7 +1,6 @@
 import copy
 import random
 from collections import namedtuple
-
 import gym
 from gym import wrappers
 import numpy as np
