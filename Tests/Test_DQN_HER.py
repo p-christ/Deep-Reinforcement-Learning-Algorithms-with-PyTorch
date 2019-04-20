@@ -126,14 +126,12 @@ def test_tracks_changes_from_one_action():
 
 def test_tracks_changes_from_multiple_actions():
     """Tests that it tracks the changes as a result of actions correctly"""
-
-
-    for _ in range(4):
+    for ix in range(4):
         previous_obs = agent.observation
         previous_desired_goal = agent.desired_goal
         previous_achieved_goal = agent.achieved_goal
 
-        agent.action = 0
+        agent.action = ix
         agent.conduct_action_in_changeable_goal_envs(agent.action)
 
         assert agent.next_state.shape[0] == 8
@@ -143,38 +141,21 @@ def test_tracks_changes_from_multiple_actions():
         assert all(agent.desired_goal == previous_desired_goal)
 
         agent.track_changeable_goal_episodes_data()
+        agent.save_experience()
+        if agent.done: agent.save_alternative_experience()
 
-        with pytest.raises(Exception):
-            agent.HER_memory.sample(1)
+        agent.state_dict = agent.next_state_dict  # this is to set the state for the next iteration
+        agent.state = agent.next_state
 
-        agent.save_alternative_experience()
+    states, actions, rewards, next_states, dones = agent.HER_memory.sample(4)
 
-    sample = agent.HER_memory.sample(4)
+    assert all(states[1] == torch.Tensor([1.0, 1., 1., 1., 0., 0., 0. , 0.]))
+    assert all(actions == torch.Tensor([[1.], [0.], [3.], [2.]]))
+    assert all(rewards == torch.Tensor([[-1.], [-1.], [4.], [-1.]]))
+    assert all(dones == torch.Tensor([[0.], [0.], [1.], [0.]]))
 
-    # assert sample[1].item() == agent.action
-    # assert sample[2].item() == 4
+    states, actions, rewards, next_states, dones = agent.memory.sample(4)
 
-
-    print(sample)
-
-
-    print()
-
-
-    print(agent.observation)
-    print(previous_obs)
-
-    assert 1 == 0
-    #
-    # self.next_state_dict, self.reward, self.done, _ = self.environment.step(action)
-    # self.observation = self.next_state_dict["observation"]
-    # self.desired_goal = self.next_state_dict["desired_goal"]
-    # self.achieved_goal = self.next_state_dict["achieved_goal"]
-    # self.next_state = self.create_state_from_observation_and_desired_goal(self.observation, self.desired_goal)
-    # self.total_episode_score_so_far += self.reward
-    #
-    #
-    #
 
 
 

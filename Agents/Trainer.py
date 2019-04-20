@@ -92,7 +92,7 @@ class Trainer(object):
                 agent_config.environment = gym.wrappers.FlattenDictWrapper(agent_config.environment,
                                                                            dict_keys=["observation", "desired_goal"])
 
-                if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
+            if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
             agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))

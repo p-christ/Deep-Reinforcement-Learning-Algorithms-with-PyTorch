@@ -1,7 +1,4 @@
-import gym
-
 from gym.wrappers import FlattenDictWrapper
-
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from Bit_Flipping_Environment import Bit_Flipping_Environment
 from Trainer import Trainer
@@ -10,7 +7,7 @@ from Agents.DQN_Agents.DQN import DQN
 
 config = Config()
 config.seed = 1
-config.environment = Bit_Flipping_Environment(8)
+config.environment = Bit_Flipping_Environment(14)
 config.num_episodes_to_run = 4500
 config.file_to_save_data_results = None #"Data_and_Graphs/Bit_Flipping_Results_Data.pkl"
 config.file_to_save_results_graph = None #"Data_and_Graphs/Bit_Flipping_Results_Graph.png"
@@ -30,16 +27,13 @@ config.hyperparameters = {
         "learning_rate": 0.001,
         "batch_size": 128,
         "buffer_size": 100000,
-        "epsilon": 0.1,
-        "epsilon_decay_rate_denominator": 500,
-        "discount_rate": 0.98,
-        "tau": 0.1,
-        "alpha_prioritised_replay": 0.6,
-        "beta_prioritised_replay": 0.4,
+        "epsilon_decay_rate_denominator": 150,
+        "discount_rate": 0.999,
         "incremental_td_error": 1e-8,
         "update_every_n_steps": 1,
-        "linear_hidden_units": [256, 256],
+        "linear_hidden_units": [64, 64],
         "final_layer_activation": None,
+        "y_range": (-1, 14),
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "HER_sample_proportion": 0.8
@@ -47,13 +41,6 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
-    state = config.environment.reset()
-    print("State before ", state)
-    environment = FlattenDictWrapper(config.environment, dict_keys=["observation", "desired_goal"])
-    state = environment.reset()
-    print("State after ", state.shape)
-
-
     AGENTS = [DQN_HER, DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()

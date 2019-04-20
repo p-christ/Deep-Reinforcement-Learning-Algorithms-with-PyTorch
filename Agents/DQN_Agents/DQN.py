@@ -51,6 +51,7 @@ class DQN(Base_Agent):
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
+        # print("Loss ", loss)
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):
