@@ -62,10 +62,6 @@ config.hyperparameters = {
 config.hyperparameters["DQN_Agents"] =  config.hyperparameters["h_DQN"]["META_CONTROLLER"]
 
 if __name__ == "__main__":
-
-    print(config.environment.observation_space.n,
-                                      max(4, int(config.environment.observation_space.n / 10.0)))
-
     AGENTS = [DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()

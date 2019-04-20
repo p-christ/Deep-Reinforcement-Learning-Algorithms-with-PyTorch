@@ -1,12 +1,16 @@
 import copy
 import random
+from collections import namedtuple
+
+import gym
+from gym import wrappers
 import numpy as np
 import matplotlib as mpl
+from gym import spaces
 from matplotlib import pyplot
-from Environments.Base_Environment import Base_Environment
 from random import randint
 
-class Four_Rooms_Environment(Base_Environment):
+class Four_Rooms_Environment(gym.Env):
     """Four rooms game environment as described in paper http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf"""
     environment_name = "Four Rooms"
 
@@ -30,23 +34,43 @@ class Four_Rooms_Environment(Base_Environment):
         self.reward_for_achieving_goal = (self.grid_width + self.grid_height) * 3.0
         self.step_reward_for_not_achieving_goal = -1.0
         self.state_only_dimension = 1
-        self.reset_environment()
+        self.num_possible_states = self.grid_height * self.grid_width
 
-    def reset_environment(self):
+        self.action_space = spaces.Discrete(4)
+        self.observation_space = spaces.Dict(dict(
+            desired_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+            achieved_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+            observation=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+        ))
+
+        self.seed()
+
+        self.spec = namedtuple('spec', 'reward_threshold trials max_episode_steps')
+        self.spec.reward_threshold = 0.0
+        self.spec.trials = 100
+        self.spec.max_episode_steps = self.reward_for_achieving_goal
+        self.spec.id = "Four Rooms"
+
+
+    def reset(self):
         """Resets the environment and returns the start state"""
         self.grid = self.create_grid()
         self.place_agent()
         self.place_goal()
         self.desired_goal = [self.location_to_state(self.current_goal_location)]
+        self.achieved_goal = [self.location_to_state(self.current_user_location)]
         self.step_count = 0
         self.state = [self.location_to_state(self.current_user_location), self.location_to_state(self.current_goal_location)]
         self.next_state = None
         self.reward = None
         self.done = False
         self.achieved_goal = self.state[:self.state_only_dimension]
-        return np.array(self.state)
+        return {"observation": np.array(self.state[:1]),
+                "desired_goal": np.array(self.desired_goal),
+                "achieved_goal": np.array(self.achieved_goal)}
 
-    def conduct_action(self, desired_action):
+
+    def step(self, desired_action):
         if type(desired_action) is np.ndarray:
             assert desired_action.shape[0] == 1
             assert len(desired_action.shape) == 1
@@ -63,10 +87,14 @@ class Four_Rooms_Environment(Base_Environment):
             self.done = True
         else:
             self.reward = self.step_reward_for_not_achieving_goal
-            if self.step_count >= self.get_max_steps_per_episode(): self.done = True
+            if self.step_count >= self.spec.max_episode_steps: self.done = True
             else: self.done = False
         self.achieved_goal = self.next_state[:self.state_only_dimension]
         self.state = self.next_state
+
+        return {"observation": np.array(self.next_state[:1]),
+                "desired_goal": np.array(self.desired_goal),
+                "achieved_goal": np.array(self.achieved_goal)}, self.reward, self.done, {}
 
     def determine_which_action_will_actually_occur(self, desired_action):
         """Chooses what action will actually occur. Gives 1. - self.stochastic_actions_probability chance to the
@@ -171,6 +199,16 @@ class Four_Rooms_Environment(Base_Environment):
                 thing_placed = True
         return (random_row, random_col)
 
+    def compute_reward(self, achieved_goal, desired_goal, info):
+        """Computes the reward we would have got with this achieved goal and desired goal. Must be of this exact
+        interface to fit with the open AI gym specifications"""
+        if (achieved_goal == desired_goal).all():
+            reward = self.reward_for_achieving_goal
+        else:
+            reward = self.step_reward_for_not_achieving_goal
+        return reward
+
+
     def print_current_grid(self):
         """Prints out the grid"""
         for row in range(len(self.grid)):
@@ -199,50 +237,3 @@ class Four_Rooms_Environment(Base_Environment):
                             cmap=cmap, norm=norm)
         print("Black = wall, White = empty, Blue = user, Red = goal")
         pyplot.show()
-
-    def get_reward_for_achieving_goal(self):
-        return self.reward_for_achieving_goal
-
-    def get_step_reward_for_not_achieving_goal(self):
-        return self.step_reward_for_not_achieving_goal
-
-    def get_action_size(self):
-        """In this discrete setting this equals the number of actions we can take"""
-        return 4
-
-    def get_action_types(self):
-        return "DISCRETE"
-
-    def get_done(self):
-        return self.done
-
-    def get_max_steps_per_episode(self):
-        return self.reward_for_achieving_goal
-
-    def get_next_state(self):
-        return np.array(self.next_state)
-
-    def get_state(self):
-        return np.array(self.state)
-
-    def get_reward(self):
-        return self.reward
-
-    def get_rolling_period_to_calculate_score_over(self):
-        return 100
-
-    def get_score_to_win(self):
-        return 0.0
-
-    def get_state_size(self):
-        return len(self.state)
-
-    def get_achieved_goal(self):
-        return self.achieved_goal
-
-    def get_desired_goal(self):
-        return self.desired_goal
-
-    def get_num_possible_states(self):
-        """Returns the number of possible states there are"""
-        return self.grid_height * self.grid_width

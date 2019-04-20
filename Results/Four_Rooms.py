@@ -7,9 +7,9 @@ from Agents.DQN_Agents.DQN import DQN
 config = Config()
 config.seed = 1
 config.environment = Four_Rooms_Environment(9, 9, stochastic_actions_probability=0.0, random_start_user_place=True, random_goal_place=True)
-config.num_episodes_to_run = 4500
-config.file_to_save_data_results = "Data_and_Graphs/Four_Rooms_Environment_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Four_Rooms_Environment_Results_Graph.png"
+config.num_episodes_to_run = 3
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -36,8 +36,8 @@ config.hyperparameters = {
         "update_every_n_steps": 1,
         "linear_hidden_units": [10, 10],
         "columns_of_data_to_be_embedded": [0, 1],
-        "embedding_dimensions": [[config.environment.get_num_possible_states(),
-                                      max(4, int(config.environment.get_num_possible_states() / 10.0))] for _ in range(2)],
+        "embedding_dimensions": [[config.environment.num_possible_states,
+                                      max(4, int(config.environment.num_possible_states / 10.0))] for _ in range(2)],
         "final_layer_activation": None,
         "batch_norm": False,
         "gradient_clipping_norm": 5,
@@ -46,7 +46,7 @@ config.hyperparameters = {
 }
 
 if __name__== '__main__':
-    AGENTS = [DQN_HER, DQN]
+    AGENTS = [DQN, DQN_HER]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

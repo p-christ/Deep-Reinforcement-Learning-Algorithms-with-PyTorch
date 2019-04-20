@@ -2,11 +2,10 @@ import copy
 import random
 import pickle
 import os
-
 import gym
+from gym import wrappers
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
 
 class Trainer(object):
     """Runs games for given agents. Optionally will visualise and save the results"""
@@ -18,6 +17,7 @@ class Trainer(object):
         self.results = None
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
+
 
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""
@@ -98,6 +98,7 @@ class Trainer(object):
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
             agent = agent_class(agent_config)
+            self.environment_name = agent.environment_title
             print(agent.hyperparameters)
             print("RANDOM SEED " , agent_config.seed)
             game_scores, rolling_scores, time_taken = agent.run_n_episodes()
@@ -171,7 +172,7 @@ class Trainer(object):
         ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15),
                   fancybox=True, shadow=True, ncol=3)
 
-        if not title: title = self.config.environment.title
+        if not title: title = self.environment_name
 
         ax.set_title(title, fontsize=15, fontweight='bold')
         ax.set_ylabel('Rolling Episode Scores')

@@ -10,7 +10,7 @@ from Trainer import Trainer
 config = Config()
 config.seed = 1
 config.environment = gym.make("FetchReach-v1")
-config.num_episodes_to_run = 2000
+config.num_episodes_to_run = 2
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
