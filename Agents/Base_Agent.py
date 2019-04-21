@@ -58,25 +58,29 @@ class Base_Agent(object):
         print(self.environment.observation_space.shape)
 
         random_state = self.environment.reset()
-
-
-
-        print("RANDOM STATE ", random_state)
-        print("LENGHT RANDOM STATE ", random_state.size)
         if isinstance(random_state, dict):
             print("leaving 1 ")
             state_size = random_state["observation"].shape[0] + random_state["desired_goal"].shape[0]
             return state_size
-        elif random_state.size == 2:
-            return 2
-
-        elif self.environment.observation_space.dtype == int:
-            print("leaving 2 ")
-            return 1
         else:
-            s = random_state.shape[0]
-            print("S is ", s)
-            return random_state.shape[0]
+            return random_state.size
+
+        # infer state size from the reset...!  easiest way
+        #
+        #
+        # print("RANDOM STATE ", random_state)
+        # print("LENGHT RANDOM STATE ", random_state.size)
+        #
+        # elif random_state.size == 2:
+        #     return 2
+        #
+        # elif self.environment.observation_space.dtype == int:
+        #     print("leaving 2 ")
+        #     return 1
+        # else:
+        #     s = random_state.shape[0]
+        #     print("S is ", s)
+        #     return random_state.shape[0]
         #
         #
         # if len(self.environment.observation_space.shape) == 1:
