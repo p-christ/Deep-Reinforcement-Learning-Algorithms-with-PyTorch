@@ -6,7 +6,7 @@ from Agents.Hierarchical_Agents.h_DQN import h_DQN
 from Environments.Long_Corridor_Environment import Long_Corridor_Environment
 config = Config()
 config.seed = 1
-config.env_parameters = {"stochasticity_of_action_right": 0.5}
+config.env_parameters = {"stochasticity_of_action_right": 0.0}
 config.environment = Long_Corridor_Environment(stochasticity_of_action_right=config.env_parameters["stochasticity_of_action_right"])
 config.num_episodes_to_run = 1
 config.file_to_save_data_results = "Data_and_Graphs/Long_Corridor_Results_Data.pkl"
@@ -62,9 +62,10 @@ config.hyperparameters = {
 
     "SNN_HRL": {
         "SKILL_AGENT": {
-            "num_skills": 4,
+            "num_skills": 2,
             "regularisation_weight": 0.5,
-            "visitations_decay": 0.999,
+            "visitations_decay": 0.99,
+            "episodes_for_pretraining": 10000,
             "batch_size": 256,
             "learning_rate": 0.01,
             "buffer_size": 40000,

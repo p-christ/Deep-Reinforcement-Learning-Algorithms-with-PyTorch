@@ -65,28 +65,6 @@ class Base_Agent(object):
         else:
             return random_state.size
 
-        # infer state size from the reset...!  easiest way
-        #
-        #
-        # print("RANDOM STATE ", random_state)
-        # print("LENGHT RANDOM STATE ", random_state.size)
-        #
-        # elif random_state.size == 2:
-        #     return 2
-        #
-        # elif self.environment.observation_space.dtype == int:
-        #     print("leaving 2 ")
-        #     return 1
-        # else:
-        #     s = random_state.shape[0]
-        #     print("S is ", s)
-        #     return random_state.shape[0]
-        #
-        #
-        # if len(self.environment.observation_space.shape) == 1:
-        #     return self.environment.observation_space.shape[0]
-        # else: return self.environment.observation_space.n
-
     def get_score_required_to_win(self):
         """Gets average score required to win game"""
         if self.environment_title == "FetchReach": return -5
