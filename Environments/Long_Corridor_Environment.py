@@ -45,8 +45,9 @@ class Long_Corridor_Environment(gym.Env):
 
         self._update_done_reward_and_visited_final_state()
         self.state = self.next_state
+        self.s = np.array(self.next_state)
 
-        return np.array(self.next_state), self.reward, self.done, {}
+        return self.s, self.reward, self.done, {}
 
     def reset(self):
         self.state = 1 #environment always starts in state 1
@@ -55,7 +56,8 @@ class Long_Corridor_Environment(gym.Env):
         self.done = False
         self.visited_final_state = False
         self.episode_steps = 0
-        return np.array(self.state)
+        self.s = np.array(self.state)
+        return self.s
 
     def _update_done_reward_and_visited_final_state(self):
         if self.next_state == 0:

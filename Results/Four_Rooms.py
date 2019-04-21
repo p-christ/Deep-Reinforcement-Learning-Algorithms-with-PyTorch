@@ -42,6 +42,50 @@ config.hyperparameters = {
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "HER_sample_proportion": 0.8
+    },
+
+    "SNN_HRL": {
+        "SKILL_AGENT": {
+            "num_skills": 2,
+            "regularisation_weight": 1.5,
+            "visitations_decay": 0.99,
+            "episodes_for_pretraining": 2000,
+            "batch_size": 256,
+            "learning_rate": 0.01,
+            "buffer_size": 40000,
+            "linear_hidden_units": [20, 10],
+            "final_layer_activation": "None",
+            "columns_of_data_to_be_embedded": [0, 1],
+            "embedding_dimensions": [[config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0))],
+                                     [6, 4]],
+            "batch_norm": False,
+            "gradient_clipping_norm": 5,
+            "update_every_n_steps": 1,
+            "epsilon_decay_rate_denominator": 50,
+            "discount_rate": 0.999,
+            "learning_iterations": 1
+        },
+
+        "MANAGER": {
+            "timesteps_before_changing_skill": 4,
+            "linear_hidden_units": [10, 5],
+            "learning_rate": 0.01,
+            "buffer_size": 40000,
+            "batch_size": 256,
+            "final_layer_activation": "None",
+            "columns_of_data_to_be_embedded": [0],
+            "embedding_dimensions": [[config.environment.observation_space.n,
+                                      max(4, int(config.environment.observation_space.n / 10.0))]],
+            "batch_norm": False,
+            "gradient_clipping_norm": 5,
+            "update_every_n_steps": 1,
+            "epsilon_decay_rate_denominator": 1000,
+            "discount_rate": 0.999,
+            "learning_iterations": 1
+
+        }
+
     }
 }
 

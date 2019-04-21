@@ -1,16 +1,18 @@
+import gym
+
 from Hierarchical_Agents.SNN_HRL import SNN_HRL
 from Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 from Agents.Hierarchical_Agents.h_DQN import h_DQN
-from Environments.Long_Corridor_Environment import Long_Corridor_Environment
+
 config = Config()
 config.seed = 1
-config.env_parameters = {"stochasticity_of_action_right": 0.5}
-config.environment = Long_Corridor_Environment(stochasticity_of_action_right=config.env_parameters["stochasticity_of_action_right"])
+config.environment = gym.make("Taxi-v2")
+config.env_parameters = {}
 config.num_episodes_to_run = 10000
-config.file_to_save_data_results = "Data_and_Graphs/Long_Corridor_Results_Data.pkl"
-config.file_to_save_results_graph = "Data_and_Graphs/Long_Corridor_Results_Graph.png"
+config.file_to_save_data_results = None
+config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -64,7 +66,7 @@ config.hyperparameters = {
         "SKILL_AGENT": {
             "num_skills": 2,
             "regularisation_weight": 1.5,
-            "visitations_decay": 0.99,
+            "visitations_decay": 0.9999,
             "episodes_for_pretraining": 2000,
             "batch_size": 256,
             "learning_rate": 0.01,

@@ -1,11 +1,7 @@
 import copy
-import random
-
 import numpy as np
 from Base_Agent import Base_Agent
 from DQN import DQN
-
-# should learn to get intrinsic rewards > 0.5 first... before meta-controller starts learning
 
 class h_DQN(Base_Agent):
     """Implements hierarchical RL agent h-DQN from paper Kulkarni et al. (2016) https://arxiv.org/abs/1604.06057?context=stat
@@ -15,25 +11,20 @@ class h_DQN(Base_Agent):
 
     def __init__(self, config):
         Base_Agent.__init__(self, config)
-
         self.controller_config = copy.deepcopy(config)
         self.controller_config.hyperparameters = self.controller_config.hyperparameters["CONTROLLER"]
         self.controller = DQN(self.controller_config)
         self.controller.q_network_local = self.create_NN(input_dim=self.state_size*2, output_dim=self.action_size,
                                                          key_to_use="CONTROLLER")
-
         self.meta_controller_config = copy.deepcopy(config)
         self.meta_controller_config.hyperparameters = self.meta_controller_config.hyperparameters["META_CONTROLLER"]
         self.meta_controller = DQN(self.meta_controller_config)
         self.meta_controller.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=config.environment.observation_space.n,
                                                               key_to_use="META_CONTROLLER")
-
         self.rolling_intrinsic_rewards = []
         self.goals_seen = []
-
         self.controller_learnt_enough = False
         self.controller_actions = []
-
 
     def reset_game(self):
         """Resets the game information so we are ready to play a new episode"""
@@ -55,25 +46,10 @@ class h_DQN(Base_Agent):
         self.episode_steps = 0
 
         while not self.episode_over:
-
             episode_intrinsic_rewards = []
-
             self.meta_controller_state = self.environment.state
-
             self.subgoal = self.meta_controller.pick_action(state=self.meta_controller_state)
-
-            # if self.controller_learnt_enough:
-            #     print("Picking subgoal non-randomly now because controller is good enough!")
-            #
-            # else:
-            #     if self.episode_steps % 2 == 0:
-            #         self.subgoal = 2
-            #     else:
-            #         self.subgoal = 0
-            #     # self.subgoal =  random.randint(0, self.environment.get_num_possible_states()-1)
-
             self.goals_seen.append(self.subgoal)
-
             self.subgoal_achieved = False
             self.state = np.concatenate((self.environment.state, np.array([self.subgoal])))
             self.cumulative_meta_controller_reward = 0
@@ -85,12 +61,8 @@ class h_DQN(Base_Agent):
                     for _ in range(self.hyperparameters["CONTROLLER"]["learning_iterations"]):
                         self.controller.learn()
                 self.save_experience(memory=self.controller.memory, experience=(self.state, self.action, self.reward, self.next_state, self.done))
-                # print("""Started in state {} did move {} to get new state {} -- goal {} -- inrinsic reward {} -- reward {}""".format(self.state, self.action,
-                #                                                                                            self.next_state, self.subgoal,
-                #                                                                                            self.reward, self.environment.get_reward()))
                 self.state = self.next_state #this is to set the state for the next iteration
                 self.global_step_number += 1
-
                 episode_intrinsic_rewards.append(self.reward)
 
             if self.time_to_learn(self.meta_controller.memory, self.meta_controller_steps, "META_CONTROLLER"):
@@ -101,15 +73,9 @@ class h_DQN(Base_Agent):
                                  experience=(self.meta_controller_state, self.subgoal, self.cumulative_meta_controller_reward,
                                              self.meta_controller_next_state, self.episode_over))
             self.meta_controller_steps += 1
-
             self.episode_steps += 1
 
-            # self.controller_learnt_enough = np.mean(self.rolling_intrinsic_rewards[-100:]) > 0.5
-
-        # print("EPISODE SUM INTRSINIC REWARDS -- {} ---".format(np.sum(episode_intrinsic_rewards)))
-
         self.rolling_intrinsic_rewards.append(np.sum(episode_intrinsic_rewards))
-
         if self.episode_number % 100 == 0:
             print(" ")
             print("Most common goal -- {} -- ".format( max(set(self.goals_seen[-100:]), key=self.goals_seen[-100:].count)  ))
@@ -123,9 +89,7 @@ class h_DQN(Base_Agent):
     def pick_and_conduct_controller_action(self):
         """Picks and conducts an action for controller"""
         self.action =  self.controller.pick_action(state=self.state)
-
         self.controller_actions.append(self.action)
-
         self.conduct_action()
 
     def update_data(self):
@@ -143,9 +107,6 @@ class h_DQN(Base_Agent):
         self.reward = 1.0 * self.subgoal_achieved
         self.done = self.subgoal_achieved or self.episode_over
 
-
-        #
-
     def update_meta_controller_data(self):
         """Updates data relating to meta controller"""
         self.cumulative_meta_controller_reward += self.environment.get_reward()
@@ -157,8 +118,4 @@ class h_DQN(Base_Agent):
         """Boolean indicating whether it is time for meta-controller or controller to learn"""
         enough_experiences = len(memory) > self.hyperparameters[controller_name]["batch_size"]
         enough_steps_taken = steps_taken % self.hyperparameters[controller_name]["update_every_n_steps"] == 0
-
-        # if controller_name == "META_CONTROLLER":
-        #     return self.controller_learnt_enough and enough_experiences and enough_steps_taken
-
         return enough_experiences and enough_steps_taken
