@@ -66,21 +66,40 @@ config.hyperparameters = {
             "regularisation_weight": 1.5,
             "visitations_decay": 0.99,
             "episodes_for_pretraining": 2000,
-            "batch_size": 256,
-            "learning_rate": 0.01,
-            "buffer_size": 40000,
-            "linear_hidden_units": [20, 10],
-            "final_layer_activation": "None",
-            "columns_of_data_to_be_embedded": [0, 1],
-            "embedding_dimensions": [[config.environment.observation_space.n,
-                                      max(4, int(config.environment.observation_space.n / 10.0))],
-                                     [6, 4]],
+            # "batch_size": 256,
+            # "learning_rate": 0.01,
+            # "buffer_size": 40000,
+            # "linear_hidden_units": [20, 10],
+            # "final_layer_activation": "None",
+            # "columns_of_data_to_be_embedded": [0, 1],
+            # "embedding_dimensions": [[config.environment.observation_space.n,
+            #                           max(4, int(config.environment.observation_space.n / 10.0))],
+            #                          [6, 4]],
+            # "batch_norm": False,
+            # "gradient_clipping_norm": 5,
+            # "update_every_n_steps": 1,
+            # "epsilon_decay_rate_denominator": 50,
+            # "discount_rate": 0.999,
+            # "learning_iterations": 1
+
+
+            "learning_rate": 0.05,
+            "linear_hidden_units": [20, 20],
+            "final_layer_activation": "SOFTMAX",
+            "learning_iterations_per_round": 5,
+            "discount_rate": 0.99,
             "batch_norm": False,
-            "gradient_clipping_norm": 5,
-            "update_every_n_steps": 1,
-            "epsilon_decay_rate_denominator": 50,
-            "discount_rate": 0.999,
-            "learning_iterations": 1
+            "clip_epsilon": 0.1,
+            "episodes_per_learning_round": 4,
+            "normalise_rewards": True,
+            "gradient_clipping_norm": 7.0,
+            "mu": 0.0,  # only required for continuous action games
+            "theta": 0.0,  # only required for continuous action games
+            "sigma": 0.0,  # only required for continuous action games
+            "epsilon_decay_rate_denominator": 1.0
+
+
+
     },
 
         "MANAGER": {

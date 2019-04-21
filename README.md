@@ -54,16 +54,19 @@ between them was whether hindsight was used or not.
 
 #### 3. Hierarchical Reinforcement Learning Experiments
 
-Below shows the performance of DQN and the algorithm hierarchical-DQN from [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf)
+The results on the left below show the performance of DQN and the algorithm hierarchical-DQN from [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf)
 on the Long Corridor environment also explained in [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf). The environment
 requires the agent to go to the end of a corridor before coming back in order to receive a larger reward. This delayed 
 gratification and the aliasing of states makes it a somewhat impossible game for DQN to learn but if we introduce a 
 meta-controller (as in h-DQN) which directs a lower-level controller how to behave we are able to make more progress. This 
 aligns with the results found in the paper. 
 
-![h-DQN Long Corridor](Results/Data_and_Graphs/Long_Corridor_Graph.png)
+The results on the right show the performance of DDQN and algorithm Stochastic NNs for Hierarchical Reinforcement Learning 
+(SNN-HRL) from [Florensa et al. 2017](https://arxiv.org/pdf/1704.03012.pdf). DDQN is used as the comparison because
+the implementation of SSN-HRL uses 2 DDQN algorithms within it. Note also that the first 300 episodes of training
+for SNN-HRL were used for pre-training which is why there is no reward for those episodes. 
  
-
+![Long Corridor and Four Rooms](Results/Data_and_Graphs/Four_Rooms_and_Long_Corridor.png)
      
 
 ### Usage ###

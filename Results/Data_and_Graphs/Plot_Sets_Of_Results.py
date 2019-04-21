@@ -7,9 +7,13 @@ from Trainer import Trainer
 trainer = Trainer(config=Config(), agents=None)
 
 
+trainer.visualise_set_of_preexisting_results(save_image_path="Four_Rooms_and_Long_Corridor.png", results_data_paths=["Long_Corridor_Results_Data.pkl", "Four_Rooms.pkl"],
+                                      plot_titles=["Long Corridor", "Four Rooms"], y_limits=[(0.0, 0.25), (-90.0, 100.25)])
 
-trainer.visualise_preexisting_results(save_image_path="Long_Corridor_Graph.png", data_path="Long_Corridor_Results_Data.pkl",
-                                      title="Long Corridor", y_limits=(0.0, 0.25))
+
+
+# trainer.visualise_preexisting_results(save_image_path="Long_Corridor_Graph.png", data_path="Long_Corridor_Results_Data.pkl",
+#                                       title="Long Corridor", y_limits=(0.0, 0.25))
 
 
 # trainer.visualise_set_of_preexisting_results(results_data_paths=["Cart_Pole_Results_Data.pkl",

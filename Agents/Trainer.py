@@ -54,7 +54,8 @@ class Trainer(object):
             "DQN-HER": "#008000",
             "DDPG-HER": "#008000",
             "TD3": "#E74C3C",
-            "h-DQN": "#D35400"
+            "h-DQN": "#D35400",
+            "SNN-HRL": "#800000",
         }
         return agent_to_color_dictionary
 
@@ -277,7 +278,8 @@ class Trainer(object):
         if save_image_path: plt.savefig(save_image_path, bbox_inches="tight")
         if show_image: plt.show()
 
-    def visualise_set_of_preexisting_results(self, results_data_paths, save_image_path=None, show_image=True, plot_titles=None):
+    def visualise_set_of_preexisting_results(self, results_data_paths, save_image_path=None, show_image=True, plot_titles=None,
+                                             y_limits=None):
         """Visualises a set of preexisting results on 1 plot by making subplots"""
         assert isinstance(results_data_paths, list), "all_results must be a list of data paths"
 
@@ -293,7 +295,7 @@ class Trainer(object):
             raise ValueError("Need to tell this method how to deal with more than 4 plots")
         for ax_ix in range(len(results_data_paths)):
             self.visualise_preexisting_results(show_image=False, data_path=results_data_paths[ax_ix], ax=axes[ax_ix],
-                                               title=plot_titles[ax_ix])
+                                               title=plot_titles[ax_ix], y_limits=y_limits[ax_ix])
         fig.tight_layout()
         fig.subplots_adjust(bottom=0.25)
 

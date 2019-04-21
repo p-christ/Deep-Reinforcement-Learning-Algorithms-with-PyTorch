@@ -1,7 +1,7 @@
 import copy
 import numpy as np
 from Base_Agent import Base_Agent
-from DQN import DQN
+from DDQN import DDQN
 
 class h_DQN(Base_Agent):
     """Implements hierarchical RL agent h-DQN from paper Kulkarni et al. (2016) https://arxiv.org/abs/1604.06057?context=stat
@@ -13,12 +13,12 @@ class h_DQN(Base_Agent):
         Base_Agent.__init__(self, config)
         self.controller_config = copy.deepcopy(config)
         self.controller_config.hyperparameters = self.controller_config.hyperparameters["CONTROLLER"]
-        self.controller = DQN(self.controller_config)
+        self.controller = DDQN(self.controller_config)
         self.controller.q_network_local = self.create_NN(input_dim=self.state_size*2, output_dim=self.action_size,
                                                          key_to_use="CONTROLLER")
         self.meta_controller_config = copy.deepcopy(config)
         self.meta_controller_config.hyperparameters = self.meta_controller_config.hyperparameters["META_CONTROLLER"]
-        self.meta_controller = DQN(self.meta_controller_config)
+        self.meta_controller = DDQN(self.meta_controller_config)
         self.meta_controller.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=config.environment.observation_space.n,
                                                               key_to_use="META_CONTROLLER")
         self.rolling_intrinsic_rewards = []

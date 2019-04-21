@@ -37,11 +37,15 @@ class Four_Rooms_Environment(gym.Env):
         self.num_possible_states = self.grid_height * self.grid_width
 
         self.action_space = spaces.Discrete(4)
-        self.observation_space = spaces.Dict(dict(
-            desired_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
-            achieved_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
-            observation=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
-        ))
+
+        if self.random_goal_place:
+            self.observation_space = spaces.Dict(dict(
+                desired_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+                achieved_goal=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+                observation=spaces.Box(0, self.num_possible_states, shape=(1,), dtype='float32'),
+            ))
+        else:
+            self.observation_space = spaces.Discrete(self.num_possible_states)
 
         self.seed()
 
@@ -58,8 +62,8 @@ class Four_Rooms_Environment(gym.Env):
     def reset(self):
         """Resets the environment and returns the start state"""
         self.grid = self.create_grid()
-        self.place_agent()
         self.place_goal()
+        self.place_agent()
         self.desired_goal = [self.location_to_state(self.current_goal_location)]
         self.achieved_goal = [self.location_to_state(self.current_user_location)]
         self.step_count = 0
@@ -68,9 +72,14 @@ class Four_Rooms_Environment(gym.Env):
         self.reward = None
         self.done = False
         self.achieved_goal = self.state[:self.state_only_dimension]
-        return {"observation": np.array(self.state[:1]),
-                "desired_goal": np.array(self.desired_goal),
-                "achieved_goal": np.array(self.achieved_goal)}
+
+        if self.random_goal_place:
+            self.s = {"observation": np.array(self.state[:self.state_only_dimension]),
+                    "desired_goal": np.array(self.desired_goal),
+                    "achieved_goal": np.array(self.achieved_goal)}
+        else:
+            self.s = np.array(self.state[:self.state_only_dimension])
+        return self.s
 
 
     def step(self, desired_action):
@@ -95,9 +104,14 @@ class Four_Rooms_Environment(gym.Env):
         self.achieved_goal = self.next_state[:self.state_only_dimension]
         self.state = self.next_state
 
-        return {"observation": np.array(self.next_state[:1]),
+        if self.random_goal_place:
+            self.s = {"observation": np.array(self.next_state[:self.state_only_dimension]),
                 "desired_goal": np.array(self.desired_goal),
-                "achieved_goal": np.array(self.achieved_goal)}, self.reward, self.done, {}
+                "achieved_goal": np.array(self.achieved_goal)}
+        else:
+            self.s = np.array(self.next_state[:self.state_only_dimension])
+
+        return self.s, self.reward, self.done, {}
 
     def determine_which_action_will_actually_occur(self, desired_action):
         """Chooses what action will actually occur. Gives 1. - self.stochastic_actions_probability chance to the
@@ -124,7 +138,7 @@ class Four_Rooms_Environment(gym.Env):
 
     def move_user(self, current_location, new_location):
         """Moves a user from current location to new location"""
-        assert self.grid[current_location[0]][current_location[1]] == self.user_space_name
+        assert self.grid[current_location[0]][current_location[1]] == self.user_space_name, "{} vs. {}".format(self.grid[current_location[0]][current_location[1]], self.user_space_name)
         self.grid[new_location[0]][new_location[1]] = self.user_space_name
         self.grid[current_location[0]][current_location[1]] = self.blank_space_name
         self.current_user_location = (new_location[0], new_location[1])
@@ -178,7 +192,7 @@ class Four_Rooms_Environment(gym.Env):
     def place_agent(self):
         """Places the agent on a random non-wall square"""
         if self.random_start_user_place:
-            self.current_user_location = self.randomly_place_something(self.user_space_name, [self.wall_space_name])
+            self.current_user_location = self.randomly_place_something(self.user_space_name, [self.wall_space_name, self.goal_space_name])
         else:
             self.current_user_location = (1, 1)
             self.grid[1][1] = self.user_space_name

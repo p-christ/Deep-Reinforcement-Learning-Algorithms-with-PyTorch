@@ -1,13 +1,12 @@
 import copy
 import random
 import time
-from collections import namedtuple
 import numpy as np
+import torch
 from gym import Wrapper, spaces
-
 from Agents.Base_Agent import Base_Agent
 from Agents.Policy_Gradient_Agents.PPO import PPO
-from DQN import DQN
+from DDQN import DDQN
 
 
 class SNN_HRL(Base_Agent):
@@ -27,7 +26,6 @@ class SNN_HRL(Base_Agent):
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         assert isinstance(self.environment.reset(), int) or isinstance(self.environment.reset(), np.int64) or  self.environment.reset().dtype == np.int64, "only works for discrete states currently"
-        self.env_parameters = config.env_parameters
         self.num_skills = self.hyperparameters["SKILL_AGENT"]["num_skills"]
         self.episodes_for_pretraining =  self.hyperparameters["SKILL_AGENT"]["episodes_for_pretraining"]
         self.timesteps_before_changing_skill = self.hyperparameters["MANAGER"]["timesteps_before_changing_skill"]
@@ -38,6 +36,7 @@ class SNN_HRL(Base_Agent):
 
         self.manager_config = copy.deepcopy(config)
         self.manager_config.hyperparameters = self.manager_config.hyperparameters["MANAGER"]
+        self.manager_config.num_episodes_to_run = self.config.num_episodes_to_run - self.skill_agent_config.num_episodes_to_run
 
     def run_n_episodes(self):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
@@ -45,13 +44,17 @@ class SNN_HRL(Base_Agent):
 
         skill_agent = self.create_skill_training_agent()
         skill_agent.run_n_episodes()
+        self.skill_agent_config.environment.print_state_distribution()
         skill_agent.turn_off_all_exploration()
 
         manager_agent = self.create_manager_agent(skill_agent)
         manager_agent.run_n_episodes()
 
         time_taken = time.time() - start
-        return self.manager_agent.game_full_episode_scores, self.manager_agent.rolling_results, time_taken
+
+        pretraining_results = [np.min(manager_agent.game_full_episode_scores)]*self.episodes_for_pretraining
+
+        return pretraining_results + manager_agent.game_full_episode_scores, pretraining_results + manager_agent.rolling_results, time_taken
 
     def create_skill_training_agent(self):
         """Creates and instantiates a pre-training environment for the agent to learn skills in and then instantiates
@@ -60,13 +63,13 @@ class SNN_HRL(Base_Agent):
                                                             self.num_skills,
                                                             self.skill_agent_config.hyperparameters[
                                                                 "regularisation_weight"], self.skill_agent_config.hyperparameters["visitations_decay"])
-        return DQN(self.skill_agent_config)
+        return DDQN(self.skill_agent_config)
 
     def create_manager_agent(self, skill_agent):
         """Instantiates a manager agent"""
         self.manager_config.environment = Manager_Frozen_Worker_Wrapper(copy.deepcopy(self.environment), self.num_skills,
                                                                              self.timesteps_before_changing_skill, skill_agent)
-        return DQN(self.manager_config)
+        return DDQN(self.manager_config)
 
 
 class Skill_Wrapper(Wrapper):
@@ -85,7 +88,7 @@ class Skill_Wrapper(Wrapper):
         return self.observation(observation)
 
     def observation(self, observation):
-        return np.array([observation, self.skill])
+        return np.concatenate((observation, np.array([self.skill])))
 
     def step(self, action):
         next_state, reward, done, _ = self.env.step(action)
@@ -98,12 +101,12 @@ class Skill_Wrapper(Wrapper):
         """Updates table keeping track of number of times each state visited under each skill"""
         self.state_visitations = [[val * self.visitations_decay for val in sublist] for sublist in
                                   self.state_visitations]
-        self.state_visitations[self.skill][next_state] += 1
+        self.state_visitations[self.skill][next_state[0]] += 1
 
     def calculate_probability_correct_skill(self, next_state):
         """Calculates the probability that being in a state implies a certain skill"""
-        visitations_correct_skill = self.state_visitations[self.skill][next_state]
-        visitations_any_skill = np.sum([visit[next_state] for visit in self.state_visitations])
+        visitations_correct_skill = self.state_visitations[self.skill][next_state[0]]
+        visitations_any_skill = np.sum([visit[next_state[0]] for visit in self.state_visitations])
         probability = float(visitations_correct_skill) / float(visitations_any_skill)
         return probability
 
@@ -114,7 +117,7 @@ class Skill_Wrapper(Wrapper):
         for skill in range(len(self.state_visitations)):
             for state in range(len(self.state_visitations[0])):
                 state_count[state] += self.state_visitations[skill][state]
-        probability_visitations = [[row[ix] / state_count[ix] for ix in range(len(row))] for row in
+        probability_visitations = [[row[ix] / max(1.0, state_count[ix]) for ix in range(len(row))] for row in
                                    self.state_visitations]
         print(" ")
         print(probability_visitations)
@@ -133,7 +136,8 @@ class Manager_Frozen_Worker_Wrapper(Wrapper):
         next_state = self.env.unwrapped.s
         cumulative_reward = 0
         for _ in range(self.timesteps_before_changing_skill):
-            skill_action = self.skills_agent.pick_action(np.array([next_state, action]))
+            with torch.no_grad():
+                skill_action = self.skills_agent.pick_action(np.array([next_state[0], action]))
             next_state, reward, done, _ = self.env.step(skill_action)
             cumulative_reward += reward
             if done: break

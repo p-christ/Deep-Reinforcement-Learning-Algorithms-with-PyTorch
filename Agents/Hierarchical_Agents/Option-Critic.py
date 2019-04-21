@@ -22,9 +22,12 @@ class Option_Critic(Base_Agent):
 
         self.num_options = self.hyperparameters["num_options"]
 
-        self.q_options = self.create_NN(input_dim=self.state_size, output_dim=self.num_options)
-        self.q_option_actions = self.create_NN(input_dim=self.state_size + 1, output_dim=self.action_size)
-        # self.intra_option_policies = self.create_NN(input_dim=self.state_size + 1, output_dim=self.action_size)
+        self.q_options = self.create_NN(input_dim=self.state_size, output_dim=self.num_options, key_to_use="q_options")
+        self.q_option_actions = self.create_NN(input_dim=self.state_size + 1, output_dim=self.action_size, key_to_use="q_option_actions")
+
+
+
+        self.intra_option_policies = [self.create_NN(input_dim=self.state_size, output_dim=self.action_size) for _ in range(self.num_options)]
 
 
 
