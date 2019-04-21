@@ -17,11 +17,10 @@ class Long_Corridor_Environment(gym.Env):
         self.observation_space = spaces.Discrete(num_states)
         self.seed()
 
-        self.spec = namedtuple('spec', 'reward_threshold trials max_episode_steps')
-        self.spec.reward_threshold = 1.0
-        self.spec.trials = 100
-        self.spec.max_episode_steps = 100
-        self.spec.id = "Long Corridor"
+        self.reward_threshold = 1.0
+        self.trials = 100
+        self.max_episode_steps = 100
+        self.id = "Long Corridor"
 
         self.action_translation = {0: "left", 1: "right"}
         self.stochasticity_of_action_right = stochasticity_of_action_right

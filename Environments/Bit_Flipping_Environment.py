@@ -1,12 +1,9 @@
 import copy
 import random
-from collections import namedtuple
-
 import gym
 import numpy as np
 from gym import spaces
 from gym.utils import seeding
-
 
 class Bit_Flipping_Environment(gym.Env):
     environment_name = "Bit Flipping Game"
@@ -21,13 +18,10 @@ class Bit_Flipping_Environment(gym.Env):
         ))
 
         self.seed()
-
-        self.spec = namedtuple('spec', 'reward_threshold trials max_episode_steps id')
-        self.spec.reward_threshold = 0.0
-        self.spec.trials = 50
-        self.spec.max_episode_steps = environment_dimension
-        self.spec.id = "Bit Flipping"
-
+        self.reward_threshold = 0.0
+        self.trials = 50
+        self.max_episode_steps = environment_dimension
+        self.id = "Bit Flipping"
         self.environment_dimension = environment_dimension
         self.reward_for_achieving_goal = self.environment_dimension
         self.step_reward_for_not_achieving_goal = -1

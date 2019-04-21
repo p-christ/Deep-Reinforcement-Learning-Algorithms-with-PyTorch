@@ -41,12 +41,16 @@ class Base_Agent(object):
 
     def get_environment_title(self):
         """Extracts name of environment from it"""
+        print(self.environment)
         try:
-            title = self.environment.spec.id.split("-")[0]
+            return self.environment.unwrapped.id
         except AttributeError:
             if str(self.environment.unwrapped)[1:11] == "FetchReach":
                 title = "FetchReach"
-        return title
+                return title
+            else:
+                title = self.environment.spec.id.split("-")[0]
+                return title
 
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
@@ -69,14 +73,19 @@ class Base_Agent(object):
     def get_score_required_to_win(self):
         """Gets average score required to win game"""
         if self.environment_title == "FetchReach": return -5
-        if self.environment.spec.reward_threshold is not None:
-                return self.environment.spec.reward_threshold
+        try:
+            return self.environment.unwrapped.reward_threshold
+        except AttributeError:
+            return self.environment.spec.reward_threshold
+
 
     def get_trials(self):
         """Gets the number of trials to average a score over"""
         if self.environment_title == "FetchReach": return 100
-        else: return self.environment.spec.trials
-
+        try:
+            return self.environment.unwrapped.trials
+        except AttributeError:
+            return self.environment.spec.trials
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""

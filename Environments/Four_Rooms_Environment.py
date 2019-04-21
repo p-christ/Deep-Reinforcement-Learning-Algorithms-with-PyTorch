@@ -49,11 +49,11 @@ class Four_Rooms_Environment(gym.Env):
 
         self.seed()
 
-        self.spec = namedtuple('spec', 'reward_threshold trials max_episode_steps')
-        self.spec.reward_threshold = 0.0
-        self.spec.trials = 100
-        self.spec.max_episode_steps = self.reward_for_achieving_goal
-        self.spec.id = "Four Rooms"
+        self.reward_threshold = 0.0
+        self.trials = 100
+        self.max_episode_steps = self.reward_for_achieving_goal
+        self.id = "Four Rooms"
+
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
