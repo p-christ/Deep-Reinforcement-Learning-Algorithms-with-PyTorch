@@ -32,6 +32,7 @@ class Base_Agent(object):
         self.visualise_results_boolean = config.visualise_individual_results
         self.run_checks()
         self.global_step_number = 0
+        self.turn_off_exploration = False
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
 
     def step(self):
@@ -256,6 +257,7 @@ class Base_Agent(object):
 
     def get_updated_epsilon_exploration(self, epsilon=1.0, epsilon_decay_denominator=None):
         """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""
+        if self.turn_off_exploration: return 0.0
         if epsilon_decay_denominator is None: epsilon_decay_denominator = self.hyperparameters["epsilon_decay_rate_denominator"]
         epsilon = epsilon / (1.0 + (self.episode_number / epsilon_decay_denominator))
         return epsilon
@@ -266,5 +268,7 @@ class Base_Agent(object):
         if random.random() > epsilon: return torch.argmax(action_values).item()
         return random.randint(0, action_values.shape[1] - 1)
 
-
+    def turn_off_all_exploration(self):
+        """Turns off all exploration"""
+        self.turn_off_exploration = True
 
