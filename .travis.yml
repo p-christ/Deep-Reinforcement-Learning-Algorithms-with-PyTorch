@@ -12,6 +12,10 @@ install:
 script:
   - export PYTHONPATH="$PYTHONPATH:$PWD"
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/DQN_Agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Hierarchical_Agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Actor_Critic_Agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Policy_Gradient_Agents""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Environments""
   - pytest Tests/*.py
 
