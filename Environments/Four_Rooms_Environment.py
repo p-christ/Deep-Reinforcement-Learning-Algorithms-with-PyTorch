@@ -99,7 +99,7 @@ class Four_Rooms_Environment(gym.Env):
             self.done = True
         else:
             self.reward = self.step_reward_for_not_achieving_goal
-            if self.step_count >= self.spec.max_episode_steps: self.done = True
+            if self.step_count >= self.max_episode_steps: self.done = True
             else: self.done = False
         self.achieved_goal = self.next_state[:self.state_only_dimension]
         self.state = self.next_state

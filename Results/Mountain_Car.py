@@ -3,7 +3,7 @@ import gym
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Actor_Critic_Agents.DDPG import DDPG
 from TD3 import TD3
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 
 

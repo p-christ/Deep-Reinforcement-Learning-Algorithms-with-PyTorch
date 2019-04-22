@@ -45,7 +45,7 @@ class SNN_HRL(Base_Agent):
         skill_agent = self.create_skill_training_agent()
         skill_agent.run_n_episodes()
         self.skill_agent_config.environment.print_state_distribution()
-        skill_agent.turn_off_all_exploration()
+        skill_agent.turn_off_any_epsilon_greedy_exploration()
 
         manager_agent = self.create_manager_agent(skill_agent)
         manager_agent.run_n_episodes()

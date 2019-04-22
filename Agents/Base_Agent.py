@@ -15,9 +15,7 @@ class Base_Agent(object):
         self.environment_title = self.get_environment_title()
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
-        print("ACTION SIZE ", self.action_size)
         self.state_size =  int(self.get_state_size())
-        print("STATE SIZE ", self.state_size)
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.get_score_required_to_win()
         self.rolling_score_window = self.get_trials()
@@ -41,7 +39,6 @@ class Base_Agent(object):
 
     def get_environment_title(self):
         """Extracts name of environment from it"""
-        print(self.environment)
         try:
             return self.environment.unwrapped.id
         except AttributeError:
@@ -59,12 +56,8 @@ class Base_Agent(object):
 
     def get_state_size(self):
         """Gets the state_size for the gym env into the correct shape for a neural network"""
-        print(self.environment.observation_space)
-        print(self.environment.observation_space.shape)
-
         random_state = self.environment.reset()
         if isinstance(random_state, dict):
-            print("leaving 1 ")
             state_size = random_state["observation"].shape[0] + random_state["desired_goal"].shape[0]
             return state_size
         else:
@@ -73,19 +66,14 @@ class Base_Agent(object):
     def get_score_required_to_win(self):
         """Gets average score required to win game"""
         if self.environment_title == "FetchReach": return -5
-        try:
-            return self.environment.unwrapped.reward_threshold
-        except AttributeError:
-            return self.environment.spec.reward_threshold
-
+        try: return self.environment.unwrapped.reward_threshold
+        except AttributeError: return self.environment.spec.reward_threshold
 
     def get_trials(self):
         """Gets the number of trials to average a score over"""
         if self.environment_title == "FetchReach": return 100
-        try:
-            return self.environment.unwrapped.trials
-        except AttributeError:
-            return self.environment.spec.trials
+        try: return self.environment.unwrapped.trials
+        except AttributeError: return self.environment.spec.trials
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
@@ -159,11 +147,9 @@ class Base_Agent(object):
 
     def print_rolling_result(self):
         """Prints out the latest episode results"""
-        sys.stdout.write(
-            """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f},  Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}""".format(len(self.game_full_episode_scores),
-                                                                                               self.rolling_results[-1],
-                                                                                               self.max_rolling_score_seen,
-                                                                                               self.game_full_episode_scores[-1], self.max_episode_score_seen))
+        text = """"\r Episode {0}, Score: {3: .2f}, Max score seen: {4: .2f}, Rolling score: {1: .2f}, Max rolling score seen: {2: .2f}"""
+        sys.stdout.write(text.format(len(self.game_full_episode_scores), self.rolling_results[-1], self.max_rolling_score_seen,
+                                     self.game_full_episode_scores[-1], self.max_episode_score_seen))
         sys.stdout.flush()
 
     def show_whether_achieved_goal(self):
@@ -225,7 +211,6 @@ class Base_Agent(object):
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm, gradients_given=None):
         optimizer.zero_grad() #reset gradients to 0
-
         if gradients_given is None:
             loss.backward() #this calculates the gradients
         else:
@@ -235,7 +220,6 @@ class Base_Agent(object):
                         parameters.grad = gradients_given[episode][ix]
                     else:
                         parameters.grad += gradients_given[episode][ix]
-
         torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
     
@@ -247,14 +231,11 @@ class Base_Agent(object):
 
     def create_NN(self, input_dim, output_dim, key_to_use=None, override_seed=None):
         """Creates a neural network for the agents to use"""
-        if key_to_use:
-            hyperparameters = self.hyperparameters[key_to_use]
-        else:
-            hyperparameters = self.hyperparameters
-        if override_seed:
-            seed = override_seed
-        else:
-            seed = self.config.seed
+        if key_to_use: hyperparameters = self.hyperparameters[key_to_use]
+        else: hyperparameters = self.hyperparameters
+
+        if override_seed: seed = override_seed
+        else: seed = self.config.seed
 
         return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
@@ -278,7 +259,7 @@ class Base_Agent(object):
             return torch.argmax(action_values).item()
         return random.randint(0, action_values.shape[1] - 1)
 
-    def turn_off_all_exploration(self):
-        """Turns off all exploration"""
+    def turn_off_any_epsilon_greedy_exploration(self):
+        """Turns off all exploration in epsilon greedy method"""
         self.turn_off_exploration = True
 

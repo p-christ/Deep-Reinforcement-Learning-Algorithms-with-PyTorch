@@ -2,7 +2,7 @@ import gym
 
 from A2C import A2C
 from Agents.Policy_Gradient_Agents.PPO import PPO
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DDQN import DDQN
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
@@ -74,20 +74,20 @@ config.hyperparameters = {
 
     "Actor_Critic_Agents": {
 
-        "learning_rate": 0.01,
+        "learning_rate": 0.1,
         "linear_hidden_units": [20, 20],
         "final_layer_activation": ["SOFTMAX", None],
         "gradient_clipping_norm": 5.0,
         "discount_rate": 0.99,
         "epsilon_decay_rate_denominator": 1.0,
-        "episodes_per_learning_round": 5,
+        "episodes_per_learning_round": 1,
         "normalise_rewards": True
 
     }
 }
 
 if __name__ == "__main__":
-    AGENTS = [DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN, PPO]
+    AGENTS = [A2C, PPO, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

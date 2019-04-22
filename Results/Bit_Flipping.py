@@ -1,7 +1,7 @@
 from gym.wrappers import FlattenDictWrapper
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from Bit_Flipping_Environment import Bit_Flipping_Environment
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 

@@ -1,7 +1,7 @@
 import gym
 
 from Hierarchical_Agents.SNN_HRL import SNN_HRL
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 from Agents.Hierarchical_Agents.h_DQN import h_DQN

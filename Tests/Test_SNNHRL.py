@@ -6,12 +6,17 @@ import numpy as np
 
 config = Config()
 config.seed = 1
+config.num_episodes_to_run = 10
 
 config.hyperparameters = {
         "SKILL_AGENT": {
             "num_skills": 11,
             "regularisation_weight": 0.5,
-            "visitations_decay": 1.0
+            "visitations_decay": 1.0,
+            "episodes_for_pretraining": 100
+    },
+    "MANAGER": {
+        "timesteps_before_changing_skill": 5
     }
 }
 
@@ -20,7 +25,9 @@ def test_state_visitations():
     config.environment = Long_Corridor_Environment()
     config.env_parameters = {"stochasticity_of_action_right": 0.0}
     agent = SNN_HRL(config)
-    state_visitations = agent.skills_env.state_visitations
+    skill_agent = agent.create_skill_training_agent()
+    # agent.skills_env =
+    state_visitations = skill_agent.environment.state_visitations
     assert len(state_visitations) == 10
     assert len(state_visitations[0]) == 6
 

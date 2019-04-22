@@ -2,7 +2,7 @@ from Agents.DQN_Agents.DQN_HER import DQN_HER
 from DDQN import DDQN
 from Environments.Four_Rooms_Environment import Four_Rooms_Environment
 from Hierarchical_Agents.SNN_HRL import SNN_HRL
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
 from Agents.DQN_Agents.DQN import DQN
 

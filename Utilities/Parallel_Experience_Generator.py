@@ -2,12 +2,10 @@ import random
 import torch
 import sys
 from contextlib import closing
-from multiprocessing import Pool
-
 #
 # from pathos.multiprocessing import ProcessingPool as Pool
 
-from torch.multiprocessing import Pool as GPU_POOL
+from torch.multiprocessing import Pool
 from random import randint
 
 from Utilities.OU_Noise import OU_Noise
@@ -30,14 +28,9 @@ class Parallel_Experience_Generator(object):
     def play_n_episodes(self, n, exploration_epsilon=None):
         """Plays n episodes in parallel using the fixed policy and returns the data"""
         self.exploration_epsilon = exploration_epsilon
-        if self.use_GPU:
-            with closing(GPU_POOL(processes=n)) as pool:
-                results = pool.map(self, range(n))
-                pool.terminate()
-        else:
-            with closing(Pool(processes=n)) as pool:
-                results = pool.map(self, range(n))
-                pool.terminate()
+        with closing(Pool(processes=n)) as pool:
+            results = pool.map(self, range(n))
+            pool.terminate()
         states_for_all_episodes = [episode[0] for episode in results]
         actions_for_all_episodes = [episode[1] for episode in results]
         rewards_for_all_episodes = [episode[2] for episode in results]
@@ -87,5 +80,4 @@ class Parallel_Experience_Generator(object):
 
         if self.action_types == "CONTINUOUS": action += torch.Tensor(self.noise.sample())
         else: action = action.item()
-
         return action

@@ -3,8 +3,7 @@ import gym
 from Actor_Critic_Agents.DDPG import DDPG
 from Agents.Actor_Critic_Agents.DDPG_HER import DDPG_HER
 from Data_Structures.Config import Config
-from Fetch_Reach_Environment import Fetch_Reach_Environment
-from Trainer import Trainer
+from Agents.Trainer import Trainer
 
 
 config = Config()
