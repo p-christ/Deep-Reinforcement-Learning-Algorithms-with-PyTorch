@@ -1,6 +1,5 @@
 import copy
 import random
-import sys
 import time
 
 import numpy as np
@@ -8,12 +7,10 @@ import torch
 from torch import multiprocessing
 from torch.multiprocessing import Queue
 from Base_Agent import Base_Agent
-from Utility_Functions import create_actor_distribution, SharedAdam
-
+from Utilities.Utility_Functions import create_actor_distribution, SharedAdam
 
 class A3C(Base_Agent):
     agent_name = "A3C"
-
     def __init__(self, config):
         super(A3C, self).__init__(config)
         self.num_processes = multiprocessing.cpu_count()
@@ -43,7 +40,6 @@ class A3C(Base_Agent):
         time_taken = time.time() - start
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
-
     def print_results(self, episode_number, results_queue):
         while True:
             with episode_number.get_lock():
@@ -56,7 +52,6 @@ class A3C(Base_Agent):
 
 class A3C_Worker(torch.multiprocessing.Process):
     """Actor critic worker that will play the game for the designated number of episodes """
-
     def __init__(self, worker_num, environment, shared_model, counter, optimizer_lock, shared_optimizer,
                  config, episodes_to_run, epsilon_decay_denominator, action_size, action_types, results_queue, local_model):
         super(A3C_Worker, self).__init__()
@@ -97,7 +92,6 @@ class A3C_Worker(torch.multiprocessing.Process):
             self.episode_rewards = []
             self.episode_log_action_probabilities = []
             self.critic_outputs = []
-
             while not done:
                 action, action_log_prob, critic_outputs = self.pick_action_and_get_critic_values(self.local_model, state, epsilon_exploration)
                 next_state, reward, done, _ =  self.environment.step(action)
@@ -107,24 +101,12 @@ class A3C_Worker(torch.multiprocessing.Process):
                 self.episode_log_action_probabilities.append(action_log_prob)
                 self.critic_outputs.append(critic_outputs)
                 state = next_state
-
             total_loss = self.calculate_total_loss()
             self.take_optimization_step(total_loss)
             self.episode_number += 1
-
             with self.counter.get_lock():
                 self.counter.value += 1
                 self.results_queue.put(np.sum(self.episode_rewards))
-
-    def take_optimization_step(self, total_loss):
-        """Takes an optimisation step on the shared model. Uses lock to ensure """
-        with self.optimizer_lock:
-            total_loss.backward()
-            torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
-            self.shared_optimizer.zero_grad()
-            Base_Agent.move_gradients_one_model_to_another(self.local_model, self.shared_model, set_from_gradients_to_zero=True)
-            self.shared_optimizer.step()
-            Base_Agent.copy_model_over(self.shared_model, self.local_model)
 
     def calculate_new_exploration(self):
         """Calculates the new exploration parameter epsilon. It picks a random point within 3X above and below the
@@ -143,14 +125,9 @@ class A3C_Worker(torch.multiprocessing.Process):
     def pick_action_and_get_critic_values(self, policy, state, epsilon_exploration=None):
         """Picks an action using the policy"""
         state = torch.from_numpy(state).float().unsqueeze(0)
-
-        print("state input ", state)
         model_output = policy.forward(state)
         actor_output = model_output[:, list(range(self.action_size))] #we only use first set of columns to decide action, last column is state-value
         critic_output = model_output[:, -1]
-
-        print("Actor output ", actor_output)
-
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().cpu().numpy()
         if self.action_types == "CONTINUOUS": action += self.noise.sample()
@@ -191,7 +168,6 @@ class A3C_Worker(torch.multiprocessing.Process):
         """Normalises the discounted returns by dividing by mean and std of returns that episode"""
         mean = np.mean(discounted_returns)
         std = np.std(discounted_returns)
-        print(discounted_returns)
         discounted_returns -= mean
         discounted_returns /= std
         return discounted_returns
@@ -211,3 +187,13 @@ class A3C_Worker(torch.multiprocessing.Process):
         actor_loss = -1.0 * action_log_probabilities_for_all_episodes * advantages
         actor_loss = actor_loss.mean()
         return actor_loss
+
+    def take_optimization_step(self, total_loss):
+        """Takes an optimisation step on the shared model. Uses lock to ensure """
+        with self.optimizer_lock:
+            total_loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
+            self.shared_optimizer.zero_grad()
+            Base_Agent.move_gradients_one_model_to_another(self.local_model, self.shared_model, set_from_gradients_to_zero=True)
+            self.shared_optimizer.step()
+            Base_Agent.copy_model_over(self.shared_model, self.local_model)

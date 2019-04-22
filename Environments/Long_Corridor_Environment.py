@@ -66,7 +66,7 @@ class Long_Corridor_Environment(gym.Env):
         else:
             self.reward = 0
         if self.next_state == self.num_states - 1: self.visited_final_state = True
-        if self.episode_steps >= self.spec.max_episode_steps: self.done = True
+        if self.episode_steps >= self.max_episode_steps: self.done = True
 
     def _move_left(self):
         """Moves left in environment"""
