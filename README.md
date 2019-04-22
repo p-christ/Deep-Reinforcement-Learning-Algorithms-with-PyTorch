@@ -26,7 +26,7 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. *Stochastic NNs for Hierarchical Reinforcement Learning (SNN-HRL)* ([Florensa et al. 2017](https://arxiv.org/pdf/1704.03012.pdf)) 
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
-Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, A3C, Soft Actor-Critic and hierarchical RL algorithms soon.
+Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add A2C, Soft Actor-Critic and more hierarchical RL algorithms soon.
 
 ## **Environments Implemented**
 

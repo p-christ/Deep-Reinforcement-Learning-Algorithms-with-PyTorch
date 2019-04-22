@@ -49,9 +49,6 @@ def test_add_default_hyperparameters_if_not_overriden():
     config.hyperparameters = Trainer(config, []).add_default_hyperparameters_if_not_overriden(config.hyperparameters)
     assert config.hyperparameters == {"DQN_Agents": alternative_hyperparmater_set}
 
-    config.hyperparameters = {"A": {"B": {"helo": 20,  "output_activation": "YESSS!!"}, "C": 10, "D": {} } }
-    config.hyperparameters = Trainer(config, []).add_default_hyperparameters_if_not_overriden(config.hyperparameters)
-    assert config.hyperparameters == {"A": {"C": 10, "D": default_hyperparameter_set, "B": alternative_hyperparmater_set}}
 
 
 

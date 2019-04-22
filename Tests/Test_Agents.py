@@ -205,11 +205,3 @@ def test_agents_can_play_games_of_different_dimensions():
     results = trainer.run_games_for_agents()
     for agent in AGENTS:
         assert agent.agent_name in results.keys()
-
-    AGENTS = [DDPG, DDPG_HER]
-    trainer = Trainer(config, AGENTS)
-    config.environment = gym.make("FetchReach-v1")
-    print("hello")
-    results = trainer.run_games_for_agents()
-    for agent in AGENTS:
-        assert agent.agent_name in results.keys()
