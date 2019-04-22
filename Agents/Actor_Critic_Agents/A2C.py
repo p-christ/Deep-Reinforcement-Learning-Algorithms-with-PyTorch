@@ -22,7 +22,7 @@ from Utility_Functions import create_actor_distribution
 # envs_per_process = 64 / process_count
 
 
-https://github.com/ikostrikov/pytorch-a3c
+# https://github.com/ikostrikov/pytorch-a3c
 
 class A2C(Base_Agent):
     """Synchronous version of A2C algorithm from deepmind paper https://arxiv.org/pdf/1602.01783.pdf"""

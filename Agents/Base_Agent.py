@@ -263,3 +263,16 @@ class Base_Agent(object):
         """Turns off all exploration in epsilon greedy method"""
         self.turn_off_exploration = True
 
+    @staticmethod
+    def move_gradients_one_model_to_another(from_model, to_model, set_from_gradients_to_zero=False):
+        """Copies gradients from from_model to to_model"""
+        for from_model, to_model in zip(from_model.parameters(), to_model.parameters()):
+            to_model._grad = from_model.grad.clone()
+            if set_from_gradients_to_zero: from_model._grad = None
+
+
+    @staticmethod
+    def copy_model_over(from_model, to_model):
+        """Copies model parameters from from_model to to_model"""
+        for to_model, from_model in zip(to_model.parameters(), from_model.parameters()):
+            to_model.data.copy_(from_model.data.clone())

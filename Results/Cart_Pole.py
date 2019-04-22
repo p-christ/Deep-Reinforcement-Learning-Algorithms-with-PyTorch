@@ -1,6 +1,7 @@
 import gym
 
 from A2C import A2C
+from A3C import A3C
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
@@ -12,14 +13,14 @@ from Agents.DQN_Agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 config = Config()
 config.seed = 1
 config.environment = gym.make("CartPole-v0")
-config.num_episodes_to_run = 600
+config.num_episodes_to_run = 1500
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
-config.runs_per_agent = 3
+config.runs_per_agent = 1
 config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
@@ -74,20 +75,19 @@ config.hyperparameters = {
 
     "Actor_Critic_Agents": {
 
-        "learning_rate": 0.1,
-        "linear_hidden_units": [20, 20],
+        "learning_rate": 0.005,
+        "linear_hidden_units": [20, 10],
         "final_layer_activation": ["SOFTMAX", None],
         "gradient_clipping_norm": 5.0,
         "discount_rate": 0.99,
-        "epsilon_decay_rate_denominator": 1.0,
-        "episodes_per_learning_round": 1,
+        "epsilon_decay_rate_denominator": 50.0,
         "normalise_rewards": True
 
     }
 }
 
 if __name__ == "__main__":
-    AGENTS = [A2C, PPO, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
+    AGENTS = [A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN, PPO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

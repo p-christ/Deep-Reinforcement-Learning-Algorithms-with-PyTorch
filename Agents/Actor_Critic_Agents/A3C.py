@@ -1,31 +1,85 @@
+import copy
+import random
+import sys
+import time
+
+import numpy as np
 import torch
 from torch import multiprocessing
-
+from torch.multiprocessing import Queue
 from Base_Agent import Base_Agent
+from Utility_Functions import create_actor_distribution, SharedAdam
 
 
 class A3C(Base_Agent):
-    pass
+    agent_name = "A3C"
+
+    def __init__(self, config):
+        super(A3C, self).__init__(config)
+        self.num_processes = multiprocessing.cpu_count()
+        self.actor_critic = self.create_NN(input_dim=self.state_size, output_dim=[self.action_size, 1])
+        self.actor_critic_optimizer = SharedAdam(self.actor_critic.parameters(), lr=self.hyperparameters["learning_rate"])
+
+    def run_n_episodes(self):
+        """Runs game to completion n times and then summarises results and saves model (if asked to)"""
+        start = time.time()
+        results_queue = Queue()
+        episode_number = multiprocessing.Value('i', 0)
+        optimizer_lock = multiprocessing.Lock()
+        episodes_per_process = int(self.config.num_episodes_to_run / self.num_processes) + 1
+        processes = []
+        self.actor_critic.share_memory()
+        self.actor_critic_optimizer.share_memory()
+        for process_num in range(self.num_processes):
+            p = A3C_Worker(process_num, copy.deepcopy(self.environment), self.actor_critic, episode_number,  optimizer_lock,
+                                    self.actor_critic_optimizer, self.config, episodes_per_process,
+                                    self.hyperparameters["epsilon_decay_rate_denominator"],
+                                    self.action_size, self.action_types,
+                                    results_queue, copy.deepcopy(self.actor_critic))
+            p.start()
+            processes.append(p)
+        self.print_results(episode_number, results_queue)
+        for p in processes: p.join()
+        time_taken = time.time() - start
+        return self.game_full_episode_scores, self.rolling_results, time_taken
 
 
+    def print_results(self, episode_number, results_queue):
+        while True:
+            with episode_number.get_lock():
+                carry_on = episode_number.value < self.config.num_episodes_to_run
+            if carry_on:
+                if not results_queue.empty():
+                    self.total_episode_score_so_far = results_queue.get()
+                    self.save_and_print_result()
+            else: break
 
-class Actor_Critic_Worker(multiprocessing.Process):
-    rank, args, shared_model, counter, lock, optimizer = None
+class A3C_Worker(torch.multiprocessing.Process):
+    """Actor critic worker that will play the game for the designated number of episodes """
 
-    def __init__(self, worker_num, environment, shared_model, counter, lock, optimizer, config):
-        super(Actor_Critic_Worker, self).__init__()
-
+    def __init__(self, worker_num, environment, shared_model, counter, optimizer_lock, shared_optimizer,
+                 config, episodes_to_run, epsilon_decay_denominator, action_size, action_types, results_queue, local_model):
+        super(A3C_Worker, self).__init__()
         self.environment = environment
         self.config = config
-        self.set_seeds(worker_num)
+        self.worker_num = worker_num
 
-        self.environment = agent.environment
-        self.agent = agent
-        self.exploration = exploration
-        self.actor_critic = agent.actor_critic
-        self.actor_critic_optimizer = agent.actor_critic_optimizer
-        self.hyperparameters = agent.hyperparameters
-        self.queue = queue
+        self.gradient_clipping_norm = self.config.hyperparameters["gradient_clipping_norm"]
+        self.discount_rate = self.config.hyperparameters["discount_rate"]
+        self.normalise_rewards = self.config.hyperparameters["normalise_rewards"]
+
+        self.action_size = action_size
+        self.set_seeds(self.worker_num)
+        self.shared_model = shared_model
+        self.local_model = local_model
+        self.counter = counter
+        self.optimizer_lock = optimizer_lock
+        self.shared_optimizer = shared_optimizer
+        self.episodes_to_run = episodes_to_run
+        self.epsilon_decay_denominator = epsilon_decay_denominator
+        self.action_types = action_types
+        self.results_queue = results_queue
+        self.episode_number = 0
 
     def set_seeds(self, worker_num):
         """Sets random seeds for this worker"""
@@ -33,73 +87,98 @@ class Actor_Critic_Worker(multiprocessing.Process):
         self.environment.seed(self.config.seed + worker_num)
 
     def run(self):
-        self.state = self.reset_game_for_worker()
-        done = False
-        self.episode_states = []
-        self.episode_actions = []
-        self.episode_rewards = []
-        self.episode_log_action_probabilities = []
-        while not done:
-            action, action_log_prob = self.pick_action() # self.actor_critic, state, self.epsilon_exploration)
-            self.environment.conduct_action(action)
-            next_state = self.environment.get_next_state()
-            reward = self.environment.get_reward()
-            done = self.environment.get_done()
-            self.episode_states.append(state)
-            self.episode_actions.append(action)
-            self.episode_rewards.append(reward)
-            self.episode_log_action_probabilities.append(action_log_prob)
-            state = next_state
+        """Starts the worker"""
+        for _ in range(self.episodes_to_run):
+            epsilon_exploration = self.calculate_new_exploration()
+            state = self.reset_game_for_worker()
+            done = False
+            self.episode_states = []
+            self.episode_actions = []
+            self.episode_rewards = []
+            self.episode_log_action_probabilities = []
+            self.critic_outputs = []
 
-        total_loss = self.calculate_total_loss() #episode_states, episode_rewards, episode_log_action_probabilities)
-        gradients = self.calculate_gradients(total_loss)
+            while not done:
+                action, action_log_prob, critic_outputs = self.pick_action_and_get_critic_values(self.local_model, state, epsilon_exploration)
+                next_state, reward, done, _ =  self.environment.step(action)
+                self.episode_states.append(state)
+                self.episode_actions.append(action)
+                self.episode_rewards.append(reward)
+                self.episode_log_action_probabilities.append(action_log_prob)
+                self.critic_outputs.append(critic_outputs)
+                state = next_state
 
-        self.queue.put((gradients, self.episode_rewards, self.episode_states, self.episode_actions))
+            total_loss = self.calculate_total_loss()
+            self.take_optimization_step(total_loss)
+            self.episode_number += 1
+
+            with self.counter.get_lock():
+                self.counter.value += 1
+                self.results_queue.put(np.sum(self.episode_rewards))
+
+    def take_optimization_step(self, total_loss):
+        """Takes an optimisation step on the shared model. Uses lock to ensure """
+        with self.optimizer_lock:
+            total_loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
+            self.shared_optimizer.zero_grad()
+            Base_Agent.move_gradients_one_model_to_another(self.local_model, self.shared_model, set_from_gradients_to_zero=True)
+            self.shared_optimizer.step()
+            Base_Agent.copy_model_over(self.shared_model, self.local_model)
+
+    def calculate_new_exploration(self):
+        """Calculates the new exploration parameter epsilon. It picks a random point within 3X above and below the
+        current epsilon"""
+        with self.counter.get_lock():
+            epsilon = 1.0 / (1.0 + (self.counter.value / self.epsilon_decay_denominator))
+        epsilon = max(0.0, random.uniform(epsilon / 3.0, epsilon * 3.0))
+        return epsilon
 
     def reset_game_for_worker(self):
         """Resets the game environment so it is ready to play a new episode"""
-        seed = random.randint(0, sys.maxsize)
-        torch.manual_seed(seed)  # Need to do this otherwise each worker generates same experience
-        state = self.env.reset()
-        if self.agent.action_types == "CONTINUOUS": self.noise.reset()
+        state = self.environment.reset()
+        if self.action_types == "CONTINUOUS": self.noise.reset()
         return state
 
-    def pick_action(self): #, policy, state, epsilon_exploration=None):
+    def pick_action_and_get_critic_values(self, policy, state, epsilon_exploration=None):
         """Picks an action using the policy"""
-        state = torch.from_numpy(self.state).float().unsqueeze(0)
-        actor_output = self.actor_critic.forward(state)
-        actor_output = actor_output[:, list(range(self.agent.action_size))] #we only use first set of columns to decide action, last column is state-value
-        # print("Actor outputs should sum to 1 ", actor_output)
-        action_distribution = create_actor_distribution(self.agent.action_types, actor_output, self.agent.action_size)
+        state = torch.from_numpy(state).float().unsqueeze(0)
+        model_output = policy.forward(state)
+        actor_output = model_output[:, list(range(self.action_size))] #we only use first set of columns to decide action, last column is state-value
+
+        critic_output = model_output[:, -1]
+
+        action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().cpu().numpy()
-        if self.agent.action_types == "CONTINUOUS": action += self.noise.sample()
-        if self.agent.action_types == "DISCRETE":
-            if random.random() <= self.exploration:
-                action = random.randint(0, self.agent.action_size - 1)
-                action = np.array([action])
+        if self.action_types == "CONTINUOUS": action += self.noise.sample()
+        if self.action_types == "DISCRETE":
+            if random.random() <= epsilon_exploration:
+                action = random.randint(0, self.action_size - 1)
+            else:
+                action = action[0]
         action_log_prob = self.calculate_log_action_probability(action, action_distribution)
-        return action, action_log_prob
+        return action, action_log_prob, critic_output
 
     def calculate_log_action_probability(self, actions, action_distribution):
         """Calculates the log probability of the chosen action"""
-        policy_distribution_log_prob = action_distribution.log_prob(torch.Tensor(actions))
+        policy_distribution_log_prob = action_distribution.log_prob(torch.Tensor([actions]))
         return policy_distribution_log_prob
 
-    def calculate_total_loss(self): #, episode_states, episode_rewards, episode_log_action_probabilities):
+    def calculate_total_loss(self):
         """Calculates the actor loss + critic loss"""
         discounted_returns = self.calculate_discounted_returns()
-        if self.hyperparameters["normalise_rewards"]:
+        if self.normalise_rewards:
             discounted_returns = self.normalise_discounted_returns(discounted_returns)
         critic_loss, advantages = self.calculate_critic_loss_and_advantages(discounted_returns)
         actor_loss = self.calculate_actor_loss(advantages)
         total_loss = actor_loss + critic_loss
         return total_loss
 
-    def calculate_discounted_returns(self):#, states, rewards):
+    def calculate_discounted_returns(self):
         """Calculates the cumulative discounted return for an episode which we will then use in a learning iteration"""
         discounted_returns = [0]
         for ix in range(len(self.episode_states)):
-            return_value = self.episode_rewards[-(ix + 1)] + self.hyperparameters["discount_rate"]*discounted_returns[-1]
+            return_value = self.episode_rewards[-(ix + 1)] + self.discount_rate*discounted_returns[-1]
             discounted_returns.append(return_value)
         discounted_returns = discounted_returns[1:]
         discounted_returns = discounted_returns[::-1]
@@ -115,15 +194,11 @@ class Actor_Critic_Worker(multiprocessing.Process):
 
     def calculate_critic_loss_and_advantages(self, all_discounted_returns):
         """Calculates the critic's loss and the advantages"""
-        states = torch.Tensor(self.episode_states)
-        critic_values = self.actor_critic(states)[:, -1]
-
+        critic_values = torch.cat(self.critic_outputs)
         advantages = torch.Tensor(all_discounted_returns) - critic_values
         advantages = advantages.detach()
-
         critic_loss =  (torch.Tensor(all_discounted_returns) - critic_values)**2
         critic_loss = critic_loss.mean()
-
         return critic_loss, advantages
 
     def calculate_actor_loss(self, advantages):
@@ -132,10 +207,3 @@ class Actor_Critic_Worker(multiprocessing.Process):
         actor_loss = -1.0 * action_log_probabilities_for_all_episodes * advantages
         actor_loss = actor_loss.mean()
         return actor_loss
-
-    def calculate_gradients(self, total_loss):
-        """Calculates gradients for the worker"""
-        self.actor_critic_optimizer.zero_grad()
-        total_loss.backward()
-        gradients = [param.grad for param in list(self.actor_critic.parameters())]
-        return gradients

@@ -36,6 +36,7 @@ class Trainer(object):
             "DDPG-HER": "Actor_Critic_Agents",
             "TD3": "Actor_Critic_Agents",
             "A2C": "Actor_Critic_Agents",
+            "A3C": "Actor_Critic_Agents",
             "h-DQN": "h_DQN",
             "SNN-HRL": "SNN_HRL"
         }
@@ -56,6 +57,7 @@ class Trainer(object):
             "TD3": "#E74C3C",
             "h-DQN": "#D35400",
             "SNN-HRL": "#800000",
+            "A3C": "#E74C3C"
         }
         return agent_to_color_dictionary
 
