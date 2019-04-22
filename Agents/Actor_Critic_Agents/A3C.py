@@ -143,10 +143,13 @@ class A3C_Worker(torch.multiprocessing.Process):
     def pick_action_and_get_critic_values(self, policy, state, epsilon_exploration=None):
         """Picks an action using the policy"""
         state = torch.from_numpy(state).float().unsqueeze(0)
+
+        print("state input ", state)
         model_output = policy.forward(state)
         actor_output = model_output[:, list(range(self.action_size))] #we only use first set of columns to decide action, last column is state-value
-
         critic_output = model_output[:, -1]
+
+        print("Actor output ", actor_output)
 
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
         action = action_distribution.sample().cpu().numpy()
@@ -188,6 +191,7 @@ class A3C_Worker(torch.multiprocessing.Process):
         """Normalises the discounted returns by dividing by mean and std of returns that episode"""
         mean = np.mean(discounted_returns)
         std = np.std(discounted_returns)
+        print(discounted_returns)
         discounted_returns -= mean
         discounted_returns /= std
         return discounted_returns

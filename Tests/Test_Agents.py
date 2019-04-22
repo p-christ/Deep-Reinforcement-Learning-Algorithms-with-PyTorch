@@ -1,4 +1,6 @@
 import random
+
+from A3C import A3C
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from Agents.DQN_Agents.DDQN import DDQN
 from Agents.DQN_Agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
@@ -71,6 +73,18 @@ config.hyperparameters = {
         "theta": 0.0, #only required for continuous action games
         "sigma": 0.0, #only required for continuous action games
         "epsilon_decay_rate_denominator": 1
+    },
+
+    "Actor_Critic_Agents": {
+
+        "learning_rate": 0.005,
+        "linear_hidden_units": [20, 10],
+        "final_layer_activation": ["SOFTMAX", None],
+        "gradient_clipping_norm": 5.0,
+        "discount_rate": 0.99,
+        "epsilon_decay_rate_denominator": 50.0,
+        "normalise_rewards": True
+
     }
 }
 
