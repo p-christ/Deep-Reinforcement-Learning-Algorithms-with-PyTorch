@@ -1,7 +1,5 @@
 import gym
-
-
-from A3C import A3C
+from Agents.Actor_Critic_Agents.A3C import A3C
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config

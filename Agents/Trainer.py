@@ -97,7 +97,7 @@ class Trainer(object):
                                                                            dict_keys=["observation", "desired_goal"])
 
             if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
-            agent_config.hyperparameters = add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
+            agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
@@ -134,11 +134,9 @@ class Trainer(object):
                     for hyperparameter in default_hyperparameter_choices:
                         if hyperparameter not in hyperparameters[key][inside_key].keys():
                             hyperparameters[key][inside_key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
-                            had_nested_dictionary = True
-            if not had_nested_dictionary:
-                for hyperparameter in default_hyperparameter_choices:
-                    if hyperparameter not in hyperparameters[key].keys():
-                        hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
+            for hyperparameter in default_hyperparameter_choices:
+                if hyperparameter not in hyperparameters[key].keys():
+                    hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
         return hyperparameters
 
 

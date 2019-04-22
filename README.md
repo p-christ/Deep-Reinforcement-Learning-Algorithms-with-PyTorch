@@ -64,7 +64,7 @@ aligns with the results found in the paper.
 
 The results on the right show the performance of DDQN and algorithm Stochastic NNs for Hierarchical Reinforcement Learning 
 (SNN-HRL) from [Florensa et al. 2017](https://arxiv.org/pdf/1704.03012.pdf). DDQN is used as the comparison because
-the implementation of SSN-HRL uses 2 DDQN algorithms within it. Note also that the first 300 episodes of training
+the implementation of SSN-HRL uses 2 DDQN algorithms within it. Note that the first 300 episodes of training
 for SNN-HRL were used for pre-training which is why there is no reward for those episodes. 
  
 ![Long Corridor and Four Rooms](Results/Data_and_Graphs/Four_Rooms_and_Long_Corridor.png)

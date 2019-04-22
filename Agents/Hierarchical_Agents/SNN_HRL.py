@@ -85,12 +85,10 @@ class Skill_Wrapper(Wrapper):
     def reset(self, **kwargs):
         observation = self.env.reset(**kwargs)
         self.skill = random.randint(0, self.num_skills - 1)
-
-        print("observation ", observation)
         return self.observation(observation)
 
     def observation(self, observation):
-        return np.concatenate((np.array([observation]), np.array([self.skill])))
+        return np.concatenate((np.array(observation), np.array([self.skill])))
 
     def step(self, action):
         next_state, reward, done, _ = self.env.step(action)

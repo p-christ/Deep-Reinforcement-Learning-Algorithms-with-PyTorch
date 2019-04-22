@@ -9,6 +9,24 @@ from torch.multiprocessing import Queue
 from Base_Agent import Base_Agent
 from Utilities.Utility_Functions import create_actor_distribution, SharedAdam
 
+# change
+# to
+# a
+# manager
+# situation
+# that
+# handles
+# the
+# model
+# updates...so
+# then
+# theres
+# no
+# waiting
+# for other process to update gradients...
+#
+# multiprocessing.Manager
+
 class A3C(Base_Agent):
     agent_name = "A3C"
     def __init__(self, config):

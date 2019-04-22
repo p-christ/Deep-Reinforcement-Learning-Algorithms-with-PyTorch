@@ -24,6 +24,14 @@
 #
 # # https://github.com/ikostrikov/pytorch-a3c
 #
+
+use A barrier to synchronise it...
+or also a manager ... manager dict
+
+write tests that the algorithm work with games of discrete vs. not and different state sizes!...
+
+
+
 # class A2C(Base_Agent):
 #     """Synchronous version of A2C algorithm from deepmind paper https://arxiv.org/pdf/1602.01783.pdf"""
 #     agent_name = "A2C"
