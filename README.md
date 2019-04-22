@@ -1,6 +1,9 @@
 # Deep Reinforcement Learning Algorithms with PyTorch
 
 ![Travis CI](https://travis-ci.org/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch.svg?branch=master)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+
+
 
 ![RL](Utilities/RL_image.jpeg)   ![PyTorch](Utilities/PyTorch-logo-2.jpg)
 

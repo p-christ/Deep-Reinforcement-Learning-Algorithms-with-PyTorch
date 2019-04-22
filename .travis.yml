@@ -16,7 +16,9 @@ script:
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Hierarchical_Agents""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Actor_Critic_Agents""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Agents/Policy_Gradient_Agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/Utilities/Data_Structures""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/Environments""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/*""
   - pytest Tests/*.py
 
 
