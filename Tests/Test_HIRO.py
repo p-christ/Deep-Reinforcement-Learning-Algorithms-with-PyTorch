@@ -29,12 +29,12 @@ config.hyperparameters = {
     }
 }
 
+config.hyperparameters = config.hyperparameters["HIRO"]
+agent = HIRO(config)
+env = agent.env_for_sub_policy
 
 def test_sub_policy_env_reset():
     """Tests reset method in the sub policy environment we create"""
-    config.hyperparameters = config.hyperparameters["HIRO"]
-    agent = HIRO(config)
-    env = agent.env_for_sub_policy
     external_state = env.reset()
     assert external_state.shape[0] == 6
     assert env.internal_state.shape[0] == 3
@@ -45,7 +45,14 @@ def test_sub_policy_env_reset():
 
 def test_sub_policy_env_turn_internal_state_to_external_state():
     """Tests turn_internal_state_to_external_state method in the sub policy environment we create"""
-    pass
+    env.goal = np.array([1., 2., 3.])
+    result = env.turn_internal_state_to_external_state(np.array([9., 9., 9.]))
+    assert all(result == np.array([9., 9., 9., 1., 2., 3.]))
+    external_state = env.reset()
+    env.goal = np.array([-1., 0., 0.])
+    result = env.turn_internal_state_to_external_state(external_state[0:3])
+    assert all(result[:3] == external_state[:3]) and all(result[3:] == np.array([-1., 0., 0.]))
+
 
 def test_sub_policy_env_step():
     """Tests step method in the sub policy environment we create"""
