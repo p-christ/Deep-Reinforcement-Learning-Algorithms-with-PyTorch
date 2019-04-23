@@ -2,6 +2,7 @@ import random
 
 import gym
 
+from A2C import A2C
 from A3C import A3C
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from Agents.DQN_Agents.DDQN import DDQN
@@ -180,10 +181,9 @@ def test_agents_can_play_games_of_different_dimensions():
     config.num_episodes_to_run = 10
     config.hyperparameters["DQN_Agents"]["batch_size"] = 3
 
-    AGENTS = [A3C, PPO, DDQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN]
+    AGENTS = [A2C, A3C, PPO, DDQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN]
     trainer = Trainer(config, AGENTS)
     config.environment = gym.make("CartPole-v0")
-    print("hello")
     results = trainer.run_games_for_agents()
     for agent in AGENTS:
         assert agent.agent_name in results.keys()
