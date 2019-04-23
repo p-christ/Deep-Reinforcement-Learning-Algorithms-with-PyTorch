@@ -181,7 +181,6 @@ def test_agents_can_play_games_of_different_dimensions():
 
     config.num_episodes_to_run = 10
     config.hyperparameters["DQN_Agents"]["batch_size"] = 3
-
     AGENTS = [A2C, A3C, PPO, DDQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DQN]
     trainer = Trainer(config, AGENTS)
     config.environment = gym.make("CartPole-v0")
@@ -189,20 +188,17 @@ def test_agents_can_play_games_of_different_dimensions():
     for agent in AGENTS:
         assert agent.agent_name in results.keys()
 
-
-    config.environment = gym.make("MountainCarContinuous-v0")
-
     AGENTS = [TD3, PPO, DDPG]
+    config.environment = gym.make("MountainCarContinuous-v0")
     trainer = Trainer(config, AGENTS)
     results = trainer.run_games_for_agents()
     for agent in AGENTS:
         assert agent.agent_name in results.keys()
 
-
     AGENTS = [DDQN, SNN_HRL]
+    config.environment = Four_Rooms_Environment(15, 15, stochastic_actions_probability=0.25,
+                                                random_start_user_place=True, random_goal_place=False)
     trainer = Trainer(config, AGENTS)
-    config.environment = Four_Rooms_Environment(15, 15, stochastic_actions_probability=0.25, random_start_user_place=True, random_goal_place=False)
-    print("hello")
     results = trainer.run_games_for_agents()
     for agent in AGENTS:
         assert agent.agent_name in results.keys()
