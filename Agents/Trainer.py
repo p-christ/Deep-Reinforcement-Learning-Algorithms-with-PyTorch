@@ -57,7 +57,8 @@ class Trainer(object):
             "TD3": "#E74C3C",
             "h-DQN": "#D35400",
             "SNN-HRL": "#800000",
-            "A3C": "#E74C3C"
+            "A3C": "#E74C3C",
+            "A2C": "#F1948A"
         }
         return agent_to_color_dictionary
 

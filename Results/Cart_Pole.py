@@ -1,4 +1,6 @@
 import gym
+
+from A2C import A2C
 from Agents.Actor_Critic_Agents.A3C import A3C
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Trainer import Trainer
@@ -79,13 +81,14 @@ config.hyperparameters = {
         "gradient_clipping_norm": 5.0,
         "discount_rate": 0.99,
         "epsilon_decay_rate_denominator": 50.0,
-        "normalise_rewards": True
+        "normalise_rewards": True,
+        "exploration_worker_difference": 1.0
 
     }
 }
 
 if __name__ == "__main__":
-    AGENTS = [A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN, PPO]
+    AGENTS = [A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN, PPO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

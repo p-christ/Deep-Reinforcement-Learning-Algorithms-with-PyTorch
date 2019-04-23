@@ -1,37 +1,20 @@
 import copy
 import random
 import time
-
 import numpy as np
 import torch
 from torch import multiprocessing
 from torch.multiprocessing import Queue
+from torch.optim import Adam
 from Base_Agent import Base_Agent
 from Utilities.Utility_Functions import create_actor_distribution, SharedAdam
-
-# change
-# to
-# a
-# manager
-# situation
-# that
-# handles
-# the
-# model
-# updates...so
-# then
-# theres
-# no
-# waiting
-# for other process to update gradients...
-#
-# multiprocessing.Manager
 
 class A3C(Base_Agent):
     agent_name = "A3C"
     def __init__(self, config):
         super(A3C, self).__init__(config)
         self.num_processes = multiprocessing.cpu_count()
+        self.worker_processes = self.num_processes - 2
         self.actor_critic = self.create_NN(input_dim=self.state_size, output_dim=[self.action_size, 1])
         self.actor_critic_optimizer = SharedAdam(self.actor_critic.parameters(), lr=self.hyperparameters["learning_rate"])
 
@@ -39,26 +22,36 @@ class A3C(Base_Agent):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         start = time.time()
         results_queue = Queue()
+        gradient_updates_queue = Queue()
         episode_number = multiprocessing.Value('i', 0)
         optimizer_lock = multiprocessing.Lock()
-        episodes_per_process = int(self.config.num_episodes_to_run / self.num_processes) + 1
+        episodes_per_process = int(self.config.num_episodes_to_run / self.worker_processes) + 1
         processes = []
         self.actor_critic.share_memory()
         self.actor_critic_optimizer.share_memory()
-        for process_num in range(self.num_processes):
-            p = A3C_Worker(process_num, copy.deepcopy(self.environment), self.actor_critic, episode_number,  optimizer_lock,
+
+        optimizer_worker = multiprocessing.Process(target=self.update_shared_model, args=(gradient_updates_queue,))
+        optimizer_worker.start()
+
+        for process_num in range(self.worker_processes):
+            worker = Actor_Critic_Worker(process_num, copy.deepcopy(self.environment), self.actor_critic, episode_number, optimizer_lock,
                                     self.actor_critic_optimizer, self.config, episodes_per_process,
                                     self.hyperparameters["epsilon_decay_rate_denominator"],
                                     self.action_size, self.action_types,
-                                    results_queue, copy.deepcopy(self.actor_critic))
-            p.start()
-            processes.append(p)
+                                    results_queue, copy.deepcopy(self.actor_critic), gradient_updates_queue)
+            worker.start()
+            processes.append(worker)
+
         self.print_results(episode_number, results_queue)
-        for p in processes: p.join()
+        for worker in processes:
+            worker.join()
+            optimizer_worker.kill()
+
         time_taken = time.time() - start
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def print_results(self, episode_number, results_queue):
+        """Worker that prints out results as they get put into a queue"""
         while True:
             with episode_number.get_lock():
                 carry_on = episode_number.value < self.config.num_episodes_to_run
@@ -68,11 +61,22 @@ class A3C(Base_Agent):
                     self.save_and_print_result()
             else: break
 
-class A3C_Worker(torch.multiprocessing.Process):
+    def update_shared_model(self, gradient_updates_queue):
+        """Worker that updates the shared model with gradients as they get put into the queue"""
+        while True:
+            gradients = gradient_updates_queue.get()
+            with self.optimizer_lock:
+                self.actor_critic_optimizer.zero_grad()
+                for grads, params in zip(gradients, self.actor_critic.parameters()):
+                    params._grad = grads  # maybe need to do grads.clone()
+                self.actor_critic_optimizer.step()
+
+class Actor_Critic_Worker(torch.multiprocessing.Process):
     """Actor critic worker that will play the game for the designated number of episodes """
     def __init__(self, worker_num, environment, shared_model, counter, optimizer_lock, shared_optimizer,
-                 config, episodes_to_run, epsilon_decay_denominator, action_size, action_types, results_queue, local_model):
-        super(A3C_Worker, self).__init__()
+                 config, episodes_to_run, epsilon_decay_denominator, action_size, action_types, results_queue,
+                 local_model, gradient_updates_queue):
+        super(Actor_Critic_Worker, self).__init__()
         self.environment = environment
         self.config = config
         self.worker_num = worker_num
@@ -85,14 +89,18 @@ class A3C_Worker(torch.multiprocessing.Process):
         self.set_seeds(self.worker_num)
         self.shared_model = shared_model
         self.local_model = local_model
+        self.local_optimizer = Adam(self.local_model.parameters(), lr=0.0)
         self.counter = counter
         self.optimizer_lock = optimizer_lock
         self.shared_optimizer = shared_optimizer
         self.episodes_to_run = episodes_to_run
         self.epsilon_decay_denominator = epsilon_decay_denominator
+        self.exploration_worker_difference = self.config.hyperparameters["exploration_worker_difference"]
         self.action_types = action_types
         self.results_queue = results_queue
         self.episode_number = 0
+
+        self.gradient_updates_queue = gradient_updates_queue
 
     def set_seeds(self, worker_num):
         """Sets random seeds for this worker"""
@@ -102,6 +110,8 @@ class A3C_Worker(torch.multiprocessing.Process):
     def run(self):
         """Starts the worker"""
         for _ in range(self.episodes_to_run):
+            with self.optimizer_lock:
+                Base_Agent.copy_model_over(self.shared_model, self.local_model)
             epsilon_exploration = self.calculate_new_exploration()
             state = self.reset_game_for_worker()
             done = False
@@ -110,6 +120,7 @@ class A3C_Worker(torch.multiprocessing.Process):
             self.episode_rewards = []
             self.episode_log_action_probabilities = []
             self.critic_outputs = []
+
             while not done:
                 action, action_log_prob, critic_outputs = self.pick_action_and_get_critic_values(self.local_model, state, epsilon_exploration)
                 next_state, reward, done, _ =  self.environment.step(action)
@@ -120,7 +131,7 @@ class A3C_Worker(torch.multiprocessing.Process):
                 self.critic_outputs.append(critic_outputs)
                 state = next_state
             total_loss = self.calculate_total_loss()
-            self.take_optimization_step(total_loss)
+            self.put_gradients_in_queue(total_loss)
             self.episode_number += 1
             with self.counter.get_lock():
                 self.counter.value += 1
@@ -131,7 +142,7 @@ class A3C_Worker(torch.multiprocessing.Process):
         current epsilon"""
         with self.counter.get_lock():
             epsilon = 1.0 / (1.0 + (self.counter.value / self.epsilon_decay_denominator))
-        epsilon = max(0.0, random.uniform(epsilon / 3.0, epsilon * 3.0))
+        epsilon = max(0.0, random.uniform(epsilon / self.exploration_worker_difference, epsilon * self.exploration_worker_difference))
         return epsilon
 
     def reset_game_for_worker(self):
@@ -187,7 +198,7 @@ class A3C_Worker(torch.multiprocessing.Process):
         mean = np.mean(discounted_returns)
         std = np.std(discounted_returns)
         discounted_returns -= mean
-        discounted_returns /= std
+        discounted_returns /= (std + 1e-5)
         return discounted_returns
 
     def calculate_critic_loss_and_advantages(self, all_discounted_returns):
@@ -206,12 +217,11 @@ class A3C_Worker(torch.multiprocessing.Process):
         actor_loss = actor_loss.mean()
         return actor_loss
 
-    def take_optimization_step(self, total_loss):
-        """Takes an optimisation step on the shared model. Uses lock to ensure """
-        with self.optimizer_lock:
-            total_loss.backward()
-            torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
-            self.shared_optimizer.zero_grad()
-            Base_Agent.move_gradients_one_model_to_another(self.local_model, self.shared_model, set_from_gradients_to_zero=True)
-            self.shared_optimizer.step()
-            Base_Agent.copy_model_over(self.shared_model, self.local_model)
+    def put_gradients_in_queue(self, total_loss):
+        """Puts gradients in a queue for the optimisation process to use to update the shared model"""
+        self.local_optimizer.zero_grad()
+        total_loss.backward()
+        torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
+        gradients = [param.grad for param in self.local_model.parameters()]
+        self.gradient_updates_queue.put(gradients)
+

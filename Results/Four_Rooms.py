@@ -1,3 +1,4 @@
+from A3C import A3C
 from Agents.DQN_Agents.DQN_HER import DQN_HER
 from DDQN import DDQN
 from Environments.Four_Rooms_Environment import Four_Rooms_Environment
@@ -87,6 +88,23 @@ config.hyperparameters = {
 
         }
 
+    },
+
+    "Actor_Critic_Agents": {
+
+        "learning_rate": 0.005,
+        "linear_hidden_units": [20, 10],
+
+        "columns_of_data_to_be_embedded": [0],
+        "embedding_dimensions": [[config.environment.observation_space.n,
+                                  max(4, int(config.environment.observation_space.n / 10.0))]],
+
+        "final_layer_activation": ["SOFTMAX", None],
+        "gradient_clipping_norm": 5.0,
+        "discount_rate": 0.99,
+        "epsilon_decay_rate_denominator": 50.0,
+        "normalise_rewards": True
+
     }
 }
 
@@ -94,7 +112,7 @@ if __name__== '__main__':
 
     print(config.environment.reward_for_achieving_goal)
 
-    AGENTS = [SNN_HRL] #, DDQN]
+    AGENTS = [A3C] #SNN_HRL] #, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
