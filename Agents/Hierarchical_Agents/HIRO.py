@@ -75,13 +75,25 @@ class Goal_Wrapper(Wrapper):
         self.internal_state = self.internal_next_state
 
         self.episode_over = done
-        sub_policy_episode_over = done or self.timesteps >= self.max_sub_policy_timesteps
-        return self.turn_internal_state_to_external_state(self.internal_next_state), intrinsic_reward, sub_policy_episode_over, _
+        self.sub_policy_episode_over = done or self.timesteps >= self.max_sub_policy_timesteps
+
+        return self.turn_internal_state_to_external_state(self.internal_next_state), intrinsic_reward, self.sub_policy_episode_over, _
 
     def calculate_intrinsic_reward(self, internal_state, internal_next_state, goal):
         """Calculates the intrinsic reward for the agent according to whether it has made progress towards the goal
         or not since the last timestep"""
-        return -((internal_state + goal - internal_next_state)**2)**0.5
+
+        # print(internal_state)
+        # print(internal_next_state)
+        # print(goal)
+        combined = internal_state + goal - internal_next_state
+        # print(combined)
+        # print(combined**2)
+        # print((combined**2)**0.5)
+        #
+        # print(-(np.dot(combined, combined))**0.5)
+
+        return -(np.dot(combined, combined))**0.5
 
 
 
