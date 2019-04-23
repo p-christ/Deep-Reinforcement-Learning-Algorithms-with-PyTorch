@@ -90,12 +90,16 @@ def test_sub_policy_env_step():
     assert env.episode_over
     assert env.sub_policy_episode_over
 
-
-
-
 def test_sub_policy_env_calculate_intrinsic_reward():
     """Tests calculate_intrinsic_reward in the sub policy environment we create"""
-    pass
+    assert env.calculate_intrinsic_reward(5, 9, 4) == 0
+    assert env.calculate_intrinsic_reward(5, 9, 1.5) == -(2.5**2)**0.5
+    state = np.array([0.5, -3.5])
+    next_state = np.array([3.5, 23.5])
+    goal = np.array([-23.5, 15.5])
+    combined = state + goal - next_state
+    result = -np.linalg.norm(combined)
+    assert np.allclose(env.calculate_intrinsic_reward(state, next_state, goal), result)
 
 
 
