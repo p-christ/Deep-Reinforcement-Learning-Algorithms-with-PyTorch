@@ -34,10 +34,13 @@ class HIRO(Base_Agent):
         self.extrinsic_rewards = []
 
     def give_latest_goal(self):
-        return self.goal
 
-    def save_extrinsic_rewards(self):
-        self.extrinsic_rewards.append()
+        print("must update this")
+
+        return np.array([0.0, 0.0, 0.0])
+
+    def save_extrinsic_rewards(self, reward):
+        self.extrinsic_rewards.append(reward)
 
 
 class Goal_Wrapper(Wrapper):
@@ -55,10 +58,10 @@ class Goal_Wrapper(Wrapper):
         self.goal = self.HIRO_agent.give_latest_goal()
         self.episode_over = False
         self.timesteps = 0
-        return self.observation(observation)
+        return self.turn_internal_state_to_external_state(observation)
 
-    def observation(self, observation):
-        return np.concatenate((np.array(observation), np.array([self.goal])))
+    def turn_internal_state_to_external_state(self, internal_state):
+        return np.concatenate((np.array(internal_state), self.goal))
 
     def step(self, action):
         self.timesteps += 1
@@ -73,7 +76,7 @@ class Goal_Wrapper(Wrapper):
 
         self.episode_over = done
         sub_policy_episode_over = done or self.timesteps >= self.max_sub_policy_timesteps
-        return self.observation(self.internal_next_state), intrinsic_reward, sub_policy_episode_over, _
+        return self.turn_internal_state_to_external_state(self.internal_next_state), intrinsic_reward, sub_policy_episode_over, _
 
     def calculate_intrinsic_reward(self, internal_state, internal_next_state, goal):
         """Calculates the intrinsic reward for the agent according to whether it has made progress towards the goal
