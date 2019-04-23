@@ -120,7 +120,8 @@ config.hyperparameters = {
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 20,
         "learning_updates_per_learning_session": 10,
-        "HER_sample_proportion": 0.8
+        "HER_sample_proportion": 0.8,
+        "exploration_worker_difference": 1.0
     },
 
 "SNN_HRL": {

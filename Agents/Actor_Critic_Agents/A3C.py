@@ -25,7 +25,7 @@ class A3C(Base_Agent):
         results_queue = Queue()
         gradient_updates_queue = Queue()
         episode_number = multiprocessing.Value('i', 0)
-        optimizer_lock = multiprocessing.Lock()
+        self.optimizer_lock = multiprocessing.Lock()
         episodes_per_process = int(self.config.num_episodes_to_run / self.worker_processes) + 1
         processes = []
         self.actor_critic.share_memory()
@@ -35,7 +35,7 @@ class A3C(Base_Agent):
         optimizer_worker.start()
 
         for process_num in range(self.worker_processes):
-            worker = Actor_Critic_Worker(process_num, copy.deepcopy(self.environment), self.actor_critic, episode_number, optimizer_lock,
+            worker = Actor_Critic_Worker(process_num, copy.deepcopy(self.environment), self.actor_critic, episode_number, self.optimizer_lock,
                                     self.actor_critic_optimizer, self.config, episodes_per_process,
                                     self.hyperparameters["epsilon_decay_rate_denominator"],
                                     self.action_size, self.action_types,
