@@ -91,7 +91,7 @@ class Trainer(object):
         agent_group = self.agent_to_agent_group[agent_name]
         agent_round = 1
         for run in range(self.config.runs_per_agent):
-            agent_config = copy.deepcopy(self.config)
+            agent_config = self.config
 
             if self.environment_has_changeable_goals(agent_config.environment) and self.agent_cant_handle_changeable_goals_without_flattening(agent_name):
                 print("Flattening changeable-goal environment for agent {}".format(agent_name))
@@ -130,9 +130,7 @@ class Trainer(object):
                                           "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
                                           "embedding_dimensions": [], "y_range": ()}
 
-        print(hyperparameters)
         for key in hyperparameters.keys():
-            print("KEY ", key)
             for inside_key in hyperparameters[key].keys():
                 if isinstance(hyperparameters[key][inside_key], dict):
                     for hyperparameter in default_hyperparameter_choices:

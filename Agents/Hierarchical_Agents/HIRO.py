@@ -74,57 +74,6 @@ class HIRO(Base_Agent):
     def run_n_episodes(self):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         self.higher_level_agent.run_n_episodes(self.config.num_episodes_to_run)
-        #
-        #
-        # sub_policy_agent = DDPG(self.sub_policy_config)
-        #
-        # # for each iteration of a manager step...  sub policy must do a whole step
-        #
-        #
-        # # high level policy takes in state and produces goal state
-        # # goal state set for lower-level policy which then acts until done...
-        # # if episode not done then high level policy takes in state and produces goal state
-        #
-
-    def get_state(self):
-        return self.state
-
-    def set_state(self, state):
-        self.state = state
-
-    def get_external_state(self):
-        return self.external_state
-
-    def set_external_state(self, external_state):
-        self.external_state = external_state
-
-    def track_higher_level_step_reward(self, reward):
-        self.higher_level_step_reward += reward
-
-    def get_higher_level_step_reward(self):
-        return self.higher_level_step_reward
-
-    def set_goal_for_lower_level(self, goal):
-        self.goal = goal
-
-    def set_done(self, done):
-        """Sets boolean for whether the episode is over for high-level agent"""
-        self.done = done
-
-    def get_done(self):
-        return self.done
-
-
-
-    # def give_next_goal_for_sub_policy(self):
-    #     """Provides the next goal for the sub policy to try and achieve"""
-    #
-    #     print("must update this")
-    #
-    #     return np.array([0.0, 0.0, 0.0])
-
-    # def save_extrinsic_rewards(self, reward):
-    #     self.extrinsic_rewards.append(reward)
 
 
 class Higher_Level_Agent_Environment_Wrapper(Wrapper):
@@ -137,7 +86,6 @@ class Higher_Level_Agent_Environment_Wrapper(Wrapper):
 
 
     def reset(self, **kwargs):
-        print("Higher level resetting the game")
         self.HIRO_agent.higher_level_state = self.env.reset(**kwargs)
         return self.HIRO_agent.higher_level_state
 
@@ -162,30 +110,18 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         self.max_sub_policy_timesteps = max_sub_policy_timesteps
 
     def reset(self, **kwargs):
-        print("Lower level resetting the game")
-
-        # Must offer option when values are None so that state_size can be calculated when initialising the base agent
-
-        print(self.HIRO_agent)
-
         if self.HIRO_agent.higher_level_state is not None: state = self.HIRO_agent.higher_level_state
         else:
-            print("???")
+            print("INITIATION ONLY")
             state = self.env.reset()
 
         if self.HIRO_agent.goal is not None: goal = self.HIRO_agent.goal
         else:
-            print("???")
+            print("INITIATION ONLY")
             goal = state
 
         self.lower_level_timesteps = 0
         self.HIRO_agent.lower_level_done = False
-
-        # print("High level state ", state)
-        # print("High level goal ", goal)
-        #
-        # print("LOW LEVEL STATE ", self.turn_internal_state_to_external_state(state, goal))
-
         return self.turn_internal_state_to_external_state(state, goal)
 
     def turn_internal_state_to_external_state(self, internal_state, goal):
@@ -209,7 +145,6 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
 
         self.HIRO_agent.higher_level_done = done
         self.HIRO_agent.lower_level_done = done or self.lower_level_timesteps >= self.max_sub_policy_timesteps
-
 
         return self.HIRO_agent.lower_level_next_state, self.HIRO_agent.lower_level_reward, self.HIRO_agent.lower_level_done, _
 

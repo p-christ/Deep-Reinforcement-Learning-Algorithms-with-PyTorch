@@ -12,6 +12,8 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
+        print(config.environment.__dict__)
+        print(config.environment.spec)
         self.environment_title = self.get_environment_title()
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
@@ -39,6 +41,8 @@ class Base_Agent(object):
 
     def get_environment_title(self):
         """Extracts name of environment from it"""
+        print(self.environment.spec)
+        print(self.environment.unwrapped.__dict__)
         try:
             return self.environment.unwrapped.id
         except AttributeError:
@@ -46,6 +50,8 @@ class Base_Agent(object):
                 title = "FetchReach"
                 return title
             else:
+
+                print("self env ", self.environment.__dict__)
                 title = self.environment.spec.id.split("-")[0]
                 return title
 
@@ -111,7 +117,6 @@ class Base_Agent(object):
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
-        print("RUNNING {} EPISODE ".format(num_episodes))
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         start = time.time()
         while self.episode_number < num_episodes:
