@@ -38,7 +38,11 @@ class DDPG(Base_Agent):
 
     def step(self):
         """Runs a step in the game"""
+
+        rewards_list = []
+
         while not self.done:
+            # print("State ", self.state.shape)
             self.action = self.pick_action()
             self.conduct_action(self.action)
             if self.time_for_critic_and_actor_to_learn():

@@ -41,16 +41,12 @@ class Base_Agent(object):
 
     def get_environment_title(self):
         """Extracts name of environment from it"""
-        print(self.environment.spec)
-        print(self.environment.unwrapped.__dict__)
         try:
             return self.environment.unwrapped.id
         except AttributeError:
-            if str(self.environment.unwrapped)[1:11] == "FetchReach":
-                title = "FetchReach"
-                return title
+            if str(self.environment.unwrapped)[1:11] == "FetchReach": return "FetchReach"
+            elif str(self.environment.unwrapped)[1:8] == "AntMaze": return "AntMaze"
             else:
-
                 print("self env ", self.environment.__dict__)
                 title = self.environment.spec.id.split("-")[0]
                 return title
@@ -73,12 +69,16 @@ class Base_Agent(object):
     def get_score_required_to_win(self):
         """Gets average score required to win game"""
         if self.environment_title == "FetchReach": return -5
+        if self.environment_title == "AntMaze":
+            print("Score required to win set to infinity therefore no learning rate annealing will happen")
+            return float("inf")
         try: return self.environment.unwrapped.reward_threshold
         except AttributeError: return self.environment.spec.reward_threshold
 
     def get_trials(self):
         """Gets the number of trials to average a score over"""
         if self.environment_title == "FetchReach": return 100
+        if self.environment_title == "AntMaze": return 100
         try: return self.environment.unwrapped.trials
         except AttributeError: return self.environment.spec.trials
 
