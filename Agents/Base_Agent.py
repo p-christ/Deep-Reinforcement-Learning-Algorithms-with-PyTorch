@@ -52,7 +52,8 @@ class Base_Agent(object):
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
         if self.action_types == "DISCRETE": return self.environment.action_space.n
-        else: return self.environment.action_space.shape[0]
+        else: return self.environment.action_space.sample().shape[0]
+
 
     def get_state_size(self):
         """Gets the state_size for the gym env into the correct shape for a neural network"""
@@ -108,15 +109,17 @@ class Base_Agent(object):
         self.episode_next_states.append(self.next_state)
         self.episode_dones.append(self.done)
 
-    def run_n_episodes(self):
+    def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
+        print("RUNNING {} EPISODE ".format(num_episodes))
+        if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         start = time.time()
-        while self.episode_number < self.config.num_episodes_to_run:
+        while self.episode_number < num_episodes:
             self.reset_game()
             self.step()
             self.save_and_print_result()
         time_taken = time.time() - start
-        self.show_whether_achieved_goal()
+        if show_whether_achieved_goal: self.show_whether_achieved_goal()
         if self.config.save_model: self.locally_save_policy()
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
@@ -233,9 +236,18 @@ class Base_Agent(object):
         """Creates a neural network for the agents to use"""
         if key_to_use: hyperparameters = self.hyperparameters[key_to_use]
         else: hyperparameters = self.hyperparameters
-
         if override_seed: seed = override_seed
         else: seed = self.config.seed
+
+        default_hyperparameter_choices = {"output_activation": "None", "hidden_activations": "relu", "dropout": 0.0,
+                                          "initialiser": "default", "batch_norm": False,
+                                          "columns_of_data_to_be_embedded": [],
+                                          "embedding_dimensions": [], "y_range": ()}
+
+        for key in default_hyperparameter_choices:
+            if key not in hyperparameters.keys():
+                hyperparameters[key] = default_hyperparameter_choices[key]
+
 
         return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],

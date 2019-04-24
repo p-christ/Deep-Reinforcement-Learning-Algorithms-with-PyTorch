@@ -38,7 +38,8 @@ class Trainer(object):
             "A2C": "Actor_Critic_Agents",
             "A3C": "Actor_Critic_Agents",
             "h-DQN": "h_DQN",
-            "SNN-HRL": "SNN_HRL"
+            "SNN-HRL": "SNN_HRL",
+            "HIRO": "HIRO"
         }
         return agent_to_agent_group_dictionary
 
@@ -128,8 +129,10 @@ class Trainer(object):
         default_hyperparameter_choices = {"output_activation": "None", "hidden_activations": "relu", "dropout": 0.0,
                                           "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
                                           "embedding_dimensions": [], "y_range": ()}
+
+        print(hyperparameters)
         for key in hyperparameters.keys():
-            had_nested_dictionary = False
+            print("KEY ", key)
             for inside_key in hyperparameters[key].keys():
                 if isinstance(hyperparameters[key][inside_key], dict):
                     for hyperparameter in default_hyperparameter_choices:

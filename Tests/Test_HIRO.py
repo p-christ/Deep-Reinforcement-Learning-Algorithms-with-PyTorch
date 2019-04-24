@@ -38,7 +38,7 @@ def test_sub_policy_env_reset():
     external_state = env.reset()
     assert external_state.shape[0] == 6
     assert env.internal_state.shape[0] == 3
-    assert all(env.goal == agent.give_latest_goal())
+    assert all(env.goal == agent.give_next_goal_for_sub_policy())
     assert not env.episode_over
     assert env.timesteps == 0
     assert env.max_sub_policy_timesteps == 5
