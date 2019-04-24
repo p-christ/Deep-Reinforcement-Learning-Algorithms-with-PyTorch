@@ -31,14 +31,19 @@ class HIRO(Base_Agent):
         self.config.hyperparameters = self.config.hyperparameters["OPEN"]
 
         print(self.config.hyperparameters)
-        self.state = None #true state of environment
-        self.next_state = None
-        self.reward = None
-        self.done = False
+        self.higher_level_state = None #true state of environment
+        self.higher_level_next_state = None
+
+        self.higher_level_reward = None
+        self.lower_level_reward = None
+
+        self.higher_level_done = False
+        self.lower_level_done = False
+
         self.goal = None
-        self.external_state = None #state of environment with goal appended
-        self.external_next_state = None
-        self.higher_level_step_reward = 0
+
+        self.lower_level_state = None #state of environment with goal appended
+        self.lower_level_next_state = None
 
         self.lower_level_agent_config = copy.deepcopy(config)
         self.lower_level_agent_config.hyperparameters = self.lower_level_agent_config.hyperparameters["LOWER_LEVEL"]
@@ -133,29 +138,17 @@ class Higher_Level_Agent_Environment_Wrapper(Wrapper):
 
     def reset(self, **kwargs):
         print("Higher level resetting the game")
-        self.HIRO_agent.set_state(self.env.reset(**kwargs))
-        self.lower_level_timesteps = 0
-        self.HIRO_agent.done = False
-        return self.HIRO_agent.state
+        self.HIRO_agent.higher_level_state = self.env.reset(**kwargs)
+        return self.HIRO_agent.higher_level_state
 
     def step(self, goal):
-        # print("Step for higher agent")
-        self.HIRO_agent.higher_level_step_reward = 0
+        self.HIRO_agent.higher_level_reward = 0
+        self.HIRO_agent.goal = goal
 
-        self.HIRO_agent.set_goal_for_lower_level(goal)
-        print("RUNNING LOW LEVEL EPISODE")
-        self.HIRO_agent.lower_level_agent.episode_number = 0
+        self.HIRO_agent.lower_level_agent.episode_number = 0 #must reset lower level agent to 0 episodes completed otherwise won't run more episodes
         self.HIRO_agent.lower_level_agent.run_n_episodes(num_episodes=1, show_whether_achieved_goal=False)
 
-        last_state = self.HIRO_agent.get_state()
-        reward = self.HIRO_agent.get_higher_level_step_reward()
-        done = self.HIRO_agent.get_done()
-
-        print("Higher level done ", done)
-
-        # print("Higher agent done ", done)
-
-        return last_state, reward, done, {}
+        return self.HIRO_agent.higher_level_next_state, self.HIRO_agent.higher_level_reward, self.HIRO_agent.higher_level_done, {}
 
 
 
@@ -175,14 +168,18 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
 
         print(self.HIRO_agent)
 
-        if self.HIRO_agent.external_state is not None: state = self.HIRO_agent.external_state
-        else: state = self.env.reset()
+        if self.HIRO_agent.higher_level_state is not None: state = self.HIRO_agent.higher_level_state
+        else:
+            print("???")
+            state = self.env.reset()
 
         if self.HIRO_agent.goal is not None: goal = self.HIRO_agent.goal
-        else: goal = state
+        else:
+            print("???")
+            goal = state
 
         self.lower_level_timesteps = 0
-        self.lower_level_turn_over = False
+        self.HIRO_agent.lower_level_done = False
 
         # print("High level state ", state)
         # print("High level goal ", goal)
@@ -195,29 +192,27 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         return np.concatenate((np.array(internal_state), goal))
 
     def step(self, action):
-        print("Stepping in low level")
+
         self.lower_level_timesteps += 1
-        self.HIRO_agent.next_state, reward, done, _ = self.env.step(action)
+        next_state, extrinsic_reward, done, _ = self.env.step(action)
 
-        # need to think about what else to save in main agent
-        self.HIRO_agent.track_higher_level_step_reward(reward)
-        #
-        # self.HIRO_agent.save_extrinsic_rewards(reward)
+        self.HIRO_agent.higher_level_reward += extrinsic_reward
+        self.HIRO_agent.lower_level_reward = self.calculate_intrinsic_reward(self.HIRO_agent.higher_level_state,
+                                                                             next_state,
+                                                                             self.HIRO_agent.goal)
 
-        intrinsic_reward = self.calculate_intrinsic_reward(self.HIRO_agent.state, self.HIRO_agent.next_state, self.HIRO_agent.goal)
+        self.HIRO_agent.higher_level_next_state = next_state
+        self.HIRO_agent.lower_level_next_state = self.turn_internal_state_to_external_state(next_state, self.HIRO_agent.goal)
 
-        self.HIRO_agent.state = self.HIRO_agent.next_state
+        self.HIRO_agent.higher_level_state = self.HIRO_agent.higher_level_next_state
+        self.HIRO_agent.lower_level_state = self.HIRO_agent.lower_level_next_state
 
-        self.HIRO_agent.set_done(done)
+        self.HIRO_agent.higher_level_done = done
+        self.HIRO_agent.lower_level_done = done or self.lower_level_timesteps >= self.max_sub_policy_timesteps
 
-        self.lower_level_turn_over = done or self.lower_level_timesteps >= self.max_sub_policy_timesteps
 
-        print("Lower level done ", done)
-        print("Lower level turn over ", self.lower_level_turn_over)
+        return self.HIRO_agent.lower_level_next_state, self.HIRO_agent.lower_level_reward, self.HIRO_agent.lower_level_done, _
 
-        # print("Lower level over ", self.lower_level_episode_over)
-
-        return self.turn_internal_state_to_external_state(self.HIRO_agent.next_state, self.HIRO_agent.goal), intrinsic_reward, self.lower_level_turn_over, _
 
     def calculate_intrinsic_reward(self, internal_state, internal_next_state, goal):
         """Calculates the intrinsic reward for the agent according to whether it has made progress towards the goal

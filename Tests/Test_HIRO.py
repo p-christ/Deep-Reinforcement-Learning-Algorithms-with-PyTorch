@@ -1,4 +1,6 @@
 """Tests for the hierarchical RL agent HIRO"""
+import copy
+
 import gym
 import random
 import numpy as np
@@ -14,24 +16,151 @@ torch.manual_seed(1)
 config = Config()
 config.seed = 1
 config.environment = gym.make("Pendulum-v0")
-config.num_episodes_to_run = 2000
+config.num_episodes_to_run = 1500
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
+config.show_solution_score = False
 config.visualise_individual_results = False
-config.visualise_overall_agent_results = False
-config.randomise_random_seed = False
+config.visualise_overall_agent_results = True
+config.standard_deviation_results = 1.0
 config.runs_per_agent = 1
 config.use_GPU = False
+config.overwrite_existing_results_file = False
+config.randomise_random_seed = True
+config.save_model = False
+
+
+
+
 config.hyperparameters = {
 
-    "HIRO": {
-        "max_sub_policy_timesteps": 5
-    }
-}
+        "LOWER_LEVEL": {
+            "max_lower_level_timesteps": 3,
 
-config.hyperparameters = config.hyperparameters["HIRO"]
-agent = HIRO(config)
-env = agent.env_for_sub_policy
+            "Actor": {
+                "learning_rate": 0.001,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": "TANH",
+                "batch_norm": False,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5
+            },
+
+            "Critic": {
+                "learning_rate": 0.01,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": "None",
+                "batch_norm": False,
+                "buffer_size": 100000,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5
+            },
+
+            "batch_size": 256,
+            "discount_rate": 0.9,
+            "mu": 0.0,  # for O-H noise
+            "theta": 0.15,  # for O-H noise
+            "sigma": 0.25,  # for O-H noise
+            "action_noise_std": 0.2,  # for TD3
+            "action_noise_clipping_range": 0.5,  # for TD3
+            "update_every_n_steps": 20,
+            "learning_updates_per_learning_session": 10,
+
+            } ,
+
+
+
+        "HIGHER_LEVEL": {
+
+                "Actor": {
+                "learning_rate": 0.001,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": "TANH",
+                "batch_norm": False,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5
+            },
+
+            "Critic": {
+                "learning_rate": 0.01,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": "None",
+                "batch_norm": False,
+                "buffer_size": 100000,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5
+            },
+
+            "batch_size": 256,
+            "discount_rate": 0.9,
+            "mu": 0.0,  # for O-H noise
+            "theta": 0.15,  # for O-H noise
+            "sigma": 0.25,  # for O-H noise
+            "action_noise_std": 0.2,  # for TD3
+            "action_noise_clipping_range": 0.5,  # for TD3
+            "update_every_n_steps": 20,
+            "learning_updates_per_learning_session": 10,
+
+            } ,
+
+
+        }
+
+
+hiro_agent = HIRO(config)
+ll_env = hiro_agent.lower_level_agent.environment
+h_env = hiro_agent.higher_level_agent.environment
+
+def test_environment_resets():
+    """Tests created environments reset properly"""
+    lower_level_state = ll_env.reset()
+    assert lower_level_state.shape[0] == 6
+    assert ll_env.max_sub_policy_timesteps == 3
+    assert ll_env.lower_level_timesteps == 0
+
+    hiro_agent.higher_level_state = np.array([0., 1.0, 2.0])
+    hiro_agent.goal = np.array([1.0, 4.0, -22.])
+    assert all(ll_env.reset() == np.array([0.0, 1.0, 2.0, 1.0, 4.0, -22.0]))
+
+    high_level_state = h_env.reset()
+    assert high_level_state.shape[0] == 3
+
+def test_higher_level_step():
+    """Tests environment for higher level steps correctly"""
+    h_env.reset()
+    assert hiro_agent.higher_level_next_state is None
+    next_state, reward, done, _ = h_env.step(np.array([-1.0, 2.0, 3.0]))
+
+    assert all(hiro_agent.goal == np.array([-1.0, 2.0, 3.0]))
+    assert all(hiro_agent.higher_level_state == next_state)
+    assert all(hiro_agent.higher_level_next_state == next_state)
+    assert hiro_agent.higher_level_reward == reward
+    assert hiro_agent.higher_level_done == done
+
+    assert next_state.shape[0] == 3
+    assert isinstance(reward, float)
+    assert not done
+
+    for _ in range(200):
+        next_state, reward, done, _ = h_env.step(np.array([-1.0, 2.0, 3.0]))
+        assert all(hiro_agent.higher_level_next_state == next_state)
+        assert all(hiro_agent.higher_level_next_state == next_state)
+        assert hiro_agent.higher_level_reward == reward
+        assert hiro_agent.higher_level_done == done
+
+def test_changing_max_lower_timesteps():
+    """Tests that changing the max lower level timesteps works"""
+    config2 = copy.deepcopy(config)
+    config2.hyperparameters["LOWER_LEVEL"]["max_lower_level_timesteps"] = 1
+    hiro_agent2 = HIRO(config2)
+    h_env2 = hiro_agent2.higher_level_agent.environment
+    h_env2.reset()
+    next_state, reward, done, _ = h_env2.step(np.array([-1.0, 2.0, 3.0]))
+
+    assert not done
+    assert hiro_agent2.lower_level_done
+    assert reward == hiro_agent2.higher_level_reward
+
 
 def test_sub_policy_env_reset():
     """Tests reset method in the sub policy environment we create"""
