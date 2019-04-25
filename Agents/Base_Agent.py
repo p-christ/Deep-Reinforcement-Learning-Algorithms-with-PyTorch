@@ -54,7 +54,13 @@ class Base_Agent(object):
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
         if self.action_types == "DISCRETE": return self.environment.action_space.n
-        else: return self.environment.action_space.sample().shape[0]
+        else:
+            return self.environment.action_space.shape[0]
+            # print("ENVIRONMENT ", self.environment)
+            # print("ACTION SPACE ", self.environment.action_space)
+        #
+        #
+        # return self.environment.action_space.sample().shape[0]
 
 
     def get_state_size(self):

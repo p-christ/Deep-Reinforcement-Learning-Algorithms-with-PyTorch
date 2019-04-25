@@ -131,7 +131,7 @@ def test_goal_transition():
     hiro_agent.higher_level_state = 2
     hiro_agent.goal = 9
     next_state = 3
-    assert hiro_agent.goal_transition(next_state) == 8
+    assert HIRO.goal_transition(hiro_agent.higher_level_state, hiro_agent.goal, next_state) == 8
 
     hiro_agent.higher_level_state = 2
     hiro_agent.goal = 9
@@ -151,12 +151,17 @@ def test_goal_transition():
 
 def test_higher_level_step():
     """Tests environment for higher level steps correctly"""
+    hiro_agent = HIRO(config)
+    ll_env = hiro_agent.lower_level_agent.environment
+    h_env = hiro_agent.higher_level_agent.environment
     h_env.reset()
-    hiro_agent.goal_transition = lambda x: hiro_agent.goal
+    # HIRO.goal_transition = lambda x, y, z: y
+    state_before = hiro_agent.higher_level_state
     assert hiro_agent.higher_level_next_state is None
     next_state, reward, done, _ = h_env.step(np.array([-1.0, 2.0, 3.0]))
 
-    assert all(hiro_agent.goal == np.array([-1.0, 2.0, 3.0]))
+    assert np.allclose(hiro_agent.goal, HIRO.goal_transition(state_before,  np.array([-1.0, 2.0, 3.0]), next_state))
+
     assert all(hiro_agent.higher_level_state == next_state)
     assert all(hiro_agent.higher_level_next_state == next_state)
     assert hiro_agent.higher_level_reward == reward
@@ -188,6 +193,7 @@ def test_changing_max_lower_timesteps():
 
 def test_lower_level_step():
     """Tests the step level for the lower level environment"""
+    ll_env.reset()
     h_env.reset()
     state = ll_env.reset()
     assert state.shape[0] == 6
@@ -199,6 +205,8 @@ def test_lower_level_step():
     assert hiro_agent.lower_level_done
     assert ll_env.lower_level_timesteps == 3
 
+    previous_goal = hiro_agent.goal
+
     next_state, reward, done, _ = ll_env.step(np.array([-1.0]))
 
     assert next_state.shape[0] == 6
@@ -209,9 +217,10 @@ def test_lower_level_step():
     assert all(next_state == hiro_agent.lower_level_state)
     assert done == hiro_agent.lower_level_done
     assert not hiro_agent.higher_level_done
-    assert reward == ll_env.calculate_intrinsic_reward(hl_next_state,  hiro_agent.higher_level_next_state , hiro_agent.goal)
+    assert reward == ll_env.calculate_intrinsic_reward(hl_next_state,  hiro_agent.higher_level_next_state , previous_goal)
 
     for _ in range(100):
+        previous_goal = hiro_agent.goal
         state = hiro_agent.higher_level_next_state
         next_state, reward, done, _ = ll_env.step(np.array([random.random()]))
         assert next_state.shape[0] == 6
@@ -222,7 +231,7 @@ def test_lower_level_step():
         assert all(next_state == hiro_agent.lower_level_state)
         assert done == hiro_agent.lower_level_done
         assert reward == ll_env.calculate_intrinsic_reward(state, hiro_agent.higher_level_next_state,
-                                                           hiro_agent.goal)
+                                                           previous_goal)
 
 def test_sub_policy_env_turn_internal_state_to_external_state():
     """Tests turn_internal_state_to_external_state method in the sub policy environment we create"""

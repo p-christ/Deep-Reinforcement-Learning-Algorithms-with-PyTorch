@@ -1,5 +1,4 @@
 from Agents.Trainer import Trainer
-from Ant_Navigation_Environments import Ant_Navigation_Environments
 from DDPG import DDPG
 from Hierarchical_Agents.HIRO import HIRO
 from Utilities.Data_Structures.Config import Config
@@ -41,7 +40,7 @@ DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/18
             "gradient_clipping_norm": 5
         },
 
-        "batch_size": 64,
+        "batch_size": 5,
         "discount_rate": 0.99,
         "mu": 0.0,  # for O-H noise
         "theta": 0.15,  # for O-H noise
@@ -50,14 +49,18 @@ DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/18
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 1,
         "learning_updates_per_learning_session": 1,
+        "max_lower_level_timesteps": 4
 
     }
+
+higher_level_hyperparameters = DDPG_hyperparameters
+higher_level_hyperparameters["number_goal_candidates"] = 10
 
 config.hyperparameters = {
     "HIRO": {
 
-        "LOWER_LEVEL": DDPG_hyperparameters ,  # "max_lower_level_timesteps": 5,
-        "HIGHER_LEVEL": DDPG_hyperparameters },
+        "LOWER_LEVEL": DDPG_hyperparameters ,
+        "HIGHER_LEVEL": higher_level_hyperparameters },
 
 
 
@@ -66,13 +69,13 @@ config.hyperparameters = {
         }
 
 
-# ADD Y_RANGE  - 30 to 30...
+print(config.hyperparameters["HIRO"])
 
 
 if __name__ == "__main__":
 
     #
-    AGENTS = [DDPG, HIRO]
+    AGENTS = [HIRO, DDPG]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

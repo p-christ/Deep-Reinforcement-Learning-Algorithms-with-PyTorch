@@ -26,11 +26,14 @@ class Replay_Buffer(object):
             experience = self.experience(states, actions, rewards, next_states, dones)
             self.memory.append(experience)
    
-    def sample(self, num_experiences=None):
+    def sample(self, num_experiences=None, separate_out_data_types=True):
         """Draws a random sample of experience from the replay buffer"""
         experiences = self.pick_experiences(num_experiences)
-        states, actions, rewards, next_states, dones = self.separate_out_data_types(experiences)        
-        return states, actions, rewards, next_states, dones
+        if separate_out_data_types:
+            states, actions, rewards, next_states, dones = self.separate_out_data_types(experiences)
+            return states, actions, rewards, next_states, dones
+        else:
+            return experiences
             
     def separate_out_data_types(self, experiences):
         """Puts the sampled experience into the correct format for a PyTorch neural network"""
