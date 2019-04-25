@@ -125,9 +125,34 @@ def test_environment_resets():
     high_level_state = h_env.reset()
     assert high_level_state.shape[0] == 3
 
+
+def test_goal_transition():
+    """Tests environment does goal transitions properly"""
+    hiro_agent.higher_level_state = 2
+    hiro_agent.goal = 9
+    next_state = 3
+    assert hiro_agent.goal_transition(next_state) == 8
+
+    hiro_agent.higher_level_state = 2
+    hiro_agent.goal = 9
+    next_state = 3
+    ll_env.update_goal(next_state)
+    assert hiro_agent.goal == 8
+
+    h_env.reset()
+    hiro_agent.goal = np.array([2.0, 4.0, -3.0])
+    hiro_agent.higher_level_reward = 0
+    ll_env.reset()
+    state = hiro_agent.higher_level_state
+    next_state, reward, done, _ = ll_env.step(np.array([random.random()]))
+    assert all(hiro_agent.goal == state + np.array([2.0, 4.0, -3.0]) - next_state[0:3])
+
+
+
 def test_higher_level_step():
     """Tests environment for higher level steps correctly"""
     h_env.reset()
+    hiro_agent.goal_transition = lambda x: hiro_agent.goal
     assert hiro_agent.higher_level_next_state is None
     next_state, reward, done, _ = h_env.step(np.array([-1.0, 2.0, 3.0]))
 

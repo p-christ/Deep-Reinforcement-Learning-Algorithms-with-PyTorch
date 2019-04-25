@@ -1,4 +1,5 @@
 from Agents.Trainer import Trainer
+from Ant_Navigation_Environments import Ant_Navigation_Environments
 from DDPG import DDPG
 from Hierarchical_Agents.HIRO import HIRO
 from Utilities.Data_Structures.Config import Config
@@ -6,7 +7,7 @@ import gym
 
 config = Config()
 config.seed = 1
-config.environment = gym.make("Ant-v2")
+config.environment = gym.make("Hopper-v2")
 config.num_episodes_to_run = 1500
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
@@ -23,7 +24,7 @@ config.save_model = False
 DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/1802.09477.pdf
         "Actor": {
             "learning_rate": 0.001,
-            "linear_hidden_units": [400, 300],
+            "linear_hidden_units": [30, 20],
             "final_layer_activation": "TANH",
             "batch_norm": False,
             "tau": 0.01,
@@ -32,7 +33,7 @@ DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/18
 
         "Critic": {
             "learning_rate": 0.01,
-            "linear_hidden_units": [400, 300],
+            "linear_hidden_units": [30, 20],
             "final_layer_activation": "None",
             "batch_norm": False,
             "buffer_size": 100000,
