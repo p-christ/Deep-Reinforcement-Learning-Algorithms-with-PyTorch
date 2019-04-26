@@ -69,13 +69,11 @@ config.hyperparameters = {
         }
 
 
-print(config.hyperparameters["HIRO"])
-
 
 if __name__ == "__main__":
 
     #
-    AGENTS = [HIRO, DDPG]
+    AGENTS = [DDPG, HIRO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

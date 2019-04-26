@@ -84,18 +84,38 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
 
     def sample_experiences(self):
         experiences = self.memory.sample(separate_out_data_types=False)
-        assert len(experiences[0].state) == self.hyperparameters["max_lower_level_timesteps"]
+        assert len(experiences[0].state) == self.hyperparameters["max_lower_level_timesteps"] or experiences[0].done
         assert experiences[0].state[0].shape[0] == self.state_size * 2
-        assert len(experiences[0].action) == self.hyperparameters["max_lower_level_timesteps"]
+        assert len(experiences[0].action) == self.hyperparameters["max_lower_level_timesteps"] or experiences[0].done
 
-        state, action, reward, next_state, done = self.transform_goal_to_one_most_likely_to_have_induced_actions(experiences[0])
+        states = []
+        actions = []
+        rewards = []
+        next_states = []
+        dones = []
 
-        print("State ", state)
-        print("Action ", action)
-        print("Reward ", reward)
-        print("Next state ", next_state)
-        print("Done ", done)
-        assert 1 == 0
+        for ix, experience in enumerate(experiences):
+            state, action, reward, next_state, done = self.transform_goal_to_one_most_likely_to_have_induced_actions(experience)
+            states.append(state)
+            actions.append(action)
+            rewards.append(reward)
+            next_states.append(next_state)
+            dones.append(done)
+
+        states = torch.from_numpy(np.vstack([state for state in states])).float().to(self.device)
+        actions = torch.from_numpy(np.vstack([action for action in actions])).float().to(self.device)
+        rewards = torch.from_numpy(np.vstack([reward for reward in rewards])).float().to(self.device)
+        next_states = torch.from_numpy(np.vstack([next_state for next_state in next_states])).float().to(self.device)
+        dones = torch.from_numpy(np.vstack([int(done) for done in dones])).float().to(self.device)
+
+        return states, actions, rewards, next_states, dones
+
+        # print("State ", state)
+        # print("Action ", action)
+        # print("Reward ", reward)
+        # print("Next state ", next_state)
+        # print("Done ", done)
+        # assert 1 == 0
 
     def transform_goal_to_one_most_likely_to_have_induced_actions(self, experience):
         """Transforms the goal in an experience to the goal that would have been most likely to induce the actions chosen
@@ -106,7 +126,6 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
         goal_candidates = goal_candidate_state_change + goal_candidate_actual_goal + goal_candidate_state_change_random_iterations
 
         max = float("-inf")
-        best_ix = None
         timesteps_in_experience = len(experience.state)
 
         for goal_ix, goal in enumerate(goal_candidates):
@@ -122,6 +141,9 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
             if log_probability_total >= max:
                 max = log_probability_total
                 best_goal_ix = goal_ix
+
+
+        print("Best probability {}".format(max))
 
         state = experience.state[0][:self.state_size]
         next_state = experience.next_state
@@ -176,7 +198,6 @@ class Higher_Level_Agent_Environment_Wrapper(Wrapper):
         self.HIRO_agent.step_lower_level_states = []
         self.HIRO_agent.step_lower_level_action_seen = []
 
-        print("SETTING GOAL ", goal)
         self.HIRO_agent.goal = goal
         self.HIRO_agent.lower_level_agent.episode_number = 0 #must reset lower level agent to 0 episodes completed otherwise won't run more episodes
         self.HIRO_agent.lower_level_agent.run_n_episodes(num_episodes=1, show_whether_achieved_goal=False)
@@ -213,8 +234,6 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         return self.meta_agent.lower_level_state
 
     def turn_internal_state_to_external_state(self, internal_state, goal):
-        print("Internal state ", internal_state)
-        print("Goal ", goal )
         return np.concatenate((np.array(internal_state), goal))
 
     def step(self, action):
