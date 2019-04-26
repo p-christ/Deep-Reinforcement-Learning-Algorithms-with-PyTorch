@@ -35,7 +35,6 @@ class Four_Rooms_Environment(gym.Env):
         self.step_reward_for_not_achieving_goal = -1.0
         self.state_only_dimension = 1
         self.num_possible_states = self.grid_height * self.grid_width
-
         self.action_space = spaces.Discrete(4)
 
         if self.random_goal_place:
@@ -48,7 +47,6 @@ class Four_Rooms_Environment(gym.Env):
             self.observation_space = spaces.Discrete(self.num_possible_states)
 
         self.seed()
-
         self.reward_threshold = 0.0
         self.trials = 100
         self.max_episode_steps = self.reward_for_achieving_goal

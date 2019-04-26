@@ -3,7 +3,10 @@ import numpy as np
 
 """Environments taken from HIRO paper github repo: https://github.com/tensorflow/models/tree/master/research/efficient-hrl
 There are three environments that can be represented by this class depending on what environment_name you provide. 
-The options are: ["AntMaze", "AntPush", "AntFall"]
+The options are: ["AntMaze", "AntPush", "AntFall"].
+
+Note that "Success" for this game is defined by the authors as achieving -5 or more on the last step of the episode 
+but that this isn't coded in anyway as part of the environment. 
 """
 class Ant_Navigation_Environments(object):
 
