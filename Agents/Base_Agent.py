@@ -12,8 +12,6 @@ class Base_Agent(object):
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
-        print(config.environment.__dict__)
-        print(config.environment.spec)
         self.environment_title = self.get_environment_title()
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
@@ -121,14 +119,14 @@ class Base_Agent(object):
         self.episode_next_states.append(self.next_state)
         self.episode_dones.append(self.done)
 
-    def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True):
+    def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         start = time.time()
         while self.episode_number < num_episodes:
             self.reset_game()
             self.step()
-            self.save_and_print_result()
+            if save_and_print_results: self.save_and_print_result()
         time_taken = time.time() - start
         if show_whether_achieved_goal: self.show_whether_achieved_goal()
         if self.config.save_model: self.locally_save_policy()
@@ -223,17 +221,9 @@ class Base_Agent(object):
         if experience is None: experience = self.state, self.action, self.reward, self.next_state, self.done
         memory.add_experience(*experience)
 
-    def take_optimisation_step(self, optimizer, network, loss, clipping_norm, gradients_given=None):
+    def take_optimisation_step(self, optimizer, network, loss, clipping_norm):
         optimizer.zero_grad() #reset gradients to 0
-        if gradients_given is None:
-            loss.backward() #this calculates the gradients
-        else:
-            for ix, parameters in enumerate(network.parameters()):
-                for episode in range(len(gradients_given)):
-                    if episode == 0:
-                        parameters.grad = gradients_given[episode][ix]
-                    else:
-                        parameters.grad += gradients_given[episode][ix]
+        loss.backward() #this calculates the gradients
         torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
     

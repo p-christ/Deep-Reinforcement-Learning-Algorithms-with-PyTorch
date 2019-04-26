@@ -92,10 +92,14 @@ class Skill_Wrapper(Wrapper):
 
     def step(self, action):
         next_state, reward, done, _ = self.env.step(action)
+        new_reward = self.calculate_new_reward(reward, next_state)
+        return self.observation(next_state), new_reward, done, _
+
+    def calculate_new_reward(self, reward, next_state):
         self.update_state_visitations(next_state)
         probability_correct_skill = self.calculate_probability_correct_skill(next_state)
         new_reward = reward + self.regularisation_weight * np.log(probability_correct_skill)
-        return self.observation(next_state), new_reward, done, _
+        return new_reward
 
     def update_state_visitations(self, next_state):
         """Updates table keeping track of number of times each state visited under each skill"""

@@ -40,7 +40,7 @@ DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/18
             "gradient_clipping_norm": 5
         },
 
-        "batch_size": 5,
+        "batch_size": 128,
         "discount_rate": 0.99,
         "mu": 0.0,  # for O-H noise
         "theta": 0.15,  # for O-H noise
@@ -49,7 +49,7 @@ DDPG_hyperparameters =  {  # hyperparameters taken from https://arxiv.org/pdf/18
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 1,
         "learning_updates_per_learning_session": 1,
-        "max_lower_level_timesteps": 4
+        "max_lower_level_timesteps": 10
 
     }
 
@@ -73,7 +73,7 @@ config.hyperparameters = {
 if __name__ == "__main__":
 
     #
-    AGENTS = [DDPG, HIRO]
+    AGENTS = [HIRO, DDPG]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

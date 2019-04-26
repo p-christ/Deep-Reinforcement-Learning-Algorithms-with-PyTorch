@@ -11,11 +11,9 @@ class HIRO(Base_Agent):
     agent_name = "HIRO"
 
     def __init__(self, config):
-        Base_Agent.__init__(self, config)
-
+        super().__init__(config)
         self.max_sub_policy_timesteps = config.hyperparameters["LOWER_LEVEL"]["max_lower_level_timesteps"]
-        self.config.hyperparameters = Trainer.add_default_hyperparameters_if_not_overriden({"OPEN": self.config.hyperparameters})
-        self.config.hyperparameters = self.config.hyperparameters["OPEN"]
+        self.config.hyperparameters = self.config.hyperparameters
 
         self.higher_level_state = None #true state of environment
         self.higher_level_next_state = None
@@ -110,13 +108,6 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
 
         return states, actions, rewards, next_states, dones
 
-        # print("State ", state)
-        # print("Action ", action)
-        # print("Reward ", reward)
-        # print("Next state ", next_state)
-        # print("Done ", done)
-        # assert 1 == 0
-
     def transform_goal_to_one_most_likely_to_have_induced_actions(self, experience):
         """Transforms the goal in an experience to the goal that would have been most likely to induce the actions chosen
         by the lower level agent in the experience"""
@@ -142,9 +133,6 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
                 max = log_probability_total
                 best_goal_ix = goal_ix
 
-
-        print("Best probability {}".format(max))
-
         state = experience.state[0][:self.state_size]
         next_state = experience.next_state
         reward = experience.reward
@@ -159,24 +147,9 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
     def log_probability_lower_level_picks_action(self, state, goal, action):
         """Calculates the log probability that the lower level agent would have chosen this action given the state
         and goal as inputs"""
-        # print("Action ", action)
-        # print("State ", state.shape)
-        # print("Goal ", goal.shape)
-        #
-        # print(np.concatenate((state, goal)))
-
-
         state_and_goal = torch.from_numpy(np.concatenate((state, goal))).float().unsqueeze(0).to(self.device)
-
         action_would_have_taken = self.lower_level_policy(state_and_goal).detach()
-        # print("Action would have ", action_would_have_taken)
-
         return -0.5 * torch.norm(action - action_would_have_taken, 2)**2
-
-
-        # needs to save sequence of lower level states & actions...
-        # when samples them must replace the goal with most likely goal...
-
 
 
 class Higher_Level_Agent_Environment_Wrapper(Wrapper):
@@ -200,7 +173,7 @@ class Higher_Level_Agent_Environment_Wrapper(Wrapper):
 
         self.HIRO_agent.goal = goal
         self.HIRO_agent.lower_level_agent.episode_number = 0 #must reset lower level agent to 0 episodes completed otherwise won't run more episodes
-        self.HIRO_agent.lower_level_agent.run_n_episodes(num_episodes=1, show_whether_achieved_goal=False)
+        self.HIRO_agent.lower_level_agent.run_n_episodes(num_episodes=1, show_whether_achieved_goal=False, save_and_print_results=False)
 
         self.HIRO_agent.save_higher_level_experience()
 
@@ -214,6 +187,8 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         self.env = env
         self.meta_agent = HIRO_agent
         self.max_sub_policy_timesteps = max_sub_policy_timesteps
+
+        self.track_intrinsic_rewards = []
 
     def reset(self, **kwargs):
         if self.meta_agent.higher_level_state is not None: state = self.meta_agent.higher_level_state
@@ -237,12 +212,18 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         return np.concatenate((np.array(internal_state), goal))
 
     def step(self, action):
+        import random
+        if random.random() < 0.008:
+            print("Rolling intrinsic rewards {}".format(np.mean(self.track_intrinsic_rewards[-100:])))
+
+
+        self.meta_agent.step_lower_level_states.append(self.meta_agent.lower_level_state)
+        self.meta_agent.step_lower_level_action_seen.append(action)
 
         self.lower_level_timesteps += 1
         next_state, extrinsic_reward, done, _ = self.env.step(action)
 
-        self.meta_agent.step_lower_level_states.append(self.meta_agent.lower_level_state)
-        self.meta_agent.step_lower_level_action_seen.append(action)
+
 
         self.update_rewards(extrinsic_reward, next_state)
         self.update_goal(next_state)
@@ -279,6 +260,9 @@ class Lower_Level_Agent_Environment_Wrapper(Wrapper):
         desired_next_state = internal_state + goal
         error = desired_next_state - internal_next_state
         intrinsic_reward = -(np.dot(error, error))**0.5
+
+        self.track_intrinsic_rewards.append(intrinsic_reward)
+
         return intrinsic_reward
 
 

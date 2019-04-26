@@ -99,7 +99,7 @@ class Trainer(object):
                                                                            dict_keys=["observation", "desired_goal"])
 
             if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
-            agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
+            # agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
@@ -122,25 +122,6 @@ class Trainer(object):
 
     def agent_cant_handle_changeable_goals_without_flattening(self, agent_name):
         return "HER" not in agent_name
-
-    @staticmethod
-    def add_default_hyperparameters_if_not_overriden(hyperparameters):
-        """This looks at the hyperparameters and adds in the default options for hyperparameters that weren't specified"""
-        default_hyperparameter_choices = {"output_activation": "None", "hidden_activations": "relu", "dropout": 0.0,
-                                          "initialiser": "default", "batch_norm": False, "columns_of_data_to_be_embedded": [],
-                                          "embedding_dimensions": [], "y_range": ()}
-
-        for key in hyperparameters.keys():
-            for inside_key in hyperparameters[key].keys():
-                if isinstance(hyperparameters[key][inside_key], dict):
-                    for hyperparameter in default_hyperparameter_choices:
-                        if hyperparameter not in hyperparameters[key][inside_key].keys():
-                            hyperparameters[key][inside_key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
-            for hyperparameter in default_hyperparameter_choices:
-                if hyperparameter not in hyperparameters[key].keys():
-                    hyperparameters[key][hyperparameter] = default_hyperparameter_choices[hyperparameter]
-        return hyperparameters
-
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
                                         color=None, ax=None, title=None, y_limits=None):
