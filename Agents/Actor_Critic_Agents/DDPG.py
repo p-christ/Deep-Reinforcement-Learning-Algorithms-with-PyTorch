@@ -16,7 +16,7 @@ class DDPG(Base_Agent):
         self.hyperparameters = config.hyperparameters
         self.critic_local = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1, key_to_use="Critic")
         self.critic_target = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1, key_to_use="Critic")
-        self.critic_target.load_state_dict(copy.deepcopy(self.critic_local.state_dict()))
+        Base_Agent.copy_model_over(self.critic_local, self.critic_target)
 
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
@@ -24,7 +24,7 @@ class DDPG(Base_Agent):
                                     self.config.seed)
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
         self.actor_target = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
-        self.actor_target.load_state_dict(copy.deepcopy(self.actor_local.state_dict()))
+        Base_Agent.copy_model_over(self.actor_local, self.actor_target)
 
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
@@ -55,9 +55,9 @@ class DDPG(Base_Agent):
     def sample_experiences(self):
         return  self.memory.sample()
 
-    def pick_action(self):
+    def pick_action(self, state=None):
         """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
-        state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
+        if state is None: state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
         self.actor_local.eval()
         with torch.no_grad():
             action = self.actor_local(state).cpu().data.numpy()

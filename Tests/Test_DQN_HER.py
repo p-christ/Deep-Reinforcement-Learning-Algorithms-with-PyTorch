@@ -55,7 +55,6 @@ config.hyperparameters = {
 
 
 trainer = Trainer(config, [DQN_HER])
-config.hyperparameters = trainer.add_default_hyperparameters_if_not_overriden(config.hyperparameters)
 config.hyperparameters = config.hyperparameters["DQN_Agents"]
 agent = DQN_HER(config)
 agent.reset_game()

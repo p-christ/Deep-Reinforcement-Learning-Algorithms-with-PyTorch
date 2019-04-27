@@ -3,6 +3,8 @@ import torch
 import torch.nn.functional as functional
 from torch.distributions.normal import Normal
 from torch import optim
+
+from Base_Agent import Base_Agent
 from DDPG import DDPG
 
 class TD3(DDPG):
@@ -17,7 +19,8 @@ class TD3(DDPG):
                                            key_to_use="Critic", override_seed=self.config.seed + 1)
         self.critic_target_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                             key_to_use="Critic")
-        self.critic_target_2.load_state_dict(copy.deepcopy(self.critic_local_2.state_dict()))
+        Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
+
         self.critic_optimizer_2 = optim.Adam(self.critic_local_2.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
 

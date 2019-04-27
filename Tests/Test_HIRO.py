@@ -53,7 +53,8 @@ config.hyperparameters = {
                 "batch_norm": False,
                 "buffer_size": 100000,
                 "tau": 0.005,
-                "gradient_clipping_norm": 5
+                "gradient_clipping_norm": 5,
+
             },
 
             "batch_size": 256,
@@ -65,6 +66,7 @@ config.hyperparameters = {
             "action_noise_clipping_range": 0.5,  # for TD3
             "update_every_n_steps": 20,
             "learning_updates_per_learning_session": 10,
+            "number_goal_candidates": 8
 
             } ,
 
@@ -78,7 +80,8 @@ config.hyperparameters = {
                 "final_layer_activation": "TANH",
                 "batch_norm": False,
                 "tau": 0.005,
-                "gradient_clipping_norm": 5
+                "gradient_clipping_norm": 5,
+                "number_goal_candidates": 8
             },
 
             "Critic": {
@@ -100,6 +103,7 @@ config.hyperparameters = {
             "action_noise_clipping_range": 0.5,  # for TD3
             "update_every_n_steps": 20,
             "learning_updates_per_learning_session": 10,
+            "number_goal_candidates": 8
 
             } ,
 

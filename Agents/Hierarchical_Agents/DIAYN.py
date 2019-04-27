@@ -6,6 +6,9 @@ import numpy as np
 import random
 import copy
 
+# NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
+# agent got to in the last timestep, or after X timesteps
+
 class DIAYN(object):
     """Agent based on the paper Diversity is all you need (2018) - https://arxiv.org/pdf/1802.06070.pdf"""
     agent_name = "DIAYN"
@@ -20,6 +23,7 @@ class DIAYN(object):
         self.discriminator_loss_fn = nn.CrossEntropyLoss()
 
         self.agent_config = copy.deepcopy(config)
+        self.agent_config.environment = DIAYN_Skill_Wrapper(self.agent_config.environment)
         self.agent_config.hyperparameters = self.agent_config.hyperparameters["AGENT"]
         self.agent = SAC(self.agent_config)  #We have to use SAC because it involves maximising the policy's entropy over actions which is also a part of DIAYN
 
