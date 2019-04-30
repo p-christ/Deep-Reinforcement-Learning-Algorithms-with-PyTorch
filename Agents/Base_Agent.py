@@ -221,9 +221,9 @@ class Base_Agent(object):
         if experience is None: experience = self.state, self.action, self.reward, self.next_state, self.done
         memory.add_experience(*experience)
 
-    def take_optimisation_step(self, optimizer, network, loss, clipping_norm):
+    def take_optimisation_step(self, optimizer, network, loss, clipping_norm, retain_graph=False):
         optimizer.zero_grad() #reset gradients to 0
-        loss.backward() #this calculates the gradients
+        loss.backward(retain_graph=retain_graph) #this calculates the gradients
         torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
     

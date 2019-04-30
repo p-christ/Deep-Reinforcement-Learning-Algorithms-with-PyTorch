@@ -2,6 +2,7 @@ import gym
 
 from Agents.Policy_Gradient_Agents.PPO import PPO
 from Agents.Actor_Critic_Agents.DDPG import DDPG
+from SAC import SAC
 from TD3 import TD3
 from Agents.Trainer import Trainer
 from Utilities.Data_Structures.Config import Config
@@ -44,26 +45,27 @@ config.hyperparameters = {
 
     "Actor_Critic_Agents": {
         "Actor": {
-            "learning_rate": 0.001,
-            "linear_hidden_units": [20, 20],
-            "final_layer_activation": "TANH",
+            "learning_rate": 0.003,
+            "linear_hidden_units": [100, 100],
+            "final_layer_activation": None,
             "batch_norm": False,
             "tau": 0.005,
             "gradient_clipping_norm": 5
         },
 
         "Critic": {
-            "learning_rate": 0.01,
-            "linear_hidden_units": [20, 20],
-            "final_layer_activation": "None",
+            "learning_rate": 0.003,
+            "linear_hidden_units": [100, 100],
+            "final_layer_activation": None,
             "batch_norm": False,
-            "buffer_size": 100000,
+            "buffer_size": 1000000,
             "tau": 0.005,
             "gradient_clipping_norm": 5
         },
 
+
         "batch_size": 256,
-        "discount_rate": 0.9,
+        "discount_rate": 0.99,
         "mu": 0.0, #for O-H noise
         "theta": 0.15, #for O-H noise
         "sigma": 0.25, #for O-H noise
@@ -76,7 +78,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [PPO, TD3, DDPG]
+    AGENTS = [SAC, PPO, TD3, DDPG]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
