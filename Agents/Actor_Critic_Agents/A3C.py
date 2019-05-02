@@ -159,8 +159,8 @@ class Actor_Critic_Worker(torch.multiprocessing.Process):
         actor_output = model_output[:, list(range(self.action_size))] #we only use first set of columns to decide action, last column is state-value
         critic_output = model_output[:, -1]
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
-        action = action_distribution.sample().cpu().numpy()
-        if self.action_types == "CONTINUOUS": action += self.noise.sample()
+        action = action_distribution.produce_action_and_action_info().cpu().numpy()
+        if self.action_types == "CONTINUOUS": action += self.noise.produce_action_and_action_info()
         if self.action_types == "DISCRETE":
             if random.random() <= epsilon_exploration:
                 action = random.randint(0, self.action_size - 1)

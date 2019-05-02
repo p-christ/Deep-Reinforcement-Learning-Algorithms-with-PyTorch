@@ -81,7 +81,7 @@ class HIRO_Higher_Level_DDPG_Agent(DDPG):
         memory.add_experience(*experience)
 
     def sample_experiences(self):
-        experiences = self.memory.sample(separate_out_data_types=False)
+        experiences = self.memory.produce_action_and_action_info(separate_out_data_types=False)
         assert len(experiences[0].state) == self.hyperparameters["max_lower_level_timesteps"] or experiences[0].done
         assert experiences[0].state[0].shape[0] == self.state_size * 2
         assert len(experiences[0].action) == self.hyperparameters["max_lower_level_timesteps"] or experiences[0].done

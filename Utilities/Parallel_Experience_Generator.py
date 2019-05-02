@@ -76,7 +76,7 @@ class Parallel_Experience_Generator(object):
         if self.action_choice_output_columns is not None:
             actor_output = actor_output[:, self.action_choice_output_columns]
         action_distribution = create_actor_distribution(self.action_types, actor_output, self.action_size)
-        action = action_distribution.sample().cpu()
+        action = action_distribution.produce_action_and_action_info().cpu()
 
         if self.action_types == "CONTINUOUS": action += torch.Tensor(self.noise.sample())
         else: action = action.item()

@@ -81,7 +81,7 @@ class HER_Base(object):
 
     def sample_from_HER_and_Ordinary_Buffer(self):
         """Samples from the ordinary replay buffer and HER replay buffer according to a proportion specified in config"""
-        states, actions, rewards, next_states, dones = self.memory.sample(self.ordinary_buffer_batch_size)
+        states, actions, rewards, next_states, dones = self.memory.produce_action_and_action_info(self.ordinary_buffer_batch_size)
         HER_states, HER_actions, HER_rewards, HER_next_states, HER_dones = self.HER_memory.sample(self.HER_buffer_batch_size)
 
         states = torch.cat((states, HER_states))

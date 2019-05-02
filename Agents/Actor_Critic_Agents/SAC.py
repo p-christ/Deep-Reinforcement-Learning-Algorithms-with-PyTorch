@@ -1,24 +1,20 @@
-import torch
-import torch.nn.functional as functional
-from torch.distributions.normal import Normal
 from Base_Agent import Base_Agent
-from OU_Noise import OU_Noise
 from Replay_Buffer import Replay_Buffer
-from TD3 import TD3
-from Utilities.Data_Structures.Tanh_Distribution import TanhNormal
-
+from torch.optim import Adam
+import torch
+import torch.nn.functional as F
+from torch.distributions import Normal
 import numpy as np
-import copy
+
+LOG_SIG_MAX = 2
+LOG_SIG_MIN = -20
+EPSILON = 1e-6
 
 class SAC(Base_Agent):
-    """Soft Actor-Critic model based on the Open AI implementation explained here https://spinningup.openai.com/en/latest/algorithms/sac.html"""
-
-# Based on https://github.com/vitchyr/rlkit/blob/master/rlkit/torch/sac/sac.py
-    # Newer version: Soft Actor-Critic Algorithms and Applications
-    # https: // towardsdatascience.com / soft - actor - critic - demystified - b8427df61665
-
+    """Soft Actor-Critic model based on the 2018 paper https://arxiv.org/abs/1812.05905 and on this github implementation
+      https://github.com/pranz24/pytorch-soft-actor-critic. It is an actor-critic algorithm where the agent is also trained
+      to maximise the entropy of their actions as well as their cumulative reward"""
     agent_name = "SAC"
-
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.hyperparameters = config.hyperparameters
@@ -37,140 +33,138 @@ class SAC(Base_Agent):
         Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                                     self.config.seed)
-
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size * 2, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
-
-        self.target_entropy = -np.prod(self.environment.action_space.shape).item()  # heuristic value from Tuomas
-        self.log_alpha = torch.zeros(1, requires_grad=True)
-        self.alpha_optimizer = torch.optim.Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
+        self.target_entropy = -np.prod(self.environment.action_space.shape).item()  # heuristic value from the paper
+        self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
+        if self.automatic_entropy_tuning:
+            self.target_entropy = -torch.prod(torch.Tensor(self.environment.action_space.shape).to(self.device)).item()
+            self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
+            self.alpha = self.log_alpha.exp()
+            self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
+        else:
+            self.alpha = self.hyperparameters["entropy_term_weight"]
 
     def step(self):
-        """Runs a step in the game"""
+        """Runs an episode on the game, saving the experience and running a learning step if appropriate"""
+        eval_ep = self.episode_number % 10 == 0
+        self.episode_step_number_val = 0
         while not self.done:
-            # print("State ", self.state.shape)
-            self.action, _, _, _, _, _ = self.pick_action()
+            self.episode_step_number_val += 1
+            self.action = self.pick_action(eval_ep)
             self.conduct_action(self.action)
             if self.time_for_critic_and_actor_to_learn():
                 for _ in range(self.hyperparameters["learning_updates_per_learning_session"]):
-                    states, actions, rewards, next_states, dones = self.sample_experiences()
-                    new_actions, log_action_prob = self.temperature_learn(states)
-                    actor_loss = self.calculate_actor_loss(states, new_actions, log_action_prob)
-                    critic_loss_1, critic_loss_2 = self.calculate_critic_losses(states, actions, next_states, rewards, dones)
-
-                    self.take_optimisation_step(self.critic_optimizer, self.critic_local, critic_loss_1,
-                                                self.hyperparameters["Critic"]["gradient_clipping_norm"])
-                    self.take_optimisation_step(self.critic_optimizer_2, self.critic_local_2, critic_loss_2,
-                                                self.hyperparameters["Critic"]["gradient_clipping_norm"])
-                    self.take_optimisation_step(self.actor_optimizer, self.actor_local, actor_loss,
-                                                self.hyperparameters["Actor"]["gradient_clipping_norm"])
-            self.save_experience()
-            self.state = self.next_state #this is to set the state for the next iteration
+                    self.learn()
+            mask = False if self.episode_step_number_val >= self.environment._max_episode_steps else self.done
+            if not eval_ep: self.save_experience(experience=(self.state, self.action, self.reward, self.next_state, mask))
+            self.state = self.next_state
             self.global_step_number += 1
+        if eval_ep: self.print_summary_of_evaluation_episode()
         self.episode_number += 1
 
-    def temperature_learn(self, states):
+    def pick_action(self, eval_ep):
+        """Picks an action using one of three methods: 1) Randomly if we haven't passed a certain number of steps,
+         2) Using the actor in evaluation mode if eval_ep is True  3) Using the actor in training mode if eval_ep is False.
+         The difference between evaluation and training mode is that training mode does more exploration"""
+        if self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
+            action = self.environment.action_space.sample()
+        elif eval_ep: action = self.actor_pick_action(self.state, eval=True)
+        else: action = self.actor_pick_action(self.state)
+        return action
 
-        action, action_mean, log_std, log_prob, _, _ = self.pick_action(state=states, track_grads=True)
-
-        alpha_loss = -(self.alpha * (log_prob + self.target_entropy).detach()).mean()
-
-        self.alpha_optimizer.zero_grad()
-        alpha_loss.backward()
-        self.alpha_optimizer.step()
-
-        return action, log_prob
-
-    def calculate_actor_loss(self, states, new_actions, log_action_prob):
-
-
-
-        q_new_actions = torch.min(self.critic_local(torch.cat((states, new_actions), 1)), self.critic_local_2(torch.cat((states, new_actions), 1)))
-        policy_loss = (self.alpha * log_action_prob - q_new_actions).mean()
-        return policy_loss
-
-    def calculate_critic_losses(self, states, actions, next_states, rewards, dones):
-
-        q1_pred = self.critic_local(torch.cat((states, actions), 1))
-        q2_pred = self.critic_local_2(torch.cat((states, actions), 1))
-
-        new_next_actions, _, _, new_log_prob, _, _ = self.pick_action(state=next_states, track_grads=True)
-
-
-
-        critic_targets_next = torch.min(self.critic_target(torch.cat((next_states, new_next_actions), 1)),
-                                    self.critic_target_2(torch.cat((next_states, new_next_actions), 1))) - self.alpha * new_log_prob
-        q_target = self.compute_critic_values_for_current_states(rewards, critic_targets_next, dones)
-
-        qf1_loss = functional.mse_loss(q1_pred, q_target.detach())
-        qf2_loss = functional.mse_loss(q2_pred, q_target.detach())
-        return qf1_loss, qf2_loss
+    def actor_pick_action(self, state=None, eval=False):
+        """Uses actor to pick an action in one of two ways: 1) If eval = False and we aren't in eval mode then it picks
+        an action that has partly been randomly sampled 2) If eval = True then we pick the action that comes directly
+        from the network and so did not involve any random sampling"""
+        if state is None: state = self.state
+        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
+        if eval == False: action, _, _ = self.produce_action_and_action_info(state)
+        else: _, _, action = self.produce_action_and_action_info(state)
+        action = action.detach().cpu().numpy()
+        return action[0]
 
     def time_for_critic_and_actor_to_learn(self):
         """Returns boolean indicating whether there are enough experiences to learn from and it is time to learn for the
         actor and critic"""
-        return self.enough_experiences_to_learn_from() and self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
+        return self.global_step_number > self.hyperparameters["min_steps_before_learning"] and \
+               self.enough_experiences_to_learn_from() and self.global_step_number % self.hyperparameters["update_every_n_steps"] == 0
 
-    def calculate_action_info(self, state=None):
-        if state is None: state = torch.from_numpy(self.state).float().unsqueeze(0).to(self.device)
-        actor_output = self.actor_local(state).data
-        action_mean = actor_output[:, :self.action_size]
-        log_std = actor_output[:, self.action_size:]
-        log_std = torch.clamp(log_std, -20, 2)
-        std = log_std.exp()
-        tanh_normal = TanhNormal(action_mean, std)
-        action, pre_tanh_value = tanh_normal.rsample(return_pretanh_value=True)
-        log_prob = tanh_normal.log_prob(action, pre_tanh_value=pre_tanh_value)
-        log_prob = log_prob.sum(dim=1, keepdim=True)
-        return action, action_mean, log_std, log_prob, std, pre_tanh_value
-
-    def pick_action(self, state=None, track_grads=False):
-        """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
-        if not track_grads:
-            with torch.no_grad():
-                action, action_mean, log_std, log_prob, std, pre_tanh_value = self.calculate_action_info(state=state)
-        else:
-            action, action_mean, log_std, log_prob, std, pre_tanh_value = self.calculate_action_info(state=state)
-        return action, action_mean, log_std, log_prob, std, pre_tanh_value
-
-
-
-
-    def compute_critic_values_for_current_states(self, rewards, critic_targets_next, dones):
-        """Computes the critic values for current states to be used in the loss for the critic"""
-        critic_targets_current = rewards + (self.hyperparameters["discount_rate"] * critic_targets_next * (1.0 - dones))
-        return critic_targets_current
+    def learn(self):
+        """Runs a learning iteration for the actor, both critics and (if specified) the temperature parameter"""
+        state_batch, action_batch, reward_batch, next_state_batch, mask_batch = self.sample_experiences()
+        qf1_loss, qf2_loss = self.calculate_critic_losses(state_batch, action_batch, reward_batch, next_state_batch, mask_batch)
+        policy_loss, log_pi = self.calculate_actor_loss(state_batch)
+        if self.automatic_entropy_tuning: alpha_loss = self.calculate_entropy_tuning_loss(log_pi)
+        else: alpha_loss = None
+        self.update_all_parameters(qf1_loss, qf2_loss, policy_loss, alpha_loss)
 
     def sample_experiences(self):
         return  self.memory.sample()
 
-    @property
-    def alpha(self):
-        return self.log_alpha.exp()
+    def calculate_critic_losses(self, state_batch, action_batch, reward_batch, next_state_batch, mask_batch):
+        """Calculates the losses for the two critics. This is the ordinary Q-learning loss except the additional entropy
+         term is taken into account"""
+        with torch.no_grad():
+            next_state_action, next_state_log_pi, _ = self.produce_action_and_action_info(next_state_batch)
+            qf1_next_target = self.critic_target(torch.cat((next_state_batch, next_state_action), 1))
+            qf2_next_target = self.critic_target_2(torch.cat((next_state_batch, next_state_action), 1))
+            min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - self.alpha * next_state_log_pi
+            next_q_value = reward_batch + (1.0 - mask_batch) * self.hyperparameters["discount_rate"] * (min_qf_next_target)
+        qf1 = self.critic_local(torch.cat((state_batch, action_batch), 1))
+        qf2 = self.critic_local_2(torch.cat((state_batch, action_batch), 1))
+        qf1_loss = F.mse_loss(qf1, next_q_value)
+        qf2_loss = F.mse_loss(qf2, next_q_value)
+        return qf1_loss, qf2_loss
 
+    def produce_action_and_action_info(self, state):
+        """Given the state, produces an action, the log probability of the action, and the tanh of the mean action"""
+        actor_output = self.actor_local(state)
+        mean, log_std = actor_output[:, :self.action_size], actor_output[:, self.action_size:]
+        std = log_std.exp()
+        normal = Normal(mean, std)
+        x_t = normal.rsample()  #rsample means it is sampled using reparameterisation trick
+        action = torch.tanh(x_t)
+        log_prob = normal.log_prob(x_t)
+        log_prob -= torch.log(1 - action.pow(2) + EPSILON)
+        log_prob = log_prob.sum(1, keepdim=True)
+        return action, log_prob, torch.tanh(mean)
 
-    # def value_function_learn(self, states):
-    #
-    #     new_actions, log_action_prob = self.pick_action(states,  give_log_prob=True, track_grads=True)
-    #
-    #     # print(new_actions.requires_grad)
-    #
-    #     with torch.no_grad():
-    #         critic_expected_1 = self.critic_local(torch.cat((states, new_actions), 1))
-    #         critic_expected_2 = self.critic_local_2(torch.cat((states, new_actions), 1))
-    #         critic_expected_min = torch.min(critic_expected_1, critic_expected_2)
-    #
-    #     target_value_func = critic_expected_min - self.hyperparameters["entropy_loss_weight"] * log_action_prob
-    #
-    #     value_func_values = self.value_function_local(states)
-    #
-    #     value_loss = functional.mse_loss(value_func_values, target_value_func)
-    #
-    #     self.take_optimisation_step(self.value_function_optimizer, self.value_function_local, value_loss,
-    #                                 self.hyperparameters["Value"]["gradient_clipping_norm"], retain_graph=True)
-    #     self.soft_update_of_target_network(self.value_function_local, self.value_function_target, self.hyperparameters["Value"]["tau"])
-    #
-    #     return new_actions, log_action_prob
-    #
+    def calculate_actor_loss(self, state_batch):
+        """Calculates the loss for the actor. This loss includes the additional entropy term"""
+        pi, log_pi, _ = self.produce_action_and_action_info(state_batch)
+        qf1_pi = self.critic_local(torch.cat((state_batch, pi), 1))
+        qf2_pi = self.critic_local_2(torch.cat((state_batch, pi), 1))
+        min_qf_pi = torch.min(qf1_pi, qf2_pi)
+        policy_loss = ((self.alpha * log_pi) - min_qf_pi).mean()
+        return policy_loss, log_pi
 
+    def calculate_entropy_tuning_loss(self, log_pi):
+        """Calculates the loss for the entropy temperature parameter. This is only relevant if self.automatic_entropy_tuning
+        is True."""
+        alpha_loss = -(self.log_alpha * (log_pi + self.target_entropy).detach()).mean()
+        return alpha_loss
+
+    def update_all_parameters(self, critic_loss_1, critic_loss_2, actor_loss, alpha_loss):
+        """Updates the parameters for the actor, both critics and (if specified) the temperature parameter"""
+        self.take_optimisation_step(self.critic_optimizer, self.critic_local, critic_loss_1,
+                                    self.hyperparameters["Critic"]["gradient_clipping_norm"])
+        self.take_optimisation_step(self.critic_optimizer_2, self.critic_local_2, critic_loss_2,
+                                    self.hyperparameters["Critic"]["gradient_clipping_norm"])
+        self.take_optimisation_step(self.actor_optimizer, self.actor_local, actor_loss,
+                                    self.hyperparameters["Actor"]["gradient_clipping_norm"])
+        self.soft_update_of_target_network(self.critic_local, self.critic_target,
+                                           self.hyperparameters["Critic"]["tau"])
+        self.soft_update_of_target_network(self.critic_local_2, self.critic_target_2,
+                                           self.hyperparameters["Critic"]["tau"])
+        if alpha_loss is not None:
+            self.take_optimisation_step(self.alpha_optim, None, alpha_loss, None)
+            self.alpha = self.log_alpha.exp()
+
+    def print_summary_of_evaluation_episode(self):
+        """Prints a summary of the episode we just ran in evaluation mode"""
+        print(" ")
+        print("----------------------------")
+        print("Evaluation episode score {} ".format(self.total_episode_score_so_far))
+        print("----------------------------")

@@ -46,7 +46,7 @@ config.hyperparameters = {
     "Actor_Critic_Agents": {
         "Actor": {
             "learning_rate": 0.003,
-            "linear_hidden_units": [100, 100],
+            "linear_hidden_units": [20, 20],
             "final_layer_activation": None,
             "batch_norm": False,
             "tau": 0.005,
@@ -54,8 +54,8 @@ config.hyperparameters = {
         },
 
         "Critic": {
-            "learning_rate": 0.003,
-            "linear_hidden_units": [100, 100],
+            "learning_rate": 0.02,
+            "linear_hidden_units": [20, 20],
             "final_layer_activation": None,
             "batch_norm": False,
             "buffer_size": 1000000,
@@ -65,7 +65,7 @@ config.hyperparameters = {
 
 
         "batch_size": 256,
-        "discount_rate": 0.99,
+        "discount_rate": 0.9,
         "mu": 0.0, #for O-H noise
         "theta": 0.15, #for O-H noise
         "sigma": 0.25, #for O-H noise
@@ -78,7 +78,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [SAC, PPO, TD3, DDPG]
+    AGENTS = [TD3, DDPG, PPO, SAC]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

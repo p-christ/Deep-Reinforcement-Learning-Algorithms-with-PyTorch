@@ -83,8 +83,10 @@ class PPO(Base_Agent):
     def calculate_log_probability_of_actions(self, policy, states, actions):
         """Calculates the log probability of an action occuring given a policy and starting state"""
         policy_output = policy.forward(states).to(self.device)
+        print("ACTION TYPES ", self.action_types)
         policy_distribution = create_actor_distribution(self.action_types, policy_output, self.action_size)
         actions_tensor = actions
+        print("actions tensor shape ", actions_tensor.shape)
         policy_distribution_log_prob = policy_distribution.log_prob(actions_tensor)
         return policy_distribution_log_prob
 

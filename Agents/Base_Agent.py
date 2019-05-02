@@ -45,7 +45,6 @@ class Base_Agent(object):
             if str(self.environment.unwrapped)[1:11] == "FetchReach": return "FetchReach"
             elif str(self.environment.unwrapped)[1:8] == "AntMaze": return "AntMaze"
             else:
-                print("self env ", self.environment.__dict__)
                 title = self.environment.spec.id.split("-")[0]
                 return title
 
@@ -212,7 +211,7 @@ class Base_Agent(object):
     def pick_and_conduct_action(self):
         """Picks and conducts an action"""
         raise ValueError("CHANGE ME")
-        self.action = self.pick_action()
+        self.action = self.actor_pick_action()
         self.conduct_action()
 
     def save_experience(self, memory=None, experience=None):
@@ -221,10 +220,11 @@ class Base_Agent(object):
         if experience is None: experience = self.state, self.action, self.reward, self.next_state, self.done
         memory.add_experience(*experience)
 
-    def take_optimisation_step(self, optimizer, network, loss, clipping_norm, retain_graph=False):
+    def take_optimisation_step(self, optimizer, network, loss, clipping_norm=None, retain_graph=False):
         optimizer.zero_grad() #reset gradients to 0
         loss.backward(retain_graph=retain_graph) #this calculates the gradients
-        torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
+        if clipping_norm is not None:
+            torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
     
     def soft_update_of_target_network(self, local_model, target_model, tau):
@@ -282,7 +282,6 @@ class Base_Agent(object):
         for from_model, to_model in zip(from_model.parameters(), to_model.parameters()):
             to_model._grad = from_model.grad.clone()
             if set_from_gradients_to_zero: from_model._grad = None
-
 
     @staticmethod
     def copy_model_over(from_model, to_model):

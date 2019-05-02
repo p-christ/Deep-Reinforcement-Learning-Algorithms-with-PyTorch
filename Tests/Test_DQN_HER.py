@@ -121,11 +121,11 @@ def test_tracks_changes_from_one_action():
     agent.track_changeable_goal_episodes_data()
 
     with pytest.raises(Exception):
-        agent.HER_memory.sample(1)
+        agent.HER_memory.produce_action_and_action_info(1)
 
     agent.save_alternative_experience()
 
-    sample = agent.HER_memory.sample(1)
+    sample = agent.HER_memory.produce_action_and_action_info(1)
 
     assert sample[1].item() == agent.action
     assert sample[2].item() == 4
@@ -157,7 +157,7 @@ def test_tracks_changes_from_multiple_actions():
         agent.state_dict = agent.next_state_dict  # this is to set the state for the next iteration
         agent.state = agent.next_state
 
-    states, actions, rewards, next_states, dones = agent.HER_memory.sample(4)
+    states, actions, rewards, next_states, dones = agent.HER_memory.produce_action_and_action_info(4)
 
     assert all(states[1] == torch.Tensor([1.0, 1., 1., 1., 0., 0., 0. , 0.]))
     assert all(actions == torch.Tensor([[1.], [0.], [3.], [2.]]))

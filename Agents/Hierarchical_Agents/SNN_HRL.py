@@ -141,7 +141,7 @@ class Manager_Frozen_Worker_Wrapper(Wrapper):
         cumulative_reward = 0
         for _ in range(self.timesteps_before_changing_skill):
             with torch.no_grad():
-                skill_action = self.skills_agent.pick_action(np.array([next_state[0], action]))
+                skill_action = self.skills_agent.actor_pick_action(np.array([next_state[0], action]))
             next_state, reward, done, _ = self.env.step(skill_action)
             cumulative_reward += reward
             if done: break
