@@ -11,8 +11,8 @@ from Utilities.Data_Structures.Config import Config
 config = Config()
 config.seed = 1
 config.environment = gym.make("MountainCarContinuous-v0")
-config.num_episodes_to_run = 600
-config.file_to_save_data_results = None
+config.num_episodes_to_run = 450
+config.file_to_save_data_results = "Data_and_Graphs/Mountain_Car_Results_Data.pkl"
 config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
@@ -44,41 +44,47 @@ config.hyperparameters = {
         },
 
     "Actor_Critic_Agents": {
-        "Actor": {
-            "learning_rate": 0.003,
-            "linear_hidden_units": [20, 20],
-            "final_layer_activation": None,
-            "batch_norm": False,
-            "tau": 0.005,
-            "gradient_clipping_norm": 5
-        },
+            "Actor": {
+                "learning_rate": 0.003,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": None,
+                "batch_norm": False,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5,
+                "initialiser": "Xavier"
+            },
 
-        "Critic": {
-            "learning_rate": 0.02,
-            "linear_hidden_units": [20, 20],
-            "final_layer_activation": None,
-            "batch_norm": False,
-            "buffer_size": 1000000,
-            "tau": 0.005,
-            "gradient_clipping_norm": 5
-        },
+            "Critic": {
+                "learning_rate": 0.02,
+                "linear_hidden_units": [20, 20],
+                "final_layer_activation": None,
+                "batch_norm": False,
+                "buffer_size": 1000000,
+                "tau": 0.005,
+                "gradient_clipping_norm": 5,
+                "initialiser": "Xavier"
+            },
 
-
+        "min_steps_before_learning": 1000, #for SAC only
         "batch_size": 256,
-        "discount_rate": 0.9,
-        "mu": 0.0, #for O-H noise
-        "theta": 0.15, #for O-H noise
-        "sigma": 0.25, #for O-H noise
+        "discount_rate": 0.99,
+        "mu": 0.0,  # for O-H noise
+        "theta": 0.15,  # for O-H noise
+        "sigma": 0.25,  # for O-H noise
         "action_noise_std": 0.2,  # for TD3
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 20,
         "learning_updates_per_learning_session": 10,
+        "automatically_tune_entropy_hyperparameter": True,
+        "entropy_term_weight": None,
+        "add_extra_noise": True
 
     }
+
 }
 
 if __name__ == "__main__":
-    AGENTS = [TD3, DDPG, PPO, SAC]
+    AGENTS = [SAC] #, TD3, DDPG, PPO]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

@@ -10,14 +10,14 @@ from Utilities.Data_Structures.Config import Config
 config = Config()
 config.seed = 1
 config.environment = gym.make("Hopper-v2")
-config.num_episodes_to_run = 59
+config.num_episodes_to_run = 450
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
-config.runs_per_agent = 1
+config.runs_per_agent = 3
 config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
@@ -75,7 +75,8 @@ config.hyperparameters = {
         "update_every_n_steps": 1,
         "learning_updates_per_learning_session": 1,
         "automatically_tune_entropy_hyperparameter": False,
-        "entropy_term_weight": 0.2
+        "entropy_term_weight": 0.2,
+        "add_extra_noise": False
 
     }
 }

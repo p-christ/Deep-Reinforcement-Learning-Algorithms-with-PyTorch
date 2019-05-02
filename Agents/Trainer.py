@@ -93,7 +93,7 @@ class Trainer(object):
         agent_group = self.agent_to_agent_group[agent_name]
         agent_round = 1
         for run in range(self.config.runs_per_agent):
-            agent_config = self.config
+            agent_config = copy.deepcopy(self.config)
 
             if self.environment_has_changeable_goals(agent_config.environment) and self.agent_cant_handle_changeable_goals_without_flattening(agent_name):
                 print("Flattening changeable-goal environment for agent {}".format(agent_name))
@@ -101,7 +101,6 @@ class Trainer(object):
                                                                            dict_keys=["observation", "desired_goal"])
 
             if self.config.randomise_random_seed: agent_config.seed = random.randint(0, 2**32 - 2)
-            # agent_config.hyperparameters = self.add_default_hyperparameters_if_not_overriden(agent_config.hyperparameters)
             agent_config.hyperparameters = agent_config.hyperparameters[agent_group]
             print("AGENT NAME: {}".format(agent_name))
             print("\033[1m" + "{}.{}: {}".format(agent_number, agent_round, agent_name) + "\033[0m", flush=True)
@@ -133,6 +132,7 @@ class Trainer(object):
         assert bool(show_mean_and_std_range) ^ bool(show_each_run), "either show_mean_and_std_range or show_each_run must be true"
 
         if not ax: ax = plt.gca()
+
 
         if not color: color =  self.agent_to_color_group[agent_name]
         if show_mean_and_std_range:
@@ -264,7 +264,7 @@ class Trainer(object):
         if show_image: plt.show()
 
     def visualise_set_of_preexisting_results(self, results_data_paths, save_image_path=None, show_image=True, plot_titles=None,
-                                             y_limits=None):
+                                             y_limits=[None,None]):
         """Visualises a set of preexisting results on 1 plot by making subplots"""
         assert isinstance(results_data_paths, list), "all_results must be a list of data paths"
 

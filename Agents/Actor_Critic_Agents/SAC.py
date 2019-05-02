@@ -1,4 +1,5 @@
 from Base_Agent import Base_Agent
+from OU_Noise import OU_Noise
 from Replay_Buffer import Replay_Buffer
 from torch.optim import Adam
 import torch
@@ -8,6 +9,7 @@ import numpy as np
 
 LOG_SIG_MAX = 2
 LOG_SIG_MIN = -20
+TRAINING_EPISODES_PER_EVAL_EPISODE = 10
 EPSILON = 1e-6
 
 class SAC(Base_Agent):
@@ -46,6 +48,29 @@ class SAC(Base_Agent):
         else:
             self.alpha = self.hyperparameters["entropy_term_weight"]
 
+        self.add_extra_noise = self.hyperparameters["add_extra_noise"]
+        if self.add_extra_noise:
+            self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],
+                                  self.hyperparameters["theta"], self.hyperparameters["sigma"])
+
+    def save_result(self):
+        """Saves the result of an episode of the game. Overriding the method in Base Agent that does this because we only
+        want to keep track of the results during the evaluation episodes"""
+        if self.episode_number == 1:
+            self.game_full_episode_scores.extend([self.total_episode_score_so_far])
+            self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]))
+            self.save_max_result_seen()
+
+        elif (self.episode_number - 1) % TRAINING_EPISODES_PER_EVAL_EPISODE == 0:
+            self.game_full_episode_scores.extend([self.total_episode_score_so_far for _ in range(TRAINING_EPISODES_PER_EVAL_EPISODE)])
+            self.rolling_results.extend([np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]) for _ in range(TRAINING_EPISODES_PER_EVAL_EPISODE)])
+            self.save_max_result_seen()
+
+    def reset_game(self):
+        """Resets the game information so we are ready to play a new episode"""
+        Base_Agent.reset_game(self)
+        if self.add_extra_noise: self.noise.reset()
+
     def step(self):
         """Runs an episode on the game, saving the experience and running a learning step if appropriate"""
         eval_ep = self.episode_number % 10 == 0
@@ -53,6 +78,8 @@ class SAC(Base_Agent):
         while not self.done:
             self.episode_step_number_val += 1
             self.action = self.pick_action(eval_ep)
+            if self.add_extra_noise:
+                self.action += self.noise.sample()
             self.conduct_action(self.action)
             if self.time_for_critic_and_actor_to_learn():
                 for _ in range(self.hyperparameters["learning_updates_per_learning_session"]):
@@ -133,9 +160,9 @@ class SAC(Base_Agent):
 
     def calculate_actor_loss(self, state_batch):
         """Calculates the loss for the actor. This loss includes the additional entropy term"""
-        pi, log_pi, _ = self.produce_action_and_action_info(state_batch)
-        qf1_pi = self.critic_local(torch.cat((state_batch, pi), 1))
-        qf2_pi = self.critic_local_2(torch.cat((state_batch, pi), 1))
+        action, log_pi, _ = self.produce_action_and_action_info(state_batch)
+        qf1_pi = self.critic_local(torch.cat((state_batch, action), 1))
+        qf2_pi = self.critic_local_2(torch.cat((state_batch, action), 1))
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
         policy_loss = ((self.alpha * log_pi) - min_qf_pi).mean()
         return policy_loss, log_pi

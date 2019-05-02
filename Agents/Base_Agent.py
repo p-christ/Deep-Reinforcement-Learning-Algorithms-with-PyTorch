@@ -53,12 +53,6 @@ class Base_Agent(object):
         if self.action_types == "DISCRETE": return self.environment.action_space.n
         else:
             return self.environment.action_space.shape[0]
-            # print("ENVIRONMENT ", self.environment)
-            # print("ACTION SPACE ", self.environment.action_space)
-        #
-        #
-        # return self.environment.action_space.sample().shape[0]
-
 
     def get_state_size(self):
         """Gets the state_size for the gym env into the correct shape for a neural network"""
@@ -248,7 +242,6 @@ class Base_Agent(object):
         for key in default_hyperparameter_choices:
             if key not in hyperparameters.keys():
                 hyperparameters[key] = default_hyperparameter_choices[key]
-
 
         return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
