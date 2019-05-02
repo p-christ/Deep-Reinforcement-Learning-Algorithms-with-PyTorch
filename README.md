@@ -18,6 +18,7 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 1. *REINFORCE* ([Williams et al. 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
 1. *DDPG* ([Lillicrap et al. 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
 1. *TD3* ([Fujimoto et al. 2018](https://arxiv.org/abs/1802.09477))
+1. *Soft Actor-Critic* ( [Haarnoja et al. 2018](https://arxiv.org/pdf/1812.05905.pdf)) 
 1. *A3C* ([Mnih et al. 2016](https://arxiv.org/pdf/1602.01783.pdf))
 1. *A2C*
 1. *PPO* ([Schulman et al. 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
