@@ -96,7 +96,7 @@ config.hyperparameters = {
         "automatically_tune_entropy_hyperparameter": True,
         "add_extra_noise": False,
         "min_steps_before_learning": 4,
-        "do_evaluation_iterations": True
+        "do_evaluation_iterations": True,
 
         "Actor": {
             "learning_rate": 0.001,
