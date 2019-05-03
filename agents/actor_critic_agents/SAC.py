@@ -1,5 +1,5 @@
 from Base_Agent import Base_Agent
-from OU_Noise import OU_Noise
+from utilities.OU_Noise import OU_Noise
 from Replay_Buffer import Replay_Buffer
 from torch.optim import Adam
 import torch
