@@ -76,7 +76,8 @@ config.hyperparameters = {
         "learning_updates_per_learning_session": 1,
         "automatically_tune_entropy_hyperparameter": False,
         "entropy_term_weight": 0.2,
-        "add_extra_noise": False
+        "add_extra_noise": False,
+        "do_evaluation_iterations": True
 
     }
 }

@@ -53,6 +53,8 @@ class SAC(Base_Agent):
             self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],
                                   self.hyperparameters["theta"], self.hyperparameters["sigma"])
 
+        self.do_evaluation_iterations = self.hyperparameters["do_evaluation_iterations"]
+
     def save_result(self):
         """Saves the result of an episode of the game. Overriding the method in Base Agent that does this because we only
         want to keep track of the results during the evaluation episodes"""
@@ -73,7 +75,7 @@ class SAC(Base_Agent):
 
     def step(self):
         """Runs an episode on the game, saving the experience and running a learning step if appropriate"""
-        eval_ep = self.episode_number % 10 == 0
+        eval_ep = self.episode_number % TRAINING_EPISODES_PER_EVAL_EPISODE == 0 and self.do_evaluation_iterations
         self.episode_step_number_val = 0
         while not self.done:
             self.episode_step_number_val += 1
@@ -95,9 +97,9 @@ class SAC(Base_Agent):
         """Picks an action using one of three methods: 1) Randomly if we haven't passed a certain number of steps,
          2) Using the actor in evaluation mode if eval_ep is True  3) Using the actor in training mode if eval_ep is False.
          The difference between evaluation and training mode is that training mode does more exploration"""
-        if self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
+        if eval_ep: action = self.actor_pick_action(self.state, eval=True)
+        elif self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
             action = self.environment.action_space.sample()
-        elif eval_ep: action = self.actor_pick_action(self.state, eval=True)
         else: action = self.actor_pick_action(self.state)
         return action
 
@@ -108,7 +110,9 @@ class SAC(Base_Agent):
         if state is None: state = self.state
         state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
         if eval == False: action, _, _ = self.produce_action_and_action_info(state)
-        else: _, _, action = self.produce_action_and_action_info(state)
+        else:
+            with torch.no_grad():
+                _, _, action = self.produce_action_and_action_info(state)
         action = action.detach().cpu().numpy()
         return action[0]
 
