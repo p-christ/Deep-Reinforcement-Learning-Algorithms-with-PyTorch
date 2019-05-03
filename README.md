@@ -32,10 +32,10 @@ Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous ac
 
 ## **Environments Implemented**
 
-1. *Bit Flipping Game* (as described in [Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf))
-1. *Four Rooms Game* (as described in [Sutton et al. 1998](http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf))
-1. *Long Corridor Game* (as described in [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf))
-1. *Ant-{Maze, Push, Fall}* (as desribed in [Nachum et al. 2018](https://arxiv.org/pdf/1805.08296.pdf) and their accompanying [code](https://github.com/tensorflow/models/tree/master/research/efficient-hrl))
+1. *Bit Flipping Game* <sub><sup> (as described in [Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf)) </sup></sub>
+1. *Four Rooms Game* <sub><sup> (as described in [Sutton et al. 1998](http://www-anw.cs.umass.edu/~barto/courses/cs687/Sutton-Precup-Singh-AIJ99.pdf)) </sup></sub>
+1. *Long Corridor Game* <sub><sup> (as described in [Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf)) </sup></sub>
+1. *Ant-{Maze, Push, Fall}* <sub><sup> (as desribed in [Nachum et al. 2018](https://arxiv.org/pdf/1805.08296.pdf) and their accompanying [code](https://github.com/tensorflow/models/tree/master/research/efficient-hrl)) </sup></sub>
 
 ## **Results**
 
@@ -44,7 +44,7 @@ Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous ac
 Below shows various RL algorithms successfully learning discrete action game [Cart Pole](https://github.com/openai/gym/wiki/CartPole-v0)
  or continuous action game [Mountain Car](https://github.com/openai/gym/wiki/MountainCarContinuous-v0). The mean result from running the algorithms 
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
- used can be found in files `Results/Cart_Pole.py` and `Results/Mountain_Car.py`. 
+ used can be found in files `results/Cart_Pole.py` and `results/Mountain_Car.py`. 
  
 ![Cart Pole and Mountain Car Results](data_and_graphs/CartPole_and_MountainCar_Graph.png) 
 
@@ -80,17 +80,17 @@ for SNN-HRL were used for pre-training which is why there is no reward for those
 
 The repository's high-level structure is:
  
-    ├── Agents                    
-        ├── Actor_Critic_Agents   
-        ├── DQN_Agents         
-        ├── Policy_Gradient_Agents
-        └── Stochastic_Policy_Search_Agents 
-    ├── Environments   
-    ├── Results             
-        └── Data_and_Graphs        
-    ├── Tests
-    ├── Utilities             
-        └── Data Structures            
+    ├── agents                    
+        ├── actor_critic_agents   
+        ├── DQN_agents         
+        ├── policy_gradient_agents
+        └── stochastic_policy_search_agents 
+    ├── environments   
+    ├── results             
+        └── data_and_graphs        
+    ├── tests
+    ├── utilities             
+        └── data structures            
    
 
 #### i) To watch the agents learn the above games  
