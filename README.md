@@ -11,24 +11,24 @@ This repository contains PyTorch implementations of deep reinforcement learning 
 
 ## **Algorithms Implemented** 
 
-1. *Deep Q Learning (DQN)* ([Mnih et al. 2013](https://arxiv.org/pdf/1312.5602.pdf))  
-1. *DQN with Fixed Q Targets* ([Mnih et al. 2013](https://arxiv.org/pdf/1312.5602.pdf))
-1. *Double DQN* ([Hado van Hasselt et al. 2015](https://arxiv.org/pdf/1509.06461.pdf))
-1. *Double DQN with Prioritised Experience Replay* ([Schaul et al. 2016](https://arxiv.org/pdf/1511.05952.pdf))
-1. *REINFORCE* ([Williams et al. 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf))
-1. *DDPG* ([Lillicrap et al. 2016](https://arxiv.org/pdf/1509.02971.pdf)) 
-1. *TD3* ([Fujimoto et al. 2018](https://arxiv.org/abs/1802.09477))
-1. *Soft Actor-Critic* ( [Haarnoja et al. 2018](https://arxiv.org/pdf/1812.05905.pdf)) 
-1. *A3C* ([Mnih et al. 2016](https://arxiv.org/pdf/1602.01783.pdf))
+1. *Deep Q Learning (DQN)* <sub><sup> ([Mnih et al. 2013](https://arxiv.org/pdf/1312.5602.pdf)) </sup></sub>  
+1. *DQN with Fixed Q Targets* <sub><sup> ([Mnih et al. 2013](https://arxiv.org/pdf/1312.5602.pdf)) </sup></sub>
+1. *Double DQN* <sub><sup> ([Hado van Hasselt et al. 2015](https://arxiv.org/pdf/1509.06461.pdf)) </sup></sub>
+1. *Double DQN with Prioritised Experience Replay* <sub><sup> ([Schaul et al. 2016](https://arxiv.org/pdf/1511.05952.pdf)) </sup></sub>
+1. *REINFORCE* <sub><sup> ([Williams et al. 1992](http://www-anw.cs.umass.edu/~barto/courses/cs687/williams92simple.pdf)) </sup></sub>
+1. *DDPG* <sub><sup> ([Lillicrap et al. 2016](https://arxiv.org/pdf/1509.02971.pdf) ) </sup></sub>
+1. *TD3* <sub><sup> ([Fujimoto et al. 2018](https://arxiv.org/abs/1802.09477)) </sup></sub>
+1. *Soft Actor-Critic* <sub><sup> ([Haarnoja et al. 2018](https://arxiv.org/pdf/1812.05905.pdf)) </sup></sub> 
+1. *A3C* <sub><sup> ([Mnih et al. 2016](https://arxiv.org/pdf/1602.01783.pdf)) </sup></sub>
 1. *A2C*
-1. *PPO* ([Schulman et al. 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf))
-1. *DQN with Hindsight Experience Replay (DQN-HER)* ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf))
-1. *DDPG with Hindsight Experience Replay (DDPG-HER)* ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf)) 
-1. *Hierarchical-DQN (h-DQN)* ([Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf))
-1. *Stochastic NNs for Hierarchical Reinforcement Learning (SNN-HRL)* ([Florensa et al. 2017](https://arxiv.org/pdf/1704.03012.pdf)) 
+1. *PPO* <sub><sup> ([Schulman et al. 2017](https://openai-public.s3-us-west-2.amazonaws.com/blog/2017-07/ppo/ppo-arxiv.pdf)) </sup></sub>
+1. *DQN with Hindsight Experience Replay (DQN-HER)* <sub><sup> ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf)) </sup></sub>
+1. *DDPG with Hindsight Experience Replay (DDPG-HER)* <sub><sup> ([Andrychowicz et al. 2018](https://arxiv.org/pdf/1707.01495.pdf) ) </sup></sub>
+1. *Hierarchical-DQN (h-DQN)* <sub><sup> ([Kulkarni et al. 2016](https://arxiv.org/pdf/1604.06057.pdf)) </sup></sub>
+1. *Stochastic NNs for Hierarchical Reinforcement Learning (SNN-HRL)* <sub><sup> ([Florensa et al. 2017](https://arxiv.org/pdf/1704.03012.pdf)) </sup></sub> 
 
 All implementations are able to quickly solve Cart Pole (discrete actions), Mountain Car Continuous (continuous actions), 
-Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add Soft Actor-Critic and more hierarchical RL algorithms soon.
+Bit Flipping (discrete actions with dynamic goals) or Fetch Reach (continuous actions with dynamic goals). I plan to add more hierarchical RL algorithms soon.
 
 ## **Environments Implemented**
 
