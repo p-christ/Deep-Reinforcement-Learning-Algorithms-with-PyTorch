@@ -5,7 +5,7 @@
 
 
 
-![RL](Utilities/RL_image.jpeg)   ![PyTorch](Utilities/PyTorch-logo-2.jpg)
+![RL](utilities/RL_image.jpeg)   ![PyTorch](utilities/PyTorch-logo-2.jpg)
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. 
 
@@ -46,7 +46,7 @@ Below shows various RL algorithms successfully learning discrete action game [Ca
  with 3 random seeds is shown with the shaded area representing plus and minus 1 standard deviation. Hyperparameters
  used can be found in files `Results/Cart_Pole.py` and `Results/Mountain_Car.py`. 
  
-![Cart Pole and Mountain Car Results](Results/Data_and_Graphs/CartPole_and_MountainCar_Graph.png) 
+![Cart Pole and Mountain Car Results](data_and_graphs/CartPole_and_MountainCar_Graph.png) 
 
 
 #### 2. Hindsight Experience Replay (HER) Experiements
@@ -57,7 +57,7 @@ and [Multi-Goal Reinforcement Learning 2018](https://arxiv.org/abs/1802.09464). 
 the papers and show how adding HER can allow an agent to solve problems that it otherwise would not be able to solve at all. Note that the same hyperparameters were used within each pair of agents and so the only difference 
 between them was whether hindsight was used or not. 
 
-![HER Experiment Results](Results/Data_and_Graphs/HER_Experiments.png)
+![HER Experiment Results](data_and_graphs/HER_Experiments.png)
 
 #### 3. Hierarchical Reinforcement Learning Experiments
 
@@ -73,7 +73,7 @@ The results on the right show the performance of DDQN and algorithm Stochastic N
 the implementation of SSN-HRL uses 2 DDQN algorithms within it. Note that the first 300 episodes of training
 for SNN-HRL were used for pre-training which is why there is no reward for those episodes. 
  
-![Long Corridor and Four Rooms](Results/Data_and_Graphs/Four_Rooms_and_Long_Corridor.png)
+![Long Corridor and Four Rooms](data_and_graphs/Four_Rooms_and_Long_Corridor.png)
      
 
 ### Usage ###
