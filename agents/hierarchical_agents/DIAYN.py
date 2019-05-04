@@ -38,7 +38,7 @@ class DIAYN(Base_Agent):
         self.manager_agent = DDQN(self.manager_agent_config)
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
-        self.agent.run_n_episodes(num_episodes=self.unsupervised_episodes)
+        self.agent.run_n_episodes(num_episodes=self.unsupervised_episodes, show_whether_achieved_goal=False)
         self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
 
     def disciminator_learn(self, skill, discriminator_outputs):

@@ -40,7 +40,8 @@ class Trainer(object):
             "h-DQN": "h_DQN",
             "SNN-HRL": "SNN_HRL",
             "HIRO": "HIRO",
-            "SAC": "Actor_Critic_Agents"
+            "SAC": "Actor_Critic_Agents",
+            "HRL": "HRL"
         }
         return agent_to_agent_group_dictionary
 
