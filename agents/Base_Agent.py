@@ -253,20 +253,6 @@ class Base_Agent(object):
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],
                   random_seed=seed).to(self.device)
 
-    def get_updated_epsilon_exploration(self, epsilon=1.0, epsilon_decay_denominator=None):
-        """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""
-        if self.turn_off_exploration: return 0.0
-        if epsilon_decay_denominator is None: epsilon_decay_denominator = self.hyperparameters["epsilon_decay_rate_denominator"]
-        epsilon = epsilon / (1.0 + (self.episode_number / epsilon_decay_denominator))
-        return epsilon
-
-    def make_epsilon_greedy_choice(self, action_values, epsilon_decay_denominator=None):
-        """Chooses action with highest q_value with probability 1 - epsilon, otherwise picks randomly"""
-        epsilon = self.get_updated_epsilon_exploration(epsilon_decay_denominator=epsilon_decay_denominator)
-        if random.random() > epsilon:
-            return torch.argmax(action_values).item()
-        return random.randint(0, action_values.shape[1] - 1)
-
     def turn_off_any_epsilon_greedy_exploration(self):
         """Turns off all exploration in epsilon greedy method"""
         self.turn_off_exploration = True
