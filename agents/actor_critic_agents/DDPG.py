@@ -5,6 +5,7 @@ from nn_builder.pytorch.NN import NN
 from torch import optim
 from Base_Agent import Base_Agent
 from Replay_Buffer import Replay_Buffer
+from exploration_startegies.OH_Noise_Exploration_Strategy import OH_Noise_Exploration_Strategy
 from utilities.OU_Noise import OU_Noise
 
 class DDPG(Base_Agent):
@@ -28,13 +29,7 @@ class DDPG(Base_Agent):
 
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
-        self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],
-                              self.hyperparameters["theta"], self.hyperparameters["sigma"])
-
-    def reset_game(self):
-        """Resets the game information so we are ready to play a new episode"""
-        Base_Agent.reset_game(self)
-        self.noise.reset()
+        self.exploration_strategy = OH_Noise_Exploration_Strategy(self.config)
 
     def step(self):
         """Runs a step in the game"""
@@ -53,7 +48,7 @@ class DDPG(Base_Agent):
         self.episode_number += 1
 
     def sample_experiences(self):
-        return  self.memory.sample()
+        return self.memory.sample()
 
     def pick_action(self, state=None):
         """Picks an action using the actor network and then adds some noise to it to ensure exploration"""
@@ -62,7 +57,7 @@ class DDPG(Base_Agent):
         with torch.no_grad():
             action = self.actor_local(state).cpu().data.numpy()
         self.actor_local.train()
-        action += self.noise.sample()
+        action = self.exploration_strategy.perturb_action_for_exploration_purposes({"action": action})
         return action.squeeze(0)
 
     def critic_learn(self, states, actions, rewards, next_states, dones):

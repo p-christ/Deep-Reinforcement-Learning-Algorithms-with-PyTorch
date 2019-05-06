@@ -26,3 +26,7 @@ class Epsilon_Greedy_Exploration(Base_Exploration_Strategy):
     def add_exploration_rewards(self, reward_info):
         """Actions intrinsic rewards to encourage exploration"""
         return reward_info["reward"]
+
+    def reset(self):
+        """Resets the noise process"""
+        pass

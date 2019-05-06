@@ -15,6 +15,7 @@ class Base_Agent(object):
         self.environment_title = self.get_environment_title()
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
+        self.config.action_size = self.action_size
         self.state_size =  int(self.get_state_size())
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.get_score_required_to_win()
@@ -116,6 +117,7 @@ class Base_Agent(object):
         self.episode_desired_goals = []
         self.episode_achieved_goals = []
         self.episode_observations = []
+        self.exploration_strategy.reset()
 
     def track_episodes_data(self):
         """Saves the data from the recent episodes"""
