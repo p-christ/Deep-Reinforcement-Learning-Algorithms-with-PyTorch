@@ -1,11 +1,9 @@
-import copy
 import torch
 import torch.nn.functional as functional
-from torch.distributions.normal import Normal
 from torch import optim
-
 from Base_Agent import Base_Agent
 from DDPG import DDPG
+from exploration_startegies.Gaussian_Exploration_Strategy import Gaussian_Exploration_Strategy
 
 class TD3(DDPG):
     """A TD3 Agent from the paper Addressing Function Approximation Error in Actor-Critic Methods (Fujimoto et al. 2018)
@@ -14,35 +12,23 @@ class TD3(DDPG):
 
     def __init__(self, config):
         DDPG.__init__(self, config)
-
         self.critic_local_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                            key_to_use="Critic", override_seed=self.config.seed + 1)
         self.critic_target_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                             key_to_use="Critic")
         Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
-
         self.critic_optimizer_2 = optim.Adam(self.critic_local_2.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
-
-        self.action_noise_std = self.hyperparameters["action_noise_std"]
-        self.action_noise_distribution = Normal(torch.Tensor([0.0]), torch.Tensor([self.action_noise_std]))
-        self.action_noise_clipping_range = self.hyperparameters["action_noise_clipping_range"]
+        self.exploration_strategy_critic = Gaussian_Exploration_Strategy(self.config)
 
     def compute_critic_values_for_next_states(self, next_states):
         """Computes the critic values for next states to be used in the loss for the critic"""
         with torch.no_grad():
             actions_next = self.actor_target(next_states)
-
-            action_noise = self.action_noise_distribution.sample(sample_shape=actions_next.shape)
-            action_noise = action_noise.squeeze(-1)
-            clipped_action_noise = torch.clamp(action_noise, min=-self.action_noise_clipping_range,
-                                               max = self.action_noise_clipping_range)
-            actions_next_with_noise = actions_next + clipped_action_noise
-
+            actions_next_with_noise =  self.exploration_strategy_critic.perturb_action_for_exploration_purposes({"action": actions_next})
             critic_targets_next_1 = self.critic_target(torch.cat((next_states, actions_next_with_noise), 1))
             critic_targets_next_2 = self.critic_target_2(torch.cat((next_states, actions_next_with_noise), 1))
             critic_targets_next = torch.min(torch.cat((critic_targets_next_1, critic_targets_next_2),1), dim=1)[0].unsqueeze(-1)
-
         return critic_targets_next
 
     def critic_learn(self, states, actions, rewards, next_states, dones):
