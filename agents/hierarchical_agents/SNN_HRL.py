@@ -51,9 +51,7 @@ class SNN_HRL(Base_Agent):
         manager_agent.run_n_episodes()
 
         time_taken = time.time() - start
-
         pretraining_results = [np.min(manager_agent.game_full_episode_scores)]*self.episodes_for_pretraining
-
         return pretraining_results + manager_agent.game_full_episode_scores, pretraining_results + manager_agent.rolling_results, time_taken
 
     def create_skill_training_agent(self):

@@ -2,7 +2,7 @@ from exploration_startegies.Base_Exploration_Strategy import Base_Exploration_St
 import torch
 from torch.distributions.normal import Normal
 
-class Gaussian_Exploration_Strategy(Base_Exploration_Strategy):
+class Gaussian_Exploration(Base_Exploration_Strategy):
 
     """Gaussian noise exploration strategy"""
     def __init__(self, config):

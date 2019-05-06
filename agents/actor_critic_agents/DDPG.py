@@ -3,7 +3,7 @@ import torch.nn.functional as functional
 from torch import optim
 from Base_Agent import Base_Agent
 from Replay_Buffer import Replay_Buffer
-from exploration_startegies.OU_Noise_Exploration_Strategy import OU_Noise_Exploration_Strategy
+from exploration_startegies.OU_Noise_Exploration import OU_Noise_Exploration
 
 class DDPG(Base_Agent):
     """A DDPG Agent"""
@@ -26,7 +26,7 @@ class DDPG(Base_Agent):
 
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
-        self.exploration_strategy = OU_Noise_Exploration_Strategy(self.config)
+        self.exploration_strategy = OU_Noise_Exploration(self.config)
 
     def step(self):
         """Runs a step in the game"""

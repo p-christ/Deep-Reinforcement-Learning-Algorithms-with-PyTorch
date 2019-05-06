@@ -11,9 +11,9 @@ from utilities.data_structures.Config import Config
 config = Config()
 config.seed = 1
 config.environment = gym.make("Hopper-v2")
-config.num_episodes_to_run = 450
-config.file_to_save_data_results = None
-config.file_to_save_results_graph = None
+config.num_episodes_to_run = 1000
+config.file_to_save_data_results = "data_and_graphs/Hopper_Results_Data.pkl"
+config.file_to_save_results_graph = "data_and_graphs/Hopper_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -47,7 +47,7 @@ actor_critic_agent_hyperparameters = {
             "initialiser": "Xavier"
         },
 
-        "min_steps_before_learning": 100, #1000 potentially works better for just SAC
+        "min_steps_before_learning": 1000,
         "batch_size": 256,
         "discount_rate": 0.99,
         "mu": 0.0, #for O-H noise
@@ -83,7 +83,7 @@ dqn_agent_hyperparameters =   {
 
 
 manager_hyperparameters = dqn_agent_hyperparameters
-manager_hyperparameters.update({"timesteps_to_give_up_control_for": 5})
+manager_hyperparameters.update({"timesteps_to_give_up_control_for": 10})
 
 
 config.hyperparameters = {
@@ -116,13 +116,13 @@ config.hyperparameters = {
         "AGENT": actor_critic_agent_hyperparameters,
         "MANAGER": manager_hyperparameters,
         "num_skills": 10,
-        "num_unsupservised_episodes": 100
+        "num_unsupservised_episodes": 300
     }
 }
 
 
 if __name__ == "__main__":
-    AGENTS = [DIAYN, SAC] #, DDPG, PPO, TD3]
+    AGENTS = [DIAYN] #, SAC] #, DDPG, PPO, TD3]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

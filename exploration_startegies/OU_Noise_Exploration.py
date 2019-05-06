@@ -1,8 +1,7 @@
 from OU_Noise import OU_Noise
 from exploration_startegies.Base_Exploration_Strategy import Base_Exploration_Strategy
 
-
-class OU_Noise_Exploration_Strategy(Base_Exploration_Strategy):
+class OU_Noise_Exploration(Base_Exploration_Strategy):
     """Ornstein-Uhlenbeck noise process exploration strategy"""
     def __init__(self, config):
         super().__init__(config)
@@ -20,5 +19,5 @@ class OU_Noise_Exploration_Strategy(Base_Exploration_Strategy):
         raise ValueError("Must be implemented")
 
     def reset(self):
-        """Resets the noise process"""        
+        """Resets the noise process"""
         self.noise.reset()

@@ -58,7 +58,7 @@ class SAC(Base_Agent):
     def save_result(self):
         """Saves the result of an episode of the game. Overriding the method in Base Agent that does this because we only
         want to keep track of the results during the evaluation episodes"""
-        if self.episode_number == 1:
+        if self.episode_number == 1 or not self.do_evaluation_iterations:
             self.game_full_episode_scores.extend([self.total_episode_score_so_far])
             self.rolling_results.append(np.mean(self.game_full_episode_scores[-1 * self.rolling_score_window:]))
             self.save_max_result_seen()
@@ -90,17 +90,19 @@ class SAC(Base_Agent):
             if not eval_ep: self.save_experience(experience=(self.state, self.action, self.reward, self.next_state, mask))
             self.state = self.next_state
             self.global_step_number += 1
-        if eval_ep: self.print_summary_of_evaluation_episode()
+        if eval_ep: self.print_summary_of_latest_evaluation_episode()
         self.episode_number += 1
 
-    def pick_action(self, eval_ep):
+    def pick_action(self, eval_ep, state=None):
         """Picks an action using one of three methods: 1) Randomly if we haven't passed a certain number of steps,
          2) Using the actor in evaluation mode if eval_ep is True  3) Using the actor in training mode if eval_ep is False.
          The difference between evaluation and training mode is that training mode does more exploration"""
-        if eval_ep: action = self.actor_pick_action(self.state, eval=True)
+        if state is None: state = self.state
+        if eval_ep: action = self.actor_pick_action(state, eval=True)
         elif self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
+            print("random SAC action")
             action = self.environment.action_space.sample()
-        else: action = self.actor_pick_action(self.state)
+        else: action = self.actor_pick_action(state)
         return action
 
     def actor_pick_action(self, state=None, eval=False):
@@ -115,6 +117,19 @@ class SAC(Base_Agent):
                 _, _, action = self.produce_action_and_action_info(state)
         action = action.detach().cpu().numpy()
         return action[0]
+
+    def produce_action_and_action_info(self, state):
+        """Given the state, produces an action, the log probability of the action, and the tanh of the mean action"""
+        actor_output = self.actor_local(state)
+        mean, log_std = actor_output[:, :self.action_size], actor_output[:, self.action_size:]
+        std = log_std.exp()
+        normal = Normal(mean, std)
+        x_t = normal.rsample()  #rsample means it is sampled using reparameterisation trick
+        action = torch.tanh(x_t)
+        log_prob = normal.log_prob(x_t)
+        log_prob -= torch.log(1 - action.pow(2) + EPSILON)
+        log_prob = log_prob.sum(1, keepdim=True)
+        return action, log_prob, torch.tanh(mean)
 
     def time_for_critic_and_actor_to_learn(self):
         """Returns boolean indicating whether there are enough experiences to learn from and it is time to learn for the
@@ -149,19 +164,6 @@ class SAC(Base_Agent):
         qf2_loss = F.mse_loss(qf2, next_q_value)
         return qf1_loss, qf2_loss
 
-    def produce_action_and_action_info(self, state):
-        """Given the state, produces an action, the log probability of the action, and the tanh of the mean action"""
-        actor_output = self.actor_local(state)
-        mean, log_std = actor_output[:, :self.action_size], actor_output[:, self.action_size:]
-        std = log_std.exp()
-        normal = Normal(mean, std)
-        x_t = normal.rsample()  #rsample means it is sampled using reparameterisation trick
-        action = torch.tanh(x_t)
-        log_prob = normal.log_prob(x_t)
-        log_prob -= torch.log(1 - action.pow(2) + EPSILON)
-        log_prob = log_prob.sum(1, keepdim=True)
-        return action, log_prob, torch.tanh(mean)
-
     def calculate_actor_loss(self, state_batch):
         """Calculates the loss for the actor. This loss includes the additional entropy term"""
         action, log_pi, _ = self.produce_action_and_action_info(state_batch)
@@ -193,9 +195,9 @@ class SAC(Base_Agent):
             self.take_optimisation_step(self.alpha_optim, None, alpha_loss, None)
             self.alpha = self.log_alpha.exp()
 
-    def print_summary_of_evaluation_episode(self):
-        """Prints a summary of the episode we just ran in evaluation mode"""
+    def print_summary_of_latest_evaluation_episode(self):
+        """Prints a summary of the latest episode"""
         print(" ")
         print("----------------------------")
-        print("Evaluation episode score {} ".format(self.total_episode_score_so_far))
+        print("Episode score {} ".format(self.total_episode_score_so_far))
         print("----------------------------")

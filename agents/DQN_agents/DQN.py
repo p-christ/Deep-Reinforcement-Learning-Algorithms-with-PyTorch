@@ -45,12 +45,9 @@ class DQN(Base_Agent):
         with torch.no_grad():
             action_values = self.q_network_local(state)
         self.q_network_local.train() #puts network back in training mode
-
-
         action = self.exploration_strategy.perturb_action_for_exploration_purposes({"action_values": action_values,
                                                                                     "turn_off_exploration": self.turn_off_exploration,
                                                                                     "episode_number": self.episode_number})
-
         return action
 
     def learn(self, experiences=None):

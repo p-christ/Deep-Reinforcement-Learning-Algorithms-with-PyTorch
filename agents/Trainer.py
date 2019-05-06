@@ -62,7 +62,8 @@ class Trainer(object):
             "SNN-HRL": "#800000",
             "A3C": "#E74C3C",
             "A2C": "#F1948A",
-            "SAC": "#1C2833"
+            "SAC": "#1C2833",
+            "DIAYN": "#F322CD"
         }
         return agent_to_color_dictionary
 

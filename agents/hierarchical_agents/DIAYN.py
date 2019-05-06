@@ -1,8 +1,9 @@
 import torch
-from gym import Wrapper
+from gym import Wrapper, spaces
 from torch import optim, nn
 import numpy as np
 import random
+import time
 import copy
 import torch.nn.functional as F
 from Base_Agent import Base_Agent
@@ -30,19 +31,25 @@ class DIAYN(Base_Agent):
         self.agent_config.environment = DIAYN_Skill_Wrapper(copy.deepcopy(self.environment), self.num_skills, self)
         self.agent_config.hyperparameters = self.agent_config.hyperparameters["AGENT"]
         self.agent_config.hyperparameters["do_evaluation_iterations"] = False
-
         self.agent = SAC(self.agent_config)  #We have to use SAC because it involves maximising the policy's entropy over actions which is also a part of DIAYN
 
-        print(self.hyperparameters["MANAGER"])
         self.timesteps_to_give_up_control_for = self.hyperparameters["MANAGER"]["timesteps_to_give_up_control_for"]
         self.manager_agent_config = copy.deepcopy(config)
-        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(copy.deepcopy(self.environment), self.agent, self.timesteps_to_give_up_control_for)
+        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(copy.deepcopy(self.environment), self.agent,
+                                                                            self.timesteps_to_give_up_control_for, self.num_skills)
         self.manager_agent_config.hyperparameters = self.manager_agent_config.hyperparameters["MANAGER"]
         self.manager_agent = DDQN(self.manager_agent_config)
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
+        start = time.time()
         self.agent.run_n_episodes(num_episodes=self.unsupervised_episodes, show_whether_achieved_goal=False)
-        self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
+        time_taken = time.time() - start
+        pretraining_results = [np.min(self.agent.game_full_episode_scores)]*self.unsupervised_episodes
+
+        print(pretraining_results + game_full_episode_scores)
+
+        return pretraining_results + game_full_episode_scores, pretraining_results + rolling_results, time_taken
 
     def disciminator_learn(self, skill, discriminator_outputs):
         if not self.training_mode: return
@@ -57,7 +64,6 @@ class DIAYN(Base_Agent):
         """Gets the probability that the disciminator gives to the correct skill"""
         predicted_probabilities_unnormalised = self.discriminator(torch.Tensor(next_state).unsqueeze(0))
         probability_of_correct_skill = F.softmax(predicted_probabilities_unnormalised)[:, skill]
-        print(probability_of_correct_skill)
         return  probability_of_correct_skill.item(), predicted_probabilities_unnormalised
 
 class DIAYN_Skill_Wrapper(Wrapper):
@@ -95,8 +101,9 @@ class DIAYN_Skill_Wrapper(Wrapper):
 class DIAYN_Manager_Agent_Wrapper(Wrapper):
     """Environment wrapper for the meta agent. The meta agent uses this environment to take in the state, decide on a skill
      and then grant over control to the lower-level skill for a set number of timesteps"""
-    def __init__(self, env, lower_level_agent, timesteps_to_give_up_control_for):
+    def __init__(self, env, lower_level_agent, timesteps_to_give_up_control_for, num_skills):
         Wrapper.__init__(self, env)
+        self.action_space = spaces.Discrete(num_skills)
         self.lower_level_agent = lower_level_agent
         self.timesteps_to_give_up_control_for = timesteps_to_give_up_control_for
 
@@ -110,7 +117,7 @@ class DIAYN_Manager_Agent_Wrapper(Wrapper):
         cumulative_reward = 0
         for _ in range(self.timesteps_to_give_up_control_for):
             combined_state = np.concatenate((np.array(self.state), np.array([skill_chosen])))
-            action = self.lower_level_agent.pick_action(combined_state, eval_ep=True)
+            action = self.lower_level_agent.pick_action(eval_ep=True, state=combined_state)
             next_state, reward, done, _ = self.env.step(action)
             cumulative_reward += reward
             self.state = next_state

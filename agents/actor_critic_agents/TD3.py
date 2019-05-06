@@ -3,7 +3,7 @@ import torch.nn.functional as functional
 from torch import optim
 from Base_Agent import Base_Agent
 from DDPG import DDPG
-from exploration_startegies.Gaussian_Exploration_Strategy import Gaussian_Exploration_Strategy
+from exploration_startegies.Gaussian_Exploration import Gaussian_Exploration
 
 class TD3(DDPG):
     """A TD3 Agent from the paper Addressing Function Approximation Error in Actor-Critic Methods (Fujimoto et al. 2018)
@@ -19,7 +19,7 @@ class TD3(DDPG):
         Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
         self.critic_optimizer_2 = optim.Adam(self.critic_local_2.parameters(),
                                            lr=self.hyperparameters["Critic"]["learning_rate"])
-        self.exploration_strategy_critic = Gaussian_Exploration_Strategy(self.config)
+        self.exploration_strategy_critic = Gaussian_Exploration(self.config)
 
     def compute_critic_values_for_next_states(self, next_states):
         """Computes the critic values for next states to be used in the loss for the critic"""
