@@ -6,7 +6,6 @@ from agents.Base_Agent import Base_Agent
 
 class REINFORCE(Base_Agent):
     agent_name = "REINFORCE"
-
     def __init__(self, config):
         Base_Agent.__init__(self, config)
         self.policy = self.create_NN(input_dim=self.state_size, output_dim=self.action_size)

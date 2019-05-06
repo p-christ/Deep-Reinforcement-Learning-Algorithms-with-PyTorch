@@ -57,7 +57,6 @@ class HER_Base(object):
         self.episode_next_achieved_goals.append(self.next_state_dict["achieved_goal"])
         self.episode_next_observations.append(self.next_state_dict["observation"])
 
-
     def conduct_action_in_changeable_goal_envs(self, action):
         """Adapts conduct_action from base agent so that can handle changeable goal environments"""
         self.next_state_dict, self.reward, self.done, _ = self.environment.step(action)

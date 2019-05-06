@@ -18,7 +18,6 @@ class Trainer(object):
         self.colors = ["red", "blue", "green", "orange", "yellow", "purple"]
         self.colour_ix = 0
 
-
     def create_agent_to_agent_group_dictionary(self):
         """Creates a dictionary that maps an agent to their wider agent group"""
         agent_to_agent_group_dictionary = {
@@ -41,7 +40,8 @@ class Trainer(object):
             "SNN-HRL": "SNN_HRL",
             "HIRO": "HIRO",
             "SAC": "Actor_Critic_Agents",
-            "HRL": "HRL"
+            "HRL": "HRL",
+            "DIAYN": "DIAYN"
         }
         return agent_to_agent_group_dictionary
 
@@ -131,10 +131,7 @@ class Trainer(object):
         assert isinstance(agent_results, list), "agent_results must be a list of lists, 1 set of results per list"
         assert isinstance(agent_results[0], list), "agent_results must be a list of lists, 1 set of results per list"
         assert bool(show_mean_and_std_range) ^ bool(show_each_run), "either show_mean_and_std_range or show_each_run must be true"
-
         if not ax: ax = plt.gca()
-
-
         if not color: color =  self.agent_to_color_group[agent_name]
         if show_mean_and_std_range:
             mean_minus_x_std, mean_results, mean_plus_x_std = self.get_mean_and_standard_deviation_difference_results(agent_results)
@@ -189,8 +186,6 @@ class Trainer(object):
             if temp_min < min_result:
                 min_result = temp_min
         return min_result, max_result
-
-
 
     def get_next_color(self):
         """Gets the next color in list self.colors. If it gets to the end then it starts from beginning"""

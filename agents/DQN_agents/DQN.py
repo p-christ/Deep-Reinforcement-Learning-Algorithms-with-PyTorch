@@ -4,6 +4,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
 from agents.Base_Agent import Base_Agent
+from exploration_startegies.Epsilon_Greedy_Exploration import Epsilon_Greedy_Exploration
 from utilities.data_structures.Replay_Buffer import Replay_Buffer
 
 class DQN(Base_Agent):
@@ -15,6 +16,7 @@ class DQN(Base_Agent):
         self.q_network_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size).to(self.device)
         self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
                                               lr=self.hyperparameters["learning_rate"])
+        self.exploration_strategy = Epsilon_Greedy_Exploration(config)
 
     def reset_game(self):
         super(DQN, self).reset_game()
@@ -43,7 +45,12 @@ class DQN(Base_Agent):
         with torch.no_grad():
             action_values = self.q_network_local(state)
         self.q_network_local.train() #puts network back in training mode
-        action = self.make_epsilon_greedy_choice(action_values)
+
+
+        action = self.exploration_strategy.perturb_action_for_exploration_purposes({"action_values": action_values,
+                                                                                    "turn_off_exploration": self.turn_off_exploration,
+                                                                                    "episode_number": self.episode_number})
+
         return action
 
     def learn(self, experiences=None):

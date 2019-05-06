@@ -28,7 +28,6 @@ class Base_Agent(object):
         self.episode_number = 0
         self.device = "cuda:0" if config.use_GPU else "cpu"
         self.visualise_results_boolean = config.visualise_individual_results
-        self.run_checks()
         self.global_step_number = 0
         self.turn_off_exploration = False
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
@@ -42,11 +41,20 @@ class Base_Agent(object):
         try:
             return self.environment.unwrapped.id
         except AttributeError:
-            if str(self.environment.unwrapped)[1:11] == "FetchReach": return "FetchReach"
-            elif str(self.environment.unwrapped)[1:8] == "AntMaze": return "AntMaze"
-            else:
-                title = self.environment.spec.id.split("-")[0]
-                return title
+            try:
+                if str(self.environment.unwrapped)[1:11] == "FetchReach": return "FetchReach"
+                elif str(self.environment.unwrapped)[1:8] == "AntMaze": return "AntMaze"
+                elif str(self.environment.unwrapped)[1:7] == "Hopper": return "Hopper"
+                else:
+                    title = self.environment.spec.id.split("-")[0]
+                    return title
+            except AttributeError:
+                name = str(self.environment.env)
+                if name[0:10] == "TimeLimit<": name = name[10:]
+                name = name.split(" ")[0]
+                if name[0] == "<": name = name[1:]
+                if name[-3:] == "Env": name = name[:-3]
+                return name
 
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
@@ -65,17 +73,21 @@ class Base_Agent(object):
 
     def get_score_required_to_win(self):
         """Gets average score required to win game"""
+        print("TITLE ", self.environment_title)
         if self.environment_title == "FetchReach": return -5
-        if self.environment_title == "AntMaze":
+        if self.environment_title in ["AntMaze", "Hopper"]:
             print("Score required to win set to infinity therefore no learning rate annealing will happen")
             return float("inf")
         try: return self.environment.unwrapped.reward_threshold
-        except AttributeError: return self.environment.spec.reward_threshold
+        except AttributeError:
+            try:
+                return self.environment.spec.reward_threshold
+            except AttributeError:
+                return self.environment.unwrapped.spec.reward_threshold
 
     def get_trials(self):
         """Gets the number of trials to average a score over"""
-        if self.environment_title == "FetchReach": return 100
-        if self.environment_title == "AntMaze": return 100
+        if self.environment_title in ["AntMaze", "FetchReach", "Hopper"]: return 100
         try: return self.environment.unwrapped.trials
         except AttributeError: return self.environment.spec.trials
 
@@ -194,10 +206,6 @@ class Base_Agent(object):
             for g in optimizer.param_groups:
                 g['lr'] = new_lr
 
-    def run_checks(self):
-        """Makes sure the environment action_types are valid"""
-        assert self.action_types in ["DISCRETE", "CONTINUOUS"], "Environment needs to provide action types"
-
     def enough_experiences_to_learn_from(self):
         """Boolean indicated whether there are enough experiences in the memory buffer to learn from"""
         return len(self.memory) > self.hyperparameters["batch_size"]
@@ -228,7 +236,7 @@ class Base_Agent(object):
         if override_seed: seed = override_seed
         else: seed = self.config.seed
 
-        default_hyperparameter_choices = {"output_activation": "None", "hidden_activations": "relu", "dropout": 0.0,
+        default_hyperparameter_choices = {"output_activation": None, "hidden_activations": "relu", "dropout": 0.0,
                                           "initialiser": "default", "batch_norm": False,
                                           "columns_of_data_to_be_embedded": [],
                                           "embedding_dimensions": [], "y_range": ()}
@@ -237,7 +245,7 @@ class Base_Agent(object):
             if key not in hyperparameters.keys():
                 hyperparameters[key] = default_hyperparameter_choices[key]
 
-        return NN(input_dim=input_dim, linear_hidden_units=hyperparameters["linear_hidden_units"],
+        return NN(input_dim=input_dim, hidden_layers_info=hyperparameters["linear_hidden_units"],
                   output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
                   batch_norm=hyperparameters["batch_norm"], dropout=hyperparameters["dropout"],
                   hidden_activations=hyperparameters["hidden_activations"], initialiser=hyperparameters["initialiser"],

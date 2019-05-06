@@ -1,8 +1,10 @@
+import torch
 from gym import Wrapper
 from torch import optim, nn
 import numpy as np
 import random
 import copy
+import torch.nn.functional as F
 from Base_Agent import Base_Agent
 from DDQN import DDQN
 from SAC import SAC
@@ -20,20 +22,21 @@ class DIAYN(Base_Agent):
         self.unsupervised_episodes = config.hyperparameters["num_unsupservised_episodes"]
         self.supervised_episodes = config.num_episodes_to_run - self.unsupervised_episodes
 
-
-        self.discriminator = self.create_NN(1, self.num_skills, key_to_use="DISCRIMINATOR")
+        assert self.hyperparameters["DISCRIMINATOR"]["final_layer_activation"] == None, "Final layer activation for disciminator should be None"
+        self.discriminator = self.create_NN(self.state_size, self.num_skills, key_to_use="DISCRIMINATOR")
         self.discriminator_optimizer = optim.Adam(self.discriminator.parameters(),
                                               lr=self.hyperparameters["DISCRIMINATOR"]["learning_rate"])
         self.agent_config = copy.deepcopy(config)
-        self.agent_config.environment = DIAYN_Skill_Wrapper(self.agent_config.environment)
+        self.agent_config.environment = DIAYN_Skill_Wrapper(copy.deepcopy(self.environment), self.num_skills, self)
         self.agent_config.hyperparameters = self.agent_config.hyperparameters["AGENT"]
         self.agent_config.hyperparameters["do_evaluation_iterations"] = False
+
         self.agent = SAC(self.agent_config)  #We have to use SAC because it involves maximising the policy's entropy over actions which is also a part of DIAYN
 
-
+        print(self.hyperparameters["MANAGER"])
         self.timesteps_to_give_up_control_for = self.hyperparameters["MANAGER"]["timesteps_to_give_up_control_for"]
         self.manager_agent_config = copy.deepcopy(config)
-        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(self.agent_config.environment, self.agent, self.timesteps_to_give_up_control_for)
+        self.manager_agent_config.environment = DIAYN_Manager_Agent_Wrapper(copy.deepcopy(self.environment), self.agent, self.timesteps_to_give_up_control_for)
         self.manager_agent_config.hyperparameters = self.manager_agent_config.hyperparameters["MANAGER"]
         self.manager_agent = DDQN(self.manager_agent_config)
 
@@ -44,11 +47,18 @@ class DIAYN(Base_Agent):
     def disciminator_learn(self, skill, discriminator_outputs):
         if not self.training_mode: return
         assert isinstance(skill, int)
-        assert discriminator_outputs.shape[0] == self.num_skills
-        assert discriminator_outputs.shape[1] == 5 # should fail..
-        loss = nn.CrossEntropyLoss()(discriminator_outputs, skill)
+        assert discriminator_outputs.shape[0] == 1
+        assert discriminator_outputs.shape[1] == self.num_skills
+        loss = nn.CrossEntropyLoss()(discriminator_outputs, torch.Tensor([skill]).long())
         self.take_optimisation_step(self.discriminator_optimizer, self.discriminator, loss,
                                     self.hyperparameters["DISCRIMINATOR"]["gradient_clipping_norm"])
+
+    def get_predicted_probability_of_skill(self, skill, next_state):
+        """Gets the probability that the disciminator gives to the correct skill"""
+        predicted_probabilities_unnormalised = self.discriminator(torch.Tensor(next_state).unsqueeze(0))
+        probability_of_correct_skill = F.softmax(predicted_probabilities_unnormalised)[:, skill]
+        print(probability_of_correct_skill)
+        return  probability_of_correct_skill.item(), predicted_probabilities_unnormalised
 
 class DIAYN_Skill_Wrapper(Wrapper):
     """Open AI gym wrapper to help create a pretraining environment in which to train diverse skills according to the
@@ -58,6 +68,7 @@ class DIAYN_Skill_Wrapper(Wrapper):
         self.num_skills = num_skills
         self.meta_agent = meta_agent
         self.prior_probability_of_skill = 1.0 / self.num_skills #Each skill equally likely to be chosen
+        self._max_episode_steps = self.env._max_episode_steps
 
     def reset(self, **kwargs):
         observation = self.env.reset(**kwargs)
@@ -77,7 +88,7 @@ class DIAYN_Skill_Wrapper(Wrapper):
         """Calculates an intrinsic reward that encourages maximum exploration. It also keeps track of the discriminator
         outputs so they can be used for training"""
         probability_correct_skill, disciminator_outputs =  self.meta_agent.get_predicted_probability_of_skill(self.skill, next_state)
-        new_reward = np.log(probability_correct_skill) - np.log(self.prior_probability_of_skill)
+        new_reward = np.log(probability_correct_skill + 1e-8) - np.log(self.prior_probability_of_skill)
         return new_reward, disciminator_outputs
 
 
