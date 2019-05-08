@@ -3,7 +3,7 @@ import torch.nn.functional as functional
 from torch import optim
 from Base_Agent import Base_Agent
 from DDPG import DDPG
-from exploration_startegies.Gaussian_Exploration import Gaussian_Exploration
+from exploration_strategies.Gaussian_Exploration import Gaussian_Exploration
 
 class TD3(DDPG):
     """A TD3 Agent from the paper Addressing Function Approximation Error in Actor-Critic Methods (Fujimoto et al. 2018)

@@ -1,4 +1,4 @@
-from exploration_startegies.Base_Exploration_Strategy import Base_Exploration_Strategy
+from exploration_strategies.Base_Exploration_Strategy import Base_Exploration_Strategy
 import torch
 from torch.distributions.normal import Normal
 

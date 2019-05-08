@@ -18,6 +18,8 @@ script:
   - export PYTHONPATH=""$PYTHONPATH:$PWD/agents/policy_gradient_agents""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities/data_structures""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/environments""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/exploration_strategies""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/*""
   - pytest tests/*.py
 
