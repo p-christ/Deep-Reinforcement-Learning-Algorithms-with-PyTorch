@@ -219,6 +219,7 @@ class Base_Agent(object):
         memory.add_experience(*experience)
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm=None, retain_graph=False):
+        """Takes an optimisation step by calculating gradients given the loss and then updating the parameters"""
         optimizer.zero_grad() #reset gradients to 0
         loss.backward(retain_graph=retain_graph) #this calculates the gradients
         if clipping_norm is not None:

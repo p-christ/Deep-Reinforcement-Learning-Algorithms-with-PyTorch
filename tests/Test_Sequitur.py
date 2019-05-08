@@ -1,4 +1,4 @@
-from grammar_algorithms.Sequitur import run_sequitur
+from utilities.grammar_algorithms.Sequitur import run_sequitur
 
 def test_Sequitur():
     assert run_sequitur(

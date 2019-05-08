@@ -12,9 +12,15 @@ from SAC import SAC
 
 # NOTE: DIAYN calculates diversity of states penalty each timestep but it might be better to only base it on where the
 # agent got to in the last timestep, or after X timesteps
+# NOTE another problem with this is that the discriminator is trained from online data as it comes in which isn't iid
+# so we could probably make it perform better by maintaining a replay buffer and using that to train the discriminator instead
 
 class DIAYN(Base_Agent):
-    """Agent based on the paper Diversity is all you need (2018) - https://arxiv.org/pdf/1802.06070.pdf"""
+    """Hierarchical RL agent based on the paper Diversity is all you need (2018) - https://arxiv.org/pdf/1802.06070.pdf.
+    Works in two stages:
+        1) First it trains an agent that tries to reach different states depending on which skill number is
+           inputted
+        2) Then it trains an agent to maximise reward using its choice of skill for the lower level agent"""
     agent_name = "DIAYN"
     def __init__(self, config):
         super().__init__(config)
@@ -46,9 +52,6 @@ class DIAYN(Base_Agent):
         game_full_episode_scores, rolling_results, _ = self.manager_agent.run_n_episodes(num_episodes=self.supervised_episodes)
         time_taken = time.time() - start
         pretraining_results = [np.min(self.agent.game_full_episode_scores)]*self.unsupervised_episodes
-
-        print(pretraining_results + game_full_episode_scores)
-
         return pretraining_results + game_full_episode_scores, pretraining_results + rolling_results, time_taken
 
     def disciminator_learn(self, skill, discriminator_outputs):
@@ -85,9 +88,9 @@ class DIAYN_Skill_Wrapper(Wrapper):
         return np.concatenate((np.array(observation), np.array([self.skill])))
 
     def step(self, action):
-        next_state, reward, done, _ = self.env.step(action)
-        new_reward, disciminator_outputs = self.calculate_new_reward(next_state)
-        self.meta_agent.disciminator_learn(self.skill, disciminator_outputs)
+        next_state, _, done, _ = self.env.step(action)
+        new_reward, discriminator_outputs = self.calculate_new_reward(next_state)
+        self.meta_agent.disciminator_learn(self.skill, discriminator_outputs)
         return self.observation(next_state), new_reward, done, _
 
     def calculate_new_reward(self, next_state):

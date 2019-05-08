@@ -12,16 +12,13 @@ class Long_Corridor_Environment(gym.Env):
     environment_name = "Long Corridor Environment"
 
     def __init__(self, num_states=6, stochasticity_of_action_right=0.5):
-
         self.action_space = spaces.Discrete(2)
         self.observation_space = spaces.Discrete(num_states)
         self.seed()
-
         self.reward_threshold = 1.0
         self.trials = 100
         self.max_episode_steps = 100
         self.id = "Long Corridor"
-
         self.action_translation = {0: "left", 1: "right"}
         self.stochasticity_of_action_right = stochasticity_of_action_right
         self.num_states = num_states
@@ -38,14 +35,11 @@ class Long_Corridor_Environment(gym.Env):
         if type(action) is np.ndarray:
             action = action[0]
         assert action in [0, 1], "Action must be a 0 or a 1"
-
-        if action == 0: self._move_left()
-        else: self._move_right()
-
-        self._update_done_reward_and_visited_final_state()
+        if action == 0: self.move_left()
+        else: self.move_right()
+        self.update_done_reward_and_visited_final_state()
         self.state = self.next_state
         self.s = np.array(self.next_state)
-
         return self.s, self.reward, self.done, {}
 
     def reset(self):
@@ -58,7 +52,7 @@ class Long_Corridor_Environment(gym.Env):
         self.s = np.array(self.state)
         return self.s
 
-    def _update_done_reward_and_visited_final_state(self):
+    def update_done_reward_and_visited_final_state(self):
         if self.next_state == 0:
             self.done = True
             if self.visited_final_state: self.reward = self.reward_if_visited_final_state
@@ -68,13 +62,11 @@ class Long_Corridor_Environment(gym.Env):
         if self.next_state == self.num_states - 1: self.visited_final_state = True
         if self.episode_steps >= self.max_episode_steps: self.done = True
 
-    def _move_left(self):
+    def move_left(self):
         """Moves left in environment"""
         self.next_state = self.state - 1
 
-    def _move_right(self):
+    def move_right(self):
         """Moves right in environment"""
-        if random.random() < self.stochasticity_of_action_right:
-            self.next_state = self.state - 1
-        else:
-            self.next_state = min(self.state + 1, self.num_states - 1)
+        if random.random() < self.stochasticity_of_action_right: self.next_state = self.state - 1
+        else: self.next_state = min(self.state + 1, self.num_states - 1)

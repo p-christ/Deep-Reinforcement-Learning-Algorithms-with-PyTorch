@@ -47,7 +47,7 @@ actor_critic_agent_hyperparameters = {
             "initialiser": "Xavier"
         },
 
-        "min_steps_before_learning": 1000,
+        "min_steps_before_learning": 400,
         "batch_size": 256,
         "discount_rate": 0.99,
         "mu": 0.0, #for O-H noise
@@ -60,7 +60,7 @@ actor_critic_agent_hyperparameters = {
         "automatically_tune_entropy_hyperparameter": True,
         "entropy_term_weight": None,
         "add_extra_noise": False,
-        "do_evaluation_iterations": False
+        "do_evaluation_iterations": True
     }
 
 dqn_agent_hyperparameters =   {
@@ -83,7 +83,7 @@ dqn_agent_hyperparameters =   {
 
 
 manager_hyperparameters = dqn_agent_hyperparameters
-manager_hyperparameters.update({"timesteps_to_give_up_control_for": 10})
+manager_hyperparameters.update({"timesteps_to_give_up_control_for": 5})
 
 
 config.hyperparameters = {
@@ -116,13 +116,13 @@ config.hyperparameters = {
         "AGENT": actor_critic_agent_hyperparameters,
         "MANAGER": manager_hyperparameters,
         "num_skills": 10,
-        "num_unsupservised_episodes": 300
+        "num_unsupservised_episodes": 500
     }
 }
 
 
 if __name__ == "__main__":
-    AGENTS = [DIAYN] #, SAC] #, DDPG, PPO, TD3]
+    AGENTS = [DIAYN] #SAC] #, DDPG, PPO, TD3] ] #,
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

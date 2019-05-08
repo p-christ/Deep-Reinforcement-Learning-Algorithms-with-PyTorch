@@ -41,7 +41,8 @@ class Trainer(object):
             "HIRO": "HIRO",
             "SAC": "Actor_Critic_Agents",
             "HRL": "HRL",
-            "DIAYN": "DIAYN"
+            "DIAYN": "DIAYN",
+            "Dueling DDQN": "DQN_Agents"
         }
         return agent_to_agent_group_dictionary
 
@@ -53,6 +54,7 @@ class Trainer(object):
             "DQN with Fixed Q Targets": "#1F618D",
             "DDQN": "#2980B9",
             "DDQN with Prioritised Replay": "#7FB3D5",
+            "Dueling DDQN": "#22DAF3",
             "PPO": "#5B2C6F",
             "DDPG": "#800000",
             "DQN-HER": "#008000",
@@ -121,9 +123,11 @@ class Trainer(object):
         self.results[agent_name] = agent_results
 
     def environment_has_changeable_goals(self, env):
+        """Determines whether environment is such that for each episode there is a different goal or not"""
         return isinstance(env.reset(), dict)
 
     def agent_cant_handle_changeable_goals_without_flattening(self, agent_name):
+        """Boolean indicating whether the agent is set up to handle changeable goals"""
         return "HER" not in agent_name
 
     def visualise_overall_agent_results(self, agent_results, agent_name, show_mean_and_std_range=False, show_each_run=False,
