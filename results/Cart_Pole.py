@@ -15,13 +15,13 @@ config = Config()
 config.seed = 1
 config.environment = gym.make("CartPole-v0")
 config.num_episodes_to_run = 450
-config.file_to_save_data_results = "data_and_results/Cart_Pole_Results_Data.pkl"
-config.file_to_save_results_graph = "data_and_results/Cart_Pole_Results_Graph.png"
+config.file_to_save_data_results = "data_and_graphs/Cart_Pole_Results_Data.pkl"
+config.file_to_save_results_graph = "data_and_graphs/Cart_Pole_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
-config.runs_per_agent = 1
+config.runs_per_agent = 3
 config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
@@ -30,7 +30,7 @@ config.save_model = False
 
 config.hyperparameters = {
     "DQN_Agents": {
-        "learning_rate": 0.005,
+        "learning_rate": 0.01,
         "batch_size": 128,
         "buffer_size": 40000,
         "epsilon": 1.0,
@@ -89,7 +89,7 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [Dueling_DDQN] #, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
+    AGENTS = [Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
