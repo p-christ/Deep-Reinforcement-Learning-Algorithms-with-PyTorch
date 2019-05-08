@@ -1,6 +1,6 @@
 from string import ascii_uppercase
 import pytest
-from k_Sequitur import k_Sequitur
+from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 
 def test_convert_a_string_using_reverse_rules():
     """Tests convert_a_string_using_reverse_rules method"""
