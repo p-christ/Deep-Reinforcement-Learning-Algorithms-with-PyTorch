@@ -9,41 +9,75 @@
 # "AdddBAB"
 # R1: A --> ab
 # R2: B --> de
-from collections import defaultdict
-from string import ascii_uppercase
 
-
+import copy
+from collections import defaultdict, Counter
 
 class k_Sequitur(object):
 
-    def __init__(self, k):
+    def __init__(self, k, end_of_episode_symbol="/"):
         self.k = k
-        self.rule_names = ascii_uppercase
+        self.end_of_episode_symbol = end_of_episode_symbol
         self.next_rule_name_ix = 0
 
-    def generate_grammar(self, string):
-        assert isinstance(string, str), "Need to provide 1 long string"
-        assert len(string) > 0, "Need to provide a string of at least 1 character"
+    def generate_action_grammar(self, actions):
+        """Generates a grammar given a string"""
+        assert isinstance(actions, list)
+        assert len(actions) > 0, "Need to provide a list of at least 1 action"
+        assert isinstance(actions[0], int), "The actions should be integers"
 
         all_rules = {}
-        all_pair_counts = {}
-        current_string = None
-        new_string = string
+        current_actions = None
+        new_actions = actions
 
-        while new_string != current_string:
-            current_string = new_string
-            rules, reverse_rules, pairs_of_symbols = self.generate_1_layer_of_rules(current_string)
-            all_pair_counts.update(pairs_of_symbols)
+        rule_usage = defaultdict(int)
+
+        while new_actions != current_actions:
+            current_actions = new_actions
+            rules, reverse_rules = self.generate_1_layer_of_rules(current_actions)
+            # print(rules)
             all_rules.update(rules)
-            print(rules)
-            new_string = self.convert_a_string_using_reverse_rules(current_string, reverse_rules)
+            new_actions, rules_usage_count = self.convert_a_string_using_reverse_rules(current_actions, reverse_rules)
 
-        return new_string, all_rules, all_pair_counts
+            for key in rules_usage_count.keys():
+                rule_usage[key] += rules_usage_count[key]
+
+        action_usage = {}
+
+        for key in rule_usage.keys():
+            action_usage[self.convert_symbol_to_raw_actions(key, all_rules)] = rule_usage[key]
+
+
+        return new_actions, all_rules, action_usage
+
+
+    def convert_symbol_to_raw_actions(self, symbol, rules):
+        """Converts a symbol back to the sequence of raw actions it represents"""
+        assert not isinstance(symbol, list)
+        assert isinstance(symbol, str) or isinstance(symbol, int)
+
+        symbol = [symbol]
+
+        finished = False
+        while not finished:
+            new_symbol = []
+            for symbol_val in symbol:
+                if symbol_val in rules.keys():
+                    print("Symbol found")
+                    new_symbol.append(rules[symbol_val][0])
+                    new_symbol.append(rules[symbol_val][1])
+                else:
+                    print("Symbol not found")
+                    new_symbol.append(symbol_val)
+            # new_symbol = "".join(new_symbol)
+            if new_symbol == symbol: finished = True
+            else: symbol = new_symbol
+        new_symbol = tuple(new_symbol)
+        return new_symbol
 
 
     def generate_1_layer_of_rules(self, string):
-
-
+        """Generate dictionaries indicating the pair of symbols that appear next to each other more than self.k times"""
         pairs_of_symbols = defaultdict(int)
         last_pair = None
         skip_next_symbol = False
@@ -56,7 +90,11 @@ class k_Sequitur(object):
                 skip_next_symbol = False
                 continue
 
-            pair = string[ix] + string[ix+1]
+            # We skip this symbol if the next one is the end of the episode
+            if string[ix+1] == self.end_of_episode_symbol:
+                continue
+
+            pair = (string[ix], string[ix+1])
 
             # We don't count a pair if it was the previous pair (and therefore we have 3 of the same symbols in a row)
             if pair != last_pair:
@@ -65,17 +103,22 @@ class k_Sequitur(object):
             else:
                 last_pair = None
             if pairs_of_symbols[pair] >= self.k:
+                previous_pair = (string[ix-1], string[ix])
+                pairs_of_symbols[previous_pair] -= 1
+
                 skip_next_symbol = True
                 if pair not in rules.values():
                     rule_name = self.get_next_rule_name()
                     rules[rule_name] = pair
         reverse_rules = {v: k for k, v in rules.items()}
-        return rules, reverse_rules, pairs_of_symbols
+        return rules, reverse_rules
 
     def convert_a_string_using_reverse_rules(self, string, reverse_rules):
         """Converts a string using the rules we have previously generated"""
         new_string = []
         skip_next_element = False
+
+        rules_usage_count = defaultdict(int)
 
         for ix in range(len(string)):
             if skip_next_element:
@@ -87,33 +130,33 @@ class k_Sequitur(object):
                 new_string.append(string[ix])
                 continue
 
-            pair = string[ix] + string[ix+1]
+            pair = (string[ix], string[ix+1])
             if pair in reverse_rules.keys():
                 result = reverse_rules[pair]
+                rules_usage_count[result] += 1
+
                 new_string.append(result)
                 skip_next_element = True
             else:
                 new_string.append(string[ix])
 
-        new_string = "".join(new_string)
+        # new_string = "".join(new_string)
 
-        return new_string
+        return new_string, rules_usage_count
 
     def get_next_rule_name(self):
         """Returns next rule name to use and increments count """
-        next_rule_name = self.rule_names[self.next_rule_name_ix]
+        next_rule_name = "R{}".format(self.next_rule_name_ix)
         self.next_rule_name_ix += 1
-        if self.next_rule_name_ix >= len(self.rule_names): raise ValueError("Ran out of rule names")
         return next_rule_name
 
 
 
 
-obj = k_Sequitur(2)
-string = "aaaabaaaab"
-
-new_string, rules, all_pair_counts = obj.generate_grammar(string)
-
-print("Rules ", rules)
-print("new string ", new_string)
-print("pair counts", all_pair_counts)
+# obj = k_Sequitur(2)
+# string = [0, 1, 2, 0, 1, 2, 2, 2, 2]
+#
+# new_string, rules, _ = obj.generate_action_grammar(string)
+#
+# print("Rules ", rules)
+# print("new string ", new_string)

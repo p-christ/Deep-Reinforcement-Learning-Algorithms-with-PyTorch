@@ -39,6 +39,7 @@ class DQN(Base_Agent):
         # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
         # a "fake" dimension to make it a mini-batch rather than a single observation
         if state is None: state = self.state
+        if isinstance(state, np.int64) or isinstance(state, int): state = np.array([state])
         state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
         if len(state.shape) < 2: state = state.unsqueeze(0)
         self.q_network_local.eval() #puts network in evaluation mode

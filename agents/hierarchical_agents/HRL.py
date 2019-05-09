@@ -1,8 +1,8 @@
 from Base_Agent import Base_Agent
 import copy
 import time
-
 from DDQN import DDQN
+from k_Sequitur import k_Sequitur
 
 
 class HRL(DDQN):
@@ -17,21 +17,32 @@ class HRL(DDQN):
         self.actions_seen = []
 
         self.min_episode_score_seen = float("inf")
+        self.end_of_episode_symbol = "/"
+        self.grammar_calculator = k_Sequitur(k=config.hyperparameters["sequitur_k"], end_of_episode_symbol=self.end_of_episode_symbol)
 
     def save_experience(self, memory=None, experience=None):
         super().save_experience(memory, experience)
         self.actions_seen.append(self.action)
         if self.done:
-            self.actions_seen.append("DONE")
+            self.actions_seen.append(self.end_of_episode_symbol)
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
-
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         start = time.time()
         while self.episode_number < num_episodes:
-            self.reset_game()
-            self.step()
-            if save_and_print_results: self.save_and_print_result()
+
+            while not self.progress_has_been_made():
+
+                self.reset_game()
+                self.step()
+                if save_and_print_results: self.save_and_print_result()
+
+            grammar, all_rules, new_count_symbol = self.grammar_calculator.generate_action_grammar(self.actions_seen)
+
+            print("Grammar ", grammar)
+            print("All rules ", all_rules)
+            print("New count symbol", new_count_symbol)
+            assert 1 == 0
 
             print(self.progress_has_been_made())
         time_taken = time.time() - start
@@ -46,14 +57,20 @@ class HRL(DDQN):
         return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def progress_has_been_made(self):
+
+        assert self.average_score_required_to_win < 100000, self.average_score_required_to_win
+
+        if len(self.rolling_results) == 0:
+            return False
+
         self.update_min_episode_score()
 
         current_rolling_result = self.rolling_results[-1]
 
         improvement = current_rolling_result - self.min_episode_score_seen
 
-        if len(self.game_full_episode_scores) > self.rolling_score_window:
-            return improvement > (self.average_score_required_to_win - self.min_episode_score_seen) * 0.2
+        if len(self.game_full_episode_scores) > 20: #self.rolling_score_window:
+            return improvement > (self.average_score_required_to_win - self.min_episode_score_seen) * 0.1
         return False
 
 
