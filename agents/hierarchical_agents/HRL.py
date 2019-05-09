@@ -20,13 +20,22 @@ class HRL(DDQN):
         self.end_of_episode_symbol = "/"
         self.grammar_calculator = k_Sequitur(k=config.hyperparameters["sequitur_k"], end_of_episode_symbol=self.end_of_episode_symbol)
 
+        # self.full_episode_memory = Replay_Buffer(self.hyperparameters["buffer_size"], self.hyperparameters["batch_size"],
+        #                             config.seed)
+
+
+
     def save_experience(self, memory=None, experience=None):
         super().save_experience(memory, experience)
         self.actions_seen.append(self.action)
         if self.done:
             self.actions_seen.append(self.end_of_episode_symbol)
+        self.track_episodes_data()
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
+
+        print("Should change it so action grammar only inferred when playing with NO exploration for few episodes")
+
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         start = time.time()
         while self.episode_number < num_episodes:
@@ -36,6 +45,8 @@ class HRL(DDQN):
                 self.reset_game()
                 self.step()
                 if save_and_print_results: self.save_and_print_result()
+
+                self.store_full_episode_data()
 
             grammar, all_rules, new_count_symbol = self.grammar_calculator.generate_action_grammar(self.actions_seen)
 
@@ -55,6 +66,11 @@ class HRL(DDQN):
         print(self.actions_seen)
 
         return self.game_full_episode_scores, self.rolling_results, time_taken
+
+    def store_full_episode_data(self):
+        """Stores the state, next state, reward, done and action information for the latest full episode"""
+        self.memory_shaper.add_episode_experience(self.episode_states, self.episode_next_states, self.episode_rewards,
+                                                  self.episode_actions, self.episode_dones)
 
     def progress_has_been_made(self):
 

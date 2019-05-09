@@ -1,5 +1,3 @@
-from string import ascii_uppercase
-import pytest
 from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 
 def test_generate_1_layer_of_rules():
@@ -82,7 +80,6 @@ def test_get_next_rule_name():
     """Tests get_next_rule_name works correctly"""
     obj = k_Sequitur(2)
     string = [0, 1, 2, 3, 2, 3, 0, 1]
-
     assert obj.next_rule_name_ix == 0
 
     obj.generate_1_layer_of_rules(string)
@@ -120,8 +117,6 @@ def test_convert_symbol_to_raw_actions():
     rules = {"R5": ("R1", "R0"), "R1": (5, "R0"), "R0": (0, 1)}
     converted_symbol = obj.convert_symbol_to_raw_actions(symbol, rules)
     assert  converted_symbol == (5, 0, 1, 0, 1)
-
-
 
 def test_generate_grammar_new_string_and_all_rules():
     """Tests generate_grammar"""
@@ -200,27 +195,9 @@ def test_generate_grammar_deals_with_end_symbols_correctly():
     assert new_string == ["R0", "/", "R0",  "/", "R1", "R1"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
-
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, "/", 0, 1]
     new_string, all_rules, action_usage_count = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4}
     assert new_string == ["R0", "R0", "R0", "/", "R0"]
     assert all_rules == {"R0": (0, 1)}
-
-
-
-
-
-# from utilities.grammar_algorithms.Sequitur import run_sequitur
-#
-# def test_Sequitur():
-#     assert run_sequitur(
-#         'abracadabraabracadabra') == 'Usage\tRule\n 0\tR0 -> R1 R1 \n 2\tR1 -> R2 c a d R2 \n 2\tR2 -> a b r a \n'
-#     assert run_sequitur('11111211111') == 'Usage\tRule\n 0\tR0 -> R1 R2 2 R2 R1 \n 3\tR1 -> 1 1 \n 2\tR2 -> R1 1 \n'
-#
-#     print(run_sequitur('1111'))
-#     print('Usage\tRule\n 0\tR0 -> R1 R1 \n 2\tR1 -> 1 1 \n')
-#
-#
-#     assert run_sequitur('1111') == 'Usage\tRule\n 0\tR0 -> R1 R1 \n 2\tR1 -> 1 1\n'

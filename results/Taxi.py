@@ -42,7 +42,7 @@ config.hyperparameters = {
         "discount_rate": 0.99,
         "learning_iterations": 1,
         "tau": 0.01,
-        "sequitur_k": 500
+        "sequitur_k": 10
 
     }
 
