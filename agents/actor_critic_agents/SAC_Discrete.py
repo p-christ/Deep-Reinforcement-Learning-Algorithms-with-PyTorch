@@ -6,9 +6,9 @@ from Replay_Buffer import Replay_Buffer
 from SAC import SAC
 from Utility_Functions import create_actor_distribution
 
-
 class SAC_Discrete(SAC):
-    """The Soft Actor Critic for discrete actions"""
+    """The Soft Actor Critic for discrete actions. It inherits from SAC for continuous actions and only changes a few
+    methods."""
     agent_name = "SAC"
     def __init__(self, config):
         Base_Agent.__init__(self, config)
@@ -42,12 +42,7 @@ class SAC_Discrete(SAC):
             self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
         else:
             self.alpha = self.hyperparameters["entropy_term_weight"]
-
-        self.add_extra_noise = self.hyperparameters["add_extra_noise"]
-        # if self.add_extra_noise:
-        #     self.noise = OU_Noise(self.action_size, self.config.seed, self.hyperparameters["mu"],
-        #                           self.hyperparameters["theta"], self.hyperparameters["sigma"])
-
+        assert not self.hyperparameters["add_extra_noise"], "There is no add extra noise option for the discrete version of SAC at moment"
         self.do_evaluation_iterations = self.hyperparameters["do_evaluation_iterations"]
 
     def produce_action_and_action_info(self, state):
