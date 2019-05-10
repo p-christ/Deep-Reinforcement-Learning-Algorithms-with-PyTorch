@@ -115,7 +115,8 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [SAC_Discrete] #, Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
+    AGENTS = [SAC_Discrete, Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets,
+              DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

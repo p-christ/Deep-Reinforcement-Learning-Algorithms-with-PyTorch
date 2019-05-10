@@ -19,6 +19,8 @@ class SAC(Base_Agent):
     agent_name = "SAC"
     def __init__(self, config):
         Base_Agent.__init__(self, config)
+        assert self.action_types == "CONTINUOUS", "Action types must be continuous. Use SAC Discrete instead for discrete actions"
+        assert self.config.hyperparameters["Actor"]["final_layer_activation"] != "Softmax", "Final actor layer must not be softmax"
         self.hyperparameters = config.hyperparameters
         self.critic_local = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1, key_to_use="Critic")
         self.critic_local_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
