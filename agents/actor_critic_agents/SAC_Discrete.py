@@ -43,6 +43,7 @@ class SAC_Discrete(SAC):
         else:
             self.alpha = self.hyperparameters["entropy_term_weight"]
         assert not self.hyperparameters["add_extra_noise"], "There is no add extra noise option for the discrete version of SAC at moment"
+        self.add_extra_noise = False
         self.do_evaluation_iterations = self.hyperparameters["do_evaluation_iterations"]
 
     def produce_action_and_action_info(self, state):

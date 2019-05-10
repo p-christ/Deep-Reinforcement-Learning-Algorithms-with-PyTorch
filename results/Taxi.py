@@ -2,6 +2,7 @@ import gym
 
 from DDQN import DDQN
 from HRL import HRL
+from SAC_Discrete import SAC_Discrete
 from hierarchical_agents.SNN_HRL import SNN_HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
@@ -76,11 +77,53 @@ config.hyperparameters = {
         "learning_iterations": learning_iterations,
         "tau": tau,
     },
+
+    "Actor_Critic_Agents": {
+        "Actor": {
+            "learning_rate": 0.0003,
+            "linear_hidden_units": [64, 64],
+            "final_layer_activation": "Softmax",
+            "columns_of_data_to_be_embedded": [0],
+            "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+            "batch_norm": False,
+            "tau": 0.005,
+            "gradient_clipping_norm": 5,
+            "initialiser": "Xavier"
+        },
+
+        "Critic": {
+            "learning_rate": 0.0003,
+            "linear_hidden_units": [64, 64],
+            "final_layer_activation": None,
+            "columns_of_data_to_be_embedded": [0],
+            "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+            "batch_norm": False,
+            "buffer_size": 1000000,
+            "tau": 0.005,
+            "gradient_clipping_norm": 5,
+            "initialiser": "Xavier"
+        },
+
+        "min_steps_before_learning": 400,
+        "batch_size": 256,
+        "discount_rate": 0.99,
+        "mu": 0.0,  # for O-H noise
+        "theta": 0.15,  # for O-H noise
+        "sigma": 0.25,  # for O-H noise
+        "action_noise_std": 0.2,  # for TD3
+        "action_noise_clipping_range": 0.5,  # for TD3
+        "update_every_n_steps": 1,
+        "learning_updates_per_learning_session": 1,
+        "automatically_tune_entropy_hyperparameter": True,
+        "entropy_term_weight": None,
+        "add_extra_noise": False,
+        "do_evaluation_iterations": True
+    }
 }
 
 
 if __name__ == "__main__":
-    AGENTS = [DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
