@@ -122,7 +122,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [DIAYN] #SAC] #, DDPG, PPO, TD3] ] #,
+    AGENTS = [SAC, DIAYN] #SAC] #, DDPG, PPO, TD3] ] #,
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

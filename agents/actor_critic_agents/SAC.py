@@ -38,10 +38,9 @@ class SAC(Base_Agent):
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size * 2, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
-        self.target_entropy = -np.prod(self.environment.action_space.shape).item()  # heuristic value from the paper
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
-            self.target_entropy = -torch.prod(torch.Tensor(self.environment.action_space.shape).to(self.device)).item()
+            self.target_entropy = -torch.prod(torch.Tensor(self.environment.action_space.shape).to(self.device)).item() # heuristic value from the paper
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
             self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
@@ -80,8 +79,6 @@ class SAC(Base_Agent):
         while not self.done:
             self.episode_step_number_val += 1
             self.action = self.pick_action(eval_ep)
-            if self.add_extra_noise:
-                self.action += self.noise.sample()
             self.conduct_action(self.action)
             if self.time_for_critic_and_actor_to_learn():
                 for _ in range(self.hyperparameters["learning_updates_per_learning_session"]):
@@ -100,9 +97,11 @@ class SAC(Base_Agent):
         if state is None: state = self.state
         if eval_ep: action = self.actor_pick_action(state, eval=True)
         elif self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
-            print("random SAC action")
             action = self.environment.action_space.sample()
+            print("random SAC action ", action)
         else: action = self.actor_pick_action(state)
+        if self.add_extra_noise:
+            self.action += self.noise.sample()
         return action
 
     def actor_pick_action(self, state=None, eval=False):

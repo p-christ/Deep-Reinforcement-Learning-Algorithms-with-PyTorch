@@ -2,6 +2,7 @@ import gym
 
 from A2C import A2C
 from Dueling_DDQN import Dueling_DDQN
+from SAC_Discrete import SAC_Discrete
 from agents.actor_critic_agents.A3C import A3C
 from agents.policy_gradient_agents.PPO import PPO
 from agents.Trainer import Trainer
@@ -74,22 +75,47 @@ config.hyperparameters = {
         "epsilon_decay_rate_denominator": 1.0
     },
 
-    "Actor_Critic_Agents": {
+    "Actor_Critic_Agents":  {
+        "Actor": {
+            "learning_rate": 0.0003,
+            "linear_hidden_units": [64, 64],
+            "final_layer_activation": "Softmax",
+            "batch_norm": False,
+            "tau": 0.005,
+            "gradient_clipping_norm": 5,
+            "initialiser": "Xavier"
+        },
 
-        "learning_rate": 0.005,
-        "linear_hidden_units": [20, 10],
-        "final_layer_activation": ["SOFTMAX", None],
-        "gradient_clipping_norm": 5.0,
+        "Critic": {
+            "learning_rate": 0.0003,
+            "linear_hidden_units": [64, 64],
+            "final_layer_activation": None,
+            "batch_norm": False,
+            "buffer_size": 1000000,
+            "tau": 0.005,
+            "gradient_clipping_norm": 5,
+            "initialiser": "Xavier"
+        },
+
+        "min_steps_before_learning": 400,
+        "batch_size": 256,
         "discount_rate": 0.99,
-        "epsilon_decay_rate_denominator": 50.0,
-        "normalise_rewards": True,
-        "exploration_worker_difference": 1.0
-
+        "mu": 0.0, #for O-H noise
+        "theta": 0.15, #for O-H noise
+        "sigma": 0.25, #for O-H noise
+        "action_noise_std": 0.2,  # for TD3
+        "action_noise_clipping_range": 0.5,  # for TD3
+        "update_every_n_steps": 1,
+        "learning_updates_per_learning_session": 1,
+        "automatically_tune_entropy_hyperparameter": True,
+        "entropy_term_weight": None,
+        "add_extra_noise": False,
+        "do_evaluation_iterations": True
     }
 }
 
 if __name__ == "__main__":
-    AGENTS = [Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
+    AGENTS = [SAC_Discrete] #, Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets, DDQN_With_Prioritised_Experience_Replay, DDQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
