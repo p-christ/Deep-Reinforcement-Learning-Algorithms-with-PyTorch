@@ -142,7 +142,9 @@ class Base_Agent(object):
 
     def conduct_action(self, action):
         """Conducts an action in the environment"""
+        # print("action ", action)
         self.next_state, self.reward, self.done, _ = self.environment.step(action)
+        # print("reward ", self.reward)
         self.total_episode_score_so_far += self.reward
 
     def save_and_print_result(self):

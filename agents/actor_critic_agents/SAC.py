@@ -97,8 +97,6 @@ class SAC(Base_Agent):
          2) Using the actor in evaluation mode if eval_ep is True  3) Using the actor in training mode if eval_ep is False.
          The difference between evaluation and training mode is that training mode does more exploration"""
         if state is None: state = self.state
-        # print("State is ", state)
-
         if eval_ep: action = self.actor_pick_action(state=state, eval=True)
         elif self.global_step_number < self.hyperparameters["min_steps_before_learning"]:
             action = self.environment.action_space.sample()
@@ -118,7 +116,7 @@ class SAC(Base_Agent):
         if eval == False: action, _, _ = self.produce_action_and_action_info(state)
         else:
             with torch.no_grad():
-                _, _, action = self.produce_action_and_action_info(state)
+                _, z, action = self.produce_action_and_action_info(state)
         action = action.detach().cpu().numpy()
         return action[0]
 
