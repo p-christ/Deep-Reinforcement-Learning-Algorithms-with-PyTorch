@@ -1,13 +1,16 @@
 # NOT FINISHED
 from Replay_Buffer import Replay_Buffer
 import numpy as np
+import random
 
 class Memory_Shaper(object):
     """Takes in the experience of full episodes and reshapes it according to macro-actions you define. Then it provides
     a replay buffer with this reshaped data to learn from"""
 
-    def __init__(self, buffer_size, batch_size, seed):
+    def __init__(self, buffer_size, batch_size, seed, proportion_of_one_step_actions_to_include=1.0, reward_length_increment=0.0):
         self.reset(buffer_size, batch_size, seed)
+        self.proportion_of_one_step_actions_to_include = proportion_of_one_step_actions_to_include
+        self.reward_length_increment = reward_length_increment
 
     def order_action_rules_according_to_length_of_rule(self, action_rules):
         sorted(action_rules, key=lambda k: len(action_rules), reverse=True)
@@ -32,11 +35,6 @@ class Memory_Shaper(object):
         for episode_ix in range(episodes):
             self.add_adapted_experience_for_an_episode(episode_ix, action_rules, max_action_length)
 
-
-        # Assume rules of the form
-        # (0, 1, 2): 5,
-        # (0, 1, 1, 1, 0): 6
-
     def calculate_max_action_length(self, action_rules):
         """Calculates the max length of the provided macro-actions"""
         max_length = 0
@@ -46,39 +44,38 @@ class Memory_Shaper(object):
                 max_length = action_length
         return max_length
 
+    def increment_reward_according_to_action_length(self, cumulative_reward):
+        if cumulative_reward != 0.0:
+            increment = self.reward_length_increment * abs(cumulative_reward)
+            reward = cumulative_reward + increment
+        else:
+            reward = cumulative_reward + 1.0 * self.reward_length_increment
+        return reward
 
     def add_adapted_experience_for_an_episode(self, episode_ix, action_rules, max_action_length):
-
+        """Adds all the experiences we have been given to a replay buffer after adapting experiences that involved doing a
+          macro action"""
         states = self.states[episode_ix]
         next_states = self.next_states[episode_ix]
         rewards = self.rewards[episode_ix]
         actions = self.actions[episode_ix]
-        dones = self.done[episode_ix]
+        dones = self.dones[episode_ix]
         assert len(states) == len(next_states) == len(rewards) == len(dones) == len(actions)
         steps = len(states)
-
-
-
         for step in range(steps):
-            self.replay_buffer.add_experience(states[step], actions[step], rewards[step], next_states[step], dones[step])
-
-            for action_length in range(2, max_action_length):
-
-                if step >= action_length - 1: continue
-
+            if random.random() <= self.proportion_of_one_step_actions_to_include:
+                self.replay_buffer.add_experience(states[step], actions[step], rewards[step], next_states[step], dones[step])
+            for action_length in range(2, max_action_length + 1):
+                if step < action_length - 1: continue
                 action_sequence =  tuple(actions[step - action_length + 1 : step + 1])
-
-                if action_sequence in action_rules:
+                if action_sequence in action_rules.keys():
                     new_action = action_rules[action_sequence]
                     new_state = states[step - action_length + 1]
                     new_reward = np.sum(rewards[step - action_length + 1:step + 1])
+                    new_reward = self.increment_reward_according_to_action_length(new_reward)
                     new_next_state = next_states[step]
                     new_dones = dones[step]
                     self.replay_buffer.add_experience(new_state, new_action, new_reward, new_next_state, new_dones)
-
-        pass
-
-
 
     def add_episode_experience(self, states, next_states, rewards, actions, dones):
         """Adds in an episode of experience"""
