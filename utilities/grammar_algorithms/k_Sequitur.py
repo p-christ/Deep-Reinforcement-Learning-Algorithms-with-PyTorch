@@ -26,6 +26,10 @@ class k_Sequitur(object):
         assert len(actions) > 0, "Need to provide a list of at least 1 action"
         assert isinstance(actions[0], int), "The actions should be integers"
         new_actions, all_rules, rule_usage = self.discover_all_rules_and_new_actions_representation(actions)
+
+        print("New actions ", new_actions)
+        print("Rule usage ", rule_usage)
+
         action_usage = self.extract_action_usage_from_rule_usage(rule_usage, all_rules)
         return new_actions, all_rules, action_usage
 
@@ -36,11 +40,15 @@ class k_Sequitur(object):
         current_actions = None
         new_actions = actions
         rule_usage = defaultdict(int)
+        print("Step 1")
         while new_actions != current_actions:
             current_actions = new_actions
+            print("Current actions ", current_actions)
             rules, reverse_rules = self.generate_1_layer_of_rules(current_actions)
+            print("Rules generated here ", rules)
             all_rules.update(rules)
             new_actions, rules_usage_count = self.convert_a_string_using_reverse_rules(current_actions, reverse_rules)
+            print("Rules usage count here ", rules_usage_count)
             for key in rules_usage_count.keys():
                 rule_usage[key] += rules_usage_count[key]
         return new_actions, all_rules, rule_usage

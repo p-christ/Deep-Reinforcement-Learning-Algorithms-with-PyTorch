@@ -19,13 +19,10 @@ def test_calculate_max_action_length():
 
 def test_add_adapted_experience_for_an_episode():
     """Tests that add_adapted_experience_for_an_episode works correctly"""
-
-    buffer_size = 3
-
     for reward_increment in [0.0, 0.5, 1.5]:
-
-        memory_shaper = Memory_Shaper(buffer_size, batch_size, seed, reward_length_increment=reward_increment)
-        memory_shaper.reset(buffer_size, 3, seed)
+        buffer_size = 3
+        memory_shaper = Memory_Shaper(buffer_size, buffer_size, seed, reward_length_increment=reward_increment)
+        memory_shaper.reset()
         states = [0, 1]
         next_states = [1, 10]
         rewards = [10, 5]
@@ -35,11 +32,11 @@ def test_add_adapted_experience_for_an_episode():
 
         action_rules = {(0, 5): 6}
 
-        memory_shaper.add_adapted_experience_for_an_episode(0, action_rules, 2)
+        replay_buffer = memory_shaper.put_adapted_experiences_in_a_replay_buffer(action_rules)
 
-        assert len(memory_shaper.replay_buffer) == 3
+        assert len(replay_buffer) == 3
 
-        s_states, s_actions, s_rewards, s_next_states, s_dones = memory_shaper.replay_buffer.sample(separate_out_data_types=True)
+        s_states, s_actions, s_rewards, s_next_states, s_dones = replay_buffer.sample(separate_out_data_types=True)
 
         assert all(s_states.numpy() == np.array([[0.0], [1.0,], [0.0]]))
         assert all(s_actions.numpy() == np.array([[0.0], [5.0, ], [6.0]]))
@@ -49,7 +46,7 @@ def test_add_adapted_experience_for_an_episode():
 
         buffer_size = 5
         memory_shaper = Memory_Shaper(buffer_size, buffer_size, seed, reward_length_increment=reward_increment)
-        memory_shaper.reset(buffer_size, buffer_size, seed)
+        memory_shaper.reset()
         states = [0, 1, 2]
         next_states = [1, 10, 11]
         rewards = [10, 5, -4]
@@ -59,11 +56,11 @@ def test_add_adapted_experience_for_an_episode():
 
         action_rules = {(0, 5): 6, (0, 5, 2): 7}
 
-        memory_shaper.add_adapted_experience_for_an_episode(0, action_rules, 3)
+        replay_buffer = memory_shaper.put_adapted_experiences_in_a_replay_buffer(action_rules)
 
-        assert len(memory_shaper.replay_buffer) == 5
+        assert len(replay_buffer) == 5
 
-        s_states, s_actions, s_rewards, s_next_states, s_dones = memory_shaper.replay_buffer.sample(
+        s_states, s_actions, s_rewards, s_next_states, s_dones = replay_buffer.sample(
             separate_out_data_types=True)
 
         assert all(s_states.numpy() == np.array([[0.0], [0.0], [1.0], [0.0], [2.0]]))
@@ -72,6 +69,65 @@ def test_add_adapted_experience_for_an_episode():
         assert all(s_next_states.numpy() == np.array([[10.0], [1.0], [10.0], [11.0], [11.0]]))
         assert all(s_dones.numpy() == np.array([[0.0], [0.0], [0.0], [1.0], [1.0]]))
 
+def test_add_adapted_experience_for_an_episode_long_action_length():
+    """Tests that add_adapted_experience_for_an_episode works correctly for actions with length > 2"""
+    for reward_increment in [0.0, 0.5, 1.5]:
+        buffer_size = 4
+        memory_shaper = Memory_Shaper(buffer_size, buffer_size, seed, reward_length_increment=reward_increment)
+        states = [0, 1, 2]
+        next_states = [1, 10, 11]
+        rewards = [10, 5, 2]
+        actions = [0, 7, 3]
+        dones = [False, False, False]
+        memory_shaper.add_episode_experience(states, next_states, rewards, actions, dones)
+
+        action_rules = {(0, 7, 3): 8}
+
+        replay_buffer = memory_shaper.put_adapted_experiences_in_a_replay_buffer(action_rules)
+
+        assert len(replay_buffer) == 4
+
+        s_states, s_actions, s_rewards, s_next_states, s_dones = replay_buffer.sample(separate_out_data_types=True)
+
+        assert all(s_states.numpy() == np.array([[2.0], [0.0,], [1.0], [0.0]]))
+        assert all(s_actions.numpy() == np.array([[3.0], [0.0, ], [7.0], [8.0]]))
+        assert all(s_rewards.numpy() == np.array([[2.0], [10.0], [5.0], [17.0*(1.0 + reward_increment)]]))
+        assert all(s_next_states.numpy() == np.array([[11.0], [1.0, ], [10.0], [11.0]]))
+        assert all(s_dones.numpy() == np.array([[0.0], [0.0, ], [0.0], [0.0]]))
+
+
+def test_add_adapted_experience_for_multiple_episodes():
+    """Tests that add_adapted_experience_for_an_episode works correctly for multiple episodes"""
+    for reward_increment in [0.0, 0.5, 1.5]:
+        buffer_size = 2
+        memory_shaper = Memory_Shaper(buffer_size, buffer_size, seed, reward_length_increment=reward_increment)
+        states = [0]
+        next_states = [1]
+        rewards = [10]
+        actions = [0]
+        dones = [False]
+        memory_shaper.add_episode_experience(states, next_states, rewards, actions, dones)
+
+        states = [1]
+        next_states = [2]
+        rewards = [11]
+        actions = [1]
+        dones = [True]
+        memory_shaper.add_episode_experience(states, next_states, rewards, actions, dones)
+
+        action_rules = {}
+
+        replay_buffer = memory_shaper.put_adapted_experiences_in_a_replay_buffer(action_rules)
+
+        assert len(replay_buffer) == 2
+
+        s_states, s_actions, s_rewards, s_next_states, s_dones = replay_buffer.sample(separate_out_data_types=True)
+
+        assert all(s_states.numpy() == np.array([[0.0], [1.0]]))
+        assert all(s_actions.numpy() == np.array([[0.0], [1.0]]))
+        assert all(s_rewards.numpy() == np.array([[10.0], [11.0]]))
+        assert all(s_next_states.numpy() == np.array([[1.0], [2.0]]))
+        assert all(s_dones.numpy() == np.array([[0.0], [1.0]]))
 
 
 

@@ -58,7 +58,7 @@ class HIRO(Base_Agent):
     @staticmethod
     def goal_transition(state, goal, next_state):
         """Provides updated goal according to the goal transition function in the HIRO paper"""
-        return  state + goal - next_state #
+        return state + goal - next_state
 
     def save_higher_level_experience(self):
         self.higher_level_agent.step_lower_level_states = self.step_lower_level_states

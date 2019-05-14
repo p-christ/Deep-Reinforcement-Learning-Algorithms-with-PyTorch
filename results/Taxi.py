@@ -36,7 +36,7 @@ embedding_dimensionality = 15
 gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 400
+epsilon_decay_rate_denominator = 1
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 10
@@ -58,7 +58,8 @@ config.hyperparameters = {
         "discount_rate": discount_rate,
         "learning_iterations": learning_iterations,
         "tau": tau,
-        "sequitur_k": sequitur_k
+        "sequitur_k": sequitur_k,
+        "action_length_reward_bonus": 0.1
     },
 
     "DQN_Agents": {
@@ -123,7 +124,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [HRL] #SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

@@ -16,6 +16,9 @@ class Base_Agent(object):
         self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
         self.config.action_size = self.action_size
+
+
+
         self.state_size =  int(self.get_state_size())
         self.hyperparameters = config.hyperparameters
         self.average_score_required_to_win = self.get_score_required_to_win()
@@ -61,8 +64,7 @@ class Base_Agent(object):
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
         if self.action_types == "DISCRETE": return self.environment.action_space.n
-        else:
-            return self.environment.action_space.shape[0]
+        else: return self.environment.action_space.shape[0]
 
     def get_state_size(self):
         """Gets the state_size for the gym env into the correct shape for a neural network"""
@@ -124,6 +126,7 @@ class Base_Agent(object):
         """Saves the data from the recent episodes"""
         self.episode_states.append(self.state)
         self.episode_actions.append(self.action)
+        self.episode_rewards.append(self.reward)
         self.episode_next_states.append(self.next_state)
         self.episode_dones.append(self.done)
 
