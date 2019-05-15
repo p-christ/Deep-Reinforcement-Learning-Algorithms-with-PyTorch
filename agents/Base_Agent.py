@@ -17,7 +17,7 @@ class Base_Agent(object):
         self.action_size = int(self.get_action_size())
         self.config.action_size = self.action_size
 
-
+        self.lowest_possible_episode_score = self.get_lowest_possible_episode_score()
 
         self.state_size =  int(self.get_state_size())
         self.hyperparameters = config.hyperparameters
@@ -60,6 +60,11 @@ class Base_Agent(object):
                 if name[0] == "<": name = name[1:]
                 if name[-3:] == "Env": name = name[:-3]
                 return name
+
+    def get_lowest_possible_episode_score(self):
+        """Returns the lowest possible episode score you can get in an environment"""
+        if self.environment_title == "Taxi": return -800
+        return None
 
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""

@@ -27,16 +27,16 @@ config.randomise_random_seed = True
 config.save_model = False
 
 
-linear_hidden_units = [10, 5]
+linear_hidden_units = [64, 32]
 learning_rate = 0.01
-buffer_size = 40000
+buffer_size = 100000
 batch_size = 256
 batch_norm = False
 embedding_dimensionality = 15
 gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 1
+epsilon_decay_rate_denominator = 50
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 10

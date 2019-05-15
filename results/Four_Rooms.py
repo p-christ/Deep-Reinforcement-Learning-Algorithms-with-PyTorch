@@ -11,9 +11,17 @@ from agents.DQN_agents.DQN import DQN
 
 config = Config()
 config.seed = 1
-config.environment = Four_Rooms_Environment(15, 15, stochastic_actions_probability=0.25, random_start_user_place=True, random_goal_place=False)
 
-config.num_episodes_to_run = 200
+height = 15
+width = 15
+random_goal_place = False
+num_possible_states = (height * width) ** (1 + 1*random_goal_place)
+embedding_dimensions = [[num_possible_states, 20]]
+print("Num possible states ", num_possible_states)
+
+config.environment = Four_Rooms_Environment(height, width, stochastic_actions_probability=0.0, random_start_user_place=True, random_goal_place=random_goal_place)
+
+config.num_episodes_to_run = 1000
 config.file_to_save_data_results = "Data_and_Graphs/Four_Rooms.pkl"
 config.file_to_save_results_graph = "Data_and_Graphs/Four_Rooms.png"
 config.show_solution_score = False
@@ -29,21 +37,21 @@ config.save_model = False
 
 config.hyperparameters = {
     "DQN_Agents": {
-        "linear_hidden_units": [10, 5],
+        "linear_hidden_units": [30, 10],
         "learning_rate": 0.01,
         "buffer_size": 40000,
         "batch_size": 256,
         "final_layer_activation": "None",
         "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.observation_space.n,
-                                  max(4, int(config.environment.observation_space.n / 10.0))]],
+        "embedding_dimensions": embedding_dimensions,
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "update_every_n_steps": 1,
-        "epsilon_decay_rate_denominator": 400,
+        "epsilon_decay_rate_denominator": 10,
         "discount_rate": 0.99,
         "learning_iterations": 1,
-        "tau": 0.01
+        "tau": 0.01,
+        "exploration_cycle_episodes_length": None
     },
 
     "SNN_HRL": {
@@ -58,8 +66,7 @@ config.hyperparameters = {
             "linear_hidden_units": [20, 10],
             "final_layer_activation": "None",
             "columns_of_data_to_be_embedded": [0, 1],
-            "embedding_dimensions": [[config.environment.observation_space.n,
-                                      max(4, int(config.environment.observation_space.n / 10.0))],
+            "embedding_dimensions": [embedding_dimensions[0],
                                      [20, 6]],
             "batch_norm": False,
             "gradient_clipping_norm": 2,
@@ -78,8 +85,7 @@ config.hyperparameters = {
             "batch_size": 256,
             "final_layer_activation": "None",
             "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.observation_space.n,
-                                      max(4, int(config.environment.observation_space.n / 10.0))]],
+            "embedding_dimensions": embedding_dimensions,
             "batch_norm": False,
             "gradient_clipping_norm": 5,
             "update_every_n_steps": 1,
@@ -98,8 +104,7 @@ config.hyperparameters = {
         "linear_hidden_units": [20, 10],
 
         "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.observation_space.n,
-                                  max(4, int(config.environment.observation_space.n / 10.0))]],
+        "embedding_dimensions": embedding_dimensions,
         "final_layer_activation": ["SOFTMAX", None],
         "gradient_clipping_norm": 5.0,
         "discount_rate": 0.99,
@@ -116,8 +121,7 @@ config.hyperparameters = {
             "learning_rate": 0.01,
             "linear_hidden_units": [20, 10],
             "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.observation_space.n,
-                                      max(4, int(config.environment.observation_space.n / 10.0))]]
+            "embedding_dimensions": embedding_dimensions,
         },
 
         "AGENT": {
@@ -134,8 +138,7 @@ config.hyperparameters = {
         "batch_size": 256,
         "final_layer_activation": "None",
         "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.observation_space.n,
-                                  max(4, int(config.environment.observation_space.n / 10.0))]],
+        "embedding_dimensions": embedding_dimensions,
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "update_every_n_steps": 1,

@@ -6,13 +6,13 @@ import random
 class Memory_Shaper(object):
     """Takes in the experience of full episodes and reshapes it according to macro-actions you define. Then it provides
     a replay buffer with this reshaped data to learn from"""
-    def __init__(self, buffer_size, batch_size, seed, proportion_of_one_step_actions_to_include=1.0, reward_length_increment=0.0):
+    def __init__(self, buffer_size, batch_size, seed, new_reward_fn, proportion_of_one_step_actions_to_include=1.0):
         self.reset()
         self.proportion_of_one_step_actions_to_include = proportion_of_one_step_actions_to_include
-        self.reward_length_increment = reward_length_increment
         self.buffer_size = buffer_size
         self.batch_size = batch_size
         self.seed = seed
+        self.new_reward_fn = new_reward_fn
 
     def put_adapted_experiences_in_a_replay_buffer(self, action_id_to_actions):
         """Adds experiences to the replay buffer after re-imagining that the actions taken were macro-actions according to
@@ -49,13 +49,6 @@ class Memory_Shaper(object):
                 max_length = action_length
         return max_length
 
-    def increment_reward_according_to_action_length(self, cumulative_reward):
-        if cumulative_reward != 0.0:
-            increment = self.reward_length_increment * abs(cumulative_reward)
-            reward = cumulative_reward + increment
-        else:
-            reward = cumulative_reward + 1.0 * self.reward_length_increment
-        return reward
 
     def add_adapted_experience_for_an_episode(self, episode_ix, action_rules, max_action_length, replay_buffer):
         """Adds all the experiences we have been given to a replay buffer after adapting experiences that involved doing a
@@ -74,11 +67,12 @@ class Memory_Shaper(object):
             for action_length in range(2, max_action_length + 1):
                 if step < action_length - 1: continue
                 action_sequence =  tuple(actions[step - action_length + 1 : step + 1])
+                assert all([action in range(6) for action in action_sequence]), "All actions should be primitive here"
                 if action_sequence in action_rules.keys():
                     new_action = action_rules[action_sequence]
                     new_state = states[step - action_length + 1]
                     new_reward = np.sum(rewards[step - action_length + 1:step + 1])
-                    new_reward = self.increment_reward_according_to_action_length(new_reward)
+                    new_reward = self.new_reward_fn(new_reward, len(action_sequence))
                     new_next_state = next_states[step]
                     new_dones = dones[step]
                     replay_buffer.add_experience(new_state, new_action, new_reward, new_next_state, new_dones)
