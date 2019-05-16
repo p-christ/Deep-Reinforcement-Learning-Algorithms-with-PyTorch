@@ -68,6 +68,7 @@ class Base_Agent(object):
 
     def get_action_size(self):
         """Gets the action_size for the gym env into the correct shape for a neural network"""
+        if "overwrite_action_size" in self.config.__dict__: return self.config.overwrite_action_size
         if self.action_types == "DISCRETE": return self.environment.action_space.n
         else: return self.environment.action_space.shape[0]
 
@@ -150,9 +151,7 @@ class Base_Agent(object):
 
     def conduct_action(self, action):
         """Conducts an action in the environment"""
-        # print("action ", action)
         self.next_state, self.reward, self.done, _ = self.environment.step(action)
-        # print("reward ", self.reward)
         self.total_episode_score_so_far += self.reward
 
     def save_and_print_result(self):

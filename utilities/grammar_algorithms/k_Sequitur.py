@@ -22,7 +22,8 @@ class k_Sequitur(object):
 
     def generate_action_grammar(self, actions):
         """Generates a grammar given a list of actions"""
-        assert isinstance(actions, list)
+        assert isinstance(actions, list), actions
+        assert not isinstance(actions[0], list), "Should be 1 long list of actions"
         assert len(actions) > 0, "Need to provide a list of at least 1 action"
         assert isinstance(actions[0], int), "The actions should be integers"
         new_actions, all_rules, rule_usage = self.discover_all_rules_and_new_actions_representation(actions)

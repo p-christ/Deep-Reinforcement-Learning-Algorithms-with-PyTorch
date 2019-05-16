@@ -36,10 +36,12 @@ embedding_dimensionality = 15
 gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 100
+epsilon_decay_rate_denominator = 1
 discount_rate = 0.99
 tau = 0.01
-sequitur_k = 10
+sequitur_k = 2
+pre_training_learning_iterations_multiplier = 50
+episodes_to_run_with_no_exploration = 10
 
 config.hyperparameters = {
 
@@ -59,7 +61,9 @@ config.hyperparameters = {
         "learning_iterations": learning_iterations,
         "tau": tau,
         "sequitur_k": sequitur_k,
-        "action_length_reward_bonus": 0.1
+        "action_length_reward_bonus": 0.1,
+        "pre_training_learning_iterations_multiplier": pre_training_learning_iterations_multiplier,
+        "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration
     },
 
     "DQN_Agents": {

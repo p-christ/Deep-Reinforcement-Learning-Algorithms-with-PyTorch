@@ -59,7 +59,7 @@ class Memory_Shaper(object):
         actions = self.actions[episode_ix]
         dones = self.dones[episode_ix]
 
-        assert len(states) == len(next_states) == len(rewards) == len(dones) == len(actions)
+        assert len(states) == len(next_states) == len(rewards) == len(dones) == len(actions), "{} {} {} {} {} = {}".format(len(states), len(next_states), len(rewards), len(dones), len(actions), actions)
         steps = len(states)
         for step in range(steps):
             if random.random() <= self.proportion_of_one_step_actions_to_include:
