@@ -33,10 +33,23 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
         if num_experiences: batch_size = num_experiences
         else: batch_size = self.batch_size
 
+        min_batch_per_action = int(self.batch_size / self.num_actions)
+        batch_per_action = {k: 0 for k in range(self.num_actions)}
 
-        batch_per_action = self.batch_size / self.num_actions
+        current_batch_size = np.sum([batch_per_action[k] for k in range(self.num_actions)])
+        remainder = batch_size - current_batch_size
+        while remainder > 0:
+            random_action = random.randint(0, self.num_actions - 1)
+            batch_per_action[random_action] += 1
+            remainder -= 1
 
-        return random.sample(self.memory, k=batch_size)
+        samples = {}
+        for action in range(self.num_actions):
+            memory = self.memories[action]
+            samples[action] = random.sample(memory, batch_per_action[action])
+
+        combined_sample = [x for list in samples[action] for x in list]
+        return combined_sample
 
     def __len__(self):
         return  np.sum([len(memory) for memory in self.memories.values()])
