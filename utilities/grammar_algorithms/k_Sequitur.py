@@ -48,7 +48,7 @@ class k_Sequitur(object):
 
         num_episodes = Counter(actions)[self.end_of_episode_symbol]
 
-        self.rules_episode_appearance_tracker = {k: defaultdict(int) for k in range(num_episodes)}
+        rules_episode_appearance_tracker = {k: defaultdict(int) for k in range(num_episodes)}
 
         while new_actions != current_actions:
             current_actions = new_actions
@@ -56,7 +56,8 @@ class k_Sequitur(object):
             rules, reverse_rules = self.generate_1_layer_of_rules(current_actions)
             print("Rules generated here ", rules)
             all_rules.update(rules)
-            new_actions, rules_usage_count = self.convert_a_string_using_reverse_rules(current_actions, reverse_rules)
+            new_actions, rules_usage_count = self.convert_a_string_using_reverse_rules(current_actions, reverse_rules,
+                                                                                       rules_episode_appearance_tracker)
             print("Rules usage count here ", rules_usage_count)
             for key in rules_usage_count.keys():
                 rule_usage[key] += rules_usage_count[key]
@@ -64,13 +65,18 @@ class k_Sequitur(object):
         rules_episode_appearance_count = defaultdict(int)
 
         for episode in range(num_episodes):
-            rule_apperance_tracker = self.rules_episode_appearance_tracker[episode]
+            rule_apperance_tracker = rules_episode_appearance_tracker[episode]
             for key in rule_apperance_tracker.keys():
                 if rule_apperance_tracker[key] == 1:
                     rules_episode_appearance_count[key] += 1
 
+        primitive_rules_episode_appearance_count = {}
+        for rule in rules_episode_appearance_count.keys():
+            primitive_actions = all_rules[rule]
+            primitive_rules_episode_appearance_count[primitive_actions] = rules_episode_appearance_count[rule]
 
-        return new_actions, all_rules, rule_usage, rules_episode_appearance_count
+
+        return new_actions, all_rules, rule_usage, primitive_rules_episode_appearance_count
 
     def generate_1_layer_of_rules(self, string):
         """Generate dictionaries indicating the pair of symbols that appear next to each other more than self.k times"""
@@ -79,14 +85,13 @@ class k_Sequitur(object):
         skip_next_symbol = False
         rules = {}
 
+        assert string[-1] == self.end_of_episode_symbol, "Final element of string must be self.end_of_episode_symbol {}".format(string)
+
         for ix in range(len(string) - 1):
             # We skip the next symbol if it is already being used in a rule we just made
             if skip_next_symbol:
                 skip_next_symbol = False
                 continue
-            # We skip this symbol if the next one is the end of the episode
-            print("Preivous string ", string[ix+1])
-            if string[ix+1] == self.end_of_episode_symbol or string[ix] == self.end_of_episode_symbol: continue
 
             pair = (string[ix], string[ix+1])
 
@@ -99,7 +104,7 @@ class k_Sequitur(object):
                 previous_pair = (string[ix-1], string[ix])
                 pairs_of_symbols[previous_pair] -= 1
                 skip_next_symbol = True
-                if pair not in rules.values():
+                if pair not in rules.values() and self.end_of_episode_symbol not in pair:
                     rule_name = self.get_next_rule_name()
                     rules[rule_name] = pair
         reverse_rules = {v: k for k, v in rules.items()}
@@ -137,7 +142,7 @@ class k_Sequitur(object):
             action_usage[self.convert_symbol_to_raw_actions(key, all_rules)] = rule_usage[key]
         return action_usage
 
-    def convert_a_string_using_reverse_rules(self, string, reverse_rules):
+    def convert_a_string_using_reverse_rules(self, string, reverse_rules, rules_episode_appearance_tracker):
         """Converts a string using the rules we have previously generated"""
         new_string = []
         skip_next_element = False
@@ -151,10 +156,9 @@ class k_Sequitur(object):
             if string[ix] == self.end_of_episode_symbol:
                 rules_used_this_episode = set(rules_used_this_episode)
                 for rule in rules_used_this_episode:
-                    self.rules_episode_appearance_tracker[episode][rule] = 1
+                    rules_episode_appearance_tracker[episode][rule] = 1
                 rules_used_this_episode = []
                 episode += 1
-
 
             if skip_next_element:
                 skip_next_element = False
