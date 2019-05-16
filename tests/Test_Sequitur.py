@@ -1,3 +1,5 @@
+import random
+
 from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 
 def test_generate_1_layer_of_rules():
@@ -122,20 +124,20 @@ def test_generate_grammar_new_string_and_all_rules():
     """Tests generate_grammar"""
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1,  0, 2, 0, 2, 0, 1, 0, 2, 0, 1, 4, 2]
-    new_string, all_rules, _ = obj.generate_action_grammar(string)
+    new_string, all_rules, *_ = obj.generate_action_grammar(string)
     assert new_string == ["R0", "R2", "R1", "R2", "R0", 4, 2]
     assert all_rules == {"R0": (0, 1), "R1": (0, 2), "R2": ("R0", "R1")}
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, 0, 1]
-    new_string, all_rules, _ = obj.generate_action_grammar(string)
+    new_string, all_rules, *_ = obj.generate_action_grammar(string)
     assert new_string == ["R1", "R1"], new_string
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     for repetition in range(1, 16):
         obj = k_Sequitur(2)
         string = [0, 1] * repetition
-        new_string, all_rules, _ = obj.generate_action_grammar(string)
+        new_string, all_rules, *_ = obj.generate_action_grammar(string)
         if repetition < 2:
             assert new_string == [0, 1]
             assert all_rules == {}
@@ -158,17 +160,17 @@ def test_generate_action_grammar_action_usage_count():
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, 0, 1]
-    _, _, action_usage_count = obj.generate_action_grammar(string)
+    _, _, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4, (0, 1, 0, 1): 2}
 
     obj = k_Sequitur(3)
     string = [0, 1, 0, 1, 0, 1, 0, 1]
-    _, _, action_usage_count = obj.generate_action_grammar(string)
+    _, _, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4}
 
     obj = k_Sequitur(2)
     string = [0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1]
-    _, _, action_usage_count = obj.generate_action_grammar(string)
+    _, _, action_usage_count, _ = obj.generate_action_grammar(string)
     print(action_usage_count)
     assert action_usage_count == {(0, 0): 3, (1, 0): 3, (0, 0, 1, 0): 2}
 
@@ -176,32 +178,44 @@ def test_generate_grammar_deals_with_end_symbols_correctly():
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, 0, 1]
-    new_string, all_rules, action_usage_count = obj.generate_action_grammar(string)
+    new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4, (0, 1, 0, 1): 2}
     assert new_string == ["R1", "R1"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, "/", 0, 1, 0, 1]
-    new_string, all_rules, action_usage_count = obj.generate_action_grammar(string)
+    new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4, (0, 1, 0, 1): 2}
     assert new_string == ["R1", "/", "R1"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, "/", 0, 1, "/", 0, 1, 0, 1, 0, 1, 0, 1]
-    new_string, all_rules, action_usage_count = obj.generate_action_grammar(string)
+    new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 6, (0, 1, 0, 1): 2}
     assert new_string == ["R0", "/", "R0",  "/", "R1", "R1"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, "/", 0, 1]
-    new_string, all_rules, action_usage_count = obj.generate_action_grammar(string)
+    new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4}
     assert new_string == ["R0", "R0", "R0", "/", "R0"]
     assert all_rules == {"R0": (0, 1)}
 
-def test_ignores_end_symbol_correctly
+def test_generate_grammar_deals_with_end_symbols_correctly_long_string():
+    obj = k_Sequitur(2)
+    string_options = [0, 1, 2, 3, "/"]
+    long_string = [random.choice(string_options) for _ in range(100000)]
+    new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(long_string)
 
-    do this...
+    for rule in action_usage_count.keys():
+        assert "/" not in rule
+
+
+
+
+# def test_ignores_end_symbol_correctly
+#
+#     do this...
