@@ -89,6 +89,7 @@ class SAC(Base_Agent):
             if not eval_ep: self.save_experience(experience=(self.state, self.action, self.reward, self.next_state, mask))
             self.state = self.next_state
             self.global_step_number += 1
+        print(self.total_episode_score_so_far)
         if eval_ep: self.print_summary_of_latest_evaluation_episode()
         self.episode_number += 1
 

@@ -1,6 +1,7 @@
 import random
 
 from gym import Wrapper, spaces
+from torch import nn, optim
 
 from Base_Agent import Base_Agent
 import copy
@@ -48,11 +49,12 @@ class HRL(Base_Agent):
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
 
-        #TODO learn grammar from most successful episodes not random ones...
+        #TODO learn grammar from most successful episodes not random ones... with or without exploration on?
         #TODO set the score to beat as % lower than best score seen before without exploration
-        #TODO have more layers & keep earlier layers
         #TODO do grammar updates less often as we go...  increase % improvement required as we go?
         #TODO do pre-training until loss stops going down quickly?
+        #TODO Use SAC-Discrete instead of DQN?
+        #TODO learn grammar of a mixture of best performing episodes when had exploration on vs. not
 
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
 
@@ -61,28 +63,27 @@ class HRL(Base_Agent):
         replay_buffer = None
         self.num_episodes = num_episodes
         self.episodes_conducted = 0
+        self.grammar_induction_iteration = 0
 
         while self.episodes_conducted < self.num_episodes:
 
             current_num_actions = len(self.global_action_id_to_primitive_action.keys())
-            PRE_TRAINING_ITERATIONS = 500 * (current_num_actions ** 2)
-
-
-
-            agent = self.generate_agent_with_updated_action_set()
+            PRE_TRAINING_ITERATIONS = 50 * (current_num_actions ** 2)
+            self.agent = self.generate_agent_with_updated_action_set(copy_over_hidden_layers=True)
             if replay_buffer is not None:
                 print(" ------ ")
                 print("Length of buffer {} -- Actions {} -- Pre training iterations {}".format(len(replay_buffer),
                                                                                                current_num_actions,
                                                                                                PRE_TRAINING_ITERATIONS))
                 print(" ------ ")
-                self.overwrite_replay_buffer_and_pre_train_agent(agent, replay_buffer, PRE_TRAINING_ITERATIONS)
+                self.overwrite_replay_buffer_and_pre_train_agent(self.agent, replay_buffer, PRE_TRAINING_ITERATIONS,
+                                                                 only_train_final_layer=True)
 
 
             print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
 
 
-            exploration_free_macro_actions_seen = self.play_agent_until_progress_made(agent)
+            exploration_free_macro_actions_seen = self.play_agent_until_progress_made(self.agent)
 
 
             print("macro_actions_seen", exploration_free_macro_actions_seen)
@@ -97,6 +98,8 @@ class HRL(Base_Agent):
             for key, value in self.global_action_id_to_primitive_action.items():
                 assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
             replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(self.global_action_id_to_primitive_action)
+
+            self.grammar_induction_iteration += 1
 
         return self.game_full_episode_scores, self.rolling_results
 
@@ -165,8 +168,10 @@ class HRL(Base_Agent):
         return actions_seen
 
 
-    def generate_agent_with_updated_action_set(self):
+    def generate_agent_with_updated_action_set(self, copy_over_hidden_layers):
         """Generates an agent that acts according to the new updated action set"""
+        if copy_over_hidden_layers and self.grammar_induction_iteration > 0:
+            saved_network = copy.deepcopy(self.agent.q_network_local)
         updated_config = copy.deepcopy(self.config)
         print("Creating new agent with actions ", self.global_action_id_to_primitive_action)
         updated_config.environment = Environment_Wrapper(copy.deepcopy(self.environment),
@@ -174,7 +179,38 @@ class HRL(Base_Agent):
                                                          self.action_length_reward_bonus, self.memory_shaper)
         target_rolling_score = self.determine_rolling_score_to_beat_before_recalculating_grammar()
         agent = DDQN_Wrapper(updated_config, target_rolling_score)
+
+        if copy_over_hidden_layers and self.grammar_induction_iteration > 0:
+            agent = self.copy_over_saved_network_besides_final_layer(saved_network, agent)
+
         return agent
+
+    def copy_over_saved_network_besides_final_layer(self, saved_network, new_agent):
+        """Copies over the hidden layers of a saved network to a new agent (but not the output layer"""
+        assert len(new_agent.q_network_local.output_layers) == 1
+        output_layer = copy.deepcopy(new_agent.q_network_local.output_layers[0])
+        new_agent.q_network_local = saved_network
+        new_agent.q_network_local.output_layers[0] = output_layer
+
+        Base_Agent.copy_model_over(from_model=new_agent.q_network_local, to_model=new_agent.q_network_target)
+        new_agent.q_network_optimizer = optim.Adam(new_agent.q_network_local.parameters(),
+                                              lr=new_agent.hyperparameters["learning_rate"])
+        return new_agent
+
+    def freeze_all_but_output_layers(self, network):
+        """Freezes all layers except the output layer of a network"""
+        print("Freezing hidden layers")
+        for param in network.named_parameters():
+            param_name = param[0]
+            assert "hidden" in param_name or "output" in param_name or "embedding" in param_name, "Name {} of network layers not understood".format(param_name)
+            if "output" not in param_name:
+                param[1].requires_grad = False
+
+    def unfreeze_all_layers(self, network):
+        """Unfreezes all layers of a network"""
+        print("Unfreezing all layers")
+        for param in network.parameters():
+            param.requires_grad = True
 
     def determine_rolling_score_to_beat_before_recalculating_grammar(self):
         """Determines the rollowing window score the agent needs to get to before we will adapt its actions"""
@@ -184,13 +220,18 @@ class HRL(Base_Agent):
         return target_rolling_score
 
 
-    def overwrite_replay_buffer_and_pre_train_agent(self, agent, replay_buffer, training_iterations):
+    def overwrite_replay_buffer_and_pre_train_agent(self, agent, replay_buffer, training_iterations, only_train_final_layer):
         """Overwrites the replay buffer of the agent and sets it to the provided replay_buffer. Then trains the agent
         for training_iterations number of iterations using data from the replay buffer"""
         assert replay_buffer is not None
         agent.memory = replay_buffer
+
+        if only_train_final_layer:
+            print("Only training the final layer")
+            self.freeze_all_but_output_layers(agent.q_network_local)
         for _ in range(training_iterations):
             agent.learn()
+        if only_train_final_layer: self.unfreeze_all_layers(agent.q_network_local)
 
     def flatten_action_id_to_actions(self, action_id_to_actions):
         """Converts the values in an action_id_to_actions dictionary back to the primitive actions they represent"""
@@ -223,71 +264,71 @@ class HRL(Base_Agent):
         cumulative_reward += increment * ((length_of_macro_action - 1)** 0.5) * self.action_length_reward_bonus
         return cumulative_reward
 
-
-class Environment_Wrapper(Wrapper):
-    """Open AI gym wrapper to adapt the environment so that the actions we can use are macro actions"""
-    def __init__(self, env, action_id_to_primitive_actions, action_length_reward_bonus, memory_shaper, end_of_episode_symbol="/"):
-        Wrapper.__init__(self, env)
-        self.action_id_to_primitive_actions = action_id_to_primitive_actions
-        self.action_space = spaces.Discrete(len(action_id_to_primitive_actions.keys()))
-        self.action_length_reward_bonus = action_length_reward_bonus
-        self.memory_shaper = memory_shaper
-
-
-    def store_episode_in_memory_shaper(self):
-        """Stores the state, next state, reward, done and action information for the latest full episode"""
-        self.memory_shaper.add_episode_experience(self.episode_states, self.episode_next_states, self.episode_rewards,
-                                                  self.episode_actions, self.episode_dones)
-
-    def track_episode_data(self, state, reward, action, next_state, done):
-        self.episode_states.append(state)
-        self.episode_rewards.append(reward)
-        self.episode_actions.append(action)
-        self.episode_next_states.append(next_state)
-        self.episode_dones.append(done)
-
-    def reset(self):
-        self.state = self.env.reset()
-        self.episode_states = []
-        self.episode_rewards = []
-        self.episode_actions = []
-        self.episode_next_states = []
-        self.episode_dones = []
-        return self.state
-
-    def step(self, macro_action):
-        """Moves a step in environment by conducting a macro action"""
-
-        actions = self.action_id_to_primitive_actions[macro_action]
-
-        if isinstance(actions, int): actions = tuple([actions])
-
-        cumulative_reward = 0
-
-        if random.random() < 0.001: print("actions ", actions)
-
-        for action in actions:
-            next_state, reward, done, _ = self.env.step(action)
-            self.track_episode_data(self.state, reward, action, next_state, done)
-            self.state = next_state
-
-            cumulative_reward += reward
-            if done:
-                self.store_episode_in_memory_shaper()
-                break
-            if self.abandon_macro_action(): break
-
-        cumulative_reward = self.memory_shaper.new_reward_fn(cumulative_reward, len(actions))
-        return next_state, cumulative_reward, done, _
-
-
-
-    def abandon_macro_action(self):
-        """Need to implement this logic..
-        and also decide on the intrinsic rewards when a macro action gets abandoned
-        Should there be a punishment?
-        """
-        return False
+#
+# class Environment_Wrapper(Wrapper):
+#     """Open AI gym wrapper to adapt the environment so that the actions we can use are macro actions"""
+#     def __init__(self, env, action_id_to_primitive_actions, action_length_reward_bonus, memory_shaper, end_of_episode_symbol="/"):
+#         Wrapper.__init__(self, env)
+#         self.action_id_to_primitive_actions = action_id_to_primitive_actions
+#         self.action_space = spaces.Discrete(len(action_id_to_primitive_actions.keys()))
+#         self.action_length_reward_bonus = action_length_reward_bonus
+#         self.memory_shaper = memory_shaper
+#
+#
+#     def store_episode_in_memory_shaper(self):
+#         """Stores the state, next state, reward, done and action information for the latest full episode"""
+#         self.memory_shaper.add_episode_experience(self.episode_states, self.episode_next_states, self.episode_rewards,
+#                                                   self.episode_actions, self.episode_dones)
+#
+#     def track_episode_data(self, state, reward, action, next_state, done):
+#         self.episode_states.append(state)
+#         self.episode_rewards.append(reward)
+#         self.episode_actions.append(action)
+#         self.episode_next_states.append(next_state)
+#         self.episode_dones.append(done)
+#
+#     def reset(self):
+#         self.state = self.env.reset()
+#         self.episode_states = []
+#         self.episode_rewards = []
+#         self.episode_actions = []
+#         self.episode_next_states = []
+#         self.episode_dones = []
+#         return self.state
+#
+#     def step(self, macro_action):
+#         """Moves a step in environment by conducting a macro action"""
+#
+#         actions = self.action_id_to_primitive_actions[macro_action]
+#
+#         if isinstance(actions, int): actions = tuple([actions])
+#
+#         cumulative_reward = 0
+#
+#         if random.random() < 0.001: print("actions ", actions)
+#
+#         for action in actions:
+#             next_state, reward, done, _ = self.env.step(action)
+#             self.track_episode_data(self.state, reward, action, next_state, done)
+#             self.state = next_state
+#
+#             cumulative_reward += reward
+#             if done:
+#                 self.store_episode_in_memory_shaper()
+#                 break
+#             if self.abandon_macro_action(): break
+#
+#         cumulative_reward = self.memory_shaper.new_reward_fn(cumulative_reward, len(actions))
+#         return next_state, cumulative_reward, done, _
+#
+#
+#
+#     def abandon_macro_action(self):
+#         """Need to implement this logic..
+#         and also decide on the intrinsic rewards when a macro action gets abandoned
+#         Should there be a punishment?
+#         """
+#         return False
 
 
 
@@ -300,17 +341,26 @@ class DDQN_Wrapper(DDQN):
         self.end_of_episode_symbol = end_of_episode_symbol
         self.rolling_score_to_beat = rolling_score_to_beat
         self.enough_progress_made = False
+        self.episode_actions_and_scores = []
 
     def save_experience(self, memory=None, experience=None):
         """Saves the recent experience to the memory buffer"""
         super().save_experience(memory, experience)
+        self.track_episodes_data()
         if self.enough_progress_made:
             self.actions_seen.append(self.action)
             if self.done: self.actions_seen.append(self.end_of_episode_symbol)
 
+    def save_episode_actions_with_score(self):
+        self.episode_actions.append(self.end_of_episode_symbol)
+        self.episode_actions_and_scores.append([self.episode_score, self.episode_actions])
+
+
     def run_n_episodes(self, num_episodes, stop_when_progress_made=False):
         self.actions_seen = []
-        self.episode_number = 0
+
+        episodes_to_run_with_no_exploration = 10
+
         episodes_with_no_exploration = 0
         while self.episode_number < num_episodes:
             self.reset_game()
@@ -318,14 +368,15 @@ class DDQN_Wrapper(DDQN):
             self.save_and_print_result()
             if self.enough_progress_made:
                 episodes_with_no_exploration += 1
-            if episodes_with_no_exploration >= 10:
+            if episodes_with_no_exploration >= episodes_to_run_with_no_exploration:
                 break
             if stop_when_progress_made:
                 if self.progress_has_been_made():
                     self.enough_progress_made = True
                     self.turn_off_any_epsilon_greedy_exploration()
+            self.save_episode_actions_with_score()
 
-        return self.actions_seen, self.episode_number, self.rolling_results[-1]
+        return self.actions_seen, self.episode_number, np.mean(self.game_full_episode_scores[-episodes_to_run_with_no_exploration:])
 
     def progress_has_been_made(self):
         """Determines whether enough 'progress' has been made for us to do another round of grammar induction"""

@@ -27,7 +27,7 @@ config.randomise_random_seed = True
 config.save_model = False
 
 
-linear_hidden_units = [64, 32]
+linear_hidden_units = [64, 32, 32]
 learning_rate = 0.01
 buffer_size = 100000
 batch_size = 256
@@ -36,7 +36,7 @@ embedding_dimensionality = 15
 gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 50
+epsilon_decay_rate_denominator = 100
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 10
@@ -105,7 +105,7 @@ config.hyperparameters = {
             "initialiser": "Xavier"
         },
 
-        "min_steps_before_learning": 400,
+        "min_steps_before_learning": 10000,
         "batch_size": 256,
         "discount_rate": 0.99,
         "mu": 0.0,  # for O-H noise
@@ -124,7 +124,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [HRL] #SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [HRL] #SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
