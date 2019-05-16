@@ -278,7 +278,9 @@ class HRL(Base_Agent):
             if action in primitive_actions: new_action_tuple.append(action)
             else:
                 converted_action = self.global_action_id_to_primitive_action[action]
+                print(new_action_tuple)
                 new_action_tuple.extend(converted_action)
+                print("Should have changed: ", new_action_tuple)
         new_action_tuple = tuple(new_action_tuple)
         return self.backtrack_action_to_primitive_actions(new_action_tuple)
 

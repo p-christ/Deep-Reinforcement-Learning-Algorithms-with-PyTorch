@@ -30,26 +30,47 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
             self.memories[actions].append(experience)
 
     def pick_experiences(self, num_experiences=None):
+        """Picks the experiences that the sample function will return as a random sample of experiences. It works by picking
+        an equal number of experiences that used each action (as far as possible)"""
         if num_experiences: batch_size = num_experiences
         else: batch_size = self.batch_size
+        batch_per_action = self.calculate_batch_sizes_per_action(batch_size)
+        samples_split_by_action = self.sample_each_action_equally(batch_per_action)
+        combined_sample = []
+        for key in samples_split_by_action.keys():
+            combined_sample.extend(samples_split_by_action[key])
+        return combined_sample
 
-        min_batch_per_action = int(self.batch_size / self.num_actions)
-        batch_per_action = {k: 0 for k in range(self.num_actions)}
-
+    def calculate_batch_sizes_per_action(self, batch_size):
+        """Calculates the batch size we need to randomly draw from each action to make sure there is equal coverage
+        per action and that the batch gets filled up"""
+        min_batch_per_action = int(batch_size / self.num_actions)
+        batch_per_action = {k: min_batch_per_action for k in range(self.num_actions)}
         current_batch_size = np.sum([batch_per_action[k] for k in range(self.num_actions)])
         remainder = batch_size - current_batch_size
-        while remainder > 0:
-            random_action = random.randint(0, self.num_actions - 1)
-            batch_per_action[random_action] += 1
-            remainder -= 1
+        give_remainder_to = random.sample(range(self.num_actions), remainder)
+        for action in give_remainder_to:
+            batch_per_action[action] += 1
+        return batch_per_action
 
+    def sample_each_action_equally(self, batch_per_action):
+        """Samples a number of experiences (determined by batch_per_action) from the memory buffer for each action"""
         samples = {}
         for action in range(self.num_actions):
             memory = self.memories[action]
-            samples[action] = random.sample(memory, batch_per_action[action])
-
-        combined_sample = [x for list in samples[action] for x in list]
-        return combined_sample
+            batch_size_for_action = batch_per_action[action]
+            action_memory_size = len(memory)
+            assert action_memory_size > 0, "Need at least 1 experience for each action"
+            if action_memory_size >= batch_size_for_action:
+                samples[action] = random.sample(memory, batch_size_for_action)
+            else:
+                samples_for_action = []
+                while len(samples_for_action) < batch_per_action[action]:
+                    remainder = batch_per_action[action] - len(samples_for_action)
+                    sampled_experiences = random.sample(memory, min(remainder, action_memory_size))
+                    samples_for_action.extend(sampled_experiences)
+                samples[action] = samples_for_action
+        return samples
 
     def __len__(self):
         return  np.sum([len(memory) for memory in self.memories.values()])
