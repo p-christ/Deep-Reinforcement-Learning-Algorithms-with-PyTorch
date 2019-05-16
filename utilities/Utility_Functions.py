@@ -95,3 +95,28 @@ class SharedAdam(torch.optim.Adam):
 
                 p.data.addcdiv_(-step_size, exp_avg, denom)
         return loss
+
+def flatten_action_id_to_actions(action_id_to_actions, global_action_id_to_primitive_action, num_primitive_actions):
+    """Converts the values in an action_id_to_actions dictionary back to the primitive actions they represent"""
+    flattened_action_id_to_actions = {}
+    for key in action_id_to_actions.keys():
+        actions = action_id_to_actions[key]
+        raw_actions = backtrack_action_to_primitive_actions(actions, global_action_id_to_primitive_action, num_primitive_actions)
+        flattened_action_id_to_actions[key] = raw_actions
+    return flattened_action_id_to_actions
+
+def backtrack_action_to_primitive_actions(action_tuple, global_action_id_to_primitive_action, num_primitive_actions):
+    """Converts an action tuple back to the primitive actions it represents in a recursive way."""
+    print("Recursing to backtrack on ", action_tuple)
+    primitive_actions = range(num_primitive_actions)
+    if all(action in primitive_actions for action in action_tuple): return action_tuple #base case
+    new_action_tuple = []
+    for action in action_tuple:
+        if action in primitive_actions: new_action_tuple.append(action)
+        else:
+            converted_action = global_action_id_to_primitive_action[action]
+            print(new_action_tuple)
+            new_action_tuple.extend(converted_action)
+            print("Should have changed: ", new_action_tuple)
+    new_action_tuple = tuple(new_action_tuple)
+    return backtrack_action_to_primitive_actions(new_action_tuple)

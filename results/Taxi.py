@@ -36,12 +36,15 @@ embedding_dimensionality = 15
 gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 1
+epsilon_decay_rate_denominator = 400
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 2
 pre_training_learning_iterations_multiplier = 50
-episodes_to_run_with_no_exploration = 10
+episodes_to_run_with_no_exploration = 25
+action_balanced_replay_buffer = True
+copy_over_hidden_layers = True
+action_length_reward_bonus = 0.1
 
 config.hyperparameters = {
 
@@ -61,9 +64,11 @@ config.hyperparameters = {
         "learning_iterations": learning_iterations,
         "tau": tau,
         "sequitur_k": sequitur_k,
-        "action_length_reward_bonus": 0.1,
+        "action_length_reward_bonus": action_length_reward_bonus,
         "pre_training_learning_iterations_multiplier": pre_training_learning_iterations_multiplier,
-        "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration
+        "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration,
+        "action_balanced_replay_buffer": action_balanced_replay_buffer,
+        "copy_over_hidden_layers": copy_over_hidden_layers
     },
 
     "DQN_Agents": {

@@ -1,4 +1,5 @@
 # NOT FINISHED
+from Action_Balanced_Replay_Buffer import Action_Balanced_Replay_Buffer
 from Replay_Buffer import Replay_Buffer
 import numpy as np
 import random
@@ -6,13 +7,15 @@ import random
 class Memory_Shaper(object):
     """Takes in the experience of full episodes and reshapes it according to macro-actions you define. Then it provides
     a replay buffer with this reshaped data to learn from"""
-    def __init__(self, buffer_size, batch_size, seed, new_reward_fn, proportion_of_one_step_actions_to_include=1.0):
+    def __init__(self, buffer_size, batch_size, seed, new_reward_fn, proportion_of_one_step_actions_to_include=1.0,
+                 action_balanced_replay_buffer=True):
         self.reset()
         self.proportion_of_one_step_actions_to_include = proportion_of_one_step_actions_to_include
         self.buffer_size = buffer_size
         self.batch_size = batch_size
         self.seed = seed
         self.new_reward_fn = new_reward_fn
+        self.action_balanced_replay_buffer = action_balanced_replay_buffer
 
     def put_adapted_experiences_in_a_replay_buffer(self, action_id_to_actions):
         """Adds experiences to the replay buffer after re-imagining that the actions taken were macro-actions according to
@@ -33,7 +36,14 @@ class Memory_Shaper(object):
             assert len(data_type) == episodes
 
         max_action_length = self.calculate_max_action_length(actions_to_action_id)
-        replay_buffer = Replay_Buffer(self.buffer_size, self.batch_size, self.seed)
+
+        if self.action_balanced_replay_buffer:
+            print("Using action balanced replay buffer")
+            replay_buffer = Action_Balanced_Replay_Buffer(self.buffer_size, self.batch_size, self.seed, num_actions=len(action_id_to_actions))
+
+        else:
+            print("Using ordinary replay buffer")
+            replay_buffer = Replay_Buffer(self.buffer_size, self.batch_size, self.seed)
 
         for episode_ix in range(episodes):
             self.add_adapted_experience_for_an_episode(episode_ix, actions_to_action_id, max_action_length, replay_buffer)

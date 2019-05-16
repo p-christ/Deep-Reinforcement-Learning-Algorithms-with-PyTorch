@@ -201,3 +201,7 @@ def test_generate_grammar_deals_with_end_symbols_correctly():
     assert action_usage_count == {(0, 1): 4}
     assert new_string == ["R0", "R0", "R0", "/", "R0"]
     assert all_rules == {"R0": (0, 1)}
+
+def test_ignores_end_symbol_correctly
+
+    do this...

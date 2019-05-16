@@ -10,8 +10,11 @@
 # R1: A --> ab
 # R2: B --> de
 
+# TODO fix the fact that it sometimes provides rules that have end of episode symbol in them
+# TODO add an option to return rules in terms of the amount of times they appear in a set of provided episodes
 
-from collections import defaultdict
+from collections import defaultdict, Counter
+
 
 class k_Sequitur(object):
 
@@ -19,6 +22,43 @@ class k_Sequitur(object):
         self.k = k
         self.end_of_episode_symbol = end_of_episode_symbol
         self.next_rule_name_ix = 0
+    #
+    # def generate_action_grammar_and_frequency_of_episode_appearances(self, actions_for_all_episodes):
+    #     """Generates an action grammar to explain the actions seen"""
+    #
+    #     assert isinstance(actions_for_all_episodes, list), "Actions must be provided as a list, with each element representing the actions in an episode"
+    #     assert isinstance(actions_for_all_episodes[0], list), "Actions for an episode must be provided as a list"
+    #     assert isinstance(actions_for_all_episodes[0][0], int), "Actions must be integers"
+    #
+    #     flattened_actions = [action for list in actions_for_all_episodes for action in list]
+    #
+    #     _, _, action_usage = self.generate_action_grammar(flattened_actions)
+    #
+    #     macro_action_episode_appearances = defaultdict(int)
+    #
+    #     max_action_length
+    #
+    #     for episode in actions_for_all_episodes:
+    #         actions_seen_in_this_episode = []
+    #         for lower_range in range(len(episode)):
+    #             for upper_range in range(lower_range + 1, lower_range + 1 + max_action_length):
+    #                 candidate_action = episode[lower_range:upper_range]
+    #                 if candidate_action in action_usage:
+    #                     actions_seen_in_this_episode.append(candidate_action)
+    #         actions_seen_in_this_episode = set(actions_seen_in_this_episode)
+    #
+    #
+    #     for action in action_usage:
+    #
+    #
+    #
+    #
+    #
+    #     for episode_actions in actions_for_all_episodes:
+    #         new_actions, all_rules, rule_usage = self.discover_all_rules_and_new_actions_representation(episode_actions)
+    #         action_usage = self.extract_action_usage_from_rule_usage(rule_usage, all_rules)
+    #
+
 
     def generate_action_grammar(self, actions):
         """Generates a grammar given a list of actions"""
@@ -26,13 +66,13 @@ class k_Sequitur(object):
         assert not isinstance(actions[0], list), "Should be 1 long list of actions"
         assert len(actions) > 0, "Need to provide a list of at least 1 action"
         assert isinstance(actions[0], int), "The actions should be integers"
-        new_actions, all_rules, rule_usage = self.discover_all_rules_and_new_actions_representation(actions)
+        new_actions, all_rules, rule_usage, rules_episode_appearance_count = self.discover_all_rules_and_new_actions_representation(actions)
 
         print("New actions ", new_actions)
         print("Rule usage ", rule_usage)
 
         action_usage = self.extract_action_usage_from_rule_usage(rule_usage, all_rules)
-        return new_actions, all_rules, action_usage
+        return new_actions, all_rules, action_usage, rules_episode_appearance_count
 
     def discover_all_rules_and_new_actions_representation(self, actions):
         """Takes in a list of actions and discovers all the rules present that get used more than self.k times and the
@@ -42,6 +82,12 @@ class k_Sequitur(object):
         new_actions = actions
         rule_usage = defaultdict(int)
         print("Step 1")
+
+
+        num_episodes = Counter(actions)[self.end_of_episode_symbol]
+
+        self.rules_episode_appearance_tracker = {k: defaultdict(int) for k in num_episodes}
+
         while new_actions != current_actions:
             current_actions = new_actions
             print("Current actions ", current_actions)
@@ -52,7 +98,17 @@ class k_Sequitur(object):
             print("Rules usage count here ", rules_usage_count)
             for key in rules_usage_count.keys():
                 rule_usage[key] += rules_usage_count[key]
-        return new_actions, all_rules, rule_usage
+
+        rules_episode_appearance_count = defaultdict(int)
+
+        for episode in range(num_episodes):
+            rule_apperance_tracker = self.rules_episode_appearance_tracker[episode]
+            for key in rule_apperance_tracker.keys():
+                if rule_apperance_tracker[key] == 1:
+                    rules_episode_appearance_count[key] += 1
+
+
+        return new_actions, all_rules, rule_usage, rules_episode_appearance_count
 
     def generate_1_layer_of_rules(self, string):
         """Generate dictionaries indicating the pair of symbols that appear next to each other more than self.k times"""
@@ -122,7 +178,20 @@ class k_Sequitur(object):
         new_string = []
         skip_next_element = False
         rules_usage_count = defaultdict(int)
+
+        episode = 0
+
+        rules_used_this_episode = []
+
         for ix in range(len(string)):
+            if string[ix] == self.end_of_episode_symbol:
+                rules_used_this_episode = set(rules_used_this_episode)
+                for rule in rules_used_this_episode:
+                    self.rules_episode_appearance_tracker[episode][rule] = 1
+                rules_used_this_episode = []
+                episode += 1
+
+
             if skip_next_element:
                 skip_next_element = False
                 continue
@@ -134,6 +203,7 @@ class k_Sequitur(object):
             if pair in reverse_rules.keys():
                 result = reverse_rules[pair]
                 rules_usage_count[result] += 1
+                rules_used_this_episode.append(result)
                 new_string.append(result)
                 skip_next_element = True
             else:

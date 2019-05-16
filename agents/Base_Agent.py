@@ -268,7 +268,23 @@ class Base_Agent(object):
 
     def turn_off_any_epsilon_greedy_exploration(self):
         """Turns off all exploration in epsilon greedy method"""
+        print("Turning off epsilon greedy exploration")
         self.turn_off_exploration = True
+
+    def freeze_all_but_output_layers(self, network):
+        """Freezes all layers except the output layer of a network"""
+        print("Freezing hidden layers")
+        for param in network.named_parameters():
+            param_name = param[0]
+            assert "hidden" in param_name or "output" in param_name or "embedding" in param_name, "Name {} of network layers not understood".format(param_name)
+            if "output" not in param_name:
+                param[1].requires_grad = False
+
+    def unfreeze_all_layers(self, network):
+        """Unfreezes all layers of a network"""
+        print("Unfreezing all layers")
+        for param in network.parameters():
+            param.requires_grad = True
 
     @staticmethod
     def move_gradients_one_model_to_another(from_model, to_model, set_from_gradients_to_zero=False):
