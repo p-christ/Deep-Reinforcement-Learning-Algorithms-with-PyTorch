@@ -112,7 +112,7 @@ class Base_Agent(object):
     def setup_logger(self):
         """Sets up the logger"""
         filename = "Training.log"
-        os.remove(filename)
+        if os.path.isfile(filename): os.remove(filename)
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
         # create a file handler

@@ -91,7 +91,7 @@ def test_sample_statistics_correct():
                     count = Counter(actions)
                     action_count = count[0]
                     for action in range(num_actions):
-                        assert abs(count[action] - action_count) < 2
-                        print(count[action])
+                        assert abs(count[action] - action_count) < 2, print(count[action])
+
 
 
