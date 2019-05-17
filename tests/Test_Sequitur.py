@@ -236,6 +236,23 @@ def test_episode_frequency_count():
     _, _, _, episode_appearance_of_rules = obj.generate_action_grammar(string)
     assert episode_appearance_of_rules == {(0, 1): 3, (2, 2): 1}, episode_appearance_of_rules
 
+    string = [0, 1, 0, 1, "/", 0, 1, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 0, 1, "/", 0, 1, 2, 2, 2, 2, "/"]
+    _, _, new_count_symbol, episode_appearance_of_rules = obj.generate_action_grammar(string)
+
+    string = [0, 1, 0, 1, "/", 0, 1, 0, 1, "/", 0, 1, 2, 2, 2, 2, "/"]
+    _, _, new_count_symbol, episode_appearance_of_rules = obj.generate_action_grammar(string)
+    assert episode_appearance_of_rules == {(0, 1): 3, (2, 2): 1, (0, 1, 0, 1): 2}, episode_appearance_of_rules
+
+    string = [0, 1, 0, 1, "/", 0, 1, 0, 1, "/", 0, 1, 2, 2, 2, 2, "/", 0, 1, "/"]
+    _, _, new_count_symbol, episode_appearance_of_rules = obj.generate_action_grammar(string)
+    assert episode_appearance_of_rules == {(0, 1): 4, (2, 2): 1, (0, 1, 0, 1): 2}, episode_appearance_of_rules
+
+    string = [0, 1, 0, 1, "/", 0, 1, 0, 1, "/", 0, 1, 2, 2, 2, 2, "/", 0, 1, 0, 1, "/"]
+    _, _, new_count_symbol, episode_appearance_of_rules = obj.generate_action_grammar(string)
+    assert episode_appearance_of_rules == {(0, 1): 4, (2, 2): 1, (0, 1, 0, 1): 3}, episode_appearance_of_rules
+    assert new_count_symbol == {(0, 1): 7, (2, 2): 2, (0, 1, 0, 1): 3}, episode_appearance_of_rules
+
+
 def test_throws_error_if_end_of_episode_symbol_not_there():
     """Checks that it throws an error if end of episode symbol not in right place"""
     with pytest.raises(AssertionError):

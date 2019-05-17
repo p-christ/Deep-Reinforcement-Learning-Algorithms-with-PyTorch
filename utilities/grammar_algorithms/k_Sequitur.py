@@ -32,9 +32,17 @@ class k_Sequitur(object):
         new_actions, all_rules, rule_usage, rules_episode_appearance_count = self.discover_all_rules_and_new_actions_representation(actions)
 
         print("New actions ", new_actions)
-        print("Rule usage ", rule_usage)
+        print("Rule usage BEFORE ", rule_usage)
 
         action_usage = self.extract_action_usage_from_rule_usage(rule_usage, all_rules)
+
+        print("Rule usage AFTER ", action_usage)
+        print("RULE APPEARANCE BEFORE ", rules_episode_appearance_count)
+
+        rules_episode_appearance_count = self.extract_action_usage_from_rule_usage(rules_episode_appearance_count,
+                                                                                   all_rules)
+
+        print("RULE APPEARANCE AFTER ", rules_episode_appearance_count)
         return new_actions, all_rules, action_usage, rules_episode_appearance_count
 
     def discover_all_rules_and_new_actions_representation(self, actions):
@@ -70,13 +78,7 @@ class k_Sequitur(object):
                 if rule_apperance_tracker[key] == 1:
                     rules_episode_appearance_count[key] += 1
 
-        primitive_rules_episode_appearance_count = {}
-        for rule in rules_episode_appearance_count.keys():
-            primitive_actions = all_rules[rule]
-            primitive_rules_episode_appearance_count[primitive_actions] = rules_episode_appearance_count[rule]
-
-
-        return new_actions, all_rules, rule_usage, primitive_rules_episode_appearance_count
+        return new_actions, all_rules, rule_usage, rules_episode_appearance_count
 
     def generate_1_layer_of_rules(self, string):
         """Generate dictionaries indicating the pair of symbols that appear next to each other more than self.k times"""
@@ -156,6 +158,7 @@ class k_Sequitur(object):
             if string[ix] == self.end_of_episode_symbol:
                 rules_used_this_episode = set(rules_used_this_episode)
                 for rule in rules_used_this_episode:
+                    print("Rule ", rule)
                     rules_episode_appearance_tracker[episode][rule] = 1
                 rules_used_this_episode = []
                 episode += 1

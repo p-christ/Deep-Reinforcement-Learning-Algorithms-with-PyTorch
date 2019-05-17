@@ -17,5 +17,6 @@ class Config(object):
         self.standard_deviation_results = 1.0
         self.randomise_random_seed = True
         self.show_solution_score = False
+        self.debug_mode = False
 
 

@@ -1,6 +1,10 @@
 *.pyc
 *cache
 *.idea
+*.log
+*logs/
+logs/
+runs/
 *__pycache__
 .DS_Store
 drlnd/

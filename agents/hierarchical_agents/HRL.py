@@ -1,4 +1,6 @@
 import random
+from collections import Counter
+
 from gym import Wrapper, spaces
 from torch import nn, optim
 from Base_Agent import Base_Agent
@@ -27,6 +29,11 @@ from operator import itemgetter
 # TODO change so its the action rules used in most of best performing episodes that get used rather than
 #      those that occur the most overall. because a better episode ends faster and so less occurances of actions!!
 #      maybe even pick out the fixed X many actions from the top performing episodes no matter how many episodes
+# TODO option for just adding nodes to final layer rather than removing the final layer completely
+# TODO don't retrain if there's no new actions...
+# TODO have higher minimum bound for number episodes to retrain on
+# TODO learn from best ever performing episodes? or best performing in latest iteration?[\']
+
 
 class HRL(Base_Agent):
     agent_name = "HRL"
@@ -47,6 +54,7 @@ class HRL(Base_Agent):
         self.copy_over_hidden_layers = self.hyperparameters["copy_over_hidden_layers"]
 
         self.global_action_id_to_primitive_action = {k: tuple([k]) for k in range(self.action_size)}
+        self.num_top_results_to_use = self.episodes_to_run_with_no_exploration
 
         self.agent = DDQN_Wrapper(config, self.global_action_id_to_primitive_action,
                              self.update_reward_to_encourage_longer_macro_actions, self.memory_shaper)
@@ -68,6 +76,8 @@ class HRL(Base_Agent):
             actions_to_infer_grammar_from = self.pick_actions_to_infer_grammar_from(
                 self.episode_actions_scores_and_exploration_status)
 
+            num_actions_before = len(self.global_action_id_to_primitive_action)
+
             self.update_action_choices(actions_to_infer_grammar_from)
 
             print("New actions ", self.global_action_id_to_primitive_action)
@@ -78,8 +88,6 @@ class HRL(Base_Agent):
 
             for key, value in self.global_action_id_to_primitive_action.items():
                 assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
-            replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(
-                self.global_action_id_to_primitive_action)
 
             self.grammar_induction_iteration += 1
 
@@ -89,14 +97,17 @@ class HRL(Base_Agent):
             self.agent.update_agent_for_new_actions(self.global_action_id_to_primitive_action,
                                                     copy_over_hidden_layers=self.copy_over_hidden_layers)
 
+            if num_actions_before != len(self.global_action_id_to_primitive_action):
+                replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(
+                    self.global_action_id_to_primitive_action)
 
-            print(" ------ ")
-            print("Length of buffer {} -- Actions {} -- Pre training iterations {}".format(len(replay_buffer),
-                                                                                           current_num_actions,
-                                                                                           PRE_TRAINING_ITERATIONS))
-            print(" ------ ")
-            self.overwrite_replay_buffer_and_pre_train_agent(replay_buffer, PRE_TRAINING_ITERATIONS,
-                                                             only_train_final_layer=False)
+                print(" ------ ")
+                print("Length of buffer {} -- Actions {} -- Pre training iterations {}".format(len(replay_buffer),
+                                                                                               current_num_actions,
+                                                                                               PRE_TRAINING_ITERATIONS))
+                print(" ------ ")
+                self.overwrite_replay_buffer_and_pre_train_agent(replay_buffer, PRE_TRAINING_ITERATIONS,
+                                                                 only_train_final_layer=False)
             print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
 
         return self.game_full_episode_scores, self.rolling_results
@@ -104,7 +115,7 @@ class HRL(Base_Agent):
     def calculate_how_many_episodes_to_play(self):
         """Calculates how many episodes the agent should play until we re-infer the grammar"""
         episodes_to_play = self.hyperparameters["epsilon_decay_rate_denominator"] / self.grammar_induction_iteration
-        episodes_to_play = int(max(self.episodes_to_run_with_no_exploration * 2, episodes_to_play))
+        episodes_to_play = max(50, int(max(self.episodes_to_run_with_no_exploration * 2, episodes_to_play)))
         print("Grammar iteration {} -- Episodes to play {}".format(self.grammar_induction_iteration, episodes_to_play))
         return episodes_to_play
 
@@ -114,9 +125,7 @@ class HRL(Base_Agent):
         episode_scores = [data[0] for data in episode_actions_scores_and_exploration_status]
         episode_actions = [data[1] for data in episode_actions_scores_and_exploration_status]
         reverse_ordering = np.argsort(episode_scores)
-        top_results = list(reverse_ordering[-self.episodes_to_run_with_no_exploration*2:])
-
-
+        top_results = list(reverse_ordering[-self.num_top_results_to_use:])
 
         best_episode_actions = list(itemgetter(*top_results)(episode_actions))
         best_episode_actions = [item for sublist in best_episode_actions for item in sublist]
@@ -128,9 +137,9 @@ class HRL(Base_Agent):
         grammar_calculator = k_Sequitur(k=self.config.hyperparameters["sequitur_k"],
                                         end_of_episode_symbol=self.end_of_episode_symbol)
         print("latest_macro_actions_seen ", latest_macro_actions_seen)
-        _, _, macro_action_sequence_appearance_count = grammar_calculator.generate_action_grammar(latest_macro_actions_seen)
-        print("NEW sequence_appearance_count ", macro_action_sequence_appearance_count)
-        new_actions = self.pick_new_macro_actions(macro_action_sequence_appearance_count)
+        _, _, _, rules_episode_appearance_count = grammar_calculator.generate_action_grammar(latest_macro_actions_seen)
+        print("NEW rules_episode_appearance_count ", rules_episode_appearance_count)
+        new_actions = self.pick_new_macro_actions(rules_episode_appearance_count)
         self.update_global_action_id_to_primitive_action(new_actions)
 
     def update_global_action_id_to_primitive_action(self, new_actions):
@@ -141,20 +150,18 @@ class HRL(Base_Agent):
             self.global_action_id_to_primitive_action[next_action_name] = value
             next_action_name += 1
 
-    def pick_new_macro_actions(self, new_count_symbol):
+    def pick_new_macro_actions(self, rules_episode_appearance_count):
         """Picks the new macro actions to be made available to the agent. Returns them in the form {action_id: (action_1, action_2, ...)}.
         NOTE there are many ways to do this... i should do experiments testing different ways and report the results
         """
         new_unflattened_actions = {}
-        total_actions = np.sum([new_count_symbol[rule] for rule in new_count_symbol.keys()])
-        cutoff = total_actions * 0.07
-        assert cutoff != 0.0, new_count_symbol
+        cutoff = self.num_top_results_to_use * 0.7
         print(" ")
         print("Cutoff ", cutoff)
         print(" ")
         action_id = len(self.global_action_id_to_primitive_action.keys())
-        for rule in new_count_symbol.keys():
-            count = new_count_symbol[rule]
+        for rule in rules_episode_appearance_count.keys():
+            count = rules_episode_appearance_count[rule]
             print("Rule {} -- Count {}".format(rule, count))
             if count >= cutoff:
                 new_unflattened_actions[action_id] = rule
@@ -172,7 +179,8 @@ class HRL(Base_Agent):
             print("Only training the final layer")
             self.freeze_all_but_output_layers(self.agent.q_network_local)
         for _ in range(training_iterations):
-            self.agent.learn()
+            output = self.agent.learn(print_loss=False)
+            if output == "BREAK": break
         if only_train_final_layer: self.unfreeze_all_layers(self.agent.q_network_local)
 
     def update_reward_to_encourage_longer_macro_actions(self, cumulative_reward, length_of_macro_action):
@@ -195,10 +203,11 @@ class DDQN_Wrapper(DDQN):
         self.memory_shaper = memory_shaper
 
     def update_agent_for_new_actions(self, action_id_to_primitive_actions, copy_over_hidden_layers):
+        num_actions_before = self.action_size
         self.action_id_to_primitive_actions = action_id_to_primitive_actions
         self.action_size = len(action_id_to_primitive_actions)
-        self.change_final_layer_q_network(copy_over_hidden_layers)
-
+        if num_actions_before != self.action_size:
+            self.change_final_layer_q_network(copy_over_hidden_layers)
 
     def change_final_layer_q_network(self, copy_over_hidden_layers):
         """Changes the final layer of the q network to accomodate the new action space"""
@@ -216,6 +225,7 @@ class DDQN_Wrapper(DDQN):
                                               lr=self.hyperparameters["learning_rate"])
 
     def run_n_episodes(self, num_episodes, episodes_to_run_with_no_exploration):
+        self.turn_on_any_epsilon_greedy_exploration()
 
         self.episode_actions_scores_and_exploration_status = []
         num_episodes_to_get_to = self.episode_number + num_episodes
@@ -236,12 +246,29 @@ class DDQN_Wrapper(DDQN):
 
         return self.episode_actions_scores_and_exploration_status
 
+
+    def learn(self, experiences=None, print_loss=False):
+        """Runs a learning iteration for the Q network"""
+        if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
+        else: states, actions, rewards, next_states, dones = experiences
+        loss = self.compute_loss(states, next_states, rewards, actions, dones)
+        if print_loss:
+            print("Loss ", loss)
+            if loss.item() < 0.1:
+                return "BREAK"
+        self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
+        self.soft_update_of_target_network(self.q_network_local, self.q_network_target,
+                                           self.hyperparameters["tau"])  # Update the target network
+
+
     def step(self):
         """Runs a step within a game including a learning step if required"""
         self.total_episode_score_so_far = 0
         macro_state = self.state
         state = self.state
         done = self.done
+
+        episode_macro_actions = []
 
         while not done:
             macro_action = self.pick_action(state=macro_state)
@@ -265,6 +292,9 @@ class DDQN_Wrapper(DDQN):
             self.save_experience(experience=(macro_state, macro_action, macro_reward, macro_next_state, macro_done))
             macro_state = macro_next_state
 
+            episode_macro_actions.append(macro_action)
+        if random.random() < 0.1: print(Counter(episode_macro_actions))
+
         self.store_episode_in_memory_shaper()
         self.save_episode_actions_with_score()
         self.episode_number += 1
@@ -277,6 +307,7 @@ class DDQN_Wrapper(DDQN):
         self.episode_dones.append(done)
 
     def save_episode_actions_with_score(self):
+
         self.episode_actions_scores_and_exploration_status.append([self.total_episode_score_so_far,
                                                                    self.episode_actions + [self.end_of_episode_symbol],
                                                                    self.turn_off_exploration])

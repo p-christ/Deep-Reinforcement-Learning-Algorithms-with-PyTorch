@@ -1,3 +1,5 @@
+import logging
+import os
 import sys
 import gym
 import random
@@ -5,10 +7,16 @@ import numpy as np
 import torch
 import time
 from nn_builder.pytorch.NN import NN
+# from tensorboardX import SummaryWriter
+from torch.optim import optimizer
+
 
 class Base_Agent(object):
     
     def __init__(self, config):
+        self.logger = self.setup_logger()
+        self.debug_mode = config.debug_mode
+        # if self.debug_mode: self.tensorboard = SummaryWriter()
         self.config = config
         self.set_random_seeds(config.seed)
         self.environment = config.environment
@@ -35,6 +43,7 @@ class Base_Agent(object):
         self.global_step_number = 0
         self.turn_off_exploration = False
         gym.logger.set_level(40)  # stops it from printing an unnecessary warning
+        self.log_game_info()
 
     def step(self):
         """Takes a step in the game. This method must be overriden by any agent"""
@@ -43,7 +52,7 @@ class Base_Agent(object):
     def get_environment_title(self):
         """Extracts name of environment from it"""
         try:
-            return self.environment.unwrapped.id
+            name = self.environment.unwrapped.id
         except AttributeError:
             try:
                 if str(self.environment.unwrapped)[1:11] == "FetchReach": return "FetchReach"
@@ -51,15 +60,14 @@ class Base_Agent(object):
                 elif str(self.environment.unwrapped)[1:7] == "Hopper": return "Hopper"
                 elif str(self.environment.unwrapped)[1:9] == "Walker2d": return "Walker2d"
                 else:
-                    title = self.environment.spec.id.split("-")[0]
-                    return title
+                    name = self.environment.spec.id.split("-")[0]
             except AttributeError:
                 name = str(self.environment.env)
                 if name[0:10] == "TimeLimit<": name = name[10:]
                 name = name.split(" ")[0]
                 if name[0] == "<": name = name[1:]
                 if name[-3:] == "Env": name = name[:-3]
-                return name
+        return name
 
     def get_lowest_possible_episode_score(self):
         """Returns the lowest possible episode score you can get in an environment"""
@@ -101,6 +109,27 @@ class Base_Agent(object):
         try: return self.environment.unwrapped.trials
         except AttributeError: return self.environment.spec.trials
 
+    def setup_logger(self):
+        """Sets up the logger"""
+        filename = "Training.log"
+        os.remove(filename)
+        logger = logging.getLogger(__name__)
+        logger.setLevel(logging.INFO)
+        # create a file handler
+        handler = logging.FileHandler(filename)
+        handler.setLevel(logging.INFO)
+        # create a logging format
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        # add the handlers to the logger
+        logger.addHandler(handler)
+        return logger
+
+    def log_game_info(self):
+        """Logs info relating to the game"""
+        for param in self.__dict__.keys():
+            self.logger.info("{} -- {}".format(param, self.__dict__[param]))
+
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
         torch.backends.cudnn.deterministic = True
@@ -127,6 +156,7 @@ class Base_Agent(object):
         self.episode_achieved_goals = []
         self.episode_observations = []
         if "exploration_strategy" in self.__dict__.keys(): self.exploration_strategy.reset()
+        self.logger.info("Reseting game -- New start state {}".format(self.state))
 
     def track_episodes_data(self):
         """Saves the data from the recent episodes"""
@@ -217,6 +247,7 @@ class Base_Agent(object):
                 new_lr = starting_lr
             for g in optimizer.param_groups:
                 g['lr'] = new_lr
+        if random.random() < 0.001: self.logger.info("Learning rate {}".format(new_lr))
 
     def enough_experiences_to_learn_from(self):
         """Boolean indicated whether there are enough experiences in the memory buffer to learn from"""
@@ -232,10 +263,28 @@ class Base_Agent(object):
         """Takes an optimisation step by calculating gradients given the loss and then updating the parameters"""
         optimizer.zero_grad() #reset gradients to 0
         loss.backward(retain_graph=retain_graph) #this calculates the gradients
+        self.logger.info("Loss -- {}".format(loss.item()))
+        if self.debug_mode: self.log_gradient_and_weight_information(network, optimizer)
         if clipping_norm is not None:
             torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
-    
+
+    def log_gradient_and_weight_information(self, network, optimizer):
+
+        # log weight information
+        total_norm = 0
+        for name, param in network.named_parameters():
+            param_norm = param.grad.data.norm(2)
+            total_norm += param_norm.item() ** 2
+        total_norm = total_norm ** (1. / 2)
+        self.logger.info("Gradient Norm {}".format(total_norm))
+
+        for g in optimizer.param_groups:
+            learning_rate = g['lr']
+            break
+        self.logger.info("Learning Rate {}".format(learning_rate))
+
+
     def soft_update_of_target_network(self, local_model, target_model, tau):
         """Updates the target network in the direction of the local network but by taking a step size
         less than one so the target network's parameter values trail the local networks. This helps stabilise training"""
@@ -266,8 +315,13 @@ class Base_Agent(object):
                   embedding_dimensions=hyperparameters["embedding_dimensions"], y_range=hyperparameters["y_range"],
                   random_seed=seed).to(self.device)
 
+    def turn_on_any_epsilon_greedy_exploration(self):
+        """Turns off all exploration with respect to the epsilon greedy exploration strategy"""
+        print("Turning on epsilon greedy exploration")
+        self.turn_off_exploration = False
+
     def turn_off_any_epsilon_greedy_exploration(self):
-        """Turns off all exploration in epsilon greedy method"""
+        """Turns off all exploration with respect to the epsilon greedy exploration strategy"""
         print("Turning off epsilon greedy exploration")
         self.turn_off_exploration = True
 

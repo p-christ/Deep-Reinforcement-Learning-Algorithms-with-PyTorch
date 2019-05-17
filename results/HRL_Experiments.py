@@ -10,8 +10,8 @@ from agents.DQN_agents.DQN import DQN
 from agents.hierarchical_agents.h_DQN import h_DQN
 
 config = Config()
-config.seed = 1
 config.environment = gym.make("Taxi-v2")
+config.seed = 1
 config.env_parameters = {}
 config.num_episodes_to_run = 2000
 config.file_to_save_data_results = None
@@ -28,15 +28,15 @@ config.save_model = False
 
 
 linear_hidden_units = [32, 32]
-learning_rate = 0.001
+learning_rate = 0.01
 buffer_size = 100000
 batch_size = 256
 batch_norm = False
 embedding_dimensionality = 10
-gradient_clipping_norm = 0.5  #try this even lower...
+gradient_clipping_norm = 5
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 150
+epsilon_decay_rate_denominator = 400
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 2
@@ -45,7 +45,6 @@ episodes_to_run_with_no_exploration = 10
 action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
 action_length_reward_bonus = 0.1
-config.debug_mode = False
 
 config.hyperparameters = {
 
