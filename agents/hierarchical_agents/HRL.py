@@ -32,6 +32,7 @@ from operator import itemgetter
 # TODO option for just adding nodes to final layer rather than removing the final layer completely
 # TODO have higher minimum bound for number episodes to retrain on
 # TODO try starting with all the 2 step moves as macro actions...  or even starting with random macro actions?
+# TODO try having the threshold for how often need see actions come down throughout training?
 
 
 class HRL(Base_Agent):
@@ -252,6 +253,10 @@ class DDQN_Wrapper(DDQN):
         self.action_size = len(action_id_to_primitive_actions)
         if num_actions_before != self.action_size:
             self.change_final_layer_q_network(copy_over_hidden_layers)
+
+    # def add_another_final_layer_q_network(self):
+    #     self.q_network_local.output_layers.append(nn.Linear(in_features=self.q_network_local.output_layers[0].in_features,
+    #                                                       out_features=self.action_size))
 
     def change_final_layer_q_network(self, copy_over_hidden_layers):
         """Changes the final layer of the q network to accomodate the new action space"""

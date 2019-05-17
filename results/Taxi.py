@@ -44,6 +44,8 @@ pre_training_learning_iterations_multiplier = 25
 episodes_to_run_with_no_exploration = 10
 action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
+keep_previous_output_layer = True
+
 action_length_reward_bonus = 0.1
 use_global_list_of_best_performing_actions = True
 config.debug_mode = False
@@ -71,7 +73,8 @@ config.hyperparameters = {
         "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration,
         "action_balanced_replay_buffer": action_balanced_replay_buffer,
         "copy_over_hidden_layers": copy_over_hidden_layers,
-        "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions
+        "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions,
+        "keep_previous_output_layer": keep_previous_output_layer
     },
 
     "DQN_Agents": {
