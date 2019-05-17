@@ -30,19 +30,9 @@ class k_Sequitur(object):
         assert len(actions) > 0, "Need to provide a list of at least 1 action"
         assert isinstance(actions[0], int), "The actions should be integers"
         new_actions, all_rules, rule_usage, rules_episode_appearance_count = self.discover_all_rules_and_new_actions_representation(actions)
-
-        print("New actions ", new_actions)
-        print("Rule usage BEFORE ", rule_usage)
-
         action_usage = self.extract_action_usage_from_rule_usage(rule_usage, all_rules)
-
-        print("Rule usage AFTER ", action_usage)
-        print("RULE APPEARANCE BEFORE ", rules_episode_appearance_count)
-
         rules_episode_appearance_count = self.extract_action_usage_from_rule_usage(rules_episode_appearance_count,
                                                                                    all_rules)
-
-        print("RULE APPEARANCE AFTER ", rules_episode_appearance_count)
         return new_actions, all_rules, action_usage, rules_episode_appearance_count
 
     def discover_all_rules_and_new_actions_representation(self, actions):
@@ -52,21 +42,15 @@ class k_Sequitur(object):
         current_actions = None
         new_actions = actions
         rule_usage = defaultdict(int)
-        print("Step 1")
-
         num_episodes = Counter(actions)[self.end_of_episode_symbol]
-
         rules_episode_appearance_tracker = {k: defaultdict(int) for k in range(num_episodes)}
 
         while new_actions != current_actions:
             current_actions = new_actions
-            print("Current actions ", current_actions)
             rules, reverse_rules = self.generate_1_layer_of_rules(current_actions)
-            print("Rules generated here ", rules)
             all_rules.update(rules)
             new_actions, rules_usage_count = self.convert_a_string_using_reverse_rules(current_actions, reverse_rules,
                                                                                        rules_episode_appearance_tracker)
-            print("Rules usage count here ", rules_usage_count)
             for key in rules_usage_count.keys():
                 rule_usage[key] += rules_usage_count[key]
 
@@ -158,7 +142,6 @@ class k_Sequitur(object):
             if string[ix] == self.end_of_episode_symbol:
                 rules_used_this_episode = set(rules_used_this_episode)
                 for rule in rules_used_this_episode:
-                    print("Rule ", rule)
                     rules_episode_appearance_tracker[episode][rule] = 1
                 rules_used_this_episode = []
                 episode += 1

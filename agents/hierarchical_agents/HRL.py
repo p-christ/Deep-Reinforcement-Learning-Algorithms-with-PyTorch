@@ -30,9 +30,8 @@ from operator import itemgetter
 #      those that occur the most overall. because a better episode ends faster and so less occurances of actions!!
 #      maybe even pick out the fixed X many actions from the top performing episodes no matter how many episodes
 # TODO option for just adding nodes to final layer rather than removing the final layer completely
-# TODO don't retrain if there's no new actions...
 # TODO have higher minimum bound for number episodes to retrain on
-# TODO learn from best ever performing episodes? or best performing in latest iteration?[\']
+# TODO try starting with all the 2 step moves as macro actions...  or even starting with random macro actions?
 
 
 class HRL(Base_Agent):
@@ -52,6 +51,7 @@ class HRL(Base_Agent):
         self.episodes_to_run_with_no_exploration = self.hyperparameters["episodes_to_run_with_no_exploration"]
         self.pre_training_learning_iterations_multiplier = self.hyperparameters["pre_training_learning_iterations_multiplier"]
         self.copy_over_hidden_layers = self.hyperparameters["copy_over_hidden_layers"]
+        self.use_global_list_of_best_performing_actions = self.hyperparameters["use_global_list_of_best_performing_actions"]
 
         self.global_action_id_to_primitive_action = {k: tuple([k]) for k in range(self.action_size)}
         self.num_top_results_to_use = self.episodes_to_run_with_no_exploration
@@ -59,7 +59,11 @@ class HRL(Base_Agent):
         self.agent = DDQN_Wrapper(config, self.global_action_id_to_primitive_action,
                              self.update_reward_to_encourage_longer_macro_actions, self.memory_shaper)
 
+        self.global_list_of_best_results = []
+
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
+
+        start = time.time()
 
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
         self.num_episodes = num_episodes
@@ -78,7 +82,12 @@ class HRL(Base_Agent):
 
             num_actions_before = len(self.global_action_id_to_primitive_action)
 
-            self.update_action_choices(actions_to_infer_grammar_from)
+            if self.infer_new_grammar:
+
+                self.update_action_choices(actions_to_infer_grammar_from)
+
+            else:
+                print("NOT inferring new grammar because no better results found")
 
             print("New actions ", self.global_action_id_to_primitive_action)
 
@@ -110,7 +119,9 @@ class HRL(Base_Agent):
                                                                  only_train_final_layer=False)
             print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
 
-        return self.game_full_episode_scores, self.rolling_results
+        time_taken = time.time() - start
+
+        return self.game_full_episode_scores, self.rolling_results, time_taken
 
     def calculate_how_many_episodes_to_play(self):
         """Calculates how many episodes the agent should play until we re-infer the grammar"""
@@ -119,17 +130,50 @@ class HRL(Base_Agent):
         print("Grammar iteration {} -- Episodes to play {}".format(self.grammar_induction_iteration, episodes_to_play))
         return episodes_to_play
 
+    def keep_track_of_best_results_seen_so_far(self, top_results, best_episode_actions):
+        """Keeps a track of the top episode results so far & the actions played in those episodes"""
+        self.infer_new_grammar = True
+
+        old_result = copy.deepcopy(self.global_list_of_best_results)
+
+        combined_result = [(result, actions) for result, actions in zip(top_results, best_episode_actions)]
+        self.logger.info("New Candidate Best Results: {}".format(combined_result))
+
+        self.global_list_of_best_results += combined_result
+        self.global_list_of_best_results.sort(key=lambda x: x[0], reverse=True)
+        self.global_list_of_best_results = self.global_list_of_best_results[:self.num_top_results_to_use]
+
+        self.logger.info("After Best Results: {}".format(self.global_list_of_best_results))
+
+        assert isinstance(self.global_list_of_best_results, list)
+        assert isinstance(self.global_list_of_best_results[0], tuple)
+        assert len(self.global_list_of_best_results[0]) == 2
+
+
+        if old_result == self.global_list_of_best_results:
+            self.infer_new_grammar = False
+
     def pick_actions_to_infer_grammar_from(self, episode_actions_scores_and_exploration_status):
         """Takes in data summarising the results of the latest games the agent played and then picks the actions from which
         we want to base the subsequent action grammar on"""
         episode_scores = [data[0] for data in episode_actions_scores_and_exploration_status]
         episode_actions = [data[1] for data in episode_actions_scores_and_exploration_status]
         reverse_ordering = np.argsort(episode_scores)
-        top_results = list(reverse_ordering[-self.num_top_results_to_use:])
+        top_result_indexes = list(reverse_ordering[-self.num_top_results_to_use:])
 
-        best_episode_actions = list(itemgetter(*top_results)(episode_actions))
+        best_episode_actions = list(itemgetter(*top_result_indexes)(episode_actions))
+        best_episode_rewards = list(itemgetter(*top_result_indexes)(episode_scores))
+
+        if self.use_global_list_of_best_performing_actions:
+            self.keep_track_of_best_results_seen_so_far(best_episode_rewards, best_episode_actions)
+            best_episode_actions = [data[1] for data in self.global_list_of_best_results]
+            print("AFTER ", best_episode_actions)
+            print("AFter best results ", [data[0] for data in self.global_list_of_best_results])
+
         best_episode_actions = [item for sublist in best_episode_actions for item in sublist]
-        print("Best episode results ", itemgetter(*top_results)(episode_scores))
+
+
+
         return best_episode_actions
 
     def update_action_choices(self, latest_macro_actions_seen):

@@ -14,8 +14,8 @@ config.seed = 1
 config.environment = gym.make("Taxi-v2")
 config.env_parameters = {}
 config.num_episodes_to_run = 2000
-config.file_to_save_data_results = None
-config.file_to_save_results_graph = None
+config.file_to_save_data_results = "data_and_graphs/Taxi_data.pkl"
+config.file_to_save_results_graph = "data_and_graphs/Taxi_graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -33,18 +33,19 @@ buffer_size = 100000
 batch_size = 256
 batch_norm = False
 embedding_dimensionality = 10
-gradient_clipping_norm = 0.5  #try this even lower...
+gradient_clipping_norm = 0.5  #needs to be optimised
 update_every_n_steps = 1
 learning_iterations = 1
 epsilon_decay_rate_denominator = 150
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 2
-pre_training_learning_iterations_multiplier = 50
+pre_training_learning_iterations_multiplier = 25
 episodes_to_run_with_no_exploration = 10
 action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
 action_length_reward_bonus = 0.1
+use_global_list_of_best_performing_actions = True
 config.debug_mode = False
 
 config.hyperparameters = {
@@ -69,7 +70,8 @@ config.hyperparameters = {
         "pre_training_learning_iterations_multiplier": pre_training_learning_iterations_multiplier,
         "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration,
         "action_balanced_replay_buffer": action_balanced_replay_buffer,
-        "copy_over_hidden_layers": copy_over_hidden_layers
+        "copy_over_hidden_layers": copy_over_hidden_layers,
+        "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions
     },
 
     "DQN_Agents": {
@@ -134,7 +136,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [HRL] #SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [HRL] #  DDQN] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 
