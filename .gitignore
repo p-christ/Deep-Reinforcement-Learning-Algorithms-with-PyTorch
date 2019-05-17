@@ -14,5 +14,5 @@ mujoco200_macos/
 Random_Junkyard/
 *to_do_list
 Notebook.ipynb
-Results/Notebook.ipynb
+deep_reinforcement_learning_algorithms_with_pytorch/results/Notebook.ipynb
 *.ipynb_checkpoints

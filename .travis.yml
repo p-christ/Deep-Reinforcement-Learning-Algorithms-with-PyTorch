@@ -11,16 +11,16 @@ install:
 
 script:
   - export PYTHONPATH="$PYTHONPATH:$PWD"
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/agents""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/agents/DQN_agents""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/agents/hierarchical_agents""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/agents/actor_critic_agents""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/agents/policy_gradient_agents""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities/data_structures""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/environments""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/exploration_strategies""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/*""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/agents/DQN_agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/agents/hierarchical_agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/agents/actor_critic_agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/agents/policy_gradient_agents""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/utilities/data_structures""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/environments""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/utilities""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/exploration_strategies""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/deep_reinforcement_learning_algorithms_with_pytorch/*""
   - pytest tests/*.py
 
 
