@@ -9,6 +9,8 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
     def __init__(self, buffer_size, batch_size, seed, num_actions):
         self.num_actions = num_actions
         self.buffer_size_per_memory = int(buffer_size / self.num_actions)
+
+        print("NUM ACTIONS ", self.num_actions)
         self.memories = {action: deque(maxlen=self.buffer_size_per_memory) for action in range(self.num_actions)}
         self.batch_size = batch_size
         self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])

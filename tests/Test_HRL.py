@@ -2,6 +2,7 @@ import gym
 import pytest
 
 from HRL import HRL
+from Utility_Functions import flatten_action_id_to_actions
 from utilities.data_structures.Config import Config
 
 config = Config()
@@ -53,36 +54,39 @@ config.hyperparameters = {
         "learning_iterations": learning_iterations,
         "tau": tau,
         "sequitur_k": sequitur_k,
-        "action_length_reward_bonus": 0.1
+        "action_length_reward_bonus": 0.1,
+        "episodes_to_run_with_no_exploration": 10,
+        "pre_training_learning_iterations_multiplier": 0.1,
+        "copy_over_hidden_layers": True,
+        "use_global_list_of_best_performing_actions": True
 }
 
 
 hrl = HRL(config)
 
-def test_flatten_action_id_to_actions():
-    """Tests flatten_action_id_to_actions"""
-    action_id_to_actions = {0: (0,), 1:(1,), 2:(0, 1), 3: (2, 1), 4:(2, 3)}
-    original_number_of_primitive_actions = 2
-    flattened_action_id_to_actions = hrl.flatten_action_id_to_actions(action_id_to_actions, original_number_of_primitive_actions)
-    assert flattened_action_id_to_actions == {0: (0,), 1:(1,), 2:(0, 1), 3: (0, 1, 1), 4:(0, 1, 0, 1, 1)}, flattened_action_id_to_actions
-
-    action_id_to_actions = {0: (0,), 1:(1,), 2:(2,)}
-    original_number_of_primitive_actions = 3
-    flattened_action_id_to_actions = hrl.flatten_action_id_to_actions(action_id_to_actions, original_number_of_primitive_actions)
-    assert flattened_action_id_to_actions == action_id_to_actions
-
-    with pytest.raises(AssertionError):
-        action_id_to_actions = {0: (0,), 1: (1,), 2: (2,)}
-        original_number_of_primitive_actions = 4
-        flattened_action_id_to_actions = hrl.flatten_action_id_to_actions(action_id_to_actions,
-                                                                          original_number_of_primitive_actions)
-    with pytest.raises(AssertionError):
-        action_id_to_actions = {0: (0,), 1: (1,), 2: (2, 2)}
-        original_number_of_primitive_actions = 3
-        flattened_action_id_to_actions = hrl.flatten_action_id_to_actions(action_id_to_actions,
-                                                                          original_number_of_primitive_actions)
-
-
-
-
+# def test_flatten_action_id_to_actions():
+#     """Tests flatten_action_id_to_actions"""
+#     action_id_to_actions = {0: (0,), 1:(1,), 2:(0, 1), 3: (2, 1), 4:(2, 3)}
+#     original_number_of_primitive_actions = 2
+#
+#
+#
+#     flattened_action_id_to_actions = flatten_action_id_to_actions(action_id_to_actions, original_number_of_primitive_actions)
+#     assert flattened_action_id_to_actions == {0: (0,), 1:(1,), 2:(0, 1), 3: (0, 1, 1), 4:(0, 1, 0, 1, 1)}, flattened_action_id_to_actions
+#
+#     action_id_to_actions = {0: (0,), 1:(1,), 2:(2,)}
+#     original_number_of_primitive_actions = 3
+#     flattened_action_id_to_actions = flatten_action_id_to_actions(action_id_to_actions, original_number_of_primitive_actions)
+#     assert flattened_action_id_to_actions == action_id_to_actions
+#
+#     with pytest.raises(AssertionError):
+#         action_id_to_actions = {0: (0,), 1: (1,), 2: (2,)}
+#         original_number_of_primitive_actions = 4
+#         flattened_action_id_to_actions = flatten_action_id_to_actions(action_id_to_actions,
+#                                                                           original_number_of_primitive_actions)
+#     with pytest.raises(AssertionError):
+#         action_id_to_actions = {0: (0,), 1: (1,), 2: (2, 2)}
+#         original_number_of_primitive_actions = 3
+#         flattened_action_id_to_actions = flatten_action_id_to_actions(action_id_to_actions,
+#                                                                           original_number_of_primitive_actions)
 

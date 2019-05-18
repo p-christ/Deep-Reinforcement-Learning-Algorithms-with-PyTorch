@@ -33,6 +33,10 @@ from operator import itemgetter
 # TODO have higher minimum bound for number episodes to retrain on
 # TODO try starting with all the 2 step moves as macro actions...  or even starting with random macro actions?
 # TODO try having the threshold for how often need see actions come down throughout training?
+# TODO fix the tests for memory shaper... very important this works properly
+# TODO when train actions, train 1 action at a time?
+# TODO try just learning off the top 2 episodes? instead of top 10?
+# TODO increase training iterations after change actions
 
 
 class HRL(Base_Agent):
@@ -77,6 +81,7 @@ class HRL(Base_Agent):
                 self.agent.run_n_episodes(num_episodes=self.calculate_how_many_episodes_to_play(),
                                           episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
 
+
             self.episodes_conducted += len(self.episode_actions_scores_and_exploration_status)
             actions_to_infer_grammar_from = self.pick_actions_to_infer_grammar_from(
                 self.episode_actions_scores_and_exploration_status)
@@ -105,7 +110,8 @@ class HRL(Base_Agent):
             PRE_TRAINING_ITERATIONS = self.pre_training_learning_iterations_multiplier * (current_num_actions ** 2)
 
             self.agent.update_agent_for_new_actions(self.global_action_id_to_primitive_action,
-                                                    copy_over_hidden_layers=self.copy_over_hidden_layers)
+                                                    copy_over_hidden_layers=self.copy_over_hidden_layers,
+                                                    change_or_append_final_layer="APPEND")
 
             if num_actions_before != len(self.global_action_id_to_primitive_action):
                 replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(
@@ -120,9 +126,10 @@ class HRL(Base_Agent):
                                                                  only_train_final_layer=False)
             print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
 
+
         time_taken = time.time() - start
 
-        return self.game_full_episode_scores, self.rolling_results, time_taken
+        return self.agent.game_full_episode_scores[:self.num_episodes], self.agent.rolling_results[:self.num_episodes], time_taken
 
     def calculate_how_many_episodes_to_play(self):
         """Calculates how many episodes the agent should play until we re-infer the grammar"""
@@ -247,19 +254,34 @@ class DDQN_Wrapper(DDQN):
         self.bonus_reward_function = bonus_reward_function
         self.memory_shaper = memory_shaper
 
-    def update_agent_for_new_actions(self, action_id_to_primitive_actions, copy_over_hidden_layers):
+    def update_agent_for_new_actions(self, action_id_to_primitive_actions, copy_over_hidden_layers, change_or_append_final_layer):
+        assert change_or_append_final_layer in ["CHANGE", "APPEND"]
         num_actions_before = self.action_size
         self.action_id_to_primitive_actions = action_id_to_primitive_actions
         self.action_size = len(action_id_to_primitive_actions)
-        if num_actions_before != self.action_size:
-            self.change_final_layer_q_network(copy_over_hidden_layers)
+        num_new_actions = self.action_size - num_actions_before
+        if num_new_actions > 0:
+            if change_or_append_final_layer == "CHANGE": self.change_final_layer_q_network(copy_over_hidden_layers)
+            else: self.append_to_final_layers(num_new_actions)
 
-    # def add_another_final_layer_q_network(self):
-    #     self.q_network_local.output_layers.append(nn.Linear(in_features=self.q_network_local.output_layers[0].in_features,
-    #                                                       out_features=self.action_size))
+
+    def append_to_final_layers(self, num_new_actions):
+        """Appends to the end of a network to allow it to choose from the new actions. It does not change the weights
+        for the other actions"""
+        print("Appending options to final layer")
+        assert num_new_actions > 0
+        self.q_network_local.output_layers.append(nn.Linear(in_features=self.q_network_local.output_layers[0].in_features,
+                                                            out_features=num_new_actions))
+        self.q_network_target.output_layers.append(nn.Linear(in_features=self.q_network_local.output_layers[0].in_features,
+                                                            out_features=num_new_actions))
+        Base_Agent.copy_model_over(from_model=self.q_network_local, to_model=self.q_network_target)
+        self.q_network_optimizer = optim.Adam(self.q_network_local.parameters(),
+                                              lr=self.hyperparameters["learning_rate"])
+
 
     def change_final_layer_q_network(self, copy_over_hidden_layers):
-        """Changes the final layer of the q network to accomodate the new action space"""
+        """Completely changes the final layer of the q network to accomodate the new action space"""
+        print("Completely changing final layer")
         assert len(self.q_network_local.output_layers) == 1
         if copy_over_hidden_layers:
             self.q_network_local.output_layers[0] = nn.Linear(in_features=self.q_network_local.output_layers[0].in_features,

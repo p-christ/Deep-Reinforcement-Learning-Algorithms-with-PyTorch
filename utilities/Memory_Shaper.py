@@ -27,6 +27,8 @@ class Memory_Shaper(object):
 
         actions_to_action_id = {v: k for k, v in action_id_to_actions.items()}
 
+        print(actions_to_action_id)
+
         for key in actions_to_action_id.keys():
             assert isinstance(key, tuple)
             assert isinstance(actions_to_action_id[key], int)
@@ -69,6 +71,7 @@ class Memory_Shaper(object):
         actions = self.actions[episode_ix]
         dones = self.dones[episode_ix]
 
+
         assert len(states) == len(next_states) == len(rewards) == len(dones) == len(actions), "{} {} {} {} {} = {}".format(len(states), len(next_states), len(rewards), len(dones), len(actions), actions)
         steps = len(states)
         for step in range(steps):
@@ -86,6 +89,7 @@ class Memory_Shaper(object):
                     new_next_state = next_states[step]
                     new_dones = dones[step]
                     replay_buffer.add_experience(new_state, new_action, new_reward, new_next_state, new_dones)
+
 
     def add_episode_experience(self, states, next_states, rewards, actions, dones):
         """Adds in an episode of experience"""

@@ -187,28 +187,28 @@ def test_generate_grammar_deals_with_end_symbols_correctly():
     string = [0, 1, 0, 1, 0, 1, 0, 1]+ ["/"]
     new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4, (0, 1, 0, 1): 2}
-    assert new_string == ["R1", "R1"]
+    assert new_string == ["R1", "R1"]+ ["/"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, "/", 0, 1, 0, 1]+ ["/"]
     new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4, (0, 1, 0, 1): 2}, action_usage_count
-    assert new_string == ["R1", "/", "R1"]
+    assert new_string == ["R1", "/", "R1"] + ["/"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, "/", 0, 1, "/", 0, 1, 0, 1, 0, 1, 0, 1]+ ["/"]
     new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 6, (0, 1, 0, 1): 2}
-    assert new_string == ["R0", "/", "R0",  "/", "R1", "R1"]
+    assert new_string == ["R0", "/", "R0",  "/", "R1", "R1"] + ["/"]
     assert all_rules == {"R0": (0, 1), "R1": ("R0", "R0")}
 
     obj = k_Sequitur(2)
     string = [0, 1, 0, 1, 0, 1, "/", 0, 1]+ ["/"]
     new_string, all_rules, action_usage_count, _ = obj.generate_action_grammar(string)
     assert action_usage_count == {(0, 1): 4}
-    assert new_string == ["R0", "R0", "R0", "/", "R0"]
+    assert new_string == ["R0", "R0", "R0", "/", "R0"] + ["/"]
     assert all_rules == {"R0": (0, 1)}
 
 def test_generate_grammar_deals_with_end_symbols_correctly_long_string():

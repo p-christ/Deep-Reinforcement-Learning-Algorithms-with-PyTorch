@@ -127,8 +127,10 @@ class Base_Agent(object):
 
     def log_game_info(self):
         """Logs info relating to the game"""
-        for param in self.__dict__.keys():
-            self.logger.info("{} -- {}".format(param, self.__dict__[param]))
+        for ix, param in enumerate([self.environment_title, self.action_types, self.action_size, self.lowest_possible_episode_score,
+                      self.state_size, self.hyperparameters, self.average_score_required_to_win, self.rolling_score_window,
+                      self.device]):
+            self.logger.info("{} -- {}".format(ix, param))
 
     def set_random_seeds(self, random_seed):
         """Sets all possible random seeds so results can be reproduced"""
