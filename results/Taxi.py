@@ -13,7 +13,7 @@ config = Config()
 config.seed = 1
 config.environment = gym.make("Taxi-v2")
 config.env_parameters = {}
-config.num_episodes_to_run = 2000
+config.num_episodes_to_run = 1000
 config.file_to_save_data_results = "data_and_graphs/Taxi_data.pkl"
 config.file_to_save_results_graph = "data_and_graphs/Taxi_graph.png"
 config.show_solution_score = False
@@ -36,18 +36,33 @@ embedding_dimensionality = 10
 gradient_clipping_norm = 0.5  #needs to be optimised
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 150
+epsilon_decay_rate_denominator = 125 #150
+min_num_episodes_to_play = 40 #80
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 2
-pre_training_learning_iterations_multiplier = 0
-episodes_to_run_with_no_exploration = 10
+pre_training_learning_iterations_multiplier = 1500
+episodes_to_run_with_no_exploration = 0
 action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
-keep_previous_output_layer = True
+
+num_top_results_to_use = 10
+action_frequency_required_in_top_results = 0.5
+
+random_episodes_to_run = 0
 
 action_length_reward_bonus = 0.1
 use_global_list_of_best_performing_actions = True
+
+keep_previous_output_layer = True
+only_train_new_actions = True
+only_train_final_layer = True
+reduce_macro_action_appearance_cutoff_throughout_training = False
+add_1_macro_action_at_a_time = True
+
+calculate_q_values_as_increments = False
+
+
 config.debug_mode = False
 
 config.hyperparameters = {
@@ -74,7 +89,16 @@ config.hyperparameters = {
         "action_balanced_replay_buffer": action_balanced_replay_buffer,
         "copy_over_hidden_layers": copy_over_hidden_layers,
         "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions,
-        "keep_previous_output_layer": keep_previous_output_layer
+        "keep_previous_output_layer": keep_previous_output_layer,
+        "random_episodes_to_run": random_episodes_to_run,
+        "only_train_new_actions": only_train_new_actions,
+        "only_train_final_layer": only_train_final_layer,
+        "num_top_results_to_use": num_top_results_to_use,
+        "action_frequency_required_in_top_results": action_frequency_required_in_top_results,
+        "reduce_macro_action_appearance_cutoff_throughout_training": reduce_macro_action_appearance_cutoff_throughout_training,
+        "add_1_macro_action_at_a_time": add_1_macro_action_at_a_time,
+        "calculate_q_values_as_increments": calculate_q_values_as_increments,
+        "min_num_episodes_to_play": min_num_episodes_to_play
     },
 
     "DQN_Agents": {
@@ -139,7 +163,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [HRL] #  DDQN] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [HRL] #DDQN] #, HRL] #  DDQN] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

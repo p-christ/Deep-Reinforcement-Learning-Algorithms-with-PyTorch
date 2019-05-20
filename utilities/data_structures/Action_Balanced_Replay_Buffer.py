@@ -76,3 +76,25 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
 
     def __len__(self):
         return  np.sum([len(memory) for memory in self.memories.values()])
+
+    def sample_experiences_with_certain_actions(self, allowed_actions, num_all_actions, required_batch_size):
+        """Samples a number of experiences where the action conducted was in the list of required actions"""
+        assert isinstance(allowed_actions, list)
+        assert len(allowed_actions) > 0
+
+        num_new_actions = len(allowed_actions)
+        experiences_to_sample = int(required_batch_size * float(num_all_actions) / float(num_new_actions))
+        experiences = self.sample(num_experiences=experiences_to_sample)
+        states, actions, rewards, next_states, dones = experiences
+        matching_indexes = np.argwhere((np.in1d(actions.numpy(), allowed_actions)))
+        assert matching_indexes.shape[1] == 1
+
+        matching_indexes = matching_indexes[:, 0]
+
+        states = states[matching_indexes]
+        actions = actions[matching_indexes]
+        rewards = rewards[matching_indexes]
+        next_states = next_states[matching_indexes]
+        dones = dones[matching_indexes]
+
+        return (states, actions, rewards, next_states, dones)
