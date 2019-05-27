@@ -15,7 +15,8 @@ class DQN_HER(HER_Base, DQN):
             self.action = self.pick_action()
             self.conduct_action_in_changeable_goal_envs(self.action)
             if self.time_for_q_network_to_learn():
-                self.learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
+                for _ in range(self.hyperparameters["learning_iterations"]):
+                    self.learn(experiences=self.sample_from_HER_and_Ordinary_Buffer())
             self.track_changeable_goal_episodes_data()
             self.save_experience()
             if self.done: self.save_alternative_experience()

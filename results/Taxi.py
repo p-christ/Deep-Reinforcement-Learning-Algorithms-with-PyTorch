@@ -11,11 +11,11 @@ from agents.hierarchical_agents.h_DQN import h_DQN
 
 config = Config()
 config.seed = 1
-config.environment = gym.make("Taxi-v2")
+config.environment = gym.make("CartPole-v0")
 config.env_parameters = {}
-config.num_episodes_to_run = 1000
-config.file_to_save_data_results = "data_and_graphs/Taxi_data.pkl"
-config.file_to_save_results_graph = "data_and_graphs/Taxi_graph.png"
+config.num_episodes_to_run = 500
+config.file_to_save_data_results = "data_and_graphs/hrl_experiments/Cart_Pole_data.pkl"
+config.file_to_save_results_graph = "data_and_graphs/hrl_experiments/Cart_Pole.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -33,34 +33,35 @@ buffer_size = 100000
 batch_size = 256
 batch_norm = False
 embedding_dimensionality = 10
-gradient_clipping_norm = 0.5  #needs to be optimised
+gradient_clipping_norm = 0.7  #needs to be optimised
 update_every_n_steps = 1
 learning_iterations = 1
-epsilon_decay_rate_denominator = 125 #150
-min_num_episodes_to_play = 40 #80
+epsilon_decay_rate_denominator = 5 #150
+min_num_episodes_to_play = 20 #80
 discount_rate = 0.99
 tau = 0.01
 sequitur_k = 2
-pre_training_learning_iterations_multiplier = 1500
+pre_training_learning_iterations_multiplier = 500
 episodes_to_run_with_no_exploration = 0
 action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
 
 num_top_results_to_use = 10
-action_frequency_required_in_top_results = 0.5
+action_frequency_required_in_top_results = 1.0
 
 random_episodes_to_run = 0
 
-action_length_reward_bonus = 0.1
+action_length_reward_bonus = 0.05
 use_global_list_of_best_performing_actions = True
 
-keep_previous_output_layer = True
 only_train_new_actions = True
 only_train_final_layer = True
 reduce_macro_action_appearance_cutoff_throughout_training = False
 add_1_macro_action_at_a_time = True
 
-calculate_q_values_as_increments = False
+calculate_q_values_as_increments = True
+increase_batch_size_with_actions = False
+abandon_ship = True
 
 
 config.debug_mode = False
@@ -73,8 +74,8 @@ config.hyperparameters = {
         "buffer_size": buffer_size,
         "batch_size": batch_size,
         "final_layer_activation": "None",
-        "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+        # "columns_of_data_to_be_embedded": [0],
+        # "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
         "batch_norm": batch_norm,
         "gradient_clipping_norm": gradient_clipping_norm,
         "update_every_n_steps": update_every_n_steps,
@@ -89,7 +90,6 @@ config.hyperparameters = {
         "action_balanced_replay_buffer": action_balanced_replay_buffer,
         "copy_over_hidden_layers": copy_over_hidden_layers,
         "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions,
-        "keep_previous_output_layer": keep_previous_output_layer,
         "random_episodes_to_run": random_episodes_to_run,
         "only_train_new_actions": only_train_new_actions,
         "only_train_final_layer": only_train_final_layer,
@@ -98,7 +98,9 @@ config.hyperparameters = {
         "reduce_macro_action_appearance_cutoff_throughout_training": reduce_macro_action_appearance_cutoff_throughout_training,
         "add_1_macro_action_at_a_time": add_1_macro_action_at_a_time,
         "calculate_q_values_as_increments": calculate_q_values_as_increments,
-        "min_num_episodes_to_play": min_num_episodes_to_play
+        "min_num_episodes_to_play": min_num_episodes_to_play,
+        "increase_batch_size_with_actions": increase_batch_size_with_actions,
+        "abandon_ship": abandon_ship
     },
 
     "DQN_Agents": {
@@ -107,8 +109,8 @@ config.hyperparameters = {
         "buffer_size": buffer_size,
         "batch_size": batch_size,
         "final_layer_activation": "None",
-        "columns_of_data_to_be_embedded": [0],
-        "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+        # "columns_of_data_to_be_embedded": [0],
+        # "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
         "batch_norm": batch_norm,
         "gradient_clipping_norm": gradient_clipping_norm,
         "update_every_n_steps": update_every_n_steps,
@@ -123,8 +125,8 @@ config.hyperparameters = {
             "learning_rate": 0.0003,
             "linear_hidden_units": [64, 64],
             "final_layer_activation": "Softmax",
-            "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+            # "columns_of_data_to_be_embedded": [0],
+            # "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
             "batch_norm": False,
             "tau": 0.005,
             "gradient_clipping_norm": 5,
@@ -135,8 +137,8 @@ config.hyperparameters = {
             "learning_rate": 0.0003,
             "linear_hidden_units": [64, 64],
             "final_layer_activation": None,
-            "columns_of_data_to_be_embedded": [0],
-            "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+            # "columns_of_data_to_be_embedded": [0],
+            # "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
             "batch_norm": False,
             "buffer_size": 1000000,
             "tau": 0.005,
@@ -163,7 +165,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [HRL] #DDQN] #, HRL] #  DDQN] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [ HRL] #  DDQN] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

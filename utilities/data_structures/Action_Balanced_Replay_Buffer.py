@@ -66,6 +66,7 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
             if action_memory_size >= batch_size_for_action:
                 samples[action] = random.sample(memory, batch_size_for_action)
             else:
+                print("Memory size {} vs. required batch size {}".format(action_memory_size, batch_size_for_action))
                 samples_for_action = []
                 while len(samples_for_action) < batch_per_action[action]:
                     remainder = batch_per_action[action] - len(samples_for_action)
@@ -96,5 +97,10 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
         rewards = rewards[matching_indexes]
         next_states = next_states[matching_indexes]
         dones = dones[matching_indexes]
+
+        assert states.shape[0] == required_batch_size
+
+        # print("actions shape ", actions.shape)
+        # print(actions[0:10])
 
         return (states, actions, rewards, next_states, dones)

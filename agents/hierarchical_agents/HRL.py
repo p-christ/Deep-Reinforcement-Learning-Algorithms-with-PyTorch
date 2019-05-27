@@ -1,6 +1,7 @@
 import random
 from collections import Counter
 
+import torch
 from gym import Wrapper, spaces
 from torch import nn, optim
 from Base_Agent import Base_Agent
@@ -21,6 +22,7 @@ from operator import itemgetter
 # 4) Compare DDQN with this algo
 # 5) Point is this game too simple to benefit from macro actions but it is using them
 # 6) Use name Hindsight Macro-Action Experience Replay
+# 7) We have extended idea of intrinsic motivation to apply to picking longer macro-actions (rather than exploration)
 
 
 # TODO train model to predict next state too so that we can use this to figure out when to abandon macro actions
@@ -51,6 +53,17 @@ from operator import itemgetter
 # TODO make multi action q-values more self consistent by forcing them to be the first actions q-values + some value
 # TODO use a fixed leraning rate when training new actions rather than a learning rate that is lower because we near required score
 # TODO add option for using no_grad when combining actions values from different places
+# TODO reduce exploration as number of actions increases?
+# Having longer actions can replace exploration
+# TODO pick macro actions common in best performing episodes but NOT common in worse performing episodes...
+# TODO create a toy game that it should specifically be able to solve while other algorithms cannot as easily
+# TODO Predict next state. Abandon if not predicted. Reward for getting to unpredicted states (exploration)
+# TODO try abandon macro action if:  1) Predict next state model throws big error  2) Next primitive action isn't highest one (by some threshold)
+# TODO check if buffer for primitive actions not being filled up by double counting on primitive action moves
+# TODO try different size learning rates to learn actions of different length? Also check what LR being used generally
+# TODO why not try increasing k in k-sequitur and adding many actions at once... might get different results now
+# TODO try increasing rewards for all experiences in those episodes where the overall agent did really well.. related to soft q imitation learning
+# TODO is there anyway of making it more end-to-end?
 
 
 class HRL(Base_Agent):
@@ -75,9 +88,6 @@ class HRL(Base_Agent):
         self.global_action_id_to_primitive_action = {k: tuple([k]) for k in range(self.action_size)}
         self.num_top_results_to_use = self.hyperparameters["num_top_results_to_use"]
 
-        self.agent = DDQN_Wrapper(config, self.global_action_id_to_primitive_action,
-                             self.update_reward_to_encourage_longer_macro_actions, self.memory_shaper)
-
         self.global_list_of_best_results = []
         self.new_actions_just_added = []
 
@@ -87,11 +97,15 @@ class HRL(Base_Agent):
         self.only_train_final_layer = self.hyperparameters["only_train_final_layer"]
         self.reduce_macro_action_appearance_cutoff_throughout_training = self.hyperparameters["reduce_macro_action_appearance_cutoff_throughout_training"]
         self.add_1_macro_action_at_a_time = self.hyperparameters["add_1_macro_action_at_a_time"]
-        self.calculate_q_values_as_increments = self.hyperparameters["calculate_q_values_as_increments"]
+
 
         self.min_num_episodes_to_play = self.hyperparameters["min_num_episodes_to_play"]
 
+
         self.action_id_to_stepping_stone_action_id = {}
+
+        self.agent = DDQN_Wrapper(config, self.global_action_id_to_primitive_action,
+                             self.update_reward_to_encourage_longer_macro_actions, self.memory_shaper)
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
 
@@ -138,9 +152,9 @@ class HRL(Base_Agent):
             current_num_actions = len(self.global_action_id_to_primitive_action.keys())
 
             if self.only_train_new_actions:
-                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier * (len(self.new_actions_just_added) ** 1.25))
+                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier) # * (len(self.new_actions_just_added) ** 1.25))
             else:
-                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier * (current_num_actions ** 1.25))
+                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier) # * (current_num_actions ** 1.25))
 
             print(" ")
 
@@ -188,8 +202,6 @@ class HRL(Base_Agent):
         """Keeps a track of the top episode results so far & the actions played in those episodes"""
         self.infer_new_grammar = True
 
-        # old_result = copy.deepcopy(self.global_list_of_best_results)
-
         combined_result = [(result, actions) for result, actions in zip(top_results, best_episode_actions)]
         self.logger.info("New Candidate Best Results: {}".format(combined_result))
 
@@ -203,11 +215,6 @@ class HRL(Base_Agent):
         assert isinstance(self.global_list_of_best_results[0], tuple)
         assert len(self.global_list_of_best_results[0]) == 2
 
-        # Removing this because we want it to recaclculate grammar anyways even if top scores didn't change because our criteria
-        # for grammar change now gets looser over time...
-        # if old_result == self.global_list_of_best_results:
-        #     self.infer_new_grammar = False
-
     def pick_actions_to_infer_grammar_from(self, episode_actions_scores_and_exploration_status):
         """Takes in data summarising the results of the latest games the agent played and then picks the actions from which
         we want to base the subsequent action grammar on"""
@@ -220,10 +227,16 @@ class HRL(Base_Agent):
         best_episode_rewards = list(itemgetter(*top_result_indexes)(episode_scores))
 
         if self.use_global_list_of_best_performing_actions:
-            self.keep_track_of_best_results_seen_so_far(best_episode_rewards, best_episode_actions)
-            best_episode_actions = [data[1] for data in self.global_list_of_best_results]
-            print("AFTER ", best_episode_actions)
-            print("AFter best results ", [data[0] for data in self.global_list_of_best_results])
+            best_result_this_round = max(best_episode_rewards)
+            if len(self.global_list_of_best_results) == 0:
+                worst_best_result_ever = float("-inf")
+            else:
+                worst_best_result_ever = min([data[0] for data in self.global_list_of_best_results])
+            if best_result_this_round > worst_best_result_ever:
+                self.keep_track_of_best_results_seen_so_far(best_episode_rewards, best_episode_actions)
+                best_episode_actions = [data[1] for data in self.global_list_of_best_results]
+                print("AFTER ", best_episode_actions)
+                print("AFter best results ", [data[0] for data in self.global_list_of_best_results])
 
         best_episode_actions = [item for sublist in best_episode_actions for item in sublist]
         return best_episode_actions
@@ -341,6 +354,9 @@ class DDQN_Wrapper(DDQN):
         self.bonus_reward_function = bonus_reward_function
         self.memory_shaper = memory_shaper
         self.action_id_to_stepping_stone_action_id = {}
+        self.calculate_q_values_as_increments = self.config.hyperparameters["calculate_q_values_as_increments"]
+        self.increase_batch_size_with_actions = self.config.hyperparameters["increase_batch_size_with_actions"]
+        self.abandon_ship = self.config.hyperparameters["abandon_ship"]
 
     def update_agent_for_new_actions(self, action_id_to_primitive_actions, copy_over_hidden_layers, change_or_append_final_layer):
         assert change_or_append_final_layer in ["CHANGE", "APPEND"]
@@ -348,6 +364,14 @@ class DDQN_Wrapper(DDQN):
         self.action_id_to_primitive_actions = action_id_to_primitive_actions
         self.action_size = len(action_id_to_primitive_actions)
         num_new_actions = self.action_size - num_actions_before
+
+        if self.increase_batch_size_with_actions:
+            self.hyperparameters["batch_size"] *= (self.action_size / float(num_actions_before))
+            self.hyperparameters["batch_size"] = int(self.hyperparameters["batch_size"])
+            self.memory_shaper.batch_size = self.hyperparameters["batch_size"]
+            self.memory.batch_size = self.hyperparameters["batch_size"]
+            print("New batch size ", self.hyperparameters["batch_size"])
+
         if num_new_actions > 0:
             for new_action_id in range(num_actions_before, num_actions_before + num_new_actions):
                 self.update_action_id_to_stepping_stone_action_id(new_action_id)
@@ -427,8 +451,14 @@ class DDQN_Wrapper(DDQN):
         """Runs a learning iteration for the Q network"""
         if len(only_these_actions) == 0: super().learn()
         else:
+
+            if self.increase_batch_size_with_actions:
+                batch_size = int(self.hyperparameters["batch_size"]) / self.action_size
+            else:
+                batch_size = int(self.hyperparameters["batch_size"])
+
             experiences = self.memory.sample_experiences_with_certain_actions(only_these_actions, self.action_size,
-                                                                              self.hyperparameters["batch_size"])
+                                                                              batch_size)
             super().learn(experiences=experiences)
 
     def step(self):
@@ -446,6 +476,33 @@ class DDQN_Wrapper(DDQN):
             macro_reward = 0
             primitive_actions_conducted = 0
             for action in primitive_actions:
+
+                if self.abandon_ship:
+
+                    if primitive_actions_conducted >= 1:
+
+                        if isinstance(state, np.int64) or isinstance(state, int): state_tensor = np.array([state])
+                        else: state_tensor = state
+                        state_tensor = torch.from_numpy(state_tensor).float().unsqueeze(0).to(self.device)
+
+                        with torch.no_grad():
+                            q_values = self.calculate_q_values(self.q_network_local(state_tensor))[:, :self.get_action_size()]
+                        q_value_highest = torch.max(q_values)
+                        q_values_action = q_values[:, action]
+
+                        if q_value_highest == 0.0:
+                            increment = 1.0
+                        else:
+                            increment = abs(q_value_highest)
+
+                        max_difference = 0.1 * increment
+                        if q_values_action + max_difference < q_value_highest:
+                            print("BREAKING Action {} -- Q Values {}".format(action, q_values))
+                            break
+
+
+
+
                 next_state, reward, done, _ = self.environment.step(action)
                 macro_reward += reward
                 self.total_episode_score_so_far += reward
@@ -457,7 +514,8 @@ class DDQN_Wrapper(DDQN):
 
                 state = next_state
                 if self.time_for_q_network_to_learn():
-                    self.learn()
+                    for _ in range(self.hyperparameters["learning_iterations"]):
+                        self.learn()
                 if done or self.abandon_macro_action(): break
 
             macro_reward = self.bonus_reward_function(macro_reward, primitive_actions_conducted)
@@ -495,13 +553,36 @@ class DDQN_Wrapper(DDQN):
 
     def calculate_q_values(self, network_action_values):
 
+        if not self.calculate_q_values_as_increments: return network_action_values
+
         for action_id in range(self.action_size):
             if action_id in self.action_id_to_stepping_stone_action_id.keys():
                 stepping_stone_id = self.action_id_to_stepping_stone_action_id[action_id]
                 # should do this with no grad? Or grad?
-                network_action_values[:, action_id] += network_action_values[:, stepping_stone_id].detach()
-        assert network_action_values.shape == (self.hyperparameters["batch_size"], self.action_size)
+                network_action_values[:, action_id] += network_action_values[:, stepping_stone_id] #.detach()
+        # assert network_action_values.shape[0] in set([self.hyperparameters["batch_size"], 1])
+        assert network_action_values.shape[1] == self.action_size
         return network_action_values
+
+
+    def pick_action(self, state=None):
+        """Uses the local Q network and an epsilon greedy policy to pick an action"""
+        # PyTorch only accepts mini-batches and not single observations so we have to use unsqueeze to add
+        # a "fake" dimension to make it a mini-batch rather than a single observation
+        if state is None: state = self.state
+        if isinstance(state, np.int64) or isinstance(state, int): state = np.array([state])
+        state = torch.from_numpy(state).float().unsqueeze(0).to(self.device)
+        if len(state.shape) < 2: state = state.unsqueeze(0)
+        self.q_network_local.eval() #puts network in evaluation mode
+        with torch.no_grad():
+            action_values = self.calculate_q_values(self.q_network_local(state))
+        self.q_network_local.train() #puts network back in training mode
+        action = self.exploration_strategy.perturb_action_for_exploration_purposes({"action_values": action_values,
+                                                                                    "turn_off_exploration": self.turn_off_exploration,
+                                                                                    "episode_number": self.episode_number})
+        self.logger.info("Q values {} -- Action chosen {}".format(action_values, action))
+        return action
+
 
     def compute_q_values_for_next_states(self, next_states):
         """Computes the q_values for next state we will use to create the loss to train the Q network. Double DQN
@@ -523,27 +604,3 @@ class DDQN_Wrapper(DDQN):
         Should there be a punishment?
         """
         return False
-
-
-
-
-    # def play_agent_until_progress_made(self, agent):
-    #     """Have the agent play until enough progress is made"""
-    #     remaining_episodes_to_play = self.num_episodes - self.episodes_conducted
-    #     episode_actions_scores_and_exploration_status = \
-    #         agent.run_n_episodes(num_episodes=remaining_episodes_to_play,
-    #                              stop_when_progress_made=True,
-    #                              episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
-    #     return episode_actions_scores_and_exploration_status
-    #
-    # def determine_rolling_score_to_beat_before_recalculating_grammar(self):
-    #     """Determines the rollowing window score the agent needs to get to before we will adapt its actions"""
-    #     if self.episode_actions_scores_and_exploration_status is not None:
-    #         episode_scores = [data[0] for data in self.episode_actions_scores_and_exploration_status]
-    #         current_score = np.mean(episode_scores[-self.episodes_to_run_with_no_exploration:])
-    #     else:
-    #         current_score = self.rolling_score
-    #     improvement_required = self.average_score_required_to_win - current_score
-    #     target_rolling_score = current_score + (improvement_required * 0.25)
-    #     print("NEW TARGET ROLLING SCORE ", target_rolling_score)
-    #     return target_rolling_score
