@@ -12,7 +12,7 @@ from torch.optim import optimizer
 
 
 class Base_Agent(object):
-    
+
     def __init__(self, config):
         self.logger = self.setup_logger()
         self.debug_mode = config.debug_mode
@@ -309,8 +309,8 @@ class Base_Agent(object):
             if key not in hyperparameters.keys():
                 hyperparameters[key] = default_hyperparameter_choices[key]
 
-        return NN(input_dim=input_dim, hidden_layers_info=hyperparameters["linear_hidden_units"],
-                  output_dim=output_dim, output_activation=hyperparameters["final_layer_activation"],
+        return NN(input_dim=input_dim, layers_info=hyperparameters["linear_hidden_units"] + [output_dim],
+                  output_activation=hyperparameters["final_layer_activation"],
                   batch_norm=hyperparameters["batch_norm"], dropout=hyperparameters["dropout"],
                   hidden_activations=hyperparameters["hidden_activations"], initialiser=hyperparameters["initialiser"],
                   columns_of_data_to_be_embedded=hyperparameters["columns_of_data_to_be_embedded"],
