@@ -60,11 +60,13 @@ class HER_Base(object):
     def conduct_action_in_changeable_goal_envs(self, action):
         """Adapts conduct_action from base agent so that can handle changeable goal environments"""
         self.next_state_dict, self.reward, self.done, _ = self.environment.step(action)
+        self.total_episode_score_so_far += self.reward
+        self.reward = max(min(self.reward, 1.0), -1.0)
         self.observation = self.next_state_dict["observation"]
         self.desired_goal = self.next_state_dict["desired_goal"]
         self.achieved_goal = self.next_state_dict["achieved_goal"]
         self.next_state =  self.create_state_from_observation_and_desired_goal(self.observation, self.desired_goal)
-        self.total_episode_score_so_far += self.reward
+
 
     def create_state_from_observation_and_desired_goal(self, observation, desired_goal):
         return np.concatenate((observation, desired_goal))

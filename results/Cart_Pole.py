@@ -15,14 +15,14 @@ from agents.DQN_agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 config = Config()
 config.seed = 1
 config.environment = gym.make("CartPole-v0")
-config.num_episodes_to_run = 2000
+config.num_episodes_to_run = 450
 config.file_to_save_data_results = "data_and_graphs/Cart_Pole_Results_Data.pkl"
 config.file_to_save_results_graph = "data_and_graphs/Cart_Pole_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
-config.runs_per_agent = 3
+config.runs_per_agent = 1
 config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
@@ -32,20 +32,22 @@ config.save_model = False
 config.hyperparameters = {
     "DQN_Agents": {
         "learning_rate": 0.01,
-        "batch_size": 128,
+        "batch_size": 256,
         "buffer_size": 40000,
         "epsilon": 1.0,
-        "epsilon_decay_rate_denominator": 3,
+        "epsilon_decay_rate_denominator": 1,
         "discount_rate": 0.99,
         "tau": 0.01,
         "alpha_prioritised_replay": 0.6,
         "beta_prioritised_replay": 0.1,
         "incremental_td_error": 1e-8,
-        "update_every_n_steps": 3,
+        "update_every_n_steps": 1,
         "linear_hidden_units": [30, 15],
         "final_layer_activation": "None",
         "batch_norm": False,
-        "gradient_clipping_norm": 5
+        "gradient_clipping_norm": 0.7,
+        "learning_iterations": 1,
+        "clip_rewards": False
     },
     "Stochastic_Policy_Search_Agents": {
         "policy_network_type": "Linear",
@@ -56,7 +58,8 @@ config.hyperparameters = {
         "stochastic_action_decision": False,
         "num_policies": 10,
         "episodes_per_policy": 1,
-        "num_policies_to_keep": 5
+        "num_policies_to_keep": 5,
+        "clip_rewards": False
     },
     "Policy_Gradient_Agents": {
         "learning_rate": 0.05,
@@ -72,7 +75,8 @@ config.hyperparameters = {
         "mu": 0.0, #only required for continuous action games
         "theta": 0.0, #only required for continuous action games
         "sigma": 0.0, #only required for continuous action games
-        "epsilon_decay_rate_denominator": 1.0
+        "epsilon_decay_rate_denominator": 1.0,
+        "clip_rewards": False
     },
 
     "Actor_Critic_Agents":  {
@@ -85,6 +89,7 @@ config.hyperparameters = {
         "epsilon_decay_rate_denominator": 1.0,
         "normalise_rewards": True,
         "exploration_worker_difference": 2.0,
+        "clip_rewards": False,
 
         "Actor": {
             "learning_rate": 0.0003,
@@ -125,8 +130,8 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    AGENTS = [A2C, SAC_Discrete, Dueling_DDQN, PPO, A2C, A3C, DQN, DQN_With_Fixed_Q_Targets,
-              DDQN_With_Prioritised_Experience_Replay, DDQN]
+    AGENTS = [DDQN, Dueling_DDQN, DQN, DQN_With_Fixed_Q_Targets,
+              DDQN_With_Prioritised_Experience_Replay, A2C, SAC_Discrete, PPO, A3C ]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

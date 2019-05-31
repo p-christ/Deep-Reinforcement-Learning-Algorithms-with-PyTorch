@@ -40,7 +40,8 @@ config.hyperparameters = {
             "mu": 0.0,
             "theta": 0.15,
             "sigma": 0.2,
-            "epsilon_decay_rate_denominator": 1
+            "epsilon_decay_rate_denominator": 1,
+            "clip_rewards": False
         },
 
     "Actor_Critic_Agents": {
@@ -78,7 +79,8 @@ config.hyperparameters = {
         "automatically_tune_entropy_hyperparameter": True,
         "entropy_term_weight": None,
         "add_extra_noise": True,
-        "do_evaluation_iterations": True
+        "do_evaluation_iterations": True,
+        "clip_rewards": False
 
     }
 

@@ -51,7 +51,9 @@ config.hyperparameters = {
         "discount_rate": 0.99,
         "learning_iterations": 1,
         "tau": 0.01,
-        "exploration_cycle_episodes_length": None
+        "exploration_cycle_episodes_length": None,
+        "learning_iterations": 1,
+        "clip_rewards": False
     },
 
     "SNN_HRL": {
@@ -74,7 +76,8 @@ config.hyperparameters = {
             "epsilon_decay_rate_denominator": 500,
             "discount_rate": 0.999,
             "learning_iterations": 1,
-            "tau": 0.01
+            "tau": 0.01,
+            "clip_rewards": False
         },
 
         "MANAGER": {
@@ -92,7 +95,8 @@ config.hyperparameters = {
             "epsilon_decay_rate_denominator": 50,
             "discount_rate": 0.99,
             "learning_iterations": 1,
-            "tau": 0.01
+            "tau": 0.01,
+            "clip_rewards": False
 
         }
 
@@ -109,7 +113,8 @@ config.hyperparameters = {
         "gradient_clipping_norm": 5.0,
         "discount_rate": 0.99,
         "epsilon_decay_rate_denominator": 50.0,
-        "normalise_rewards": True
+        "normalise_rewards": True,
+        "clip_rewards": False
 
     },
 

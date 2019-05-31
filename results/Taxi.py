@@ -11,7 +11,7 @@ from agents.hierarchical_agents.h_DQN import h_DQN
 
 config = Config()
 config.seed = 1
-config.environment = gym.make("CartPole-v0")
+config.environment = gym.make("Taxi-v2")
 config.env_parameters = {}
 config.num_episodes_to_run = 500
 config.file_to_save_data_results = "data_and_graphs/hrl_experiments/Cart_Pole_data.pkl"
@@ -62,6 +62,7 @@ add_1_macro_action_at_a_time = True
 calculate_q_values_as_increments = True
 increase_batch_size_with_actions = False
 abandon_ship = True
+clip_rewards = False
 
 
 config.debug_mode = False
@@ -74,8 +75,8 @@ config.hyperparameters = {
         "buffer_size": buffer_size,
         "batch_size": batch_size,
         "final_layer_activation": "None",
-        # "columns_of_data_to_be_embedded": [0],
-        # "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
+        "columns_of_data_to_be_embedded": [0],
+        "embedding_dimensions": [[config.environment.observation_space.n, embedding_dimensionality]],
         "batch_norm": batch_norm,
         "gradient_clipping_norm": gradient_clipping_norm,
         "update_every_n_steps": update_every_n_steps,
@@ -100,7 +101,8 @@ config.hyperparameters = {
         "calculate_q_values_as_increments": calculate_q_values_as_increments,
         "min_num_episodes_to_play": min_num_episodes_to_play,
         "increase_batch_size_with_actions": increase_batch_size_with_actions,
-        "abandon_ship": abandon_ship
+        "abandon_ship": abandon_ship,
+        "clip_rewards": clip_rewards
     },
 
     "DQN_Agents": {
@@ -118,6 +120,7 @@ config.hyperparameters = {
         "discount_rate": discount_rate,
         "learning_iterations": learning_iterations,
         "tau": tau,
+        "clip_rewards": clip_rewards
     },
 
     "Actor_Critic_Agents": {
@@ -159,7 +162,8 @@ config.hyperparameters = {
         "automatically_tune_entropy_hyperparameter": True,
         "entropy_term_weight": None,
         "add_extra_noise": False,
-        "do_evaluation_iterations": True
+        "do_evaluation_iterations": True,
+        "clip_rewards": clip_rewards
     }
 }
 

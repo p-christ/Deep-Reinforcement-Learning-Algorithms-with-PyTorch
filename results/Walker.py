@@ -60,7 +60,8 @@ actor_critic_agent_hyperparameters = {
         "automatically_tune_entropy_hyperparameter": True,
         "entropy_term_weight": None,
         "add_extra_noise": False,
-        "do_evaluation_iterations": True
+        "do_evaluation_iterations": True,
+        "clip_rewards": clip_rewards
     }
 
 dqn_agent_hyperparameters =   {
@@ -78,7 +79,8 @@ dqn_agent_hyperparameters =   {
         "linear_hidden_units": [30, 15],
         "final_layer_activation": "None",
         "batch_norm": False,
-        "gradient_clipping_norm": 5
+        "gradient_clipping_norm": 5,
+        "clip_rewards": clip_rewards
     }
 
 
@@ -101,7 +103,8 @@ config.hyperparameters = {
             "mu": 0.0,
             "theta": 0.15,
             "sigma": 0.2,
-            "epsilon_decay_rate_denominator": 1
+            "epsilon_decay_rate_denominator": 1,
+            "clip_rewards": clip_rewards
         },
 
     "Actor_Critic_Agents": actor_critic_agent_hyperparameters,

@@ -36,7 +36,9 @@ config.hyperparameters = {
         "y_range": (-1, 14),
         "batch_norm": False,
         "gradient_clipping_norm": 5,
-        "HER_sample_proportion": 0.8
+        "HER_sample_proportion": 0.8,
+        "learning_iterations": 1,
+        "clip_rewards": False
     }
 }
 

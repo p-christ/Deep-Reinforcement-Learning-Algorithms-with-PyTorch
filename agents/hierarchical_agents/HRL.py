@@ -64,6 +64,9 @@ from operator import itemgetter
 # TODO why not try increasing k in k-sequitur and adding many actions at once... might get different results now
 # TODO try increasing rewards for all experiences in those episodes where the overall agent did really well.. related to soft q imitation learning
 # TODO is there anyway of making it more end-to-end?
+# TODO could use model of world to predict next state and then use that to pre-decide next action and so on until a surprisal happens (is this action grammars though)
+# TODO instead could feed in predicted next states into Q network so that it uses them to pick its macro action
+# TODO try only keeping the top 50% of experiences in replay buffer and removing the rest
 
 
 class HRL(Base_Agent):
@@ -500,12 +503,10 @@ class DDQN_Wrapper(DDQN):
                             print("BREAKING Action {} -- Q Values {}".format(action, q_values))
                             break
 
-
-
-
                 next_state, reward, done, _ = self.environment.step(action)
-                macro_reward += reward
                 self.total_episode_score_so_far += reward
+                if self.hyperparameters["clip_rewards"]: reward = max(min(reward, 1.0), -1.0)
+                macro_reward += reward
                 primitive_actions_conducted += 1
                 self.track_episodes_data(state, action, reward, next_state, done)
 

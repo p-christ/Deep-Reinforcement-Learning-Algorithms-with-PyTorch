@@ -9,7 +9,7 @@ from agents.Trainer import Trainer
 config = Config()
 config.seed = 1
 config.environment = gym.make("FetchReach-v1")
-config.num_episodes_to_run = 2
+config.num_episodes_to_run = 1000
 config.file_to_save_data_results = None
 config.file_to_save_results_graph = None
 config.show_solution_score = False
@@ -52,7 +52,8 @@ config.hyperparameters = {
     "sigma": 0.25,
     "update_every_n_steps": 10,
     "learning_updates_per_learning_session": 10,
-    "HER_sample_proportion": 0.8
+    "HER_sample_proportion": 0.8,
+    "clip_rewards": False
 }}
 
 

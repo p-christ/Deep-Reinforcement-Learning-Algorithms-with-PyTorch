@@ -56,6 +56,7 @@ config.hyperparameters = {
             "action_noise_clipping_range": 0.5,  # for TD3
             "update_every_n_steps": 20,
             "learning_updates_per_learning_session": 10,
+            "clip_rewards": False
 
             } ,
 
@@ -91,6 +92,7 @@ config.hyperparameters = {
             "action_noise_clipping_range": 0.5,  # for TD3
             "update_every_n_steps": 20,
             "learning_updates_per_learning_session": 10,
+            "clip_rewards": False
 
             } ,
 
@@ -125,6 +127,7 @@ config.hyperparameters = {
         "action_noise_clipping_range": 0.5,  # for TD3
         "update_every_n_steps": 1,
         "learning_updates_per_learning_session": 1,
+        "clip_rewards": False
 
     }
 
