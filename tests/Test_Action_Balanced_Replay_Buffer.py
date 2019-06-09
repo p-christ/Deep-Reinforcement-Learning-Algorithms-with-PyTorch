@@ -79,10 +79,10 @@ def test_sample_statistics_correct():
     tries = 5
     for random_seed in range(tries):
         for num_actions in range(1, 7):
-            for buffer_size in [random.randint(55, 9999) for _ in range(20)]:
-                for batch_size in [random.randint(8, 200) for _ in range(20)]:
-                    buffer = Action_Balanced_Replay_Buffer(buffer_size, batch_size, random_seed, num_actions)
-                    for _ in range(2000):
+            for buffer_size in [random.randint(55, 9999) for _ in range(10)]:
+                for batch_size in [random.randint(8, 200) for _ in range(10)]:
+                    buffer = Action_Balanced_Replay_Buffer(buffer_size, batch_size, random.randint(0, 2000000), num_actions)
+                    for _ in range(500):
                         random_action = random.randint(0, num_actions - 1)
                         buffer.add_experience(1, random_action, 1, 0, 0)
                     states, actions, rewards, next_states, dones = buffer.sample()
@@ -92,6 +92,7 @@ def test_sample_statistics_correct():
                     action_count = count[0]
                     for action in range(num_actions):
                         assert abs(count[action] - action_count) < 2, print(count[action])
+
 
 
 

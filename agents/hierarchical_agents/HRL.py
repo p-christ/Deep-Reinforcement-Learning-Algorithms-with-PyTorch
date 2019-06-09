@@ -120,7 +120,6 @@ class HRL(Base_Agent):
         self.reduce_macro_action_appearance_cutoff_throughout_training = self.hyperparameters["reduce_macro_action_appearance_cutoff_throughout_training"]
         self.add_1_macro_action_at_a_time = self.hyperparameters["add_1_macro_action_at_a_time"]
 
-
         self.min_num_episodes_to_play = self.hyperparameters["min_num_episodes_to_play"]
 
 
@@ -139,79 +138,55 @@ class HRL(Base_Agent):
         self.grammar_induction_iteration = 1
 
         while self.episodes_conducted < self.num_episodes:
-
-            self.episode_actions_scores_and_exploration_status, round_of_macro_actions = \
-                self.agent.run_n_episodes(num_episodes=self.calculate_how_many_episodes_to_play(),
-                                          episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
-
-
-            self.episodes_conducted += len(self.episode_actions_scores_and_exploration_status)
-            actions_to_infer_grammar_from = self.pick_actions_to_infer_grammar_from(
-                self.episode_actions_scores_and_exploration_status)
-
-            num_actions_before = len(self.global_action_id_to_primitive_action)
-
-            if self.infer_new_grammar:
-                self.update_action_choices(actions_to_infer_grammar_from)
-
-            else:
-                print("NOT inferring new grammar because no better results found")
-
-            print("New actions ", self.global_action_id_to_primitive_action)
-
-            self.new_actions_just_added = list(range(num_actions_before, num_actions_before + len(self.global_action_id_to_primitive_action) - num_actions_before))
-            print("Actions just added ", self.new_actions_just_added)
-
-            assert len(set(self.global_action_id_to_primitive_action.values())) == len(
-                self.global_action_id_to_primitive_action.values()), \
-                "Not all actions are unique anymore: {}".format(self.global_action_id_to_primitive_action)
-
-            for key, value in self.global_action_id_to_primitive_action.items():
-                assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
-
-            self.grammar_induction_iteration += 1
-
-            current_num_actions = len(self.global_action_id_to_primitive_action.keys())
-
-            if self.only_train_new_actions:
-                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier) # * (len(self.new_actions_just_added) ** 1.25))
-            else:
-                PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier) # * (current_num_actions ** 1.25))
-
-            print(" ")
-
-            print("PRE TRAINING ITERATIONS ", PRE_TRAINING_ITERATIONS)
-
-            print(" ")
-
-            self.agent.update_agent_for_new_actions(self.global_action_id_to_primitive_action,
-                                                    copy_over_hidden_layers=self.copy_over_hidden_layers,
-                                                    change_or_append_final_layer="APPEND")
-
-            if num_actions_before != len(self.global_action_id_to_primitive_action):
-                replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(
-                    self.global_action_id_to_primitive_action)
-
-                print(" ------ ")
-                print("Length of buffer {} -- Actions {} -- Pre training iterations {}".format(len(replay_buffer),
-                                                                                               current_num_actions,
-                                                                                               PRE_TRAINING_ITERATIONS))
-                print(" ------ ")
-                self.overwrite_replay_buffer_and_pre_train_agent(replay_buffer, PRE_TRAINING_ITERATIONS,
-                                                                 only_train_final_layer=self.only_train_final_layer, only_train_new_actions=self.only_train_new_actions)
-            print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
-
-
-        episode_actions = [data[1] for data in self.episode_actions_scores_and_exploration_status]
-        flat_episode_actions = [ep_action for ep in episode_actions for ep_action in ep]
-
-        final_actions_count = Counter(round_of_macro_actions)
+            self.play_new_episodes()
+            self.infer_new_grammar()
+            self.update_agent()
+        final_actions_count = Counter(self.round_of_macro_actions)
         print("FINAL EPISODE SET ACTIONS COUNT ", final_actions_count)
-
-
         time_taken = time.time() - start
-
         return self.agent.game_full_episode_scores[:self.num_episodes], self.agent.rolling_results[:self.num_episodes], time_taken
+
+    def play_new_episodes(self):
+        """Plays a new set of episodes using the recently updated agent"""
+        self.episode_actions_scores_and_exploration_status, self.round_of_macro_actions = \
+            self.agent.run_n_episodes(num_episodes=self.calculate_how_many_episodes_to_play(),
+                                      episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
+        self.episodes_conducted += len(self.episode_actions_scores_and_exploration_status)
+
+    def infer_new_grammar(self):
+        """Infers a new action grammar and updates the global action set"""
+        actions_to_infer_grammar_from = self.pick_actions_to_infer_grammar_from(self.episode_actions_scores_and_exploration_status)
+        num_actions_before = len(self.global_action_id_to_primitive_action)
+        if self.infer_new_grammar: self.update_action_choices(actions_to_infer_grammar_from)
+        else: print("NOT inferring new grammar because no better results found")
+        self.new_actions_just_added = list(range(num_actions_before, num_actions_before + len(
+            self.global_action_id_to_primitive_action) - num_actions_before))
+        self.check_new_global_actions_valid()
+        self.grammar_induction_iteration += 1
+
+    def check_new_global_actions_valid(self):
+        """Checks that global_action_id_to_primitive_action still only has valid entries"""
+        assert len(set(self.global_action_id_to_primitive_action.values())) == len(
+            self.global_action_id_to_primitive_action.values()), \
+            "Not all actions are unique anymore: {}".format(self.global_action_id_to_primitive_action)
+        for key, value in self.global_action_id_to_primitive_action.items():
+            assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
+
+    def update_agent(self):
+        """Updates the agent according to new action set by changing its action set, creating a new replay buffer
+        and doing any pretraining"""
+        current_num_actions = len(self.global_action_id_to_primitive_action.keys())
+        PRE_TRAINING_ITERATIONS = int(self.pre_training_learning_iterations_multiplier)
+        self.agent.update_agent_for_new_actions(self.global_action_id_to_primitive_action,
+                                                copy_over_hidden_layers=self.copy_over_hidden_layers,
+                                                change_or_append_final_layer="APPEND")
+        if len(self.new_actions_just_added) > 0:
+            replay_buffer = self.memory_shaper.put_adapted_experiences_in_a_replay_buffer(
+                self.global_action_id_to_primitive_action)
+            self.overwrite_replay_buffer_and_pre_train_agent(replay_buffer, PRE_TRAINING_ITERATIONS,
+                                                             only_train_final_layer=self.only_train_final_layer,
+                                                             only_train_new_actions=self.only_train_new_actions)
+        print("Now there are {} actions: {}".format(current_num_actions, self.global_action_id_to_primitive_action))
 
     def calculate_how_many_episodes_to_play(self):
         """Calculates how many episodes the agent should play until we re-infer the grammar"""
@@ -291,38 +266,24 @@ class HRL(Base_Agent):
         """
         new_unflattened_actions = {}
         cutoff = self.num_top_results_to_use * self.action_frequency_required_in_top_results
-
         if self.reduce_macro_action_appearance_cutoff_throughout_training:
-
             cutoff = cutoff / (self.grammar_induction_iteration**0.5)
-
         print(" ")
         print("Cutoff ", cutoff)
         print(" ")
         action_id = len(self.global_action_id_to_primitive_action.keys())
-
-
-
         counts = {}
-
         for rule in rules_episode_appearance_count.keys():
             count = rules_episode_appearance_count[rule]
-
             # count = count * (len(rule))**0.25
-
             print("Rule {} -- Count {}".format(rule, count))
             if count >= cutoff:
                 new_unflattened_actions[action_id] = rule
                 counts[action_id] = count
                 action_id += 1
-
-
-
         new_actions = flatten_action_id_to_actions(new_unflattened_actions, self.global_action_id_to_primitive_action,
                                                    self.action_size)
-
         if self.add_1_macro_action_at_a_time:
-
             max_count = 0
             best_rule = None
             for action_id, primitive_actions in new_actions.items():
@@ -331,11 +292,9 @@ class HRL(Base_Agent):
                     if count > max_count:
                         max_count = count
                         best_rule = primitive_actions
-
             if best_rule is None: new_actions = {}
             else:
                 new_actions = {len(self.global_action_id_to_primitive_action.keys()): best_rule}
-
         return new_actions
 
     def overwrite_replay_buffer_and_pre_train_agent(self, replay_buffer, training_iterations, only_train_final_layer,
