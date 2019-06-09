@@ -55,7 +55,8 @@ config.hyperparameters = {
         "batch_norm": False,
         "gradient_clipping_norm": 5,
         "HER_sample_proportion": 0.8,
-        "clip_rewards": False
+        "clip_rewards": False,
+        "learning_iterations": 1
     },
     "Stochastic_Policy_Search_Agents": {
         "policy_network_type": "Linear",
