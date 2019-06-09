@@ -54,7 +54,8 @@ config.hyperparameters = {
         "final_layer_activation": "None",
         "batch_norm": False,
         "gradient_clipping_norm": 5,
-        "HER_sample_proportion": 0.8
+        "HER_sample_proportion": 0.8,
+        "clip_rewards": False
     },
     "Stochastic_Policy_Search_Agents": {
         "policy_network_type": "Linear",
@@ -65,7 +66,8 @@ config.hyperparameters = {
         "stochastic_action_decision": False,
         "num_policies": 10,
         "episodes_per_policy": 1,
-        "num_policies_to_keep": 5
+        "num_policies_to_keep": 5,
+        "clip_rewards": False
     },
     "Policy_Gradient_Agents": {
         "learning_rate": 0.01,
@@ -81,7 +83,8 @@ config.hyperparameters = {
         "mu": 0.0, #only required for continuous action games
         "theta": 0.0, #only required for continuous action games
         "sigma": 0.0, #only required for continuous action games
-        "epsilon_decay_rate_denominator": 1
+        "epsilon_decay_rate_denominator": 1,
+        "clip_rewards": False
     },
 
     "Actor_Critic_Agents": {
@@ -97,6 +100,7 @@ config.hyperparameters = {
         "add_extra_noise": False,
         "min_steps_before_learning": 4,
         "do_evaluation_iterations": True,
+        "clip_rewards": False,
 
         "Actor": {
             "learning_rate": 0.001,
@@ -148,7 +152,8 @@ config.hyperparameters = {
             "epsilon_decay_rate_denominator": 500,
             "discount_rate": 0.999,
             "learning_iterations": 1,
-            "tau": 0.01
+            "tau": 0.01,
+            "clip_rewards": False
         },
 
         "MANAGER": {
@@ -166,7 +171,8 @@ config.hyperparameters = {
             "epsilon_decay_rate_denominator": 50,
             "discount_rate": 0.99,
             "learning_iterations": 1,
-            "tau": 0.01
+            "tau": 0.01,
+            "clip_rewards": False
 
         }
 
