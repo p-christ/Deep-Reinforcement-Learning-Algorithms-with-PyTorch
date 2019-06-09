@@ -37,15 +37,10 @@ class HIRO(Base_Agent):
 
         self.lower_level_agent.average_score_required_to_win = float("inf")
 
-        print("LOWER LEVEL actor {} to {}".format(self.lower_level_agent.actor_local.input_dim, self.lower_level_agent.actor_local.output_dim))
-
         self.higher_level_agent_config = copy.deepcopy(config)
         self.higher_level_agent_config.hyperparameters = self.higher_level_agent_config.hyperparameters["HIGHER_LEVEL"]
         self.higher_level_agent_config.environment = Higher_Level_Agent_Environment_Wrapper(self.environment, self)
         self.higher_level_agent = HIRO_Higher_Level_DDPG_Agent(self.higher_level_agent_config, self.lower_level_agent.actor_local)
-
-        print("HIGHER LEVEL actor {} to {}".format(self.higher_level_agent.actor_local.input_dim,
-                                                  self.higher_level_agent.actor_local.output_dim))
 
         self.step_lower_level_states = []
         self.step_lower_level_action_seen = []

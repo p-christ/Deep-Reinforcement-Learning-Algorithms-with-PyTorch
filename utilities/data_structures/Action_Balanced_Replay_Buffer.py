@@ -18,7 +18,8 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     def add_experience(self, states, actions, rewards, next_states, dones):
-        """Adds experience(s) into the replay buffer"""
+        """Adds experience or list of experiences into the replay buffer"""
+        print("MEMORY ", self.memories)
         if type(dones) == list:
             assert type(dones[0]) != list, "A done shouldn't be a list"
             experiences = [self.experience(state, action, reward, next_state, done)
@@ -26,9 +27,11 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
                            zip(states, actions, rewards, next_states, dones)]
             for experience in experiences:
                 action = experience.action
+                print("MEMORY ADDING ACTION {} -- Experience {}".format(action, experience))
                 self.memories[action].append(experience)
         else:
             experience = self.experience(states, actions, rewards, next_states, dones)
+            print("MEMORY ADDING ACTION {} -- Experience {}".format(actions, experience))
             self.memories[actions].append(experience)
 
     def pick_experiences(self, num_experiences=None):
@@ -100,7 +103,5 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
 
         assert states.shape[0] == required_batch_size
 
-        # print("actions shape ", actions.shape)
-        # print(actions[0:10])
 
         return (states, actions, rewards, next_states, dones)

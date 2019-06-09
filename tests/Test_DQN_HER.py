@@ -49,7 +49,8 @@ config.hyperparameters = {
         "final_layer_activation": "None",
         "batch_norm": False,
         "gradient_clipping_norm": 5,
-        "HER_sample_proportion": 0.8
+        "HER_sample_proportion": 0.8,
+        "clip_rewards": False
 }
 }
 
@@ -70,7 +71,7 @@ def test_initiation():
     assert agent.HER_buffer_batch_size == 64 - int(0.2 * 64)
 
     assert agent.q_network_local.input_dim == 8
-    assert agent.q_network_local.output_dim[0] == 4
+    assert agent.q_network_local.output_layers[0].out_features == 4
 
     assert isinstance(agent.state_dict, dict)
 

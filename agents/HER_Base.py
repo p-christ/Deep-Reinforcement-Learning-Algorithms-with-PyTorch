@@ -61,7 +61,8 @@ class HER_Base(object):
         """Adapts conduct_action from base agent so that can handle changeable goal environments"""
         self.next_state_dict, self.reward, self.done, _ = self.environment.step(action)
         self.total_episode_score_so_far += self.reward
-        self.reward = max(min(self.reward, 1.0), -1.0)
+        if self.hyperparameters["clip_rewards"]:
+            self.reward = max(min(self.reward, 1.0), -1.0)
         self.observation = self.next_state_dict["observation"]
         self.desired_goal = self.next_state_dict["desired_goal"]
         self.achieved_goal = self.next_state_dict["achieved_goal"]
@@ -78,6 +79,10 @@ class HER_Base(object):
         new_next_states = [self.create_state_from_observation_and_desired_goal(observation, new_goal) for observation in
                       self.episode_next_observations]
         new_rewards = [self.environment.compute_reward(next_achieved_goal, new_goal, None) for next_achieved_goal in  self.episode_next_achieved_goals]
+
+        if self.hyperparameters["clip_rewards"]:
+            new_rewards = [max(min(reward, 1.0), -1.0) for reward in new_rewards]
+
         self.HER_memory.add_experience(new_states, self.episode_actions, new_rewards, new_next_states, self.episode_dones)
 
     def sample_from_HER_and_Ordinary_Buffer(self):

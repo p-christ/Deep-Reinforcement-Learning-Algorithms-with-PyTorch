@@ -62,7 +62,7 @@ config.hyperparameters = {
 }
 
 
-hrl = HRL(config)
+# hrl = HRL(config)
 
 # def test_flatten_action_id_to_actions():
 #     """Tests flatten_action_id_to_actions"""

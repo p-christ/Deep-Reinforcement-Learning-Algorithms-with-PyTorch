@@ -23,6 +23,7 @@ from operator import itemgetter
 # 5) Point is this game too simple to benefit from macro actions but it is using them
 # 6) Use name Hindsight Macro-Action Experience Replay
 # 7) We have extended idea of intrinsic motivation to apply to picking longer macro-actions (rather than exploration)
+# 8) having network train on next state prediction task has 2 benefits: 1) lets us know when to abandon macro action & 2) like in UNREAL can speed up training
 
 
 # TODO train model to predict next state too so that we can use this to figure out when to abandon macro actions
@@ -66,7 +67,25 @@ from operator import itemgetter
 # TODO is there anyway of making it more end-to-end?
 # TODO could use model of world to predict next state and then use that to pre-decide next action and so on until a surprisal happens (is this action grammars though)
 # TODO instead could feed in predicted next states into Q network so that it uses them to pick its macro action
-# TODO try only keeping the top 50% of experiences in replay buffer and removing the rest
+# TODO try only keeping the top 50% of experiences in replay buffer and removing the rest vs. only keeping top and bottom 20%
+# TODO try with DQN base not DDQN base?
+# TODO having network train on next state prediction task has 2 benefits: 1) lets us know when to abandon macro action & 2) like in UNREAL can speed up training
+# TODO have a network that predicts next state and abandon macro-action when its hard to predict what next state is, not just if it gets it wrong
+# TODO use games where visual input not that important... or download pre-trained DQN
+# download a pre-trained DQN to speed things up... for atari
+# use diagram of my model
+# use comparison table with other columns for papers ...
+# include other models that look at hierarchies in different ways...
+# discretize actions
+# HER with hindsight over the actions
+# TODO must leverage macro actions in order to do structured exploration... exploration a v. important benefit of this all...
+# TODO use sacred to log all experiment results https://github.com/IDSIA/sacred
+# TODO try using RMSProp optimizer instead...
+# TODO try just restricting actions to having to pick 2 actions in a row. 0 1 --> 00 10 01 11  see what happens
+# TODO 2 stage... first stage whether do habit or not, next stage whether do other action
+# TODO brain changes to make it easier / less effort to repeat habits. How can we replicate that idea here?
+# TODO human actions result of combination of part of brain that acts to get reward vs. part of brain that does habits
+# TODO put a minimum limit on number of instances of a macro action in replay buffer before we add it as a macro action?
 
 
 class HRL(Base_Agent):
@@ -340,9 +359,7 @@ class HRL(Base_Agent):
         on the length of the macro action"""
         if cumulative_reward == 0.0: increment = 0.1
         else: increment = abs(cumulative_reward)
-
         total_change = increment * ((length_of_macro_action - 1)** 0.5) * self.action_length_reward_bonus
-
         cumulative_reward += total_change
         return cumulative_reward
 
@@ -560,7 +577,8 @@ class DDQN_Wrapper(DDQN):
             if action_id in self.action_id_to_stepping_stone_action_id.keys():
                 stepping_stone_id = self.action_id_to_stepping_stone_action_id[action_id]
                 # should do this with no grad? Or grad?
-                network_action_values[:, action_id] += network_action_values[:, stepping_stone_id] #.detach()
+                with torch.no_grad():
+                    network_action_values[:, action_id] += network_action_values[:, stepping_stone_id] #.detach()
         # assert network_action_values.shape[0] in set([self.hyperparameters["batch_size"], 1])
         assert network_action_values.shape[1] == self.action_size
         return network_action_values
