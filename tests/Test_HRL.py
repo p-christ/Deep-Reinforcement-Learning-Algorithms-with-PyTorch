@@ -1,7 +1,7 @@
 import gym
 import pytest
 
-from HRL import HRL
+
 from Utility_Functions import flatten_action_id_to_actions
 from utilities.data_structures.Config import Config
 
