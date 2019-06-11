@@ -10,7 +10,6 @@ from nn_builder.pytorch.NN import NN
 # from tensorboardX import SummaryWriter
 from torch.optim import optimizer
 
-
 class Base_Agent(object):
 
     def __init__(self, config):
