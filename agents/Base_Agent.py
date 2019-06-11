@@ -265,12 +265,14 @@ class Base_Agent(object):
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm=None, retain_graph=False):
         """Takes an optimisation step by calculating gradients given the loss and then updating the parameters"""
+        if not isinstance(network, list): network = [network]
         optimizer.zero_grad() #reset gradients to 0
         loss.backward(retain_graph=retain_graph) #this calculates the gradients
         self.logger.info("Loss -- {}".format(loss.item()))
         if self.debug_mode: self.log_gradient_and_weight_information(network, optimizer)
         if clipping_norm is not None:
-            torch.nn.utils.clip_grad_norm_(network.parameters(), clipping_norm) #clip gradients to help stabilise training
+            for net in network:
+                torch.nn.utils.clip_grad_norm_(net.parameters(), clipping_norm) #clip gradients to help stabilise training
         optimizer.step() #this applies the gradients
 
     def log_gradient_and_weight_information(self, network, optimizer):
@@ -295,10 +297,10 @@ class Base_Agent(object):
         for target_param, local_param in zip(target_model.parameters(), local_model.parameters()):
             target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
 
-    def create_NN(self, input_dim, output_dim, key_to_use=None, override_seed=None):
+    def create_NN(self, input_dim, output_dim, key_to_use=None, override_seed=None, hyperparameters=None):
         """Creates a neural network for the agents to use"""
-        if key_to_use: hyperparameters = self.hyperparameters[key_to_use]
-        else: hyperparameters = self.hyperparameters
+        if hyperparameters is None: hyperparameters = self.hyperparameters
+        if key_to_use: hyperparameters = hyperparameters[key_to_use]
         if override_seed: seed = override_seed
         else: seed = self.config.seed
 

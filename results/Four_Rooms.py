@@ -1,13 +1,7 @@
-from A3C import A3C
-from agents.DQN_agents.DQN_HER import DQN_HER
 from DDQN import DDQN
 from environments.Four_Rooms_Environment import Four_Rooms_Environment
-from hierarchical_agents.DIAYN import DIAYN
-from hierarchical_agents.HRL import HRL
-from hierarchical_agents.SNN_HRL import SNN_HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
-from agents.DQN_agents.DQN import DQN
 
 config = Config()
 config.seed = 1

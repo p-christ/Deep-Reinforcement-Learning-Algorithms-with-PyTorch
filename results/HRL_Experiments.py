@@ -1,13 +1,8 @@
 import gym
 
-from DDQN import DDQN
-from HRL import HRL
-from SAC_Discrete import SAC_Discrete
-from hierarchical_agents.SNN_HRL import SNN_HRL
+from HRL.HRL import HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
-from agents.DQN_agents.DQN import DQN
-from agents.hierarchical_agents.h_DQN import h_DQN
 
 config = Config()
 config.environment = gym.make("Taxi-v2")

@@ -41,6 +41,7 @@ class Trainer(object):
             "HIRO": "HIRO",
             "SAC": "Actor_Critic_Agents",
             "HRL": "HRL",
+            "Model_HRL": "HRL",
             "DIAYN": "DIAYN",
             "Dueling DDQN": "DQN_Agents"
         }

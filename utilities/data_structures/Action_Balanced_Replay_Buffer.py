@@ -98,7 +98,7 @@ class Action_Balanced_Replay_Buffer(Replay_Buffer):
         next_states = next_states[matching_indexes]
         dones = dones[matching_indexes]
 
-        assert states.shape[0] == required_batch_size
+        assert abs(states.shape[0] - required_batch_size) <= 0.05*required_batch_size, "{} vs. {}".format(states.shape[0], required_batch_size)
 
 
         return (states, actions, rewards, next_states, dones)

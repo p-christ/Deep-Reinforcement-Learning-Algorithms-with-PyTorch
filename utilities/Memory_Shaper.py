@@ -74,7 +74,6 @@ class Memory_Shaper(object):
         steps = len(states)
         for step in range(steps):
             replay_buffer.add_experience(states[step], actions[step], rewards[step], next_states[step], dones[step])
-            print("ADDING ", (states[step], actions[step], rewards[step], next_states[step], dones[step]))
             for action_length in range(2, max_action_length + 1):
                 if step < action_length - 1: continue
                 action_sequence =  tuple(actions[step - action_length + 1 : step + 1])
@@ -83,13 +82,9 @@ class Memory_Shaper(object):
                     new_action = action_rules[action_sequence]
                     new_state = states[step - action_length + 1]
                     new_reward = np.sum(rewards[step - action_length + 1:step + 1])
-                    print("New reward before ", new_reward)
-                    print("Action sequence ", action_sequence)
                     new_reward = self.new_reward_fn(new_reward, len(action_sequence))
-                    print("New reward after ", new_reward)
                     new_next_state = next_states[step]
                     new_dones = dones[step]
-                    print("ADDING ",(new_state, new_action, new_reward, new_next_state, new_dones))
                     replay_buffer.add_experience(new_state, new_action, new_reward, new_next_state, new_dones)
 
 

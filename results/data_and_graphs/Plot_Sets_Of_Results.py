@@ -12,8 +12,8 @@ trainer = Trainer(config=Config(), agents=None)
 
 
 
-trainer.visualise_preexisting_results(save_image_path="Taxi_graph_comparison.png", data_path="Taxi_data.pkl",
-                                      title="Taxi v2") #, y_limits=(0.0, 0.25))
+trainer.visualise_preexisting_results(save_image_path="hrl_experiments/Taxi_graph_comparison.png", data_path="hrl_experiments/Taxi_data.pkl",
+                                      title="Taxi v2", y_limits=(-800.0, 0.0))
 
 
 # trainer.visualise_preexisting_results(save_image_path="Long_Corridor_Graph.png", data_path="Long_Corridor_Results_Data.pkl",
