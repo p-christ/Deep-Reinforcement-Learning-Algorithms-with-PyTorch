@@ -1,5 +1,6 @@
 import gym
 
+from DDQN import DDQN
 from HRL.HRL import HRL
 from HRL.Model_HRL import Model_HRL
 from agents.Trainer import Trainer
@@ -25,8 +26,8 @@ config.save_model = False
 
 # Loss is not drawing a random sample! otherwise wouldnt jump around that much!!
 
-linear_hidden_units = [16, 16]
-learning_rate = 0.01  # 0.001 taxi
+linear_hidden_units = [32, 32]
+learning_rate = 0.005  # 0.001 taxi
 buffer_size = 1000000
 batch_size = 256
 batch_norm = False
@@ -35,7 +36,7 @@ gradient_clipping_norm = 0.5 #needs to be optimised
 update_every_n_steps = 1
 learning_iterations = 1
 epsilon_decay_rate_denominator = 2 #150
-episodes_per_round = 30 #80
+episodes_per_round = 50 #80
 discount_rate = 0.99
 tau = 0.004
 sequitur_k = 2
@@ -45,11 +46,11 @@ action_balanced_replay_buffer = True
 copy_over_hidden_layers = True
 
 num_top_results_to_use = 10
-action_frequency_required_in_top_results = 1.0
+action_frequency_required_in_top_results = 0.8
 
 random_episodes_to_run = 0
 
-action_length_reward_bonus = -0.5
+action_length_reward_bonus = 0.0
 
 only_train_new_actions = True
 only_train_final_layer = True
@@ -59,7 +60,7 @@ add_1_macro_action_at_a_time = True
 calculate_q_values_as_increments = True
 abandon_ship = True
 clip_rewards = True
-use_relative_counts = False
+use_relative_counts = True
 
 config.debug_mode = False
 
@@ -164,7 +165,7 @@ config.hyperparameters = {
 
 
 if __name__ == "__main__":
-    AGENTS = [HRL] #] #DDQN, ,  ] #] ##  ] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
+    AGENTS = [HRL, DDQN] #] #DDQN, ,  ] #] ##  ] #, SAC_Discrete,  SAC_Discrete, DDQN] #HRL] #, SNN_HRL, DQN, h_DQN]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
 

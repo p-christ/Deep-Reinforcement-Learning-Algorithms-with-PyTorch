@@ -224,9 +224,11 @@ class DDQN_Wrapper(DDQN):
 
                         max_difference = 0.2 * increment
                         if q_values_action + max_difference < q_value_highest:
-                            print("BREAKING Action {} -- Q Values {}".format(action, q_values))
-                            macro_reward -= 1.0  #punish agent for picking macro action that it had to pull out of
-                            break
+                            # print("BREAKING Action {} -- Q Values {}".format(action, q_values))
+                            macro_reward -= 0.25  #punish agent for picking macro action that it had to pull out of
+                            # break
+                            print("Changing Course of Action {} to {} -- Q Values {}".format(action, torch.argmax(q_values), q_values))
+                            action = torch.argmax(q_values).item()
 
                 step_number += 1
 

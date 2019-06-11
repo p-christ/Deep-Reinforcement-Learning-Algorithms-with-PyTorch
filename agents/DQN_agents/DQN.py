@@ -1,3 +1,5 @@
+from collections import Counter
+
 import torch
 import random
 import torch.optim as optim
@@ -20,7 +22,7 @@ class DQN(Base_Agent):
 
     def reset_game(self):
         super(DQN, self).reset_game()
-        # self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
+        self.update_learning_rate(self.hyperparameters["learning_rate"], self.q_network_optimizer)
 
     def step(self):
         """Runs a step within a game including a learning step if required"""
@@ -58,6 +60,10 @@ class DQN(Base_Agent):
         if experiences is None: states, actions, rewards, next_states, dones = self.sample_experiences() #Sample experiences
         else: states, actions, rewards, next_states, dones = experiences
         loss = self.compute_loss(states, next_states, rewards, actions, dones)
+
+        actions_list = [action_X.item() for action_X in actions ]
+
+        self.logger.info("Action counts {}".format(Counter(actions_list)))
         self.take_optimisation_step(self.q_network_optimizer, self.q_network_local, loss, self.hyperparameters["gradient_clipping_norm"])
 
     def compute_loss(self, states, next_states, rewards, actions, dones):

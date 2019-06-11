@@ -10,6 +10,7 @@ import time
 import numpy as np
 from DDQN import DDQN
 from HRL.DDQN_HRL import DDQN_Wrapper
+from HRL.Grammar_Generator import Grammar_Generator
 from Memory_Shaper import Memory_Shaper
 from Utility_Functions import flatten_action_id_to_actions
 from k_Sequitur import k_Sequitur
@@ -21,71 +22,32 @@ class HRL(Base_Agent):
 
     def __init__(self, config):
         super().__init__(config)
-        self.min_episode_score_seen = float("inf")
-        self.end_of_episode_symbol = "/"
-        self.grammar_calculator = k_Sequitur(k=config.hyperparameters["sequitur_k"], end_of_episode_symbol=self.end_of_episode_symbol)
+        self.grammar_generator = Grammar_Generator(self.hyperparameters["num_top_results_to_use"], self.action_size,
+                                                   self.hyperparameters["add_1_macro_action_at_a_time"], self.hyperparameters["use_relative_counts"],
+                                                   self.hyperparameters[
+                                                       "reduce_macro_action_appearance_cutoff_throughout_training"], self.logger,
+                                                   self.hyperparameters["sequitur_k"],
+                                                   self.hyperparameters["action_frequency_required_in_top_results"])
         self.rolling_score = self.lowest_possible_episode_score
-        self.episode_actions_scores_and_exploration_status = None
         self.episodes_to_run_with_no_exploration = self.hyperparameters["episodes_to_run_with_no_exploration"]
-
-        self.use_global_list_of_best_performing_actions = self.hyperparameters["use_global_list_of_best_performing_actions"]
-
-        self.global_action_id_to_primitive_action = {k: tuple([k]) for k in range(self.action_size)}
-        self.num_top_results_to_use = self.hyperparameters["num_top_results_to_use"]
-
-
-        self.new_actions_just_added = []
-
-        self.action_frequency_required_in_top_results = self.hyperparameters["action_frequency_required_in_top_results"]
-
-        self.reduce_macro_action_appearance_cutoff_throughout_training = self.hyperparameters["reduce_macro_action_appearance_cutoff_throughout_training"]
-        self.add_1_macro_action_at_a_time = self.hyperparameters["add_1_macro_action_at_a_time"]
-
+        self.action_id_to_action = {k: tuple([k]) for k in range(self.action_size)}
         self.episodes_per_round = self.hyperparameters["episodes_per_round"]
-        self.use_relative_counts = self.hyperparameters["use_relative_counts"]
-
-
-        self.action_id_to_stepping_stone_action_id = {}
-
-        self.agent = DDQN_Wrapper(config, self.global_action_id_to_primitive_action)
-
-
+        self.agent = DDQN_Wrapper(config, self.action_id_to_action)
 
     def run_n_episodes(self, num_episodes=None, show_whether_achieved_goal=True, save_and_print_results=True):
-
         start = time.time()
-
         if num_episodes is None: num_episodes = self.config.num_episodes_to_run
-        self.num_episodes = num_episodes
         self.episodes_conducted = 0
-        self.grammar_induction_iteration = 1
-
-        while self.episodes_conducted < self.num_episodes:
-            episode_actions_scores_and_exploration_status = self.play_new_episodes()
-            self.generate_new_grammar(episode_actions_scores_and_exploration_status, self.global_action_id_to_primitive_action)
-            self.agent.update_agent(self.global_action_id_to_primitive_action, self.new_actions_just_added)
-            self.grammar_induction_iteration += 1
-        final_actions_count = Counter(self.round_of_macro_actions)
-        print("FINAL EPISODE SET ACTIONS COUNT ", final_actions_count)
+        while self.episodes_conducted < num_episodes:
+            playing_data, self.round_of_macro_actions = self.agent.run_n_episodes(num_episodes=self.episodes_per_round,
+                                                                                  episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
+            self.episodes_conducted += len(playing_data)
+            self.action_id_to_action, new_actions_just_added =  self.grammar_generator.generate_new_grammar(playing_data,
+                                                                                                           self.action_id_to_action)
+            self.agent.update_agent(self.action_id_to_action, new_actions_just_added)
+        print("Final episode set actions count: ", Counter(self.round_of_macro_actions))
         time_taken = time.time() - start
-        return self.agent.game_full_episode_scores[:self.num_episodes], self.agent.rolling_results[:self.num_episodes], time_taken
-
-    def play_new_episodes(self):
-        """Plays a new set of episodes using the recently updated agent"""
-        episode_actions_scores_and_exploration_status, self.round_of_macro_actions = \
-            self.agent.run_n_episodes(num_episodes=self.calculate_how_many_episodes_to_play(),
-                                      episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
-        self.episodes_conducted += len(self.episode_actions_scores_and_exploration_status)
-        return episode_actions_scores_and_exploration_status
-
-
-    def calculate_how_many_episodes_to_play(self):
-        """Calculates how many episodes the agent should play until we re-infer the grammar"""
-        # episodes_to_play = self.hyperparameters["epsilon_decay_rate_denominator"] / self.grammar_induction_iteration
-        # episodes_to_play = max(self.episodes_per_round, int(max(self.episodes_to_run_with_no_exploration * 2, episodes_to_play)))
-        episodes_to_play = self.episodes_per_round
-        print("Grammar iteration {} -- Episodes to play {}".format(self.grammar_induction_iteration, episodes_to_play))
-        return episodes_to_play
+        return self.agent.game_full_episode_scores[:num_episodes], self.agent.rolling_results[:num_episodes], time_taken
 
 
 
