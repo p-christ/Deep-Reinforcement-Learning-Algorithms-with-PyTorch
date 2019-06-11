@@ -1,30 +1,27 @@
+from operator import itemgetter
+import numpy as np
+
+from Utility_Functions import flatten_action_id_to_actions
+from k_Sequitur import k_Sequitur
 
 
 class Grammar_Generator(object):
-    """Takes as input the actions in the best performing episodes """
+    """Takes as input the actions in the best performing episodes and prdocues an updated action list"""
 
     def __init__(self):
-        pass
+        self.global_list_of_best_results = []
+        self.global_list_of_bad_results = []
 
 
-    def generate_new_grammar(self):
+    def generate_new_grammar(self, episode_actions_scores_and_exploration_status, global_action_id_to_primitive_action):
         """Infers a new action grammar and updates the global action set"""
-        good_actions = self.pick_actions_to_infer_grammar_from(self.episode_actions_scores_and_exploration_status)
-        num_actions_before = len(self.global_action_id_to_primitive_action)
-        if self.infer_new_grammar: self.update_action_choices(good_actions)
-        else: print("NOT inferring new grammar because no better results found")
+        good_actions, bad_actions = self.pick_actions_to_infer_grammar_from(episode_actions_scores_and_exploration_status)
+        num_actions_before = len(global_action_id_to_primitive_action)
+        
+        self.update_action_choices(good_actions, bad_actions)
         self.new_actions_just_added = list(range(num_actions_before, num_actions_before + len(
-            self.global_action_id_to_primitive_action) - num_actions_before))
+             global_action_id_to_primitive_action) - num_actions_before))
         self.check_new_global_actions_valid()
-        self.grammar_induction_iteration += 1
-
-    def check_new_global_actions_valid(self):
-        """Checks that global_action_id_to_primitive_action still only has valid entries"""
-        assert len(set(self.global_action_id_to_primitive_action.values())) == len(
-            self.global_action_id_to_primitive_action.values()), \
-            "Not all actions are unique anymore: {}".format(self.global_action_id_to_primitive_action)
-        for key, value in self.global_action_id_to_primitive_action.items():
-            assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
 
     def pick_actions_to_infer_grammar_from(self, episode_actions_scores_and_exploration_status):
         """Takes in data summarising the results of the latest games the agent played and then picks the actions from which
@@ -37,27 +34,30 @@ class Grammar_Generator(object):
         best_episode_actions = list(itemgetter(*top_result_indexes)(episode_actions))
         best_episode_rewards = list(itemgetter(*top_result_indexes)(episode_scores))
 
-        if self.use_global_list_of_best_performing_actions:
-            best_result_this_round = max(best_episode_rewards)
-            if len(self.global_list_of_best_results) == 0:
-                worst_best_result_ever = float("-inf")
-            else:
-                worst_best_result_ever = min([data[0] for data in self.global_list_of_best_results])
-            if best_result_this_round > worst_best_result_ever:
-                self.infer_new_grammar = True
-                self.global_list_of_best_results = self.keep_track_of_best_results_seen_so_far(self.global_list_of_best_results, best_episode_rewards, best_episode_actions)
-                best_episode_actions = [data[1] for data in self.global_list_of_best_results]
-                print("AFTER ", best_episode_actions)
-                print("AFter best results ", [data[0] for data in self.global_list_of_best_results])
+        best_result_this_round = max(best_episode_rewards)
+        if len(self.global_list_of_best_results) == 0:
+            worst_best_result_ever = float("-inf")
+        else:
+            worst_best_result_ever = min([data[0] for data in self.global_list_of_best_results])
+        if best_result_this_round > worst_best_result_ever:
+            combined_best_results = [(result, actions) for result, actions in zip( best_episode_rewards, best_episode_actions)]
+            self.global_list_of_best_results, new_old_best_results = self.keep_track_of_best_results_seen_so_far(
+                self.global_list_of_best_results, combined_best_results)
+            self.global_list_of_bad_results, _ = self.keep_track_of_best_results_seen_so_far(
+                self.global_list_of_bad_results, new_old_best_results)
+            best_episode_actions = [data[1] for data in self.global_list_of_best_results]
+            bad_episode_actions = [data[1] for data in self.global_list_of_bad_results]
+            print("AFTER ", best_episode_actions)
+            print("AFter best results ", [data[0] for data in self.global_list_of_best_results])
+            print("AFter bad results ", [data[0] for data in self.global_list_of_bad_results])
 
         best_episode_actions = [item for sublist in best_episode_actions for item in sublist]
-        return best_episode_actions
+        return best_episode_actions, bad_episode_actions
 
     def keep_track_of_best_results_seen_so_far(self, global_results, top_results, best_episode_actions):
         """Keeps a track of the top episode results so far & the actions played in those episodes"""
-        combined_result = [(result, actions) for result, actions in zip(top_results, best_episode_actions)]
+
         self.logger.info("New Candidate Best Results: {}".format(combined_result))
-        global_results
         global_results += combined_result
         global_results.sort(key=lambda x: x[0], reverse=True)
         global_results, old_best_results = global_results[:self.num_top_results_to_use], global_results[self.num_top_results_to_use:]
@@ -66,20 +66,38 @@ class Grammar_Generator(object):
         assert len(global_results[0]) == 2
         return global_results, old_best_results
 
-    def update_action_choices(self, latest_macro_actions_seen):
-        """Creates a grammar out of the latest list of macro actions conducted by the agent"""
-        grammar_calculator = k_Sequitur(k=self.config.hyperparameters["sequitur_k"],
-                                        end_of_episode_symbol=self.end_of_episode_symbol)
-        print("latest_macro_actions_seen ", latest_macro_actions_seen)
-        _, _, _, rules_episode_appearance_count = grammar_calculator.generate_action_grammar(latest_macro_actions_seen)
-        print("NEW rules_episode_appearance_count ", rules_episode_appearance_count)
 
+
+    def check_new_global_actions_valid(self):
+        """Checks that global_action_id_to_primitive_action still only has valid entries"""
+        assert len(set(self.global_action_id_to_primitive_action.values())) == len(
+            self.global_action_id_to_primitive_action.values()), \
+            "Not all actions are unique anymore: {}".format(self.global_action_id_to_primitive_action)
+        for key, value in self.global_action_id_to_primitive_action.items():
+            assert max(value) < self.action_size, "Actions should be in terms of primitive actions"
+
+
+    def update_action_choices(self, good_actions, bad_actions):
+        """Creates a grammar out of the latest list of macro actions conducted by the agent"""
+        good_episode_rule_appearance = self.get_rule_appearance_count(good_actions)
+        bad_episode_rule_appearance = self.get_rule_appearance_count(bad_actions)
         if not self.use_relative_counts:
-            new_actions = self.pick_new_macro_actions(rules_episode_appearance_count)
+            new_actions = self.pick_new_macro_actions(good_episode_rule_appearance)
         else:
             new_actions = self.pick_new_macro_actions_using_relative_data(good_episode_rule_appearance, bad_episode_rule_appearance)
-
         self.update_global_action_id_to_primitive_action(new_actions)
+
+    def get_rule_appearance_count(self, actions):
+        """Takes as input a list of actions and infers rules using Sequitur and then returns a dictionary indicating how
+        many times each rule was used"""
+        grammar_calculator = k_Sequitur(k=self.config.hyperparameters["sequitur_k"],
+                                        end_of_episode_symbol=self.end_of_episode_symbol)
+        print("latest_macro_actions_seen ", actions)
+        _, _, _, rules_episode_appearance_count = grammar_calculator.generate_action_grammar(actions)
+        print("NEW rules_episode_appearance_count ", rules_episode_appearance_count)
+        return rules_episode_appearance_count
+
+
 
     def update_global_action_id_to_primitive_action(self, new_actions):
         """Updates global_action_id_to_primitive_action by adding any new actions in that aren't already represented"""

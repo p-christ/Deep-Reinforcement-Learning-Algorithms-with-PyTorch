@@ -33,8 +33,7 @@ class HRL(Base_Agent):
         self.global_action_id_to_primitive_action = {k: tuple([k]) for k in range(self.action_size)}
         self.num_top_results_to_use = self.hyperparameters["num_top_results_to_use"]
 
-        self.global_list_of_best_results = []
-        self.global_list_of_bad_results = []
+
         self.new_actions_just_added = []
 
         self.action_frequency_required_in_top_results = self.hyperparameters["action_frequency_required_in_top_results"]
@@ -62,9 +61,10 @@ class HRL(Base_Agent):
         self.grammar_induction_iteration = 1
 
         while self.episodes_conducted < self.num_episodes:
-            self.play_new_episodes()
-            self.generate_new_grammar()
+            episode_actions_scores_and_exploration_status = self.play_new_episodes()
+            self.generate_new_grammar(episode_actions_scores_and_exploration_status, self.global_action_id_to_primitive_action)
             self.agent.update_agent(self.global_action_id_to_primitive_action, self.new_actions_just_added)
+            self.grammar_induction_iteration += 1
         final_actions_count = Counter(self.round_of_macro_actions)
         print("FINAL EPISODE SET ACTIONS COUNT ", final_actions_count)
         time_taken = time.time() - start
@@ -72,10 +72,11 @@ class HRL(Base_Agent):
 
     def play_new_episodes(self):
         """Plays a new set of episodes using the recently updated agent"""
-        self.episode_actions_scores_and_exploration_status, self.round_of_macro_actions = \
+        episode_actions_scores_and_exploration_status, self.round_of_macro_actions = \
             self.agent.run_n_episodes(num_episodes=self.calculate_how_many_episodes_to_play(),
                                       episodes_to_run_with_no_exploration=self.episodes_to_run_with_no_exploration)
         self.episodes_conducted += len(self.episode_actions_scores_and_exploration_status)
+        return episode_actions_scores_and_exploration_status
 
 
     def calculate_how_many_episodes_to_play(self):

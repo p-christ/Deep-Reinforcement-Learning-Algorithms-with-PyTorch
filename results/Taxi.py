@@ -50,7 +50,6 @@ action_frequency_required_in_top_results = 1.0
 random_episodes_to_run = 0
 
 action_length_reward_bonus = -0.5
-use_global_list_of_best_performing_actions = True
 
 only_train_new_actions = True
 only_train_final_layer = True
@@ -88,7 +87,6 @@ config.hyperparameters = {
         "episodes_to_run_with_no_exploration": episodes_to_run_with_no_exploration,
         "action_balanced_replay_buffer": action_balanced_replay_buffer,
         "copy_over_hidden_layers": copy_over_hidden_layers,
-        "use_global_list_of_best_performing_actions": use_global_list_of_best_performing_actions,
         "random_episodes_to_run": random_episodes_to_run,
         "only_train_new_actions": only_train_new_actions,
         "only_train_final_layer": only_train_final_layer,
