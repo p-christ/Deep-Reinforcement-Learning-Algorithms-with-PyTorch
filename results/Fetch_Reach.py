@@ -1,8 +1,8 @@
 import gym
 
-from actor_critic_agents.DDPG import DDPG
+from agents.actor_critic_agents.DDPG import DDPG
 from agents.actor_critic_agents.DDPG_HER import DDPG_HER
-from data_structures.Config import Config
+from utilities.data_structures.Config import Config
 from agents.Trainer import Trainer
 
 

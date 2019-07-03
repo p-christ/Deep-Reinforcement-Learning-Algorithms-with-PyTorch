@@ -2,7 +2,7 @@ import random
 from collections import namedtuple, deque
 import torch
 import numpy as np
-from Replay_Buffer import Replay_Buffer
+from .Replay_Buffer import Replay_Buffer
 
 class Action_Balanced_Replay_Buffer(Replay_Buffer):
     """Replay buffer that provides sample of experiences that have an equal number of each action being conducted"""

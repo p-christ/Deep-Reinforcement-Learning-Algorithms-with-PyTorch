@@ -4,16 +4,15 @@ from collections import Counter
 import torch
 from gym import Wrapper, spaces
 from torch import nn, optim
-from Base_Agent import Base_Agent
+from agents.Base_Agent import Base_Agent
 import copy
 import time
-import numpy as np
-from DDQN import DDQN
-from HRL.DDQN_HRL import DDQN_Wrapper
-from HRL.Grammar_Generator import Grammar_Generator
-from Memory_Shaper import Memory_Shaper
-from Utility_Functions import flatten_action_id_to_actions
-from k_Sequitur import k_Sequitur
+from agents.DQN_agents.DDQN import DDQN
+from .DDQN_HRL import DDQN_Wrapper
+from .Grammar_Generator import Grammar_Generator
+from utilities.Memory_Shaper import Memory_Shaper
+from utilities.Utility_Functions import flatten_action_id_to_actions
+from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 import numpy as np
 from operator import itemgetter
 

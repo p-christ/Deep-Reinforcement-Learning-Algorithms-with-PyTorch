@@ -1,6 +1,6 @@
 import pickle
 
-from Config import Config
+from utilities.data_structures.Config import Config
 from Trainer import Trainer
 
 

@@ -8,11 +8,12 @@ import torch
 
 from torch import optim
 from collections import Counter
-from Base_Agent import Base_Agent
-from Replay_Buffer import Replay_Buffer
-from Utility_Functions import flatten_action_id_to_actions
+from agents.Base_Agent import Base_Agent
+from .DDQN_HRL import DDQN_Wrapper
+from utilities.data_structures.Replay_Buffer import Replay_Buffer
+from utilities.Utility_Functions import flatten_action_id_to_actions
 from exploration_strategies.Epsilon_Greedy_Exploration import Epsilon_Greedy_Exploration
-from k_Sequitur import k_Sequitur
+from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 
 class Model_HRL(Base_Agent):
     agent_name = "Model_HRL"

@@ -1,7 +1,7 @@
 import copy
 import numpy as np
-from Base_Agent import Base_Agent
-from DDQN import DDQN
+from agents.Base_Agent import Base_Agent
+from agents.DQN_agents.DDQN import DDQN
 
 class h_DQN(Base_Agent):
     """Implements hierarchical RL agent h-DQN from paper Kulkarni et al. (2016) https://arxiv.org/abs/1604.06057?context=stat

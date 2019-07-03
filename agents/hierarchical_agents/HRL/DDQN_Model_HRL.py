@@ -6,8 +6,8 @@ import torch.nn.functional as F
 
 from collections import Counter
 from torch import optim
-from Base_Agent import Base_Agent
-from Replay_Buffer import Replay_Buffer
+from agents.Base_Agent import Base_Agent
+from utilities.data_structures.Replay_Buffer import Replay_Buffer
 from exploration_strategies.Epsilon_Greedy_Exploration import Epsilon_Greedy_Exploration
 
 

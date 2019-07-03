@@ -1,4 +1,4 @@
-from Memory_Shaper import Memory_Shaper
+from utilities.Memory_Shaper import Memory_Shaper
 import numpy as np
 
 buffer_size = 10
