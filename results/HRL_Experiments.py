@@ -1,6 +1,6 @@
 import gym
 
-from HRL.HRL import HRL
+from agents.hierarchical_agents.HRL.HRL import HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
 

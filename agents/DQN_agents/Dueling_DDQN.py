@@ -1,7 +1,7 @@
 import torch
 from torch import optim
-from Base_Agent import Base_Agent
-from DDQN import DDQN
+from agents.Base_Agent import Base_Agent
+from .DDQN import DDQN
 
 class Dueling_DDQN(DDQN):
     """A dueling double DQN agent as described in the paper http://proceedings.mlr.press/v48/wangf16.pdf"""

@@ -2,9 +2,9 @@ import copy
 import torch
 import numpy as np
 from gym import Wrapper
-from Base_Agent import Base_Agent
-from DDPG import DDPG
-from Trainer import Trainer
+from agents.Base_Agent import Base_Agent
+from agents.actor_critic_agents.DDPG import DDPG
+from agents.Trainer import Trainer
 
 
 class HIRO(Base_Agent):

@@ -6,7 +6,7 @@ import random
 import numpy as np
 import torch
 
-from hierarchical_agents.HIRO import HIRO
+from agents.hierarchical_agents.HIRO import HIRO
 from utilities.data_structures.Config import Config
 
 random.seed(1)

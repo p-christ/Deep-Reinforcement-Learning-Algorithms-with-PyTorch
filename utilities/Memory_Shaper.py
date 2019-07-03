@@ -1,6 +1,6 @@
 # NOT FINISHED
-from Action_Balanced_Replay_Buffer import Action_Balanced_Replay_Buffer
-from Replay_Buffer import Replay_Buffer
+from .data_structures.Action_Balanced_Replay_Buffer import Action_Balanced_Replay_Buffer
+from .data_structures.Replay_Buffer import Replay_Buffer
 import numpy as np
 import random
 

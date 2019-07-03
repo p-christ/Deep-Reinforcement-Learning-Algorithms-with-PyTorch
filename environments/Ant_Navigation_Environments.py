@@ -1,4 +1,4 @@
-from ant_environments.create_maze_env import create_maze_env
+from .ant_environments.create_maze_env import create_maze_env
 import numpy as np
 
 """Environments taken from HIRO paper github repo: https://github.com/tensorflow/models/tree/master/research/efficient-hrl

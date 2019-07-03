@@ -1,4 +1,4 @@
-from OU_Noise import OU_Noise
+from utilities.OU_Noise import OU_Noise
 from exploration_strategies.Base_Exploration_Strategy import Base_Exploration_Strategy
 
 class OU_Noise_Exploration(Base_Exploration_Strategy):

@@ -108,7 +108,6 @@ y
 conda activate myenvname
 
 pip3 install -r requirements.txt
-export PYTHONPATH="${PYTHONPATH}:/Deep_RL_Implementations"
 
 python Results/Cart_Pole.py
 ``` 

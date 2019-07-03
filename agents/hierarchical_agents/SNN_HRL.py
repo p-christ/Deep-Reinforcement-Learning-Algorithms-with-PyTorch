@@ -6,7 +6,7 @@ import torch
 from gym import Wrapper, spaces
 from agents.Base_Agent import Base_Agent
 from agents.policy_gradient_agents.PPO import PPO
-from DDQN import DDQN
+from agents.DQN_agents.DDQN import DDQN
 
 
 class SNN_HRL(Base_Agent):

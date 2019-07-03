@@ -1,6 +1,6 @@
 import numpy as np
 from utilities.data_structures.Config import Config
-from Trainer import Trainer
+from agents.Trainer import Trainer
 
 def test_get_mean_and_standard_deviation_difference_results():
     """Tests that get_mean_and_standard_deviation_difference_results method produces correct output"""

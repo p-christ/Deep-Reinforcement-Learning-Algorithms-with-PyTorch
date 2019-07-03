@@ -1,4 +1,4 @@
-from hierarchical_agents.SNN_HRL import SNN_HRL
+from agents.hierarchical_agents.SNN_HRL import SNN_HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
 from agents.DQN_agents.DQN import DQN

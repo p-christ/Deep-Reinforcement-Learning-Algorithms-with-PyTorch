@@ -1,10 +1,10 @@
 import torch
 from torch.optim import Adam
 import torch.nn.functional as F
-from Base_Agent import Base_Agent
-from Replay_Buffer import Replay_Buffer
-from SAC import SAC
-from Utility_Functions import create_actor_distribution
+from agents.Base_Agent import Base_Agent
+from utilities.data_structures.Replay_Buffer import Replay_Buffer
+from .SAC import SAC
+from utilities.Utility_Functions import create_actor_distribution
 
 class SAC_Discrete(SAC):
     """The Soft Actor Critic for discrete actions. It inherits from SAC for continuous actions and only changes a few

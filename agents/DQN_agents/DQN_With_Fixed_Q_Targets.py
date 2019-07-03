@@ -1,6 +1,6 @@
 import copy
 
-from Base_Agent import Base_Agent
+from agents.Base_Agent import Base_Agent
 from agents.DQN_agents.DQN import DQN
 
 class DQN_With_Fixed_Q_Targets(DQN):

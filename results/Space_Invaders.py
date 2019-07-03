@@ -1,8 +1,8 @@
 import gym
-from Atari_Environment import make_atari_game
-from DDQN import DDQN
-from HRL.HRL import HRL
-from HRL.Model_HRL import Model_HRL
+from environments.Atari_Environment import make_atari_game
+from agents.DQN_agents.DDQN import DDQN
+from agents.hierarchical_agents.HRL.HRL import HRL
+from agents.hierarchical_agents.HRL.Model_HRL import Model_HRL
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
 

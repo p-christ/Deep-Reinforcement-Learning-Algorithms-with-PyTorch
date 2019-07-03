@@ -1,6 +1,6 @@
-from Base_Agent import Base_Agent
+from agents.Base_Agent import Base_Agent
 from utilities.OU_Noise import OU_Noise
-from Replay_Buffer import Replay_Buffer
+from utilities.data_structures.Replay_Buffer import Replay_Buffer
 from torch.optim import Adam
 import torch
 import torch.nn.functional as F

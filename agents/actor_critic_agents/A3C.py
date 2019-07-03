@@ -6,7 +6,7 @@ import torch
 from torch import multiprocessing
 from torch.multiprocessing import Queue
 from torch.optim import Adam
-from Base_Agent import Base_Agent
+from agents.Base_Agent import Base_Agent
 from utilities.Utility_Functions import create_actor_distribution, SharedAdam
 
 class A3C(Base_Agent):

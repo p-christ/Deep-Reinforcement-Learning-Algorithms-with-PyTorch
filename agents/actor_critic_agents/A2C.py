@@ -1,4 +1,4 @@
-from A3C import A3C
+from .A3C import A3C
 
 class A2C(A3C):
     """Synchronous version of A2C algorithm from deepmind paper https://arxiv.org/pdf/1602.01783.pdf. The only

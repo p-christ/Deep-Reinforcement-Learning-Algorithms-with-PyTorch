@@ -1,8 +1,8 @@
 from operator import itemgetter
 import numpy as np
 
-from Utility_Functions import flatten_action_id_to_actions
-from k_Sequitur import k_Sequitur
+from utilities.Utility_Functions import flatten_action_id_to_actions
+from utilities.grammar_algorithms.k_Sequitur import k_Sequitur
 
 
 class Grammar_Generator(object):

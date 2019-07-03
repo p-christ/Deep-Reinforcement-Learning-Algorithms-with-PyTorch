@@ -1,10 +1,10 @@
 import gym
 from agents.policy_gradient_agents.PPO import PPO
 from agents.actor_critic_agents.DDPG import DDPG
-from SAC import SAC
-from TD3 import TD3
+from agents.actor_critic_agents.SAC import SAC
+from agents.actor_critic_agents.TD3 import TD3
 from agents.Trainer import Trainer
-from hierarchical_agents.DIAYN import DIAYN
+from agents.hierarchical_agents.DIAYN import DIAYN
 from utilities.data_structures.Config import Config
 
 

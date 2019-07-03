@@ -1,5 +1,5 @@
 from gym import Wrapper, spaces
-from Open_AI_Wrappers import *
+from .Open_AI_Wrappers import *
 
 
 def make_atari_game(env_id, max_episode_steps=None):
