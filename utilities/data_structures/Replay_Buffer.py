@@ -46,7 +46,7 @@ class Replay_Buffer(object):
         return states, actions, rewards, next_states, dones
     
     def pick_experiences(self, num_experiences=None):
-        if num_experiences: batch_size = num_experiences
+        if num_experiences is not None: batch_size = num_experiences
         else: batch_size = self.batch_size
         return random.sample(self.memory, k=batch_size)
 

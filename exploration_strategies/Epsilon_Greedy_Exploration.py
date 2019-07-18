@@ -35,7 +35,7 @@ class Epsilon_Greedy_Exploration(Base_Exploration_Strategy):
 
         if (random.random() > epsilon or turn_off_exploration) and (episode_number >= self.random_episodes_to_run):
             return torch.argmax(action_values).item()
-        return random.randint(0, action_values.shape[1] - 1)
+        return  np.random.randint(0, action_values.shape[1])
 
     def get_updated_epsilon_exploration(self, action_info, epsilon=1.0):
         """Gets the probability that we just pick a random action. This probability decays the more episodes we have seen"""

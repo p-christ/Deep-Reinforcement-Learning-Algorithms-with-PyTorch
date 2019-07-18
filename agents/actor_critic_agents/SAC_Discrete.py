@@ -36,7 +36,7 @@ class SAC_Discrete(SAC):
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
-            self.target_entropy = -torch.prod(torch.Tensor(self.environment.action_space.shape).to(self.device)).item() # heuristic value from the paper
+            self.target_entropy = - self.environment.unwrapped.action_space.n / 4.0 # heuristic value from the paper
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
             self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
@@ -80,7 +80,7 @@ class SAC_Discrete(SAC):
         qf1_pi = self.critic_local(state_batch)
         qf2_pi = self.critic_local_2(state_batch)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
-        inside_term = log_action_probabilities - min_qf_pi
+        inside_term = self.alpha * log_action_probabilities - min_qf_pi
         policy_loss = torch.sum(action_probabilities * inside_term)
         policy_loss = policy_loss.mean()
         log_action_probabilities = log_action_probabilities.gather(1, action.unsqueeze(-1).long())

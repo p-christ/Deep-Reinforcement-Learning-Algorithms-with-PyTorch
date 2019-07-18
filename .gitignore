@@ -20,3 +20,6 @@ Random_Junkyard/
 Notebook.ipynb
 Results/Notebook.ipynb
 *.ipynb_checkpoints
+*.drive_access_key.json
+drive_access_key.json
+drive_access_key
