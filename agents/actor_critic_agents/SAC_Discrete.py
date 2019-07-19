@@ -36,7 +36,8 @@ class SAC_Discrete(SAC):
                                           lr=self.hyperparameters["Actor"]["learning_rate"])
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
-            self.target_entropy = - self.environment.unwrapped.action_space.n / 4.0 # heuristic value from the paper
+            # we set the max possible entropy as the target entropy
+            self.target_entropy = self.action_size * (1.0 / self.action_size) * np.log((1.0 / self.action_size))
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
             self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
