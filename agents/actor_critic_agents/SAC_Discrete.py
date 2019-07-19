@@ -1,6 +1,7 @@
 import torch
 from torch.optim import Adam
 import torch.nn.functional as F
+import numpy as np
 from agents.Base_Agent import Base_Agent
 from utilities.data_structures.Replay_Buffer import Replay_Buffer
 from .SAC import SAC
@@ -37,7 +38,7 @@ class SAC_Discrete(SAC):
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
             # we set the max possible entropy as the target entropy
-            self.target_entropy = self.action_size * (1.0 / self.action_size) * np.log((1.0 / self.action_size))
+            self.target_entropy = -np.log((1.0 / self.action_size)) * 0.98
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
             self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
@@ -84,5 +85,5 @@ class SAC_Discrete(SAC):
         inside_term = self.alpha * log_action_probabilities - min_qf_pi
         policy_loss = action_probabilities * inside_term
         policy_loss = policy_loss.mean()
-        log_action_probabilities = log_action_probabilities.gather(1, action.unsqueeze(-1).long())
+        log_action_probabilities = torch.sum(log_action_probabilities * action_probabilities, dim=1)
         return policy_loss, log_action_probabilities
