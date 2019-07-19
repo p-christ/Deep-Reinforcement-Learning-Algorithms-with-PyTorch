@@ -81,7 +81,7 @@ class SAC_Discrete(SAC):
         qf2_pi = self.critic_local_2(state_batch)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
         inside_term = self.alpha * log_action_probabilities - min_qf_pi
-        policy_loss = torch.sum(action_probabilities * inside_term)
+        policy_loss = action_probabilities * inside_term
         policy_loss = policy_loss.mean()
         log_action_probabilities = log_action_probabilities.gather(1, action.unsqueeze(-1).long())
         return policy_loss, log_action_probabilities
