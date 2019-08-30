@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import numpy as np
 from agents.Base_Agent import Base_Agent
 from utilities.data_structures.Replay_Buffer import Replay_Buffer
-from .SAC import SAC
+from agents.actor_critic_agents.SAC import SAC
 from utilities.Utility_Functions import create_actor_distribution
 
 class SAC_Discrete(SAC):
@@ -20,9 +20,9 @@ class SAC_Discrete(SAC):
         self.critic_local_2 = self.create_NN(input_dim=self.state_size, output_dim=self.action_size,
                                            key_to_use="Critic", override_seed=self.config.seed + 1)
         self.critic_optimizer = torch.optim.Adam(self.critic_local.parameters(),
-                                                 lr=self.hyperparameters["Critic"]["learning_rate"])
+                                                 lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.critic_optimizer_2 = torch.optim.Adam(self.critic_local_2.parameters(),
-                                                   lr=self.hyperparameters["Critic"]["learning_rate"])
+                                                   lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.critic_target = self.create_NN(input_dim=self.state_size, output_dim=self.action_size,
                                            key_to_use="Critic")
         self.critic_target_2 = self.create_NN(input_dim=self.state_size, output_dim=self.action_size,
@@ -34,14 +34,14 @@ class SAC_Discrete(SAC):
 
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
-                                          lr=self.hyperparameters["Actor"]["learning_rate"])
+                                          lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
             # we set the max possible entropy as the target entropy
             self.target_entropy = -np.log((1.0 / self.action_size)) * 0.98
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
-            self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
+            self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
         else:
             self.alpha = self.hyperparameters["entropy_term_weight"]
         assert not self.hyperparameters["add_extra_noise"], "There is no add extra noise option for the discrete version of SAC at moment"
@@ -65,11 +65,11 @@ class SAC_Discrete(SAC):
         """Calculates the losses for the two critics. This is the ordinary Q-learning loss except the additional entropy
          term is taken into account"""
         with torch.no_grad():
-            next_state_action, (_, log_action_probabilities), _ = self.produce_action_and_action_info(next_state_batch)
-            next_state_log_pi = log_action_probabilities.gather(1, next_state_action.unsqueeze(-1).long())
-            qf1_next_target = self.critic_target(next_state_batch).gather(1, next_state_action.unsqueeze(-1).long())
-            qf2_next_target = self.critic_target_2(next_state_batch).gather(1, next_state_action.unsqueeze(-1).long())
-            min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - self.alpha * next_state_log_pi
+            next_state_action, (action_probabilities, log_action_probabilities), _ = self.produce_action_and_action_info(next_state_batch)
+            qf1_next_target = self.critic_target(next_state_batch)
+            qf2_next_target = self.critic_target_2(next_state_batch)
+            min_qf_next_target = action_probabilities * (torch.min(qf1_next_target, qf2_next_target) - self.alpha * log_action_probabilities)
+            min_qf_next_target = min_qf_next_target.mean(dim=1).unsqueeze(-1)
             next_q_value = reward_batch + (1.0 - mask_batch) * self.hyperparameters["discount_rate"] * (min_qf_next_target)
             self.critic_target(next_state_batch).gather(1, next_state_action.unsqueeze(-1).long())
 

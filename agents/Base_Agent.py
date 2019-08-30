@@ -6,7 +6,7 @@ import random
 import numpy as np
 import torch
 import time
-import tensorflow as tf
+# import tensorflow as tf
 from nn_builder.pytorch.NN import NN
 # from tensorboardX import SummaryWriter
 from torch.optim import optimizer
@@ -139,7 +139,7 @@ class Base_Agent(object):
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
         torch.manual_seed(random_seed)
-        tf.set_random_seed(random_seed)
+        # tf.set_random_seed(random_seed)
         random.seed(random_seed)
         np.random.seed(random_seed)
         if torch.cuda.is_available():

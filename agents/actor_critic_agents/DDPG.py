@@ -17,7 +17,7 @@ class DDPG(Base_Agent):
         Base_Agent.copy_model_over(self.critic_local, self.critic_target)
 
         self.critic_optimizer = optim.Adam(self.critic_local.parameters(),
-                                           lr=self.hyperparameters["Critic"]["learning_rate"])
+                                           lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                                     self.config.seed)
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
@@ -25,7 +25,7 @@ class DDPG(Base_Agent):
         Base_Agent.copy_model_over(self.actor_local, self.actor_target)
 
         self.actor_optimizer = optim.Adam(self.actor_local.parameters(),
-                                          lr=self.hyperparameters["Actor"]["learning_rate"])
+                                          lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
         self.exploration_strategy = OU_Noise_Exploration(self.config)
 
     def step(self):

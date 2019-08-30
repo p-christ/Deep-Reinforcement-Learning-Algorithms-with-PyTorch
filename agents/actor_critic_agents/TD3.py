@@ -18,7 +18,7 @@ class TD3(DDPG):
                                             key_to_use="Critic")
         Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
         self.critic_optimizer_2 = optim.Adam(self.critic_local_2.parameters(),
-                                           lr=self.hyperparameters["Critic"]["learning_rate"])
+                                           lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.exploration_strategy_critic = Gaussian_Exploration(self.config)
 
     def compute_critic_values_for_next_states(self, next_states):

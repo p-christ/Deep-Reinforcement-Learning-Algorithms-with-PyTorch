@@ -26,9 +26,9 @@ class SAC(Base_Agent):
         self.critic_local_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                            key_to_use="Critic", override_seed=self.config.seed + 1)
         self.critic_optimizer = torch.optim.Adam(self.critic_local.parameters(),
-                                                 lr=self.hyperparameters["Critic"]["learning_rate"])
+                                                 lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.critic_optimizer_2 = torch.optim.Adam(self.critic_local_2.parameters(),
-                                                   lr=self.hyperparameters["Critic"]["learning_rate"])
+                                                   lr=self.hyperparameters["Critic"]["learning_rate"], eps=1e-4)
         self.critic_target = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
                                            key_to_use="Critic")
         self.critic_target_2 = self.create_NN(input_dim=self.state_size + self.action_size, output_dim=1,
@@ -39,13 +39,13 @@ class SAC(Base_Agent):
                                     self.config.seed)
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size * 2, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
-                                          lr=self.hyperparameters["Actor"]["learning_rate"])
+                                          lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
         self.automatic_entropy_tuning = self.hyperparameters["automatically_tune_entropy_hyperparameter"]
         if self.automatic_entropy_tuning:
             self.target_entropy = -torch.prod(torch.Tensor(self.environment.action_space.shape).to(self.device)).item() # heuristic value from the paper
             self.log_alpha = torch.zeros(1, requires_grad=True, device=self.device)
             self.alpha = self.log_alpha.exp()
-            self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"])
+            self.alpha_optim = Adam([self.log_alpha], lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
         else:
             self.alpha = self.hyperparameters["entropy_term_weight"]
 

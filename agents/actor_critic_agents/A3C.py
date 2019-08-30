@@ -17,7 +17,7 @@ class A3C(Base_Agent):
         self.num_processes = multiprocessing.cpu_count()
         self.worker_processes = max(1, self.num_processes - 2)
         self.actor_critic = self.create_NN(input_dim=self.state_size, output_dim=[self.action_size, 1])
-        self.actor_critic_optimizer = SharedAdam(self.actor_critic.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.actor_critic_optimizer = SharedAdam(self.actor_critic.parameters(), lr=self.hyperparameters["learning_rate"], eps=1e-4)
 
     def run_n_episodes(self):
         """Runs game to completion n times and then summarises results and saves model (if asked to)"""
@@ -89,7 +89,7 @@ class Actor_Critic_Worker(torch.multiprocessing.Process):
         self.set_seeds(self.worker_num)
         self.shared_model = shared_model
         self.local_model = local_model
-        self.local_optimizer = Adam(self.local_model.parameters(), lr=0.0)
+        self.local_optimizer = Adam(self.local_model.parameters(), lr=0.0, eps=1e-4)
         self.counter = counter
         self.optimizer_lock = optimizer_lock
         self.shared_optimizer = shared_optimizer

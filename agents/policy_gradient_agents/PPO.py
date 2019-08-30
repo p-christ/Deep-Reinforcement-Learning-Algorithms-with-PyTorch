@@ -18,7 +18,7 @@ class PPO(Base_Agent):
         self.policy_new = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
         self.policy_old = self.create_NN(input_dim=self.state_size, output_dim=self.policy_output_size)
         self.policy_old.load_state_dict(copy.deepcopy(self.policy_new.state_dict()))
-        self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"])
+        self.policy_new_optimizer = optim.Adam(self.policy_new.parameters(), lr=self.hyperparameters["learning_rate"], eps=1e-4)
         self.episode_number = 0
         self.many_episode_states = []
         self.many_episode_actions = []
