@@ -71,7 +71,6 @@ class SAC_Discrete(SAC):
             min_qf_next_target = action_probabilities * (torch.min(qf1_next_target, qf2_next_target) - self.alpha * log_action_probabilities)
             min_qf_next_target = min_qf_next_target.mean(dim=1).unsqueeze(-1)
             next_q_value = reward_batch + (1.0 - mask_batch) * self.hyperparameters["discount_rate"] * (min_qf_next_target)
-            self.critic_target(next_state_batch).gather(1, next_state_action.unsqueeze(-1).long())
 
         qf1 = self.critic_local(state_batch).gather(1, action_batch.long())
         qf2 = self.critic_local_2(state_batch).gather(1, action_batch.long())
