@@ -260,15 +260,3 @@ def test_throws_error_if_end_of_episode_symbol_not_there():
             obj = k_Sequitur(2)
             _, _, _, episode_appearance_of_rules = obj.generate_action_grammar(string)
 
-
-
-
-
-
-
-
-
-
-# def test_ignores_end_symbol_correctly
-#
-#     do this...

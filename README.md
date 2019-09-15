@@ -112,7 +112,7 @@ pip3 install -r requirements.txt
 python Results/Cart_Pole.py
 ``` 
 
-For other games change the last line to one of the other files in the Results folder.
+For other games change the last line to one of the other files in the Results folder. 
 
 #### ii) To train the agents on another game  
 

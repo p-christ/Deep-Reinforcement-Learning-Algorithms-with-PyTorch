@@ -1,7 +1,7 @@
 numpy==1.15.2
 torch==0.4.1.post2
-PyVirtualDisplay==0.2.1
 matplotlib==3.0.0
+PyVirtualDisplay==0.2.1
 gym==0.10.9
 nn_builder
 tensorflow

@@ -287,5 +287,3 @@ class LazyFrames(object):
 
     def frame(self, i):
         return self._force()[..., i]
-
-
