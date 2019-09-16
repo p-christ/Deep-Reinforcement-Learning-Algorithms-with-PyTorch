@@ -1,8 +1,13 @@
+import os
+import sys
+from os.path import dirname, abspath
+sys.path.append(dirname(dirname(abspath(__file__))))
+
 import gym
 
-from A2C import A2C
-from Dueling_DDQN import Dueling_DDQN
-from SAC_Discrete import SAC_Discrete
+from agents.actor_critic_agents.A2C import A2C
+from agents.DQN_agents.Dueling_DDQN import Dueling_DDQN
+from agents.actor_critic_agents.SAC_Discrete import SAC_Discrete
 from agents.actor_critic_agents.A3C import A3C
 from agents.policy_gradient_agents.PPO import PPO
 from agents.Trainer import Trainer
