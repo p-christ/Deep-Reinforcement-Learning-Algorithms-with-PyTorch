@@ -21,7 +21,7 @@ class Base_Agent(object):
         self.set_random_seeds(config.seed)
         self.environment = config.environment
         self.environment_title = self.get_environment_title()
-        self.action_types = "DISCRETE" if self.environment.action_space.dtype == int else "CONTINUOUS"
+        self.action_types = "DISCRETE" if self.environment.action_space.dtype == np.int64 else "CONTINUOUS"
         self.action_size = int(self.get_action_size())
         self.config.action_size = self.action_size
 
@@ -106,14 +106,18 @@ class Base_Agent(object):
 
     def get_trials(self):
         """Gets the number of trials to average a score over"""
-        if self.environment_title in ["AntMaze", "FetchReach", "Hopper", "Walker2d"]: return 100
+        if self.environment_title in ["AntMaze", "FetchReach", "Hopper", "Walker2d", "CartPole"]: return 100
         try: return self.environment.unwrapped.trials
         except AttributeError: return self.environment.spec.trials
 
     def setup_logger(self):
         """Sets up the logger"""
         filename = "Training.log"
-        if os.path.isfile(filename): os.remove(filename)
+        try: 
+            if os.path.isfile(filename): 
+                os.remove(filename)
+        except: pass
+
         logger = logging.getLogger(__name__)
         logger.setLevel(logging.INFO)
         # create a file handler
