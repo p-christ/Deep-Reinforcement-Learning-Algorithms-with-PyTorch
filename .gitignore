@@ -23,3 +23,7 @@ Results/Notebook.ipynb
 *.drive_access_key.json
 drive_access_key.json
 drive_access_key
+settings.json
+launch.json
+results/data_and_graphs/Cart_Pole_Results_Data.pkl
+results/data_and_graphs/Cart_Pole_Results_Graph.png
