@@ -9,14 +9,8 @@ class Prioritised_Replay_Buffer(Max_Heap, Deque):
      with the max td_value. And the array lets us do quick random samples with probabilities equal to the proportional td errors.
      We also keep track of the sum of the td values using a simple variable.
 
-     Time Complexity:
-     - Extracting max td error - O(1)
-     - Extracting sum of td errors - O(1)
-     - Updating td errors of sample - O(log N)
-     - Add experience - O(log N)
-     - Sample experiences proportional to TD error - O(1)
+    NOTE that this implementation is not optimal in terms of speed. At some point I will make improvements to it.
 
-     Space Complexity: O(N)
      """
 
     def __init__(self, hyperparameters, seed=0):
