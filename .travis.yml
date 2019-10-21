@@ -20,8 +20,8 @@ script:
   - export PYTHONPATH=""$PYTHONPATH:$PWD/environments""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/exploration_strategies""
-  - export PYTHONPATH=""$PYTHONPATH:$PWD/*""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/utilities/*""
+  - export PYTHONPATH=""$PYTHONPATH:$PWD/*""
   - export PYTHONPATH=""$PYTHONPATH:$PWD/results""
   - pytest tests/*.py
 

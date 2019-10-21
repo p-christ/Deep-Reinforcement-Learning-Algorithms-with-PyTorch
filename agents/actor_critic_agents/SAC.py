@@ -104,7 +104,7 @@ class SAC(Base_Agent):
             print("Picking random action ", action)
         else: action = self.actor_pick_action(state=state)
         if self.add_extra_noise:
-            self.action += self.noise.sample()
+            action += self.noise.sample()
         return action
 
     def actor_pick_action(self, state=None, eval=False):

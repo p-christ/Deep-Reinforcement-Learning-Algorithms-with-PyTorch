@@ -1,8 +1,13 @@
+import os
+import sys
+from os.path import dirname, abspath
+sys.path.append(dirname(dirname(abspath(__file__))))
+
 import gym
 
-from A2C import A2C
-from Dueling_DDQN import Dueling_DDQN
-from SAC_Discrete import SAC_Discrete
+from agents.actor_critic_agents.A2C import A2C
+from agents.DQN_agents.Dueling_DDQN import Dueling_DDQN
+from agents.actor_critic_agents.SAC_Discrete import SAC_Discrete
 from agents.actor_critic_agents.A3C import A3C
 from agents.policy_gradient_agents.PPO import PPO
 from agents.Trainer import Trainer
@@ -16,8 +21,8 @@ config = Config()
 config.seed = 1
 config.environment = gym.make("CartPole-v0")
 config.num_episodes_to_run = 450
-config.file_to_save_data_results = "data_and_graphs/Cart_Pole_Results_Data.pkl"
-config.file_to_save_results_graph = "data_and_graphs/Cart_Pole_Results_Graph.png"
+config.file_to_save_data_results = "results/data_and_graphs/Cart_Pole_Results_Data.pkl"
+config.file_to_save_results_graph = "results/data_and_graphs/Cart_Pole_Results_Graph.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True

@@ -15,11 +15,15 @@ drlnd/
 Game_Files/
 mjpro150/
 mujoco200_macos/
-Random_Junkyard/
 *to_do_list
+Random_Junkyard/
 Notebook.ipynb
 Results/Notebook.ipynb
 *.ipynb_checkpoints
 *.drive_access_key.json
 drive_access_key.json
 drive_access_key
+settings.json
+launch.json
+results/data_and_graphs/Cart_Pole_Results_Data.pkl
+results/data_and_graphs/Cart_Pole_Results_Graph.png
