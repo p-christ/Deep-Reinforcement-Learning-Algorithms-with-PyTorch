@@ -223,6 +223,6 @@ class Actor_Critic_Worker(torch.multiprocessing.Process):
         self.local_optimizer.zero_grad()
         total_loss.backward()
         torch.nn.utils.clip_grad_norm_(self.local_model.parameters(), self.gradient_clipping_norm)
-        gradients = [param.grad for param in self.local_model.parameters()]
+        gradients = [param.grad.clone() for param in self.local_model.parameters()]
         self.gradient_updates_queue.put(gradients)
 
