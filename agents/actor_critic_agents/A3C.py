@@ -109,6 +109,7 @@ class Actor_Critic_Worker(torch.multiprocessing.Process):
 
     def run(self):
         """Starts the worker"""
+        torch.set_num_threads(1)
         for ep_ix in range(self.episodes_to_run):
             with self.optimizer_lock:
                 Base_Agent.copy_model_over(self.shared_model, self.local_model)
