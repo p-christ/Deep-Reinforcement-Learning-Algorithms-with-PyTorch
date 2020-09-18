@@ -16,7 +16,7 @@ class Parallel_Experience_Generator(object):
     def __init__(self, environment, policy, seed, hyperparameters, action_size, use_GPU=False, action_choice_output_columns=None):
         self.use_GPU = use_GPU
         self.environment =  environment
-        self.action_types = "DISCRETE" if self.environment.action_space.dtype == int  else "CONTINUOUS"
+        self.action_types = "DISCRETE" if self.environment.action_space.dtype in [int, 'int64'] else "CONTINUOUS"
         self.action_size = action_size
         self.policy = policy
         self.action_choice_output_columns = action_choice_output_columns
