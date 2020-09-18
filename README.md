@@ -110,7 +110,7 @@ conda activate myenvname
 
 pip3 install -r requirements.txt
 
-python Results/Cart_Pole.py
+python results/Cart_Pole.py
 ``` 
 
 For other games change the last line to one of the other files in the Results folder. 
