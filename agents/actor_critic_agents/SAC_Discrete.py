@@ -30,7 +30,7 @@ class SAC_Discrete(SAC):
         Base_Agent.copy_model_over(self.critic_local, self.critic_target)
         Base_Agent.copy_model_over(self.critic_local_2, self.critic_target_2)
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
-                                    self.config.seed)
+                                    self.config.seed, device=self.device)
 
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
@@ -52,7 +52,7 @@ class SAC_Discrete(SAC):
         """Given the state, produces an action, the probability of the action, the log probability of the action, and
         the argmax action"""
         action_probabilities = self.actor_local(state)
-        max_probability_action = torch.argmax(action_probabilities).unsqueeze(0)
+        max_probability_action = torch.argmax(action_probabilities, dim=1)
         action_distribution = create_actor_distribution(self.action_types, action_probabilities, self.action_size)
         action = action_distribution.sample().cpu()
         # Have to deal with situation of 0.0 probabilities because we can't do log 0
@@ -69,7 +69,7 @@ class SAC_Discrete(SAC):
             qf1_next_target = self.critic_target(next_state_batch)
             qf2_next_target = self.critic_target_2(next_state_batch)
             min_qf_next_target = action_probabilities * (torch.min(qf1_next_target, qf2_next_target) - self.alpha * log_action_probabilities)
-            min_qf_next_target = min_qf_next_target.mean(dim=1).unsqueeze(-1)
+            min_qf_next_target = min_qf_next_target.sum(dim=1).unsqueeze(-1)
             next_q_value = reward_batch + (1.0 - mask_batch) * self.hyperparameters["discount_rate"] * (min_qf_next_target)
 
         qf1 = self.critic_local(state_batch).gather(1, action_batch.long())
@@ -85,7 +85,6 @@ class SAC_Discrete(SAC):
         qf2_pi = self.critic_local_2(state_batch)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
         inside_term = self.alpha * log_action_probabilities - min_qf_pi
-        policy_loss = action_probabilities * inside_term
-        policy_loss = policy_loss.mean()
+        policy_loss = (action_probabilities * inside_term).sum(dim=1).mean()
         log_action_probabilities = torch.sum(log_action_probabilities * action_probabilities, dim=1)
         return policy_loss, log_action_probabilities
