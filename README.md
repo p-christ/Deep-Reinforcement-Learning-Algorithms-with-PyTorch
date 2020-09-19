@@ -7,7 +7,7 @@
 
 ![RL](utilities/RL_image.jpeg)   ![PyTorch](utilities/PyTorch-logo-2.jpg)
 
-This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. 
+This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. (To help you remember things you learn about RL in general write them in [Save All](https://www.saveall.ai/)) 
 
 ## **Algorithms Implemented** 
 
@@ -110,7 +110,7 @@ conda activate myenvname
 
 pip3 install -r requirements.txt
 
-python Results/Cart_Pole.py
+python results/Cart_Pole.py
 ``` 
 
 For other games change the last line to one of the other files in the Results folder. 
