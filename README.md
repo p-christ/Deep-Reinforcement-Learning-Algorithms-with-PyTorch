@@ -9,7 +9,7 @@
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. 
 
-(To help you remember things you learn about machine learning in general write them in [Save All](https://www.saveall.ai/) and try out the public deck there about Fast AI's machine learning textbook.)
+(To help you remember things you learn about machine learning in general write them in [Save All](https://www.saveall.ai/public_decks/deck=140) and try out the public deck there about Fast AI's machine learning textbook.)
 
 ## **Algorithms Implemented**  
 
