@@ -32,6 +32,9 @@ class SAC_Discrete(SAC):
         self.memory = Replay_Buffer(self.hyperparameters["Critic"]["buffer_size"], self.hyperparameters["batch_size"],
                                     self.config.seed, device=self.device)
 
+
+        print(f'{self.state_size=}')
+        print(f'{self.action_size=}')
         self.actor_local = self.create_NN(input_dim=self.state_size, output_dim=self.action_size, key_to_use="Actor")
         self.actor_optimizer = torch.optim.Adam(self.actor_local.parameters(),
                                           lr=self.hyperparameters["Actor"]["learning_rate"], eps=1e-4)
@@ -51,6 +54,13 @@ class SAC_Discrete(SAC):
     def produce_action_and_action_info(self, state):
         """Given the state, produces an action, the probability of the action, the log probability of the action, and
         the argmax action"""
+
+        if (len(state.shape) != 2):
+            state = torch.squeeze(state, 0)
+            state = torch.squeeze(state, 0)
+            state = torch.flatten(state)
+            state = torch.unsqueeze(state, 0)
+            print(state.shape)
         action_probabilities = self.actor_local(state)
         max_probability_action = torch.argmax(action_probabilities, dim=-1)
         action_distribution = create_actor_distribution(self.action_types, action_probabilities, self.action_size)

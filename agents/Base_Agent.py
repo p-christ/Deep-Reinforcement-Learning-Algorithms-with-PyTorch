@@ -21,7 +21,8 @@ class Base_Agent(object):
         self.set_random_seeds(config.seed)
         self.environment = config.environment
         self.environment_title = self.get_environment_title()
-        self.action_types = "DISCRETE" if self.environment.action_space.dtype == np.int64 else "CONTINUOUS"
+        # self.action_types = "DISCRETE" if self.environment.action_space.dtype == np.int64 else "CONTINUOUS"
+        self.action_types = "DISCRETE"
         self.action_size = int(self.get_action_size())
         self.config.action_size = self.action_size
 
@@ -88,6 +89,8 @@ class Base_Agent(object):
             state_size = random_state["observation"].shape[0] + random_state["desired_goal"].shape[0]
             return state_size
         else:
+
+
             return random_state.size
 
     def get_score_required_to_win(self):
