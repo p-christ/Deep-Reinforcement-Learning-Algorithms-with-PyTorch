@@ -55,12 +55,15 @@ class SAC_Discrete(SAC):
         """Given the state, produces an action, the probability of the action, the log probability of the action, and
         the argmax action"""
 
-        if (len(state.shape) != 2):
+        # print(f"\nBefore reshape {state.shape=}")
+        if (len(state.shape) == 4):
             state = torch.squeeze(state, 0)
             state = torch.squeeze(state, 0)
             state = torch.flatten(state)
             state = torch.unsqueeze(state, 0)
-            print(state.shape)
+        elif len(state.shape) == 3:
+            state = torch.flatten(state, 1)
+        # print(f"After reshape {state.shape=}")
         action_probabilities = self.actor_local(state)
         max_probability_action = torch.argmax(action_probabilities, dim=-1)
         action_distribution = create_actor_distribution(self.action_types, action_probabilities, self.action_size)
@@ -76,12 +79,19 @@ class SAC_Discrete(SAC):
          term is taken into account"""
         with torch.no_grad():
             next_state_action, (action_probabilities, log_action_probabilities), _ = self.produce_action_and_action_info(next_state_batch)
+
+            # print(f"{next_state_batch.shape=}")
+            if len(next_state_batch.shape) == 3:
+                next_state_batch = torch.flatten(next_state_batch, 1)
+                # print(f"{next_state_batch.shape=}")
             qf1_next_target = self.critic_target(next_state_batch)
             qf2_next_target = self.critic_target_2(next_state_batch)
             min_qf_next_target = action_probabilities * (torch.min(qf1_next_target, qf2_next_target) - self.alpha * log_action_probabilities)
             min_qf_next_target = min_qf_next_target.sum(dim=1).unsqueeze(-1)
             next_q_value = reward_batch + (1.0 - mask_batch) * self.hyperparameters["discount_rate"] * (min_qf_next_target)
 
+        if len(state_batch.shape) == 3:
+            state_batch = torch.flatten(state_batch, 1)
         qf1 = self.critic_local(state_batch).gather(1, action_batch.long())
         qf2 = self.critic_local_2(state_batch).gather(1, action_batch.long())
         qf1_loss = F.mse_loss(qf1, next_q_value)
@@ -91,6 +101,8 @@ class SAC_Discrete(SAC):
     def calculate_actor_loss(self, state_batch):
         """Calculates the loss for the actor. This loss includes the additional entropy term"""
         action, (action_probabilities, log_action_probabilities), _ = self.produce_action_and_action_info(state_batch)
+        if len(state_batch.shape) == 3:
+            state_batch = torch.flatten(state_batch, 1)
         qf1_pi = self.critic_local(state_batch)
         qf2_pi = self.critic_local_2(state_batch)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
