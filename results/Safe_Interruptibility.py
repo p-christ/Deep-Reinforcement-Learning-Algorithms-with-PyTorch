@@ -6,8 +6,6 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 import gym
 import safe_grid_gym
 
-env = gym.make("BoatRace-v0")
-
 from agents.actor_critic_agents.A2C import A2C
 from agents.DQN_agents.Dueling_DDQN import Dueling_DDQN
 from agents.actor_critic_agents.SAC_Discrete import SAC_Discrete
