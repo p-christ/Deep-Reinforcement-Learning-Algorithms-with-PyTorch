@@ -77,6 +77,8 @@ class SAC(Base_Agent):
     def step(self):
         """Runs an episode on the game, saving the experience and running a learning step if appropriate"""
         eval_ep = self.episode_number % TRAINING_EPISODES_PER_EVAL_EPISODE == 0 and self.do_evaluation_iterations
+        print(f"\t {eval_ep=}")
+        # print(f"\t {self.episode_number=}")
         self.episode_step_number_val = 0
         while not self.done:
             self.episode_step_number_val += 1
@@ -85,11 +87,16 @@ class SAC(Base_Agent):
             if self.time_for_critic_and_actor_to_learn():
                 for _ in range(self.hyperparameters["learning_updates_per_learning_session"]):
                     self.learn()
-            mask = False if self.episode_step_number_val >= 20 else self.done
+            mask = False if self.episode_step_number_val >= self.environment._max_episode_steps else self.done
             if not eval_ep: self.save_experience(experience=(self.state, self.action, self.reward, self.next_state, mask))
             self.state = self.next_state
             self.global_step_number += 1
-        print(self.total_episode_score_so_far)
+
+            if self.episode_step_number_val >= self.environment._max_episode_steps:
+                self.done = True
+
+        print(f"\n{self.total_episode_score_so_far=}")
+        print("----------------------------------------------------")
         if eval_ep: self.print_summary_of_latest_evaluation_episode()
         self.episode_number += 1
 
@@ -114,13 +121,16 @@ class SAC(Base_Agent):
         if state is None: state = self.state
         state = torch.FloatTensor([state]).to(self.device)
         if len(state.shape) == 1: state = state.unsqueeze(0)
+        # from SAC discrete get the action sampled by the distribution
         if eval == False: action, _, _ = self.produce_action_and_action_info(state)
         else:
+        # otherwise pick directly the action with maximum probability
             with torch.no_grad():
                 _, z, action = self.produce_action_and_action_info(state)
         action = action.detach().cpu().numpy()
         return action[0]
 
+    # we do not use this as we are using SAC DISCRETE
     def produce_action_and_action_info(self, state):
         """Given the state, produces an action, the log probability of the action, and the tanh of the mean action"""
         actor_output = self.actor_local(state)

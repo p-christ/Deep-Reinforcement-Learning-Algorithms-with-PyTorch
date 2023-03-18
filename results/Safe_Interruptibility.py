@@ -21,7 +21,7 @@ from agents.DQN_agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 config = Config()
 config.seed = 1
 config.environment = gym.make("SafeInterruptibility-v0")
-config.num_episodes_to_run = 450
+config.num_episodes_to_run = 200
 config.file_to_save_data_results = "results/data_and_graphs/Boat_Race_Results_Data.pkl"
 config.file_to_save_results_graph = "results/data_and_graphs/Boat_Race_Results_Graph.png"
 config.show_solution_score = False
