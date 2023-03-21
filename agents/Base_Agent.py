@@ -235,7 +235,7 @@ class Base_Agent(object):
         sys.stdout.write(text.format(self.episode_number, self.rolling_results[-1], self.max_rolling_score_seen,
                                      self.game_full_episode_scores[-1], self.max_episode_score_seen))
 
-        print("\n",self.rolling_results)
+        # print("\n",self.rolling_results)
         sys.stdout.flush()
 
     def show_whether_achieved_goal(self):
