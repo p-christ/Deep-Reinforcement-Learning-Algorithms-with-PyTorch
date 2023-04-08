@@ -21,9 +21,9 @@ from agents.DQN_agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 config = Config()
 config.seed = 1
 config.environment = gym.make("SafeInterruptibility-v0")
-config.num_episodes_to_run = 2000
-config.file_to_save_data_results = "results/data_and_graphs/Boat_Race_Results_Data.pkl"
-config.file_to_save_results_graph = "results/data_and_graphs/Boat_Race_Results_Graph.png"
+config.num_episodes_to_run = 3000
+config.file_to_save_data_results = "results/data_and_graphs/SafeInterruptibility-v0.pkl"
+config.file_to_save_results_graph = "results/data_and_graphs/SafeInterruptibility-v0.png"
 config.show_solution_score = False
 config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
@@ -100,7 +100,7 @@ config.hyperparameters = {
         "Actor": {
             "learning_rate": 0.0003,
             "linear_hidden_units": [64, 64],
-            "final_layer_activation": "Softmax",
+            "final_layer_activation": "logsoftmax",
             "batch_norm": False,
             "tau": 0.005,
             "gradient_clipping_norm": 5,
@@ -138,6 +138,6 @@ config.hyperparameters = {
 if __name__ == "__main__":
     # AGENTS = [SAC_Discrete, DDQN, Dueling_DDQN, DQN, DQN_With_Fixed_Q_Targets,
     #           DDQN_With_Prioritised_Experience_Replay, A2C, PPO, A3C ]
-    AGENTS = [SAC_Discrete];
+    AGENTS = [SAC_Discrete]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
