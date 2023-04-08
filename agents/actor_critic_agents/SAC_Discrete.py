@@ -113,4 +113,4 @@ class SAC_Discrete(SAC):
     
     def locally_save_policy(self):
         """Saves the policy"""
-        torch.save(self.actor_local.state_dict(), "Models/{}_local_network.pt".format(self.agent_name))
+        torch.save(self.actor_local.state_dict(), "../Models/{}_local_network.pt".format(self.agent_name))
