@@ -29,7 +29,7 @@ config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
 config.runs_per_agent = 1
-config.use_GPU = True
+config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
 config.save_model = True
@@ -70,7 +70,7 @@ config.hyperparameters = {
     "Policy_Gradient_Agents": {
         "learning_rate": 0.05,
         "linear_hidden_units": [20, 20],
-        "final_layer_activation": "SOFTMAX",
+        "final_layer_activation": "Softmax",
         "learning_iterations_per_round": 5,
         "discount_rate": 0.99,
         "batch_norm": False,
@@ -100,7 +100,7 @@ config.hyperparameters = {
         "Actor": {
             "learning_rate": 0.0003,
             "linear_hidden_units": [64, 64],
-            "final_layer_activation": "softmax",
+            "final_layer_activation": "Softmax",
             "batch_norm": False,
             "tau": 0.005,
             "gradient_clipping_norm": 5,
