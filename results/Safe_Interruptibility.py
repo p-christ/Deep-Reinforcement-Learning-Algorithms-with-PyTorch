@@ -29,7 +29,7 @@ config.visualise_individual_results = False
 config.visualise_overall_agent_results = True
 config.standard_deviation_results = 1.0
 config.runs_per_agent = 1
-config.use_GPU = True
+config.use_GPU = False
 config.overwrite_existing_results_file = False
 config.randomise_random_seed = True
 config.save_model = True
@@ -100,7 +100,7 @@ config.hyperparameters = {
         "Actor": {
             "learning_rate": 0.0003,
             "linear_hidden_units": [64, 64],
-            "final_layer_activation": "softmax",
+            "final_layer_activation": "Softmax",
             "batch_norm": False,
             "tau": 0.005,
             "gradient_clipping_norm": 5,
