@@ -70,7 +70,7 @@ config.hyperparameters = {
     "Policy_Gradient_Agents": {
         "learning_rate": 0.05,
         "linear_hidden_units": [20, 20],
-        "final_layer_activation": "SOFTMAX",
+        "final_layer_activation": "Softmax",
         "learning_iterations_per_round": 5,
         "discount_rate": 0.99,
         "batch_norm": False,
