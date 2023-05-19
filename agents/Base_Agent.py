@@ -284,7 +284,11 @@ class Base_Agent(object):
         """Saves the recent experience to the memory buffer"""
         if memory is None: memory = self.memory
         if experience is None: experience = self.state, self.action, self.reward, self.next_state, self.done
-        memory.add_experience(*experience)
+        # do not add the experience to the replay buffer if it's an unsafe action.
+        if 5 in self.state and 5 not in self.next_state:
+            pass
+        else:
+            memory.add_experience(*experience)
 
     def take_optimisation_step(self, optimizer, network, loss, clipping_norm=None, retain_graph=False):
         """Takes an optimisation step by calculating gradients given the loss and then updating the parameters"""
