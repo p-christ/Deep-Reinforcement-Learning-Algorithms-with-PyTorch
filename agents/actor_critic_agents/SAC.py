@@ -78,7 +78,6 @@ class SAC(Base_Agent):
         """Runs an episode on the game, saving the experience and running a learning step if appropriate"""
         eval_ep = self.episode_number % TRAINING_EPISODES_PER_EVAL_EPISODE == 0 and self.do_evaluation_iterations
         print(f"\t {eval_ep=}")
-        # print(f"\t {self.episode_number=}")
         self.episode_step_number_val = 0
         while not self.done:
             self.episode_step_number_val += 1
@@ -94,8 +93,6 @@ class SAC(Base_Agent):
 
             if self.episode_step_number_val >= self.environment._max_episode_steps:
                 self.done = True
-
-        print(f"\n{self.total_episode_score_so_far=}")
         print("----------------------------------------------------")
         if eval_ep: self.print_summary_of_latest_evaluation_episode()
         self.episode_number += 1

@@ -1,4 +1,3 @@
-import os
 import sys
 from os.path import dirname, abspath
 sys.path.append(dirname(dirname(abspath(__file__))))
@@ -6,22 +5,14 @@ sys.path.append(dirname(dirname(abspath(__file__))))
 import gym
 import safe_grid_gym
 
-from agents.actor_critic_agents.A2C import A2C
-from agents.DQN_agents.Dueling_DDQN import Dueling_DDQN
 from agents.actor_critic_agents.SAC_Discrete import SAC_Discrete
-from agents.actor_critic_agents.A3C import A3C
-from agents.policy_gradient_agents.PPO import PPO
 from agents.Trainer import Trainer
 from utilities.data_structures.Config import Config
-from agents.DQN_agents.DDQN import DDQN
-from agents.DQN_agents.DDQN_With_Prioritised_Experience_Replay import DDQN_With_Prioritised_Experience_Replay
-from agents.DQN_agents.DQN import DQN
-from agents.DQN_agents.DQN_With_Fixed_Q_Targets import DQN_With_Fixed_Q_Targets
 
 config = Config()
 config.seed = 1
 config.environment = gym.make("SafeInterruptibility-v0")
-config.num_episodes_to_run = 3000
+config.num_episodes_to_run = 2500
 config.file_to_save_data_results = "data_and_graphs/SafeInterruptibility-v0.pkl"
 config.file_to_save_results_graph = "data_and_graphs/SafeInterruptibility-v0.png"
 config.show_solution_score = False
@@ -136,8 +127,6 @@ config.hyperparameters = {
 }
 
 if __name__ == "__main__":
-    # AGENTS = [SAC_Discrete, DDQN, Dueling_DDQN, DQN, DQN_With_Fixed_Q_Targets,
-    #           DDQN_With_Prioritised_Experience_Replay, A2C, PPO, A3C ]
     AGENTS = [SAC_Discrete]
     trainer = Trainer(config, AGENTS)
     trainer.run_games_for_agents()
