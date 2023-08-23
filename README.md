@@ -9,8 +9,7 @@
 
 This repository contains PyTorch implementations of deep reinforcement learning algorithms and environments. 
 
-(To help you remember things you learn about machine learning in general write them in [Save All](https://saveall.ai/shared/deck/140&4&3K3uXPazkg4&github_links) and try out the public deck there about Fast AI's machine learning textbook.)
-
+(To help you remember things you learn about machine learning in general write them in [Gizmo](https://gizmo.ai)
 ## **Algorithms Implemented**  
 
 1. *Deep Q Learning (DQN)* <sub><sup> ([Mnih et al. 2013](https://arxiv.org/pdf/1312.5602.pdf)) </sup></sub>  
