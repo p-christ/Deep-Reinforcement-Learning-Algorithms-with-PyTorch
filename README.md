@@ -102,8 +102,8 @@ The repository's high-level structure is:
 To watch all the different agents learn Cart Pole follow these steps:
 
 ```commandline
-git clone https://github.com/p-christ/Deep_RL_Implementations.git
-cd Deep_RL_Implementations
+git clone https://github.com/p-christ/Deep-Reinforcement-Learning-Algorithms-with-PyTorch.git
+cd Deep-Reinforcement-Learning-Algorithms-with-PyTorch
 
 conda create --name myenvname
 y
